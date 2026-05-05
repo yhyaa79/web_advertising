@@ -1,0 +1,37 @@
+<!-- templates/accounts/profile.html -->
+{% extends 'base.html' %}
+
+{% block title %}پروفایل{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>ویرایش پروفایل</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success">ذخیره تغییرات</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5>{{ user.username }}</h5>
+                <p>{{ user.email }}</p>
+                <p>{{ user.phone_number }}</p>
+                {% if user.is_verified %}
+                    <span class="badge bg-success">تایید شده</span>
+                {% else %}
+                    <span class="badge bg-warning">تایید نشده</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

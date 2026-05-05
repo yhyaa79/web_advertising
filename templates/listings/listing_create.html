@@ -1,0 +1,24 @@
+<!-- templates/listings/listing_create.html -->
+{% extends 'base.html' %}
+
+{% block title %}ثبت آگهی جدید{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>ثبت آگهی جدید</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success">ثبت آگهی</button>
+                    <a href="{% url 'listings:listing_list' %}" class="btn btn-secondary">انصراف</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

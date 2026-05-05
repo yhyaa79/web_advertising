@@ -1,0 +1,74 @@
+<!-- templates/listings/listing_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}{{ listing.title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            {% if listing.main_image %}
+                <img src="{{ listing.main_image.url }}" class="card-img-top">
+            {% endif %}
+            <div class="card-body">
+                <h2>{{ listing.title }}</h2>
+                <p class="text-muted">فروشنده: {{ listing.seller.username }} | بازدید: {{ listing.views_count }}</p>
+                <hr>
+                <h4>توضیحات:</h4>
+                <p>{{ listing.description }}</p>
+                
+                <h5 class="mt-4">مشخصات:</h5>
+                <ul>
+                    <li><strong>دسته‌بندی:</strong> {{ listing.category.name }} ({{ listing.category.get_platform_display }})</li>
+                    <li><strong>آدرس پلتفرم:</strong> <a href="{{ listing.platform_url }}" target="_blank">{{ listing.platform_url }}</a></li>
+                    <li><strong>تعداد دنبال‌کننده:</strong> {{ listing.followers_count|floatformat:0 }}</li>
+                    <li><strong>درآمد ماهانه:</strong> {{ listing.monthly_income|floatformat:0 }} تومان</li>
+                </ul>
+
+                {% if income_proofs %}
+                    <h5 class="mt-4">اثبات درآمد:</h5>
+                    <div class="row">
+                        {% for proof in income_proofs %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p><strong>نوع:</strong> {{ proof.get_proof_type_display }}</p>
+                                        <a href="{{ proof.file.url }}" target="_blank" class="btn btn-sm btn-info">مشاهده فایل</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3 class="text-success">{{ listing.price|floatformat:0 }} تومان</h3>
+                <hr>
+                {% if user.is_authenticated and user != listing.seller %}
+                    <a href="{% url 'payments:initiate_purchase' listing.pk %}" class="btn btn-success btn-lg w-100">خرید امن</a>
+                {% elif user == listing.seller %}
+                    <a href="{% url 'listings:listing_edit' listing.pk %}" class="btn btn-warning w-100">ویرایش آگهی</a>
+                    <a href="{% url 'listings:add_income_proof' listing.pk %}" class="btn btn-info w-100 mt-2">افزودن اثبات درآمد</a>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}" class="btn btn-primary w-100">ورود برای خرید</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <h6>اطلاعات فروشنده</h6>
+                <p><strong>نام کاربری:</strong> {{ listing.seller.username }}</p>
+                {% if listing.seller.is_verified %}
+                    <span class="badge bg-success">تایید شده</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

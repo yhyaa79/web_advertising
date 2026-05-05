@@ -1,0 +1,38 @@
+<!-- templates/payments/transaction_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}جزئیات تراکنش{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>جزئیات تراکنش</h4>
+            </div>
+            <div class="card-body">
+                <p><strong>کد پیگیری:</strong> {{ transaction.tracking_code }}</p>
+                <p><strong>آگهی:</strong> {{ transaction.listing.title }}</p>
+                <p><strong>خریدار:</strong> {{ transaction.buyer.username }}</p>
+                <p><strong>فروشنده:</strong> {{ transaction.seller.username }}</p>
+                <p><strong>مبلغ:</strong> {{ transaction.amount|floatformat:0 }} تومان</p>
+                <p><strong>وضعیت:</strong> 
+                    <span class="badge bg-{% if transaction.status == 'completed' %}success{% elif transaction.status == 'in_escrow' %}info{% else %}warning{% endif %}">
+                        {{ transaction.get_status_display }}
+                    </span>
+                </p>
+                <p><strong>تاریخ ایجاد:</strong> {{ transaction.created_at|date:"Y/m/d H:i" }}</p>
+                
+                {% if transaction.status == 'in_escrow' and transaction.buyer == user %}
+                    <hr>
+                    <div class="alert alert-warning">
+                        پس از دریافت دسترسی به پلتفرم، تحویل را تایید کنید.
+                    </div>
+                    <a href="{% url 'payments:confirm_delivery' transaction.id %}" class="btn btn-success">تایید تحویل</a>
+                    <a href="{% url 'payments:open_dispute' transaction.id %}" class="btn btn-danger">گزارش مشکل</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

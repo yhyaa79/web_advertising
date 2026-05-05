@@ -1,0 +1,30 @@
+<!-- templates/payments/initiate_purchase.html -->
+{% extends 'base.html' %}
+
+{% block title %}شروع خرید{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>تایید خرید</h4>
+            </div>
+            <div class="card-body">
+                <h5>{{ listing.title }}</h5>
+                <p>{{ listing.description|truncatewords:30 }}</p>
+                <hr>
+                <p><strong>قیمت:</strong> {{ listing.price|floatformat:0 }} تومان</p>
+                <p><strong>کمیسیون سایت (5%):</strong> {{ listing.price|floatformat:0|add:"0"|floatformat:0 }} تومان</p>
+                <p class="fs-4"><strong>مجموع:</strong> <span class="text-success">{{ listing.price|floatformat:0 }} تومان</span></p>
+                <hr>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success w-100">ادامه به پرداخت</button>
+                </form>
+                <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-secondary w-100 mt-2">انصراف</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

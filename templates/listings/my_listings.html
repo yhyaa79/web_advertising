@@ -1,0 +1,48 @@
+<!-- templates/listings/my_listings.html -->
+{% extends 'base.html' %}
+
+{% block title %}آگهی‌های من{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">آگهی‌های من</h2>
+
+<a href="{% url 'listings:listing_create' %}" class="btn btn-success mb-3">ثبت آگهی جدید</a>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>عنوان</th>
+                <th>قیمت</th>
+                <th>وضعیت</th>
+                <th>بازدید</th>
+                <th>تاریخ ثبت</th>
+                <th>عملیات</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for listing in listings %}
+                <tr>
+                    <td>{{ listing.title }}</td>
+                    <td>{{ listing.price|floatformat:0 }} تومان</td>
+                    <td>
+                        <span class="badge bg-{% if listing.status == 'active' %}success{% elif listing.status == 'sold' %}info{% else %}warning{% endif %}">
+                            {{ listing.get_status_display }}
+                        </span>
+                    </td>
+                    <td>{{ listing.views_count }}</td>
+                    <td>{{ listing.created_at|date:"Y/m/d" }}</td>
+                    <td>
+                        <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-sm btn-info">مشاهده</a>
+                        <a href="{% url 'listings:listing_edit' listing.pk %}" class="btn btn-sm btn-warning">ویرایش</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">شما هنوز آگهی ثبت نکرده‌اید.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

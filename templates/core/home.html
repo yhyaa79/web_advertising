@@ -1,0 +1,47 @@
+<!-- templates/core/home.html -->
+{% extends 'base.html' %}
+
+{% block title %}صفحه اصلی{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center py-5 bg-light rounded">
+    <h1>خرید و فروش پلتفرم‌های درآمدزا</h1>
+    <p class="lead">وبسایت، اینستاگرام، تلگرام و سایر پلتفرم‌ها را با اطمینان خرید و بفروش</p>
+    <a href="{% url 'listings:listing_list' %}" class="btn btn-primary btn-lg">مشاهده آگهی‌ها</a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'listings:listing_create' %}" class="btn btn-success btn-lg">ثبت آگهی</a>
+    {% endif %}
+</div>
+
+<h3 class="mt-5 mb-3">آخرین آگهی‌ها</h3>
+<div class="row">
+    {% for listing in latest_listings %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if listing.main_image %}
+                    <img src="{{ listing.main_image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ listing.title }}</h5>
+                    <p class="card-text">{{ listing.description|truncatewords:15 }}</p>
+                    <p class="text-success fw-bold">{{ listing.price|floatformat:0 }} تومان</p>
+                    <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-outline-primary">مشاهده جزئیات</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>هیچ آگهی فعالی وجود ندارد.</p>
+    {% endfor %}
+</div>
+
+<h4 class="mt-5 mb-3">دسته‌بندی‌ها</h4>
+<div class="row">
+    {% for category in categories %}
+        <div class="col-md-3 mb-3">
+            <a href="{% url 'listings:listing_list' %}?category={{ category.id }}" class="btn btn-outline-secondary w-100">
+                {{ category.name }}
+            </a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+<!-- templates/payments/my_transactions.html - نسخه کامل -->
+{% extends 'base.html' %}
+
+{% block title %}تراکنش‌های من{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">تراکنش‌های من</h2>
+
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab" href="#purchases">خریدهای من</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#sales">فروش‌های من</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="purchases">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>کد پیگیری</th>
+                        <th>آگهی</th>
+                        <th>مبلغ</th>
+                        <th>وضعیت</th>
+                        <th>تاریخ</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in purchases %}
+                        <tr>
+                            <td>{{ transaction.tracking_code }}</td>
+                            <td>{{ transaction.listing.title }}</td>
+                            <td>{{ transaction.amount|floatformat:0 }} تومان</td>
+                            <td><span class="badge bg-info">{{ transaction.get_status_display }}</span></td>
+                            <td>{{ transaction.created_at|date:"Y/m/d" }}</td>
+                            <td>
+                                <a href="{% url 'payments:transaction_detail' transaction.id %}" class="btn btn-sm btn-primary">جزئیات</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">تراکنشی وجود ندارد.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="sales">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>کد پیگیری</th>
+                        <th>آگهی</th>
+                        <th>مبلغ</th>
+                        <th>وضعیت</th>
+                        <th>تاریخ</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in sales %}
+                        <tr>
+                            <td>{{ transaction.tracking_code }}</td>
+                            <td>{{ transaction.listing.title }}</td>
+                            <td>{{ transaction.amount|floatformat:0 }} تومان</td>
+                            <td>
+                                <span class="badge bg-info">
+                                    {{ transaction.get_status_display }}
+                                </span>
+                            </td>
+                            <td>{{ transaction.created_at|date:"Y/m/d" }}</td>
+                            <td>
+                                <a href="{% url 'payments:transaction_detail' transaction.id %}" 
+                                   class="btn btn-sm btn-primary">
+                                    جزئیات
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                فروش ثبت‌شده‌ای ندارید.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

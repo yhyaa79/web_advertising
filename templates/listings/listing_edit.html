@@ -1,0 +1,24 @@
+<!-- templates/listings/listing_edit.html -->
+{% extends 'base.html' %}
+
+{% block title %}ویرایش آگهی{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>ویرایش آگهی</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success">ذخیره تغییرات</button>
+                    <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-secondary">انصراف</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
