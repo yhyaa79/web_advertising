@@ -32,38 +32,88 @@ class Listing(models.Model):
         ('deleted', 'حذف شده'),
     ]
     
+    LEVEL_CHOICES = [
+        ('beginner', 'مبتدی'),
+        ('intermediate', 'متوسط'),
+        ('advanced', 'پیشرفته'),
+        ('professional', 'حرفه‌ای'),
+    ]
+    
     seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='listings')
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True) # دسته بندی 
-    title = models.CharField(max_length=200) # تیتر 
-    description = models.TextField() #توضیحات 
-    location = models.TextField(max_length=200, null=True, blank=True) # مکان 
-    price = models.DecimalField(max_digits=12, decimal_places=0) # قیمت اصلی 
-    discount_price = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True) # قیمت با تخفیف 
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    location = models.TextField(max_length=200, null=True, blank=True)
+    price = models.DecimalField(max_digits=12, decimal_places=0)
+    discount_price = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True)
+    
+    # سطح آگهی
+    level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='beginner', verbose_name='سطح')
     
     # اطلاعات پلتفرم
-    platform_url = models.URLField() # ادرس پلتفرم
-    followers_count = models.IntegerField(default=0) # کاربر های پلتفرم
-    monthly_income = models.DecimalField(max_digits=12, decimal_places=0) # درامد ماهانه
-    platform_age = models.IntegerField(default=0) # سن پلتفرم
+    platform_url = models.URLField()
+    followers_count = models.IntegerField(default=0)
+    monthly_income = models.DecimalField(max_digits=12, decimal_places=0)
+    platform_age = models.IntegerField(default=0)
 
-    most_like = models.IntegerField(null=True, blank=True) # بیشترین لایک 
-    most_view = models.IntegerField(null=True, blank=True) # بیشترین بازدید 
-    most_comment = models.IntegerField(null=True, blank=True) # بیشترین کامنت 
+    most_like = models.IntegerField(null=True, blank=True)
+    most_view = models.IntegerField(null=True, blank=True)
+    most_comment = models.IntegerField(null=True, blank=True)
     
     # تصاویر و ویدیوها
-    main_image = models.ImageField(upload_to='listings/images/') # تصویر اصلی 
+    main_image = models.ImageField(upload_to='listings/images/')
     
     # ارتقا اگهی 
     is_preferment = models.BooleanField(default=False, verbose_name='آگهی ارتقا یافته')
 
     # گزینه خصوصی
-    is_private = models.BooleanField(default=False, verbose_name='آگهی خصوصی') # گزینه خصوصی یا عمومی بودن اگهی 
+    is_private = models.BooleanField(default=False, verbose_name='آگهی خصوصی')
     
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending') # وضعیت اگهی 
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     rejection_reason = models.TextField(blank=True, null=True, verbose_name='دلیل رد')
     views_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def get_final_price(self):
+        """قیمت نهایی (با تخفیف یا بدون تخفیف)"""
+        return self.discount_price if self.discount_price else self.price
+    
+    def get_roi_months(self):
+        """محاسبه تعداد ماه‌های برگشت سرمایه"""
+        if self.monthly_income and self.monthly_income > 0:
+            final_price = self.get_final_price()
+            return final_price / self.monthly_income
+        return None
+    
+    def get_roi_display(self):
+        """نمایش برگشت سرمایه به صورت ماه"""
+        roi_months = self.get_roi_months()
+        if roi_months is None:
+            return "نامشخص"
+        
+        months = int(roi_months)
+        return f"{months} ماه"
+    
+    def get_income_chart_data(self):
+        """دریافت داده‌های نمودار درآمد"""
+        data_points = self.income_data_points.all().order_by('date')
+        if not data_points.exists():
+            return None
+        return {
+            'labels': [point.date.strftime('%Y/%m/%d') for point in data_points],
+            'data': [float(point.income) for point in data_points]
+        }
+    
+    def get_views_chart_data(self):
+        """دریافت داده‌های نمودار بازدید"""
+        data_points = self.views_data_points.all().order_by('date')
+        if not data_points.exists():
+            return None
+        return {
+            'labels': [point.date.strftime('%Y/%m/%d') for point in data_points],
+            'data': [point.views for point in data_points]
+        }
     
     class Meta:
         ordering = ['-created_at']
@@ -84,6 +134,39 @@ class Listing(models.Model):
                 status='approved'
             ).exists()
         return False
+
+
+class IncomeDataPoint(models.Model):
+    """نقاط داده برای نمودار درآمد"""
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='income_data_points')
+    date = models.DateField(verbose_name='تاریخ')
+    income = models.DecimalField(max_digits=12, decimal_places=0, verbose_name='درآمد')
+    
+    class Meta:
+        verbose_name = 'نقطه داده درآمد'
+        verbose_name_plural = 'نقاط داده درآمد'
+        ordering = ['date']
+        unique_together = ['listing', 'date']
+    
+    def __str__(self):
+        return f"{self.listing.title} - {self.date}: {self.income}"
+
+
+class ViewsDataPoint(models.Model):
+    """نقاط داده برای نمودار بازدید"""
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='views_data_points')
+    date = models.DateField(verbose_name='تاریخ')
+    views = models.IntegerField(verbose_name='بازدید')
+    
+    class Meta:
+        verbose_name = 'نقطه داده بازدید'
+        verbose_name_plural = 'نقاط داده بازدید'
+        ordering = ['date']
+        unique_together = ['listing', 'date']
+    
+    def __str__(self):
+        return f"{self.listing.title} - {self.date}: {self.views}"
+
 
 class VisitRequest(models.Model):
     STATUS_CHOICES = [

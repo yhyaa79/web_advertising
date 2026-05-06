@@ -2,13 +2,14 @@
 
 from django import forms
 from django.forms import inlineformset_factory
-from .models import Listing, IncomeProof, ListingImage, VisitRequest
+from .models import Listing, IncomeProof, ListingImage, VisitRequest, IncomeDataPoint, ViewsDataPoint
 
 class ListingForm(forms.ModelForm):
     class Meta:
         model = Listing
         fields = ['category', 'title', 'description', 'location', 'price', 'discount_price', 'platform_url', 
-                  'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment', 'main_image', 'is_private']
+                  'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment', 
+                  'main_image', 'level', 'is_private']
         widgets = {
             'category': forms.Select(attrs={'class': 'form-control'}),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
@@ -24,9 +25,11 @@ class ListingForm(forms.ModelForm):
             'most_view': forms.NumberInput(attrs={'class': 'form-control'}),
             'most_comment': forms.NumberInput(attrs={'class': 'form-control'}),
             'main_image': forms.FileInput(attrs={'class': 'form-control'}),
+            'level': forms.Select(attrs={'class': 'form-control'}),
             'is_private': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
         labels = {
+            'level': 'سطح آگهی',
             'is_private': 'آگهی خصوصی (نیاز به درخواست بازدید)',
         }
 
@@ -37,6 +40,32 @@ class IncomeProofForm(forms.ModelForm):
         widgets = {
             'image': forms.FileInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+        }
+
+class IncomeDataPointForm(forms.ModelForm):
+    class Meta:
+        model = IncomeDataPoint
+        fields = ['date', 'income']
+        widgets = {
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'income': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'مثال: 5000000'}),
+        }
+        labels = {
+            'date': 'تاریخ',
+            'income': 'درآمد (تومان)',
+        }
+
+class ViewsDataPointForm(forms.ModelForm):
+    class Meta:
+        model = ViewsDataPoint
+        fields = ['date', 'views']
+        widgets = {
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'views': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'مثال: 15000'}),
+        }
+        labels = {
+            'date': 'تاریخ',
+            'views': 'تعداد بازدید',
         }
 
 class VisitRequestForm(forms.ModelForm):
@@ -62,4 +91,24 @@ IncomeProofFormSet = inlineformset_factory(
     extra=0,
     can_delete=True,
     max_num=10
+)
+
+# Formset برای نقاط داده درآمد
+IncomeDataPointFormSet = inlineformset_factory(
+    Listing,
+    IncomeDataPoint,
+    form=IncomeDataPointForm,
+    extra=0,
+    can_delete=True,
+    max_num=50
+)
+
+# Formset برای نقاط داده بازدید
+ViewsDataPointFormSet = inlineformset_factory(
+    Listing,
+    ViewsDataPoint,
+    form=ViewsDataPointForm,
+    extra=0,
+    can_delete=True,
+    max_num=50
 )

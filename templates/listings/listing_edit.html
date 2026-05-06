@@ -13,50 +13,78 @@
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    
+
                     <h5>اطلاعات آگهی</h5>
                     {{ form.as_p }}
-                    
+
                     <hr class="my-4">
-                    
+
+                    <h5 class="mb-3">نمودار درآمد (قابل ویرایش)</h5>
+                    {{ income_data_formset.management_form }}
+                    {% for form in income_data_formset %}
+                    <div class="border p-3 mb-3 rounded bg-light">
+                        {{ form.date.label_tag }} {{ form.date }}<br>
+                        {{ form.income.label_tag }} {{ form.income }}
+                        {{ form.id }}
+                    </div>
+                    {% endfor %}
+                    <button type="button" class="btn btn-success mb-3" id="add-income-data">افزودن نقطه درآمد</button>
+
+                    <hr class="my-4">
+
+                    <h5 class="mb-3">نمودار بازدید (قابل ویرایش)</h5>
+                    {{ views_data_formset.management_form }}
+                    {% for form in views_data_formset %}
+                    <div class="border p-3 mb-3 rounded bg-light">
+                        {{ form.date.label_tag }} {{ form.date }}<br>
+                        {{ form.views.label_tag }} {{ form.views }}
+                        {{ form.id }}
+                    </div>
+                    {% endfor %}
+                    <button type="button" class="btn btn-info mb-3" id="add-views-data">افزودن نقطه بازدید</button>
+
+
+
+
                     <h5>اثبات درآمد</h5>
                     <p class="text-muted">می‌توانید اثبات درآمد خود را ویرایش یا اضافه کنید</p>
-                    
+
                     {{ formset.management_form }}
-                    
+
                     <div id="income-proofs">
                         {% for form in formset %}
-                            <div class="income-proof-form border p-3 mb-3 rounded" data-proof-id="{{ form.instance.id }}">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <h6>اثبات درآمد {{ forloop.counter }}</h6>
-                                    <button type="button" class="btn btn-sm btn-danger remove-existing-form">حذف</button>
-                                </div>
-                                
-                                {% if form.instance.image %}
-                                    <div class="mb-2">
-                                        <img src="{{ form.instance.image.url }}" class="img-thumbnail" style="max-width: 200px;">
-                                    </div>
-                                {% endif %}
-                                
-                                <p>
-                                    <label for="id_income_proofs-{{ forloop.counter0 }}-image">تصویر اثبات درآمد:</label>
-                                    {{ form.image }}
-                                </p>
-                                <p>
-                                    <label for="id_income_proofs-{{ forloop.counter0 }}-description">توضیحات:</label>
-                                    {{ form.description }}
-                                </p>
-                                {{ form.id }}
+                        <div class="income-proof-form border p-3 mb-3 rounded" data-proof-id="{{ form.instance.id }}">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6>اثبات درآمد {{ forloop.counter }}</h6>
+                                <button type="button" class="btn btn-sm btn-danger remove-existing-form">حذف</button>
                             </div>
+
+                            {% if form.instance.image %}
+                            <div class="mb-2">
+                                <img src="{{ form.instance.image.url }}" class="img-thumbnail"
+                                    style="max-width: 200px;">
+                            </div>
+                            {% endif %}
+
+                            <p>
+                                <label for="id_income_proofs-{{ forloop.counter0 }}-image">تصویر اثبات درآمد:</label>
+                                {{ form.image }}
+                            </p>
+                            <p>
+                                <label for="id_income_proofs-{{ forloop.counter0 }}-description">توضیحات:</label>
+                                {{ form.description }}
+                            </p>
+                            {{ form.id }}
+                        </div>
                         {% endfor %}
                     </div>
-                    
+
                     <button type="button" class="btn btn-primary mb-3" id="add-income-proof">
                         <i class="bi bi-plus-circle"></i> افزودن اثبات درآمد
                     </button>
-                    
+
                     <hr>
-                    
+
                     <button type="submit" class="btn btn-success">ذخیره تغییرات</button>
                     <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-secondary">انصراف</a>
                 </form>
@@ -66,22 +94,22 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const container = document.getElementById('income-proofs');
-    const addButton = document.getElementById('add-income-proof');
-    const totalForms = document.querySelector('#id_income_proofs-TOTAL_FORMS');
-    
-    let formCount = parseInt(totalForms.value);
-    const deletedIds = [];
-    
-    addButton.addEventListener('click', function() {
-        const currentCount = container.querySelectorAll('.income-proof-form').length;
-        if (currentCount >= 10) {
-            alert('حداکثر 10 اثبات درآمد می‌توانید اضافه کنید');
-            return;
-        }
-        
-        const newForm = `
+    document.addEventListener('DOMContentLoaded', function () {
+        const container = document.getElementById('income-proofs');
+        const addButton = document.getElementById('add-income-proof');
+        const totalForms = document.querySelector('#id_income_proofs-TOTAL_FORMS');
+
+        let formCount = parseInt(totalForms.value);
+        const deletedIds = [];
+
+        addButton.addEventListener('click', function () {
+            const currentCount = container.querySelectorAll('.income-proof-form').length;
+            if (currentCount >= 10) {
+                alert('حداکثر 10 اثبات درآمد می‌توانید اضافه کنید');
+                return;
+            }
+
+            const newForm = `
             <div class="income-proof-form border p-3 mb-3 rounded">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <h6>اثبات درآمد ${currentCount + 1}</h6>
@@ -98,50 +126,50 @@ document.addEventListener('DOMContentLoaded', function() {
                 <input type="hidden" name="income_proofs-${formCount}-id" id="id_income_proofs-${formCount}-id">
             </div>
         `;
-        
-        container.insertAdjacentHTML('beforeend', newForm);
-        formCount++;
-        totalForms.value = formCount;
-    });
-    
-    container.addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-form')) {
-            e.target.closest('.income-proof-form').remove();
-            updateFormNumbers();
-        }
-        
-        if (e.target.classList.contains('remove-existing-form')) {
-            const form = e.target.closest('.income-proof-form');
-            const proofId = form.dataset.proofId;
-            
-            if (proofId) {
-                deletedIds.push(proofId);
-                updateDeletedInput();
-            }
-            
-            form.remove();
-            updateFormNumbers();
-        }
-    });
-    
-    function updateFormNumbers() {
-        const forms = container.querySelectorAll('.income-proof-form');
-        forms.forEach((form, index) => {
-            form.querySelector('h6').textContent = `اثبات درآمد ${index + 1}`;
+
+            container.insertAdjacentHTML('beforeend', newForm);
+            formCount++;
+            totalForms.value = formCount;
         });
-    }
-    
-    function updateDeletedInput() {
-        let input = document.getElementById('deleted-proofs');
-        if (!input) {
-            input = document.createElement('input');
-            input.type = 'hidden';
-            input.id = 'deleted-proofs';
-            input.name = 'deleted_proofs';
-            document.querySelector('form').appendChild(input);
+
+        container.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-form')) {
+                e.target.closest('.income-proof-form').remove();
+                updateFormNumbers();
+            }
+
+            if (e.target.classList.contains('remove-existing-form')) {
+                const form = e.target.closest('.income-proof-form');
+                const proofId = form.dataset.proofId;
+
+                if (proofId) {
+                    deletedIds.push(proofId);
+                    updateDeletedInput();
+                }
+
+                form.remove();
+                updateFormNumbers();
+            }
+        });
+
+        function updateFormNumbers() {
+            const forms = container.querySelectorAll('.income-proof-form');
+            forms.forEach((form, index) => {
+                form.querySelector('h6').textContent = `اثبات درآمد ${index + 1}`;
+            });
         }
-        input.value = deletedIds.join(',');
-    }
-});
+
+        function updateDeletedInput() {
+            let input = document.getElementById('deleted-proofs');
+            if (!input) {
+                input = document.createElement('input');
+                input.type = 'hidden';
+                input.id = 'deleted-proofs';
+                input.name = 'deleted_proofs';
+                document.querySelector('form').appendChild(input);
+            }
+            input.value = deletedIds.join(',');
+        }
+    });
 </script>
 {% endblock %}

@@ -5,7 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
 from .models import Listing, Category, IncomeProof, VisitRequest
-from .forms import ListingForm, IncomeProofFormSet, VisitRequestForm
+from .forms import (ListingForm, IncomeProofFormSet, VisitRequestForm, 
+                    IncomeDataPointFormSet, ViewsDataPointFormSet)
+import json
 
 def listing_list(request):
     listings = Listing.objects.filter(status='active')
@@ -13,6 +15,10 @@ def listing_list(request):
     category_id = request.GET.get('category')
     if category_id:
         listings = listings.filter(category_id=category_id)
+    
+    level = request.GET.get('level')
+    if level:
+        listings = listings.filter(level=level)
     
     search_query = request.GET.get('search')
     if search_query:
@@ -26,16 +32,15 @@ def listing_list(request):
     context = {
         'listings': listings,
         'categories': categories,
+        'level_choices': Listing.LEVEL_CHOICES,
     }
     return render(request, 'listings/listing_list.html', context)
 
 def listing_detail(request, pk):
     listing = get_object_or_404(Listing, pk=pk)
     
-    # بررسی دسترسی
     has_access = listing.has_access(request.user)
     
-    # بررسی وضعیت درخواست بازدید
     visit_request = None
     if request.user.is_authenticated and listing.is_private and request.user != listing.seller:
         visit_request = VisitRequest.objects.filter(
@@ -49,11 +54,32 @@ def listing_detail(request, pk):
     
     income_proofs = listing.income_proofs.all() if has_access else []
     
+    # داده‌های نمودار
+    income_chart_data = None
+    views_chart_data = None
+    
+    if has_access:
+        income_data = listing.get_income_chart_data()
+        if income_data:
+            income_chart_data = {
+                'labels': json.dumps(income_data['labels']),
+                'data': json.dumps(income_data['data'])
+            }
+        
+        views_data = listing.get_views_chart_data()
+        if views_data:
+            views_chart_data = {
+                'labels': json.dumps(views_data['labels']),
+                'data': json.dumps(views_data['data'])
+            }
+    
     context = {
         'listing': listing,
         'income_proofs': income_proofs,
         'has_access': has_access,
         'visit_request': visit_request,
+        'income_chart_data': income_chart_data,
+        'views_chart_data': views_chart_data,
     }
     return render(request, 'listings/listing_detail.html', context)
 
@@ -61,25 +87,39 @@ def listing_detail(request, pk):
 def listing_create(request):
     if request.method == 'POST':
         form = ListingForm(request.POST, request.FILES)
-        formset = IncomeProofFormSet(request.POST, request.FILES)
+        income_proof_formset = IncomeProofFormSet(request.POST, request.FILES)
+        income_data_formset = IncomeDataPointFormSet(request.POST)
+        views_data_formset = ViewsDataPointFormSet(request.POST)
         
-        if form.is_valid() and formset.is_valid():
+        if (form.is_valid() and income_proof_formset.is_valid() and 
+            income_data_formset.is_valid() and views_data_formset.is_valid()):
+            
             listing = form.save(commit=False)
             listing.seller = request.user
             listing.save()
             
-            formset.instance = listing
-            formset.save()
+            income_proof_formset.instance = listing
+            income_proof_formset.save()
+            
+            income_data_formset.instance = listing
+            income_data_formset.save()
+            
+            views_data_formset.instance = listing
+            views_data_formset.save()
             
             messages.success(request, 'آگهی شما با موفقیت ثبت شد و در انتظار تایید است.')
             return redirect('listings:my_listings')
     else:
         form = ListingForm()
-        formset = IncomeProofFormSet()
+        income_proof_formset = IncomeProofFormSet()
+        income_data_formset = IncomeDataPointFormSet()
+        views_data_formset = ViewsDataPointFormSet()
     
     return render(request, 'listings/listing_create.html', {
         'form': form,
-        'formset': formset
+        'income_proof_formset': income_proof_formset,
+        'income_data_formset': income_data_formset,
+        'views_data_formset': views_data_formset,
     })
 
 @login_required
@@ -88,20 +128,31 @@ def listing_edit(request, pk):
     
     if request.method == 'POST':
         form = ListingForm(request.POST, request.FILES, instance=listing)
-        formset = IncomeProofFormSet(request.POST, request.FILES, instance=listing)
+        income_proof_formset = IncomeProofFormSet(request.POST, request.FILES, instance=listing)
+        income_data_formset = IncomeDataPointFormSet(request.POST, instance=listing)
+        views_data_formset = ViewsDataPointFormSet(request.POST, instance=listing)
         
-        if form.is_valid() and formset.is_valid():
+        if (form.is_valid() and income_proof_formset.is_valid() and 
+            income_data_formset.is_valid() and views_data_formset.is_valid()):
+            
             form.save()
-            formset.save()
+            income_proof_formset.save()
+            income_data_formset.save()
+            views_data_formset.save()
+            
             messages.success(request, 'آگهی با موفقیت ویرایش شد.')
             return redirect('listings:listing_detail', pk=listing.pk)
     else:
         form = ListingForm(instance=listing)
-        formset = IncomeProofFormSet(instance=listing)
+        income_proof_formset = IncomeProofFormSet(instance=listing)
+        income_data_formset = IncomeDataPointFormSet(instance=listing)
+        views_data_formset = ViewsDataPointFormSet(instance=listing)
     
     return render(request, 'listings/listing_edit.html', {
         'form': form,
-        'formset': formset,
+        'income_proof_formset': income_proof_formset,
+        'income_data_formset': income_data_formset,
+        'views_data_formset': views_data_formset,
         'listing': listing
     })
 
@@ -109,7 +160,6 @@ def listing_edit(request, pk):
 def my_listings(request):
     listings = Listing.objects.filter(seller=request.user)
     
-    # درخواست‌های بازدید در انتظار
     pending_requests = VisitRequest.objects.filter(
         listing__seller=request.user,
         status='pending'
@@ -153,17 +203,14 @@ def listing_activate(request, pk):
 def request_visit(request, pk):
     listing = get_object_or_404(Listing, pk=pk, status='active')
     
-    # بررسی اینکه آگهی خصوصی باشد
     if not listing.is_private:
         messages.warning(request, 'این آگهی خصوصی نیست.')
         return redirect('listings:listing_detail', pk=pk)
     
-    # بررسی اینکه کاربر صاحب آگهی نباشد
     if request.user == listing.seller:
         messages.warning(request, 'شما صاحب این آگهی هستید.')
         return redirect('listings:listing_detail', pk=pk)
     
-    # بررسی درخواست قبلی
     existing_request = VisitRequest.objects.filter(
         listing=listing,
         requester=request.user
@@ -214,5 +261,3 @@ def manage_visit_request(request, pk, action):
         messages.success(request, f'درخواست {visit_request.requester.username} رد شد.')
     
     return redirect('listings:my_listings')
-
-
