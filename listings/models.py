@@ -32,12 +32,12 @@ class Listing(models.Model):
         ('deleted', 'حذف شده'),
     ]
     
-    LEVEL_CHOICES = [
+    """LEVEL_CHOICES = [
         ('beginner', 'مبتدی'),
         ('intermediate', 'متوسط'),
         ('advanced', 'پیشرفته'),
         ('professional', 'حرفه‌ای'),
-    ]
+    ] """
     
     seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='listings')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
@@ -48,12 +48,12 @@ class Listing(models.Model):
     discount_price = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True)
     
     # سطح آگهی
-    level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='beginner', verbose_name='سطح')
+    """ level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='beginner', verbose_name='سطح') """
     
     # اطلاعات پلتفرم
     platform_url = models.URLField()
     followers_count = models.IntegerField(default=0)
-    monthly_income = models.DecimalField(max_digits=12, decimal_places=0)
+    monthly_income = models.DecimalField(null=True, blank=True, max_digits=12, decimal_places=0)
     platform_age = models.IntegerField(default=0)
 
     most_like = models.IntegerField(null=True, blank=True)
@@ -65,6 +65,12 @@ class Listing(models.Model):
     
     # ارتقا اگهی 
     is_preferment = models.BooleanField(default=False, verbose_name='آگهی ارتقا یافته')
+
+    # درامد اگهی 
+    is_income = models.BooleanField(default=True, verbose_name='اگهی به درامد رسیده')
+
+    # اطلاعات مورد تایید 
+    is_verified = models.BooleanField(default=False, verbose_name='اطلاعات مورد تایید است')
 
     # گزینه خصوصی
     is_private = models.BooleanField(default=False, verbose_name='آگهی خصوصی')

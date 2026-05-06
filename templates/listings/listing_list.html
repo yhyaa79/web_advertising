@@ -38,6 +38,7 @@
             {% if listing.main_image %}
             <img src="{{ listing.main_image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
             {% endif %}
+
             {% if listing.is_private %}
             <div class="position-absolute top-0 end-0 m-2">
                 <span class="badge bg-warning text-dark">
@@ -45,20 +46,44 @@
                 </span>
             </div>
             {% endif %}
+
+            {% if listing.is_income %}
+            <div class="position-absolute top-0 end-0 m-2">
+                <span class="badge bg-warning text-dark">
+                    <i class="bi bi-lock-fill"></i> درامد اگهی
+                </span>
+            </div>
+            {% endif %}
+
+
+            {% if listing.is_verified %}
+            <div class="position-absolute top-0 end-0 m-2">
+                <span class="badge bg-warning text-dark">
+                    <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
+                </span>
+            </div>
+            {% endif %}
+
+            {% if listing.is_preferment %}
+            <div class="position-absolute top-0 end-0 m-2">
+                <span class="badge bg-warning text-dark">
+                    <i class="bi bi-lock-fill"></i> ارتقا اگهی
+                </span>
+            </div>
+            {% endif %}
+
             <div class="card-body">
                 <span class="badge bg-info">{{ listing.category.get_platform_display }}</span>
                 <h5 class="card-title mt-2">{{ listing.title }}</h5>
                 <p class="card-text">{{ listing.description|truncatewords:20 }}</p>
-                {% if not listing.is_private or user == listing.seller %}
+
                 <p><strong>دنبال‌کننده:</strong> {{ listing.followers_count|floatformat:0 }} نفر</p>
-
                 <p><strong>تاریخ انتشار اگهی:</strong> {{ listing.created_at }} </p>
-
-                <p><strong>درآمد ماهانه:</strong> {{ listing.monthly_income|floatformat:0 }} تومان</p>
-
                 <p><strong>برگشت سرمایه:</strong> {{ listing.get_roi_display }}</p>
-
                 <p><strong>سن پلتفرم:</strong> {{ listing.platform_age|floatformat:0 }} سال</p>
+
+                {% if not listing.is_private or user == listing.seller %}
+                <p><strong>درآمد ماهانه:</strong> {{ listing.monthly_income|floatformat:0 }} تومان</p>
                 {% else %}
                 <p class="text-muted"><i class="bi bi-lock"></i> اطلاعات محرمانه</p>
                 {% endif %}

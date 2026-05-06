@@ -9,7 +9,7 @@ class ListingForm(forms.ModelForm):
         model = Listing
         fields = ['category', 'title', 'description', 'location', 'price', 'discount_price', 'platform_url', 
                   'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment', 
-                  'main_image', 'level', 'is_private']
+                  'main_image', 'is_private', 'is_income']
         widgets = {
             'category': forms.Select(attrs={'class': 'form-control'}),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
@@ -25,12 +25,30 @@ class ListingForm(forms.ModelForm):
             'most_view': forms.NumberInput(attrs={'class': 'form-control'}),
             'most_comment': forms.NumberInput(attrs={'class': 'form-control'}),
             'main_image': forms.FileInput(attrs={'class': 'form-control'}),
-            'level': forms.Select(attrs={'class': 'form-control'}),
             'is_private': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_income': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_verified': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_preferment': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
         labels = {
-            'level': 'سطح آگهی',
-            'is_private': 'آگهی خصوصی (نیاز به درخواست بازدید)',
+            'category': 'دسته بندی',
+            'title': 'تیتر',
+            'description': 'توضیحات',
+            'location': 'موقعیت مکانی',
+            'price': 'قیمت پایه',
+            'discount_price': 'قیمت تخفیف خورده',
+            'platform_url': 'ادرس پلتفرم',
+            'followers_count': 'دنبال کنندگان',
+            'monthly_income': 'درامد ماهیانه',
+            'platform_age': 'سن پلتفرم',
+            'most_like': 'بیشترین لایک',
+            'most_view': 'بیشترین بازدید',
+            'most_comment': 'بیشترین نظرات',
+            'main_image': 'عکس اصلی',
+            'is_private': 'اگهی خصوصی',
+            'is_income': 'درامد داشتن اگهی',
+            'is_verified': 'اگهی مورد تایید',
+            'is_preferment': 'ارتقا اگهی ',
         }
 
 class IncomeProofForm(forms.ModelForm):

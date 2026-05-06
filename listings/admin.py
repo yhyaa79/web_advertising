@@ -44,6 +44,8 @@ class ListingAdmin(admin.ModelAdmin):
         'most_view',
         'most_comment',
         'is_preferment',
+        'is_income',
+        'is_verified',
         'is_private',
         'status', 
         'views_count', 
@@ -59,7 +61,7 @@ class ListingAdmin(admin.ModelAdmin):
             'fields': ('seller', 'title', 'category', 'description', 'location')
         }),
         ('قیمت و تصویر', {
-            'fields': ('price', 'discount_price', 'main_image')
+            'fields': ('is_income', 'is_verified', 'price', 'discount_price', 'main_image')
         }),
         ('اطلاعات پلتفرم', {
             'fields': ('platform_url', 'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment')

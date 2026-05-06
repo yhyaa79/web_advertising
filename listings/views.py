@@ -16,9 +16,7 @@ def listing_list(request):
     if category_id:
         listings = listings.filter(category_id=category_id)
     
-    level = request.GET.get('level')
-    if level:
-        listings = listings.filter(level=level)
+
     
     search_query = request.GET.get('search')
     if search_query:
@@ -32,9 +30,10 @@ def listing_list(request):
     context = {
         'listings': listings,
         'categories': categories,
-        'level_choices': Listing.LEVEL_CHOICES,
     }
     return render(request, 'listings/listing_list.html', context)
+
+# listings/views.py
 
 def listing_detail(request, pk):
     listing = get_object_or_404(Listing, pk=pk)
@@ -61,17 +60,11 @@ def listing_detail(request, pk):
     if has_access:
         income_data = listing.get_income_chart_data()
         if income_data:
-            income_chart_data = {
-                'labels': json.dumps(income_data['labels']),
-                'data': json.dumps(income_data['data'])
-            }
+            income_chart_data = json.dumps(income_data)  # فقط یکبار json.dumps
         
         views_data = listing.get_views_chart_data()
         if views_data:
-            views_chart_data = {
-                'labels': json.dumps(views_data['labels']),
-                'data': json.dumps(views_data['data'])
-            }
+            views_chart_data = json.dumps(views_data)  # فقط یکبار json.dumps
     
     context = {
         'listing': listing,
@@ -82,6 +75,7 @@ def listing_detail(request, pk):
         'views_chart_data': views_chart_data,
     }
     return render(request, 'listings/listing_detail.html', context)
+
 
 @login_required
 def listing_create(request):

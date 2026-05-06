@@ -20,7 +20,8 @@
                     </span>
                     {% endif %}
                 </div>
-                <p class="text-muted">تاریخ انتشار اگهی: {{ listing.created_at }} | فروشنده: {{ listing.seller.username }} | بازدید: {{ listing.views_count }}</p>
+                <p class="text-muted">تاریخ انتشار اگهی: {{ listing.created_at }} | فروشنده:
+                    {{ listing.seller.username }} | بازدید: {{ listing.views_count }}</p>
                 <hr>
 
                 {% if not has_access %}
@@ -81,18 +82,18 @@
                 <!-- نمودارها -->
                 <div id="income-chart-container" class="mt-4" style="display: none;">
                     <h5>نمودار درآمد ماهانه</h5>
-                    <div class="card">
+                    <div class="card chart-card">
                         <div class="card-body">
-                            <div id="incomeChart" class="chart-container"></div>
+                            <canvas id="incomeChart"></canvas>
                         </div>
                     </div>
                 </div>
 
                 <div id="views-chart-container" class="mt-4" style="display: none;">
                     <h5>نمودار بازدید روزانه</h5>
-                    <div class="card">
+                    <div class="card chart-card">
                         <div class="card-body">
-                            <div id="viewsChart" class="chart-container"></div>
+                            <canvas id="viewsChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -160,243 +161,381 @@
 </div>
 
 <!-- داده‌های نمودار به صورت مخفی -->
-<div id="chart-data" 
-     data-income='{{ income_chart_data|safe }}' 
-     data-views='{{ views_chart_data|safe }}'
-     style="display: none;">
+<div id="chart-data" data-income='{{ income_chart_data|safe }}' data-views='{{ views_chart_data|safe }}'
+    style="display: none;">
 </div>
 
-<style>
-.chart-container {
-    width: 100%;
-    height: 300px;
-    position: relative;
-    direction: ltr;
-}
-
-.chart-svg {
-    width: 100%;
-    height: 100%;
-}
-
-.chart-line {
-    fill: none;
-    stroke-width: 2;
-}
-
-.chart-area {
-    opacity: 0.2;
-}
-
-.chart-point {
-    cursor: pointer;
-    transition: r 0.2s;
-}
-
-.chart-point:hover {
-    r: 6;
-}
-
-.chart-grid {
-    stroke: #e0e0e0;
-    stroke-width: 1;
-}
-
-.chart-axis {
-    stroke: #666;
-    stroke-width: 1;
-}
-
-.chart-label {
-    font-family: 'Vazir', sans-serif;
-    font-size: 11px;
-    fill: #666;
-}
-
-.chart-tooltip {
-    position: absolute;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    pointer-events: none;
-    display: none;
-    z-index: 1000;
-    font-family: 'Vazir', sans-serif;
-}
-</style>
-
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const chartDataElement = document.getElementById('chart-data');
-    
-    if (!chartDataElement) return;
-    
-    const incomeDataRaw = chartDataElement.getAttribute('data-income');
-    const viewsDataRaw = chartDataElement.getAttribute('data-views');
-    
-    function createLineChart(containerId, data, color, label, unit) {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-        
-        const width = container.offsetWidth;
-        const height = 300;
-        const padding = { top: 20, right: 20, bottom: 40, left: 60 };
-        const chartWidth = width - padding.left - padding.right;
-        const chartHeight = height - padding.top - padding.bottom;
-        
-        const maxValue = Math.max(...data.data);
-        const minValue = Math.min(...data.data);
-        const valueRange = maxValue - minValue || 1;
-        
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        svg.setAttribute('class', 'chart-svg');
-        svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
-        
-        // خطوط شبکه افقی
-        for (let i = 0; i <= 5; i++) {
-            const y = padding.top + (chartHeight / 5) * i;
-            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            line.setAttribute('class', 'chart-grid');
-            line.setAttribute('x1', padding.left);
-            line.setAttribute('y1', y);
-            line.setAttribute('x2', padding.left + chartWidth);
-            line.setAttribute('y2', y);
-            svg.appendChild(line);
-            
-            const value = maxValue - (valueRange / 5) * i;
-            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            text.setAttribute('class', 'chart-label');
-            text.setAttribute('x', padding.left - 10);
-            text.setAttribute('y', y + 4);
-            text.setAttribute('text-anchor', 'end');
-            text.textContent = Math.round(value).toLocaleString('fa-IR');
-            svg.appendChild(text);
+    document.addEventListener('DOMContentLoaded', function () {
+        const chartDataElement = document.getElementById('chart-data');
+
+        if (!chartDataElement) return;
+
+        const incomeDataRaw = chartDataElement.getAttribute('data-income');
+        const viewsDataRaw = chartDataElement.getAttribute('data-views');
+
+        // تابع کمکی برای فرمت کردن اعداد با کاما
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
-        
-        // محورها
-        const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        xAxis.setAttribute('class', 'chart-axis');
-        xAxis.setAttribute('x1', padding.left);
-        xAxis.setAttribute('y1', padding.top + chartHeight);
-        xAxis.setAttribute('x2', padding.left + chartWidth);
-        xAxis.setAttribute('y2', padding.top + chartHeight);
-        svg.appendChild(xAxis);
-        
-        const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        yAxis.setAttribute('class', 'chart-axis');
-        yAxis.setAttribute('x1', padding.left);
-        yAxis.setAttribute('y1', padding.top);
-        yAxis.setAttribute('x2', padding.left);
-        yAxis.setAttribute('y2', padding.top + chartHeight);
-        svg.appendChild(yAxis);
-        
-        // نقاط و خط
-        const points = [];
-        const stepX = chartWidth / (data.labels.length - 1 || 1);
-        
-        data.data.forEach((value, index) => {
-            const x = padding.left + stepX * index;
-            const y = padding.top + chartHeight - ((value - minValue) / valueRange) * chartHeight;
-            points.push({ x, y, value, label: data.labels[index] });
-        });
-        
-        // ناحیه زیر خط
-        if (points.length > 0) {
-            const areaPath = 'M' + points[0].x + ',' + (padding.top + chartHeight) +
-                           ' L' + points.map(p => p.x + ',' + p.y).join(' L') +
-                           ' L' + points[points.length - 1].x + ',' + (padding.top + chartHeight) + ' Z';
-            const area = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            area.setAttribute('class', 'chart-area');
-            area.setAttribute('d', areaPath);
-            area.setAttribute('fill', color);
-            svg.appendChild(area);
-        }
-        
-        // خط
-        if (points.length > 1) {
-            const linePath = 'M' + points.map(p => p.x + ',' + p.y).join(' L');
-            const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            line.setAttribute('class', 'chart-line');
-            line.setAttribute('d', linePath);
-            line.setAttribute('stroke', color);
-            svg.appendChild(line);
-        }
-        
-        // نقاط
-        const tooltip = document.createElement('div');
-        tooltip.className = 'chart-tooltip';
-        container.appendChild(tooltip);
-        
-        points.forEach((point, index) => {
-            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-            circle.setAttribute('class', 'chart-point');
-            circle.setAttribute('cx', point.x);
-            circle.setAttribute('cy', point.y);
-            circle.setAttribute('r', 4);
-            circle.setAttribute('fill', color);
-            
-            circle.addEventListener('mouseenter', function(e) {
-                tooltip.style.display = 'block';
-                tooltip.innerHTML = '<strong>' + point.label + '</strong><br>' + 
-                                   point.value.toLocaleString('fa-IR') + ' ' + unit;
+
+        // تابع رسم نمودار حرفه‌ای
+        function drawChart(canvasId, labels, data, config) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas || !labels || labels.length === 0) return;
+
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+
+            // تنظیم اندازه canvas
+            const containerWidth = canvas.parentElement.offsetWidth;
+            const containerHeight = 400;
+
+            canvas.width = containerWidth * dpr;
+            canvas.height = containerHeight * dpr;
+            canvas.style.width = containerWidth + 'px';
+            canvas.style.height = containerHeight + 'px';
+
+            ctx.scale(dpr, dpr);
+
+            const padding = {
+                top: 40,
+                right: 40,
+                bottom: 60,
+                left: 80
+            };
+            const chartWidth = containerWidth - padding.left - padding.right;
+            const chartHeight = containerHeight - padding.top - padding.bottom;
+
+            // محاسبه مقادیر - شروع از صفر
+            const maxValue = Math.max(...data);
+            const minValue = 0;
+            const range = maxValue || 1;
+
+            // تنظیم فونت
+            ctx.font = '12px Vazir, sans-serif';
+            ctx.textAlign = 'right';
+
+            // رسم شبکه و محور Y
+            ctx.strokeStyle = '#e8e8e8';
+            ctx.lineWidth = 1;
+            ctx.fillStyle = '#666';
+
+            for (let i = 0; i <= 5; i++) {
+                const y = padding.top + (chartHeight / 5) * i;
+                const value = maxValue - (range / 5) * i;
+
+                // خط شبکه
+                ctx.beginPath();
+                ctx.moveTo(padding.left, y);
+                ctx.lineTo(containerWidth - padding.right, y);
+                ctx.stroke();
+
+                // برچسب محور Y
+                ctx.fillText(formatNumber(Math.round(value)), padding.left - 10, y + 4);
+            }
+
+            // محاسبه نقاط
+            const points = data.map((value, index) => {
+                const x = padding.left + (chartWidth / (data.length - 1)) * index;
+                const normalizedValue = value / range;
+                const y = padding.top + chartHeight - (normalizedValue * chartHeight);
+                return {
+                    x,
+                    y,
+                    value
+                };
             });
-            
-            circle.addEventListener('mousemove', function(e) {
-                const rect = container.getBoundingClientRect();
-                tooltip.style.left = (e.clientX - rect.left + 10) + 'px';
-                tooltip.style.top = (e.clientY - rect.top - 30) + 'px';
+
+            // رسم gradient برای ناحیه زیر خط
+            const gradient = ctx.createLinearGradient(0, padding.top, 0, containerHeight - padding.bottom);
+            gradient.addColorStop(0, config.color + '40');
+            gradient.addColorStop(1, config.color + '05');
+
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, containerHeight - padding.bottom);
+
+            points.forEach((point, index) => {
+                if (index === 0) {
+                    ctx.lineTo(point.x, point.y);
+                } else {
+                    // استفاده از bezier curve برای نرم‌تر کردن خط
+                    const prevPoint = points[index - 1];
+                    const cpX = (prevPoint.x + point.x) / 2;
+                    ctx.bezierCurveTo(cpX, prevPoint.y, cpX, point.y, point.x, point.y);
+                }
             });
-            
-            circle.addEventListener('mouseleave', function() {
-                tooltip.style.display = 'none';
+
+            ctx.lineTo(points[points.length - 1].x, containerHeight - padding.bottom);
+            ctx.closePath();
+            ctx.fill();
+
+            // رسم خط اصلی
+            ctx.strokeStyle = config.color;
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            ctx.beginPath();
+            points.forEach((point, index) => {
+                if (index === 0) {
+                    ctx.moveTo(point.x, point.y);
+                } else {
+                    const prevPoint = points[index - 1];
+                    const cpX = (prevPoint.x + point.x) / 2;
+                    ctx.bezierCurveTo(cpX, prevPoint.y, cpX, point.y, point.x, point.y);
+                }
             });
-            
-            svg.appendChild(circle);
-            
+            ctx.stroke();
+
+            // رسم نقاط
+            points.forEach(point => {
+                // دایره بیرونی (سایه)
+                ctx.fillStyle = config.color + '30';
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, 8, 0, Math.PI * 2);
+                ctx.fill();
+
+                // دایره داخلی
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, 5, 0, Math.PI * 2);
+                ctx.fill();
+
+                // نقطه مرکزی
+                ctx.fillStyle = config.color;
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
             // برچسب‌های محور X
-            if (index % Math.ceil(data.labels.length / 6) === 0 || index === data.labels.length - 1) {
-                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                text.setAttribute('class', 'chart-label');
-                text.setAttribute('x', point.x);
-                text.setAttribute('y', padding.top + chartHeight + 20);
-                text.setAttribute('text-anchor', 'middle');
-                text.textContent = point.label;
-                svg.appendChild(text);
+            ctx.fillStyle = '#666';
+            ctx.textAlign = 'center';
+            ctx.font = '11px Vazir, sans-serif';
+
+            labels.forEach((label, index) => {
+                const x = padding.left + (chartWidth / (data.length - 1)) * index;
+                ctx.fillText(label, x, containerHeight - padding.bottom + 25);
+            });
+
+            // ذخیره اطلاعات برای tooltip
+            canvas.chartData = {
+                points,
+                labels,
+                unit: config.unit,
+                padding,
+                containerWidth,
+                containerHeight
+            };
+
+            // اضافه کردن event listener برای tooltip
+            setupTooltip(canvas, config.color);
+        }
+
+        // تابع راه‌اندازی tooltip
+        function setupTooltip(canvas, color) {
+            let tooltip = document.getElementById('chart-tooltip-' + canvas.id);
+
+            if (!tooltip) {
+                tooltip = document.createElement('div');
+                tooltip.id = 'chart-tooltip-' + canvas.id;
+                tooltip.className = 'chart-tooltip';
+                document.body.appendChild(tooltip);
             }
+
+            canvas.addEventListener('mousemove', function (e) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const {
+                    points,
+                    labels,
+                    unit
+                } = canvas.chartData;
+
+                // پیدا کردن نزدیک‌ترین نقطه
+                let closestPoint = null;
+                let minDistance = Infinity;
+
+                points.forEach((point, index) => {
+                    const distance = Math.sqrt(Math.pow(x - point.x, 2) + Math.pow(y - point.y, 2));
+                    if (distance < minDistance && distance < 20) {
+                        minDistance = distance;
+                        closestPoint = {
+                            ...point,
+                            index
+                        };
+                    }
+                });
+
+                if (closestPoint) {
+                    canvas.style.cursor = 'pointer';
+                    tooltip.style.display = 'block';
+                    tooltip.innerHTML = `
+                        <div class="tooltip-label">${labels[closestPoint.index]}</div>
+                        <div class="tooltip-value" style="color: ${color}">
+                            ${formatNumber(Math.round(closestPoint.value))} ${unit}
+                        </div>
+                    `;
+
+                    // محاسبه موقعیت tooltip
+                    const canvasRect = canvas.getBoundingClientRect();
+                    const tooltipRect = tooltip.getBoundingClientRect();
+
+                    // موقعیت نقطه نسبت به viewport
+                    const pointX = canvasRect.left + closestPoint.x;
+                    const pointY = canvasRect.top + closestPoint.y;
+
+                    // قرار دادن tooltip بالای نقطه
+                    let tooltipX = pointX - (tooltipRect.width / 2);
+                    let tooltipY = pointY - tooltipRect.height - 15;
+
+                    // اگر tooltip از بالای صفحه خارج شد، آن را پایین نقطه قرار بده
+                    if (tooltipY < window.scrollY) {
+                        tooltipY = pointY + 15;
+                    }
+
+                    // جلوگیری از خروج tooltip از سمت چپ و راست صفحه
+                    if (tooltipX < 5) {
+                        tooltipX = 5;
+                    } else if (tooltipX + tooltipRect.width > window.innerWidth - 5) {
+                        tooltipX = window.innerWidth - tooltipRect.width - 5;
+                    }
+
+                    tooltip.style.left = tooltipX + 'px';
+                    tooltip.style.top = tooltipY + 'px';
+                } else {
+                    canvas.style.cursor = 'default';
+                    tooltip.style.display = 'none';
+                }
+            });
+
+            canvas.addEventListener('mouseleave', function () {
+                tooltip.style.display = 'none';
+                canvas.style.cursor = 'default';
+            });
+        }
+
+        // نمودار درآمد
+        if (incomeDataRaw && incomeDataRaw !== 'None' && incomeDataRaw !== '') {
+            try {
+                const incomeData = JSON.parse(incomeDataRaw);
+
+                if (incomeData && incomeData.labels && incomeData.labels.length > 0) {
+                    document.getElementById('income-chart-container').style.display = 'block';
+                    drawChart('incomeChart', incomeData.labels, incomeData.data, {
+                        color: '#10b981',
+                        unit: 'تومان'
+                    });
+                }
+            } catch (e) {
+                console.error('خطا در پردازش داده‌های نمودار درآمد:', e);
+            }
+        }
+
+        // نمودار بازدید
+        if (viewsDataRaw && viewsDataRaw !== 'None' && viewsDataRaw !== '') {
+            try {
+                const viewsData = JSON.parse(viewsDataRaw);
+
+                if (viewsData && viewsData.labels && viewsData.labels.length > 0) {
+                    document.getElementById('views-chart-container').style.display = 'block';
+                    drawChart('viewsChart', viewsData.labels, viewsData.data, {
+                        color: '#3b82f6',
+                        unit: 'بازدید'
+                    });
+                }
+            } catch (e) {
+                console.error('خطا در پردازش داده‌های نمودار بازدید:', e);
+            }
+        }
+
+        // Responsive: رسم مجدد نمودارها هنگام تغییر اندازه صفحه
+        let resizeTimeout;
+        window.addEventListener('resize', function () {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function () {
+                if (incomeDataRaw && incomeDataRaw !== 'None' && incomeDataRaw !== '') {
+                    try {
+                        const incomeData = JSON.parse(incomeDataRaw);
+                        if (incomeData && incomeData.labels && incomeData.labels.length > 0) {
+                            drawChart('incomeChart', incomeData.labels, incomeData.data, {
+                                color: '#10b981',
+                                unit: 'تومان'
+                            });
+                        }
+                    } catch (e) {}
+                }
+
+                if (viewsDataRaw && viewsDataRaw !== 'None' && viewsDataRaw !== '') {
+                    try {
+                        const viewsData = JSON.parse(viewsDataRaw);
+                        if (viewsData && viewsData.labels && viewsData.labels.length > 0) {
+                            drawChart('viewsChart', viewsData.labels, viewsData.data, {
+                                color: '#3b82f6',
+                                unit: 'بازدید'
+                            });
+                        }
+                    } catch (e) {}
+                }
+            }, 250);
         });
-        
-        container.appendChild(svg);
-    }
-    
-    // نمودار درآمد
-    if (incomeDataRaw && incomeDataRaw !== 'None' && incomeDataRaw !== '') {
-        try {
-            const incomeData = JSON.parse(incomeDataRaw);
-            
-            if (incomeData && incomeData.labels && incomeData.labels.length > 0) {
-                document.getElementById('income-chart-container').style.display = 'block';
-                createLineChart('incomeChart', incomeData, '#4bc0c0', 'درآمد', 'تومان');
-            }
-        } catch (e) {
-            console.error('خطا در پردازش داده‌های نمودار درآمد:', e);
-        }
-    }
-    
-    // نمودار بازدید
-    if (viewsDataRaw && viewsDataRaw !== 'None' && viewsDataRaw !== '') {
-        try {
-            const viewsData = JSON.parse(viewsDataRaw);
-            
-            if (viewsData && viewsData.labels && viewsData.labels.length > 0) {
-                document.getElementById('views-chart-container').style.display = 'block';
-                createLineChart('viewsChart', viewsData, '#ff6384', 'بازدید', 'بازدید');
-            }
-        } catch (e) {
-            console.error('خطا در پردازش داده‌های نمودار بازدید:', e);
-        }
-    }
-});
+    });
 </script>
+
+
+<style>
+    .chart-card {
+        border: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .chart-card .card-body {
+        padding: 30px 20px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    }
+
+    canvas {
+        display: block;
+        width: 100%;
+    }
+
+    .chart-tooltip {
+        position: fixed;
+        left: 100px;
+        background: rgba(0, 0, 0, 0.694);
+        color: white;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        pointer-events: none;
+        z-index: 10000;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        display: none;
+    }
+
+    .tooltip-label {
+        font-size: 11px;
+        opacity: 0.8;
+        margin-bottom: 4px;
+    }
+
+    .tooltip-value {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    #income-chart-container h5,
+    #views-chart-container h5 {
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 15px;
+    }
+</style>
 {% endblock %}
