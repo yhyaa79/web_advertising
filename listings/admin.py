@@ -32,27 +32,40 @@ class ListingAdmin(admin.ModelAdmin):
     list_display = (
         'title', 
         'seller', 
+        'location',
         'category', 
         'price', 
+        'discount_price', 
+        'platform_url',
+        'followers_count',
+        'monthly_income',
+        'platform_age',
+        'most_like',
+        'most_view',
+        'most_comment',
+        'is_preferment',
         'is_private',
         'status', 
         'views_count', 
         'created_at'
     )
-    list_filter = ('status', 'is_private', 'category', 'created_at')
+    list_filter = ('status','is_preferment', 'is_private', 'category', 'created_at')
     search_fields = ('title', 'description', 'seller__username')
     readonly_fields = ('views_count', 'created_at', 'updated_at')
     inlines = [IncomeProofInline, ListingImageInline, VisitRequestInline]
     
     fieldsets = (
         ('اطلاعات اصلی', {
-            'fields': ('seller', 'title', 'category', 'description')
+            'fields': ('seller', 'title', 'category', 'description', 'location')
         }),
         ('قیمت و تصویر', {
-            'fields': ('price', 'main_image')
+            'fields': ('price', 'discount_price', 'main_image')
+        }),
+        ('اطلاعات پلتفرم', {
+            'fields': ('platform_url', 'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment')
         }),
         ('تنظیمات', {
-            'fields': ('is_private', 'status', 'rejection_reason')
+            'fields': ('is_preferment', 'is_private', 'status', 'rejection_reason')
         }),
         ('آمار', {
             'fields': ('views_count', 'created_at', 'updated_at'),

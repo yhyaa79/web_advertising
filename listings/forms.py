@@ -7,16 +7,22 @@ from .models import Listing, IncomeProof, ListingImage, VisitRequest
 class ListingForm(forms.ModelForm):
     class Meta:
         model = Listing
-        fields = ['category', 'title', 'description', 'price', 'platform_url', 
-                  'followers_count', 'monthly_income', 'main_image', 'is_private']
+        fields = ['category', 'title', 'description', 'location', 'price', 'discount_price', 'platform_url', 
+                  'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment', 'main_image', 'is_private']
         widgets = {
             'category': forms.Select(attrs={'class': 'form-control'}),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'location': forms.TextInput(attrs={'class': 'form-control'}),
             'price': forms.NumberInput(attrs={'class': 'form-control'}),
+            'discount_price': forms.NumberInput(attrs={'class': 'form-control'}),
             'platform_url': forms.URLInput(attrs={'class': 'form-control'}),
             'followers_count': forms.NumberInput(attrs={'class': 'form-control'}),
             'monthly_income': forms.NumberInput(attrs={'class': 'form-control'}),
+            'platform_age': forms.NumberInput(attrs={'class': 'form-control'}),
+            'most_like': forms.NumberInput(attrs={'class': 'form-control'}),
+            'most_view': forms.NumberInput(attrs={'class': 'form-control'}),
+            'most_comment': forms.NumberInput(attrs={'class': 'form-control'}),
             'main_image': forms.FileInput(attrs={'class': 'form-control'}),
             'is_private': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }

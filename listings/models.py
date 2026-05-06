@@ -33,23 +33,33 @@ class Listing(models.Model):
     ]
     
     seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='listings')
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=12, decimal_places=0)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True) # دسته بندی 
+    title = models.CharField(max_length=200) # تیتر 
+    description = models.TextField() #توضیحات 
+    location = models.TextField(max_length=200, null=True, blank=True) # مکان 
+    price = models.DecimalField(max_digits=12, decimal_places=0) # قیمت اصلی 
+    discount_price = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True) # قیمت با تخفیف 
     
     # اطلاعات پلتفرم
-    platform_url = models.URLField()
-    followers_count = models.IntegerField(default=0)
-    monthly_income = models.DecimalField(max_digits=12, decimal_places=0)
+    platform_url = models.URLField() # ادرس پلتفرم
+    followers_count = models.IntegerField(default=0) # کاربر های پلتفرم
+    monthly_income = models.DecimalField(max_digits=12, decimal_places=0) # درامد ماهانه
+    platform_age = models.IntegerField(default=0) # سن پلتفرم
+
+    most_like = models.IntegerField(null=True, blank=True) # بیشترین لایک 
+    most_view = models.IntegerField(null=True, blank=True) # بیشترین بازدید 
+    most_comment = models.IntegerField(null=True, blank=True) # بیشترین کامنت 
     
     # تصاویر و ویدیوها
-    main_image = models.ImageField(upload_to='listings/images/')
+    main_image = models.ImageField(upload_to='listings/images/') # تصویر اصلی 
     
+    # ارتقا اگهی 
+    is_preferment = models.BooleanField(default=False, verbose_name='آگهی ارتقا یافته')
+
     # گزینه خصوصی
-    is_private = models.BooleanField(default=False, verbose_name='آگهی خصوصی')
+    is_private = models.BooleanField(default=False, verbose_name='آگهی خصوصی') # گزینه خصوصی یا عمومی بودن اگهی 
     
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending') # وضعیت اگهی 
     rejection_reason = models.TextField(blank=True, null=True, verbose_name='دلیل رد')
     views_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
