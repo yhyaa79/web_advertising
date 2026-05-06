@@ -11,34 +11,74 @@
                 <img src="{{ listing.main_image.url }}" class="card-img-top">
             {% endif %}
             <div class="card-body">
-                <h2>{{ listing.title }}</h2>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>{{ listing.title }}</h2>
+                    {% if listing.is_private %}
+                        <span class="badge bg-warning text-dark fs-6">
+                            <i class="bi bi-lock-fill"></i> آگهی خصوصی
+                        </span>
+                    {% endif %}
+                </div>
                 <p class="text-muted">فروشنده: {{ listing.seller.username }} | بازدید: {{ listing.views_count }}</p>
                 <hr>
-                <h4>توضیحات:</h4>
-                <p>{{ listing.description }}</p>
                 
-                <h5 class="mt-4">مشخصات:</h5>
-                <ul>
-                    <li><strong>دسته‌بندی:</strong> {{ listing.category.name }} ({{ listing.category.get_platform_display }})</li>
-                    <li><strong>آدرس پلتفرم:</strong> <a href="{{ listing.platform_url }}" target="_blank">{{ listing.platform_url }}</a></li>
-                    <li><strong>تعداد دنبال‌کننده:</strong> {{ listing.followers_count|floatformat:0 }}</li>
-                    <li><strong>درآمد ماهانه:</strong> {{ listing.monthly_income|floatformat:0 }} تومان</li>
-                </ul>
+                {% if not has_access %}
+                    <div class="alert alert-warning">
+                        <h5><i class="bi bi-lock"></i> این آگهی خصوصی است</h5>
+                        <p>برای مشاهده جزئیات کامل این آگهی، باید درخواست بازدید ارسال کنید و فروشنده آن را تایید کند.</p>
+                        
+                        {% if not user.is_authenticated %}
+                            <a href="{% url 'accounts:login' %}" class="btn btn-primary">ورود برای ارسال درخواست</a>
+                        {% elif visit_request %}
+                            {% if visit_request.status == 'pending' %}
+                                <div class="alert alert-info">
+                                    <i class="bi bi-clock"></i> درخواست شما در انتظار تایید فروشنده است.
+                                </div>
+                            {% elif visit_request.status == 'rejected' %}
+                                <div class="alert alert-danger">
+                                    <i class="bi bi-x-circle"></i> درخواست شما رد شده است.
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'listings:request_visit' listing.pk %}" class="btn btn-warning">
+                                <i class="bi bi-send"></i> ارسال درخواست بازدید
+                            </a>
+                        {% endif %}
+                    </div>
+                    
+                    <h4>توضیحات محدود:</h4>
+                    <p>{{ listing.description|truncatewords:30 }}</p>
+                {% else %}
+                    <h4>توضیحات:</h4>
+                    <p>{{ listing.description }}</p>
+                    
+                    <h5 class="mt-4">مشخصات:</h5>
+                    <ul>
+                        <li><strong>دسته‌بندی:</strong> {{ listing.category.name }} ({{ listing.category.get_platform_display }})</li>
+                        <li><strong>آدرس پلتفرم:</strong> <a href="{{ listing.platform_url }}" target="_blank">{{ listing.platform_url }}</a></li>
+                        <li><strong>تعداد دنبال‌کننده:</strong> {{ listing.followers_count|floatformat:0 }}</li>
+                        <li><strong>درآمد ماهانه:</strong> {{ listing.monthly_income|floatformat:0 }} تومان</li>
+                    </ul>
 
-                {% if income_proofs %}
-                    <h5 class="mt-4">اثبات درآمد:</h5>
-                    <div class="row">
-                        {% for proof in income_proofs %}
-                            <div class="col-md-6 mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <p><strong>نوع:</strong> {{ proof.get_proof_type_display }}</p>
-                                        <a href="{{ proof.file.url }}" target="_blank" class="btn btn-sm btn-info">مشاهده فایل</a>
+                    {% if income_proofs %}
+                        <h5 class="mt-4">اثبات درآمد:</h5>
+                        <div class="row">
+                            {% for proof in income_proofs %}
+                                <div class="col-md-6 mb-3">
+                                    <div class="card">
+                                        {% if proof.image %}
+                                            <img src="{{ proof.image.url }}" class="card-img-top" alt="اثبات درآمد">
+                                        {% endif %}
+                                        <div class="card-body">
+                                            {% if proof.description %}
+                                                <p class="card-text">{{ proof.description }}</p>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
-                    </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>
@@ -50,10 +90,13 @@
                 <h3 class="text-success">{{ listing.price|floatformat:0 }} تومان</h3>
                 <hr>
                 {% if user.is_authenticated and user != listing.seller %}
-                    <a href="{% url 'payments:initiate_purchase' listing.pk %}" class="btn btn-success btn-lg w-100">خرید امن</a>
+                    {% if has_access %}
+                        <a href="{% url 'payments:initiate_purchase' listing.pk %}" class="btn btn-success btn-lg w-100">خرید امن</a>
+                    {% else %}
+                        <p class="text-muted">برای خرید ابتدا باید دسترسی بازدید داشته باشید</p>
+                    {% endif %}
                 {% elif user == listing.seller %}
                     <a href="{% url 'listings:listing_edit' listing.pk %}" class="btn btn-warning w-100">ویرایش آگهی</a>
-                    <a href="{% url 'listings:add_income_proof' listing.pk %}" class="btn btn-info w-100 mt-2">افزودن اثبات درآمد</a>
                 {% else %}
                     <a href="{% url 'accounts:login' %}" class="btn btn-primary w-100">ورود برای خرید</a>
                 {% endif %}

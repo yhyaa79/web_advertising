@@ -4,18 +4,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
-from .models import Listing, Category, IncomeProof
-from .forms import ListingForm, IncomeProofForm
+from .models import Listing, Category, IncomeProof, VisitRequest
+from .forms import ListingForm, IncomeProofFormSet, VisitRequestForm
 
 def listing_list(request):
     listings = Listing.objects.filter(status='active')
     
-    # فیلتر بر اساس دسته‌بندی
     category_id = request.GET.get('category')
     if category_id:
         listings = listings.filter(category_id=category_id)
     
-    # جستجو
     search_query = request.GET.get('search')
     if search_query:
         listings = listings.filter(
@@ -33,14 +31,29 @@ def listing_list(request):
 
 def listing_detail(request, pk):
     listing = get_object_or_404(Listing, pk=pk)
-    listing.views_count += 1
-    listing.save()
     
-    income_proofs = listing.income_proofs.all()
+    # بررسی دسترسی
+    has_access = listing.has_access(request.user)
+    
+    # بررسی وضعیت درخواست بازدید
+    visit_request = None
+    if request.user.is_authenticated and listing.is_private and request.user != listing.seller:
+        visit_request = VisitRequest.objects.filter(
+            listing=listing,
+            requester=request.user
+        ).first()
+    
+    if has_access:
+        listing.views_count += 1
+        listing.save()
+    
+    income_proofs = listing.income_proofs.all() if has_access else []
     
     context = {
         'listing': listing,
         'income_proofs': income_proofs,
+        'has_access': has_access,
+        'visit_request': visit_request,
     }
     return render(request, 'listings/listing_detail.html', context)
 
@@ -48,16 +61,26 @@ def listing_detail(request, pk):
 def listing_create(request):
     if request.method == 'POST':
         form = ListingForm(request.POST, request.FILES)
-        if form.is_valid():
+        formset = IncomeProofFormSet(request.POST, request.FILES)
+        
+        if form.is_valid() and formset.is_valid():
             listing = form.save(commit=False)
             listing.seller = request.user
             listing.save()
+            
+            formset.instance = listing
+            formset.save()
+            
             messages.success(request, 'آگهی شما با موفقیت ثبت شد و در انتظار تایید است.')
             return redirect('listings:my_listings')
     else:
         form = ListingForm()
+        formset = IncomeProofFormSet()
     
-    return render(request, 'listings/listing_create.html', {'form': form})
+    return render(request, 'listings/listing_create.html', {
+        'form': form,
+        'formset': formset
+    })
 
 @login_required
 def listing_edit(request, pk):
@@ -65,33 +88,131 @@ def listing_edit(request, pk):
     
     if request.method == 'POST':
         form = ListingForm(request.POST, request.FILES, instance=listing)
-        if form.is_valid():
+        formset = IncomeProofFormSet(request.POST, request.FILES, instance=listing)
+        
+        if form.is_valid() and formset.is_valid():
             form.save()
+            formset.save()
             messages.success(request, 'آگهی با موفقیت ویرایش شد.')
             return redirect('listings:listing_detail', pk=listing.pk)
     else:
         form = ListingForm(instance=listing)
+        formset = IncomeProofFormSet(instance=listing)
     
-    return render(request, 'listings/listing_edit.html', {'form': form, 'listing': listing})
+    return render(request, 'listings/listing_edit.html', {
+        'form': form,
+        'formset': formset,
+        'listing': listing
+    })
 
 @login_required
 def my_listings(request):
     listings = Listing.objects.filter(seller=request.user)
-    return render(request, 'listings/my_listings.html', {'listings': listings})
+    
+    # درخواست‌های بازدید در انتظار
+    pending_requests = VisitRequest.objects.filter(
+        listing__seller=request.user,
+        status='pending'
+    ).select_related('listing', 'requester')
+    
+    return render(request, 'listings/my_listings.html', {
+        'listings': listings,
+        'pending_requests': pending_requests
+    })
 
 @login_required
-def add_income_proof(request, listing_pk):
-    listing = get_object_or_404(Listing, pk=listing_pk, seller=request.user)
+def listing_delete(request, pk):
+    listing = get_object_or_404(Listing, pk=pk, seller=request.user)
     
     if request.method == 'POST':
-        form = IncomeProofForm(request.POST, request.FILES)
-        if form.is_valid():
-            proof = form.save(commit=False)
-            proof.listing = listing
-            proof.save()
-            messages.success(request, 'اثبات درآمد با موفقیت اضافه شد.')
-            return redirect('listings:listing_detail', pk=listing.pk)
-    else:
-        form = IncomeProofForm()
+        action = request.POST.get('action')
+        if action == 'delete':
+            listing.status = 'deleted'
+            listing.save()
+            messages.success(request, 'آگهی با موفقیت حذف شد.')
+        elif action == 'sold':
+            listing.status = 'sold'
+            listing.save()
+            messages.success(request, 'آگهی به عنوان فروخته شده علامت‌گذاری شد.')
+        return redirect('listings:my_listings')
     
-    return render(request, 'listings/add_income_proof.html', {'form': form, 'listing': listing})
+    return render(request, 'listings/listing_delete.html', {'listing': listing})
+
+@login_required
+def listing_activate(request, pk):
+    listing = get_object_or_404(Listing, pk=pk, seller=request.user)
+    
+    if listing.status == 'deleted':
+        listing.status = 'pending'
+        listing.save()
+        messages.success(request, 'آگهی دوباره فعال شد و در انتظار تایید است.')
+    
+    return redirect('listings:my_listings')
+
+@login_required
+def request_visit(request, pk):
+    listing = get_object_or_404(Listing, pk=pk, status='active')
+    
+    # بررسی اینکه آگهی خصوصی باشد
+    if not listing.is_private:
+        messages.warning(request, 'این آگهی خصوصی نیست.')
+        return redirect('listings:listing_detail', pk=pk)
+    
+    # بررسی اینکه کاربر صاحب آگهی نباشد
+    if request.user == listing.seller:
+        messages.warning(request, 'شما صاحب این آگهی هستید.')
+        return redirect('listings:listing_detail', pk=pk)
+    
+    # بررسی درخواست قبلی
+    existing_request = VisitRequest.objects.filter(
+        listing=listing,
+        requester=request.user
+    ).first()
+    
+    if existing_request:
+        if existing_request.status == 'approved':
+            messages.info(request, 'درخواست شما قبلاً تایید شده است.')
+        elif existing_request.status == 'pending':
+            messages.info(request, 'درخواست شما در انتظار تایید است.')
+        else:
+            messages.warning(request, 'درخواست شما رد شده است.')
+        return redirect('listings:listing_detail', pk=pk)
+    
+    if request.method == 'POST':
+        form = VisitRequestForm(request.POST)
+        if form.is_valid():
+            visit_request = form.save(commit=False)
+            visit_request.listing = listing
+            visit_request.requester = request.user
+            visit_request.save()
+            messages.success(request, 'درخواست بازدید شما ارسال شد و در انتظار تایید فروشنده است.')
+            return redirect('listings:listing_detail', pk=pk)
+    else:
+        form = VisitRequestForm()
+    
+    return render(request, 'listings/request_visit.html', {
+        'form': form,
+        'listing': listing
+    })
+
+@login_required
+def manage_visit_request(request, pk, action):
+    visit_request = get_object_or_404(
+        VisitRequest,
+        pk=pk,
+        listing__seller=request.user,
+        status='pending'
+    )
+    
+    if action == 'approve':
+        visit_request.status = 'approved'
+        visit_request.save()
+        messages.success(request, f'درخواست {visit_request.requester.username} تایید شد.')
+    elif action == 'reject':
+        visit_request.status = 'rejected'
+        visit_request.save()
+        messages.success(request, f'درخواست {visit_request.requester.username} رد شد.')
+    
+    return redirect('listings:my_listings')
+
+

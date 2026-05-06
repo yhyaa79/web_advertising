@@ -13,7 +13,25 @@
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
+                    
+                    <h5>اطلاعات آگهی</h5>
                     {{ form.as_p }}
+                    
+                    <hr class="my-4">
+                    
+                    <h5>اثبات درآمد</h5>
+                    <p class="text-muted">می‌توانید چند تصویر برای اثبات درآمد خود آپلود کنید</p>
+                    
+                    {{ formset.management_form }}
+                    
+                    <div id="income-proofs"></div>
+                    
+                    <button type="button" class="btn btn-primary mb-3" id="add-income-proof">
+                        <i class="bi bi-plus-circle"></i> افزودن اثبات درآمد
+                    </button>
+                    
+                    <hr>
+                    
                     <button type="submit" class="btn btn-success">ثبت آگهی</button>
                     <a href="{% url 'listings:listing_list' %}" class="btn btn-secondary">انصراف</a>
                 </form>
@@ -21,4 +39,59 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('income-proofs');
+    const addButton = document.getElementById('add-income-proof');
+    const totalForms = document.querySelector('#id_income_proofs-TOTAL_FORMS');
+    
+    let formCount = 0;
+    
+    addButton.addEventListener('click', function() {
+        if (formCount >= 10) {
+            alert('حداکثر 10 اثبات درآمد می‌توانید اضافه کنید');
+            return;
+        }
+        
+        const newForm = `
+            <div class="income-proof-form border p-3 mb-3 rounded">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6>اثبات درآمد ${formCount + 1}</h6>
+                    <button type="button" class="btn btn-sm btn-danger remove-form">حذف</button>
+                </div>
+                <p>
+                    <label for="id_income_proofs-${formCount}-image">تصویر اثبات درآمد:</label>
+                    <input type="file" name="income_proofs-${formCount}-image" class="form-control" id="id_income_proofs-${formCount}-image">
+                </p>
+                <p>
+                    <label for="id_income_proofs-${formCount}-description">توضیحات:</label>
+                    <textarea name="income_proofs-${formCount}-description" rows="2" class="form-control" id="id_income_proofs-${formCount}-description"></textarea>
+                </p>
+                <input type="hidden" name="income_proofs-${formCount}-id" id="id_income_proofs-${formCount}-id">
+            </div>
+        `;
+        
+        container.insertAdjacentHTML('beforeend', newForm);
+        formCount++;
+        totalForms.value = formCount;
+    });
+    
+    container.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-form')) {
+            e.target.closest('.income-proof-form').remove();
+            formCount--;
+            totalForms.value = formCount;
+            updateFormNumbers();
+        }
+    });
+    
+    function updateFormNumbers() {
+        const forms = container.querySelectorAll('.income-proof-form');
+        forms.forEach((form, index) => {
+            form.querySelector('h6').textContent = `اثبات درآمد ${index + 1}`;
+        });
+    }
+});
+</script>
 {% endblock %}

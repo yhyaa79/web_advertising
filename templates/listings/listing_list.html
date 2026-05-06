@@ -33,16 +33,27 @@
 <div class="row">
     {% for listing in listings %}
         <div class="col-md-4 mb-4">
-            <div class="card h-100">
+            <div class="card h-100 {% if listing.is_private %}border-warning{% endif %}">
                 {% if listing.main_image %}
                     <img src="{{ listing.main_image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                {% endif %}
+                {% if listing.is_private %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> خصوصی
+                        </span>
+                    </div>
                 {% endif %}
                 <div class="card-body">
                     <span class="badge bg-info">{{ listing.category.get_platform_display }}</span>
                     <h5 class="card-title mt-2">{{ listing.title }}</h5>
                     <p class="card-text">{{ listing.description|truncatewords:20 }}</p>
-                    <p><strong>دنبال‌کننده:</strong> {{ listing.followers_count|floatformat:0 }}</p>
-                    <p><strong>درآمد ماهانه:</strong> {{ listing.monthly_income|floatformat:0 }} تومان</p>
+                    {% if not listing.is_private or user == listing.seller %}
+                        <p><strong>دنبال‌کننده:</strong> {{ listing.followers_count|floatformat:0 }}</p>
+                        <p><strong>درآمد ماهانه:</strong> {{ listing.monthly_income|floatformat:0 }} تومان</p>
+                    {% else %}
+                        <p class="text-muted"><i class="bi bi-lock"></i> اطلاعات محرمانه</p>
+                    {% endif %}
                     <p class="text-success fw-bold fs-5">{{ listing.price|floatformat:0 }} تومان</p>
                     <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-primary w-100">مشاهده جزئیات</a>
                 </div>

@@ -8,41 +8,127 @@
 
 <a href="{% url 'listings:listing_create' %}" class="btn btn-success mb-3">ثبت آگهی جدید</a>
 
-<div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>عنوان</th>
-                <th>قیمت</th>
-                <th>وضعیت</th>
-                <th>بازدید</th>
-                <th>تاریخ ثبت</th>
-                <th>عملیات</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for listing in listings %}
-                <tr>
-                    <td>{{ listing.title }}</td>
-                    <td>{{ listing.price|floatformat:0 }} تومان</td>
-                    <td>
-                        <span class="badge bg-{% if listing.status == 'active' %}success{% elif listing.status == 'sold' %}info{% else %}warning{% endif %}">
-                            {{ listing.get_status_display }}
-                        </span>
-                    </td>
-                    <td>{{ listing.views_count }}</td>
-                    <td>{{ listing.created_at|date:"Y/m/d" }}</td>
-                    <td>
-                        <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-sm btn-info">مشاهده</a>
-                        <a href="{% url 'listings:listing_edit' listing.pk %}" class="btn btn-sm btn-warning">ویرایش</a>
-                    </td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="6" class="text-center">شما هنوز آگهی ثبت نکرده‌اید.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<!-- درخواست‌های بازدید در انتظار -->
+{% if pending_requests %}
+<div class="card mb-4">
+    <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0">درخواست‌های بازدید در انتظار ({{ pending_requests.count }})</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>آگهی</th>
+                        <th>درخواست‌کننده</th>
+                        <th>پیام</th>
+                        <th>تاریخ درخواست</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in pending_requests %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'listings:listing_detail' request.listing.pk %}">
+                                {{ request.listing.title }}
+                            </a>
+                        </td>
+                        <td>{{ request.requester.username }}</td>
+                        <td>
+                            {% if request.message %}
+                                {{ request.message|truncatewords:15 }}
+                            {% else %}
+                                <em class="text-muted">بدون پیام</em>
+                            {% endif %}
+                        </td>
+                        <td>{{ request.created_at|date:"Y/m/d H:i" }}</td>
+                        <td>
+                            <a href="{% url 'listings:manage_visit_request' request.pk 'approve' %}" 
+                               class="btn btn-sm btn-success"
+                               onclick="return confirm('آیا از تایید این درخواست اطمینان دارید؟')">
+                                تایید
+                            </a>
+                            <a href="{% url 'listings:manage_visit_request' request.pk 'reject' %}" 
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('آیا از رد این درخواست اطمینان دارید؟')">
+                                رد
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- لیست آگهی‌ها -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">لیست آگهی‌ها</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>عنوان</th>
+                        <th>دسته‌بندی</th>
+                        <th>قیمت</th>
+                        <th>نوع</th>
+                        <th>وضعیت</th>
+                        <th>بازدید</th>
+                        <th>تاریخ ثبت</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for listing in listings %}
+                        <tr>
+                            <td>{{ listing.title }}</td>
+                            <td>{{ listing.category.name }}</td>
+                            <td>{{ listing.price|floatformat:0 }} تومان</td>
+                            <td>
+                                {% if listing.is_private %}
+                                    <span class="badge bg-secondary">خصوصی</span>
+                                {% else %}
+                                    <span class="badge bg-info">عمومی</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-{% if listing.status == 'active' %}success{% elif listing.status == 'sold' %}info{% elif listing.status == 'rejected' %}danger{% elif listing.status == 'deleted' %}secondary{% else %}warning{% endif %}">
+                                    {{ listing.get_status_display }}
+                                </span>
+                                {% if listing.status == 'rejected' and listing.rejection_reason %}
+                                    <br>
+                                    <small class="text-danger">دلیل: {{ listing.rejection_reason }}</small>
+                                {% endif %}
+                            </td>
+                            <td>{{ listing.views_count }}</td>
+                            <td>{{ listing.created_at|date:"Y/m/d" }}</td>
+                            <td>
+                                <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-sm btn-info">مشاهده</a>
+                                
+                                {% if listing.status != 'deleted' and listing.status != 'sold' %}
+                                    <a href="{% url 'listings:listing_edit' listing.pk %}" class="btn btn-sm btn-warning">ویرایش</a>
+                                    <a href="{% url 'listings:listing_delete' listing.pk %}" class="btn btn-sm btn-danger">حذف</a>
+                                {% endif %}
+                                
+                                {% if listing.status == 'deleted' %}
+                                    <a href="{% url 'listings:listing_activate' listing.pk %}" class="btn btn-sm btn-success">فعال‌سازی</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center">شما هنوز آگهی ثبت نکرده‌اید.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock %}
