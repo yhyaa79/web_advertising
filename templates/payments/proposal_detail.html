@@ -1,0 +1,98 @@
+<!-- templates/payments/proposal_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}جزئیات پیشنهاد{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>جزئیات پیشنهاد قیمت</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        {% if proposal.listing.main_image %}
+                        <img src="{{ proposal.listing.main_image.url }}" class="img-fluid rounded"
+                            alt="{{ proposal.listing.title }}">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <h5>{{ proposal.listing.title }}</h5>
+                        <p class="text-muted">{{ proposal.listing.description|truncatewords:20 }}</p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>خریدار:</strong> {{ proposal.buyer.username }}</p>
+                        <p><strong>فروشنده:</strong> {{ proposal.seller.username }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>تاریخ ارسال:</strong> {{ proposal.created_at|date:"Y/m/d H:i" }}</p>
+                        <p><strong>وضعیت:</strong>
+                            {% if proposal.status == 'pending' %}
+                            <span class="badge bg-warning">{{ proposal.get_status_display }}</span>
+                            {% elif proposal.status == 'accepted' %}
+                            <span class="badge bg-success">{{ proposal.get_status_display }}</span>
+                            {% elif proposal.status == 'rejected' %}
+                            <span class="badge bg-danger">{{ proposal.get_status_display }}</span>
+                            {% else %}
+                            <span class="badge bg-secondary">{{ proposal.get_status_display }}</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>قیمت اصلی:</strong> <span
+                                class="text-muted">{{ proposal.listing.price|floatformat:0 }} تومان</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>قیمت پیشنهادی:</strong> <span
+                                class="text-success fs-5">{{ proposal.proposed_price|floatformat:0 }} تومان</span></p>
+                    </div>
+                </div>
+
+                {% if proposal.message %}
+                <hr>
+                <div class="alert alert-light">
+                    <strong>پیام خریدار:</strong>
+                    <p class="mb-0 mt-2">{{ proposal.message }}</p>
+                </div>
+                {% endif %}
+
+                {% if proposal.seller_response %}
+                {% if proposal.seller_response %}
+                <hr>
+                <div class="alert alert-info">
+                    <strong>پاسخ فروشنده:</strong>
+                    <p class="mb-0 mt-2">{{ proposal.seller_response }}</p>
+                </div>
+                {% endif %}
+
+                <hr>
+
+                <div class="d-flex gap-2">
+                    <a href="{% url 'payments:my_proposals' %}" class="btn btn-secondary">
+                        بازگشت
+                    </a>
+
+                    {% if proposal.status == 'accepted' and proposal.buyer == request.user %}
+                    <a href="{% url 'payments:initiate_purchase' proposal.listing.pk %}" class="btn btn-success">
+                        ادامه خرید
+                    </a>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

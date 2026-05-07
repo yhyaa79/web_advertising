@@ -1,0 +1,75 @@
+<!-- templates/payments/respond_to_proposal.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}پاسخ به پیشنهاد{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header">
+                <h4>پاسخ به پیشنهاد قیمت</h4>
+            </div>
+            <div class="card-body">
+
+                <h5>{{ proposal.listing.title }}</h5>
+
+                <p>
+                    <strong>قیمت اصلی:</strong>
+                    {{ proposal.listing.price|floatformat:0 }} تومان
+                </p>
+
+                <p>
+                    <strong>قیمت پیشنهادی خریدار:</strong>
+                    <span class="text-success">
+                        {{ proposal.proposed_price|floatformat:0 }} تومان
+                    </span>
+                </p>
+
+                {% if proposal.message %}
+                <div class="alert alert-light">
+                    <strong>پیام خریدار:</strong>
+                    <p class="mb-0 mt-2">{{ proposal.message }}</p>
+                </div>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">پیام پاسخ (اختیاری)</label>
+                        <textarea name="response_message"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="پاسخ شما به خریدار..."></textarea>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit"
+                                name="action"
+                                value="accept"
+                                class="btn btn-success">
+                            پذیرش پیشنهاد
+                        </button>
+
+                        <button type="submit"
+                                name="action"
+                                value="reject"
+                                class="btn btn-danger">
+                            رد پیشنهاد
+                        </button>
+
+                        <a href="{% url 'payments:my_proposals' %}"
+                           class="btn btn-secondary">
+                           انصراف
+                        </a>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

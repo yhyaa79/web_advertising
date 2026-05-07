@@ -8,9 +8,7 @@
 <div class="row">
     <div class="col-md-8">
         <div class="card">
-            {% if listing.main_image %}
-            <img src="{{ listing.main_image.url }}" class="card-img-top">
-            {% endif %}
+
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <h2>{{ listing.title }}</h2>
@@ -129,29 +127,69 @@
         </div>
     </div>
 
+
+    
+
     <div class="col-md-4">
         <div class="card">
-            <div class="card-body text-center">
-                {% if listing.discount_price %}
-                <h3 class="text-success">{{ listing.discount_price|floatformat:0 }} تومان</h3>
-                <h3 class="text-muted"><s>{{ listing.price|floatformat:0 }} تومان</s></h3>
-                {% else %}
-                <h3 class="text-success">{{ listing.price|floatformat:0 }} تومان</h3>
-                {% endif %}
 
-                <hr>
+            <div class="card-body text-center">
+
+                <div class="image-card">
+                    {% if listing.main_image %}
+                    <img src="{{ listing.main_image.url }}" class="card-img-top">
+                    {% endif %}
+                </div>
+
+                <div class="price-card">
+                    {% if listing.discount_price %}
+                    <h3 class="text-success">{{ listing.discount_price|floatformat:0 }} تومان</h3>
+                    <h3 class="text-muted"><s>{{ listing.price|floatformat:0 }} تومان</s></h3>
+                    {% else %}
+                    <h3 class="text-success">{{ listing.price|floatformat:0 }} تومان</h3>
+                    {% endif %}
+                </div>
+
+                <div class="btn-buy-edit-login-card">
+
+                    {% if user.is_authenticated and user != listing.seller %}
+                    {% if has_access %}
+                    <div class="btn-buy-card">
+                        <a href="{% url 'payments:initiate_purchase' listing.pk %}"
+                            class="btn btn-success btn-lg w-100">خرید امن</a>
+                    </div>
+                    {% else %}
+                    <div class="btn-buy-access-card">
+                        <p class="text-muted">برای خرید ابتدا باید دسترسی بازدید داشته باشید</p>
+                    </div>
+                    {% endif %}
+
+                    {% elif user == listing.seller %}
+                    <div class="btn-edit-card">
+                        <a href="{% url 'listings:listing_edit' listing.pk %}" class="btn btn-warning w-100">ویرایش
+                            آگهی</a>
+                    </div>
+                    {% else %}
+                    <div class="btn-login-card">
+                        <a href="{% url 'accounts:login' %}" class="btn btn-primary w-100">ورود برای خرید</a>
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <div class="ad-views">
+                    <a href="{{ listing.platform_url }}" class="btn btn-success w-100" target="_blank">بازدید پلتفرم</a>
+                </div>
+
                 {% if user.is_authenticated and user != listing.seller %}
                 {% if has_access %}
-                <a href="{% url 'payments:initiate_purchase' listing.pk %}" class="btn btn-success btn-lg w-100">خرید
-                    امن</a>
-                {% else %}
-                <p class="text-muted">برای خرید ابتدا باید دسترسی بازدید داشته باشید</p>
+                <div class="btn-buy-card">
+                    <a href="{% url 'payments:initiate_purchase' listing.pk %}"
+                        class="btn btn-success btn-lg w-100">پیشنهاد قیمت</a>
+                </div>
                 {% endif %}
-                {% elif user == listing.seller %}
-                <a href="{% url 'listings:listing_edit' listing.pk %}" class="btn btn-warning w-100">ویرایش آگهی</a>
-                {% else %}
-                <a href="{% url 'accounts:login' %}" class="btn btn-primary w-100">ورود برای خرید</a>
                 {% endif %}
+                
             </div>
         </div>
 

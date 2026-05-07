@@ -37,6 +37,39 @@ class Transaction(models.Model):
     def __str__(self):
         return f"تراکنش {self.tracking_code}"
 
+
+class PriceProposal(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'در انتظار پاسخ'),
+        ('accepted', 'پذیرفته شده'),
+        ('rejected', 'رد شده'),
+        ('cancelled', 'لغو شده'),
+    ]
+    
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='price_proposals')
+    buyer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_proposals')
+    seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_proposals')
+    
+    proposed_price = models.DecimalField(max_digits=12, decimal_places=0, verbose_name='قیمت پیشنهادی')
+    message = models.TextField(blank=True, verbose_name='پیام')
+    
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    
+    seller_response = models.TextField(blank=True, verbose_name='پاسخ فروشنده')
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'پیشنهاد قیمت'
+        verbose_name_plural = 'پیشنهادهای قیمت'
+        ordering = ['-created_at']
+        unique_together = ['listing', 'buyer']
+    
+    def __str__(self):
+        return f"پیشنهاد {self.buyer.username} برای {self.listing.title}"
+
+
 class Dispute(models.Model):
     STATUS_CHOICES = [
         ('open', 'باز'),

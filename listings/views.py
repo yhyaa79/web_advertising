@@ -8,6 +8,8 @@ from .models import Listing, Category, IncomeProof, VisitRequest
 from .forms import (ListingForm, IncomeProofFormSet, VisitRequestForm, 
                     IncomeDataPointFormSet, ViewsDataPointFormSet)
 import json
+from notifications.utils import notify_visit_request, notify_visit_approved, notify_visit_rejected
+
 
 def listing_list(request):
     listings = Listing.objects.filter(status='active')
@@ -193,6 +195,8 @@ def listing_activate(request, pk):
     
     return redirect('listings:my_listings')
 
+
+
 @login_required
 def request_visit(request, pk):
     listing = get_object_or_404(Listing, pk=pk, status='active')
@@ -226,6 +230,10 @@ def request_visit(request, pk):
             visit_request.listing = listing
             visit_request.requester = request.user
             visit_request.save()
+            
+            # ایجاد اعلان برای فروشنده
+            notify_visit_request(visit_request)
+            
             messages.success(request, 'درخواست بازدید شما ارسال شد و در انتظار تایید فروشنده است.')
             return redirect('listings:listing_detail', pk=pk)
     else:
@@ -248,10 +256,20 @@ def manage_visit_request(request, pk, action):
     if action == 'approve':
         visit_request.status = 'approved'
         visit_request.save()
+        
+        # ایجاد اعلان برای درخواست‌کننده
+        notify_visit_approved(visit_request)
+        
         messages.success(request, f'درخواست {visit_request.requester.username} تایید شد.')
     elif action == 'reject':
         visit_request.status = 'rejected'
         visit_request.save()
+        
+        # ایجاد اعلان برای درخواست‌کننده
+        notify_visit_rejected(visit_request)
+        
         messages.success(request, f'درخواست {visit_request.requester.username} رد شد.')
     
     return redirect('listings:my_listings')
+
+
