@@ -64,7 +64,7 @@ class ListingAdmin(admin.ModelAdmin):
             'fields': ('is_income', 'is_verified', 'price', 'discount_price', 'main_image')
         }),
         ('اطلاعات پلتفرم', {
-            'fields': ('platform_url', 'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment')
+            'fields': ('platform_url', 'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment', 'about_platform')
         }),
         ('تنظیمات', {
             'fields': ('is_preferment', 'is_private', 'status', 'rejection_reason')

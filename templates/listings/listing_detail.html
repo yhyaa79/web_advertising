@@ -81,6 +81,9 @@
                     {% if listing.most_comment %}
                     <li><strong>بیشترین کامنت:</strong> {{ listing.most_comment|floatformat:0 }} </li>
                     {% endif %}
+
+                    <h4>درباره پلتفرم:</h4>
+                    <p>{{ listing.about_platform }}</p>
                 </ul>
 
                 <!-- نمودارها -->
@@ -207,7 +210,7 @@
                 {% endif %}
 
                 {% if listing.seller.profile.email_address %}
-                <p><strong>بیوگرافی:</strong> {{ listing.seller.profile.email_address }}</p>
+                <p><strong>ایمیل:</strong> {{ listing.seller.profile.email_address }}</p>
                 {% endif %}
 
                 {% if listing.seller.profile %}
@@ -222,11 +225,13 @@
 
                 <p><strong>تاریخ عضویت:</strong> {{ listing.seller.date_joined|date:"Y/m/d" }}</p>
 
-                {% if listing.seller.profile.is_verified %}
-                <span class="badge bg-success">تایید شده</span>
-                {% else %}
-                <span class="badge bg-warning">تایید نشده</span>
-                {% endif %}
+                <div class="mt-3">
+                    {% if listing.seller.is_verified %}
+                    <span class="badge bg-success">تایید شده ✓</span>
+                    {% else %}
+                    <span class="badge bg-warning">تایید نشده</span>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

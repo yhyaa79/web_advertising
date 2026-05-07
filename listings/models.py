@@ -46,6 +46,7 @@ class Listing(models.Model):
     location = models.TextField(max_length=200, null=True, blank=True)
     price = models.DecimalField(max_digits=12, decimal_places=0)
     discount_price = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True)
+    about_platform = models.TextField(null=True, blank=True)
     
     # سطح آگهی
     """ level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='beginner', verbose_name='سطح') """

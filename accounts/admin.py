@@ -26,8 +26,8 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'user_type', 'kyc_level', 'is_seller_approved', 'city', 'province']
-    list_filter = ['user_type', 'kyc_level', 'is_seller_approved', 'province']
+    list_display = ['user', 'user_type', 'kyc_level', 'city', 'province']
+    list_filter = ['user_type', 'kyc_level', 'province']
     search_fields = ['user__username', 'user__email', 'company_name', 'national_id_image']
     
     fieldsets = (
@@ -58,8 +58,9 @@ class UserProfileAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
         ('وضعیت', {
-            'fields': ('kyc_level', 'is_seller_approved')
+            'fields': ('kyc_level',)
         }),
+
     )
     
     readonly_fields = ['updated_at']

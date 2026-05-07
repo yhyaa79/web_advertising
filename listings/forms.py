@@ -7,13 +7,14 @@ from .models import Listing, IncomeProof, ListingImage, VisitRequest, IncomeData
 class ListingForm(forms.ModelForm):
     class Meta:
         model = Listing
-        fields = ['category', 'title', 'description', 'location', 'price', 'discount_price', 'platform_url', 
+        fields = ['category', 'title', 'description', 'about_platform', 'location', 'price', 'discount_price', 'platform_url', 
                   'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment', 
                   'main_image', 'is_private', 'is_income']
         widgets = {
             'category': forms.Select(attrs={'class': 'form-control'}),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'about_platform': forms.TextInput(attrs={'class': 'form-control'}),
             'location': forms.TextInput(attrs={'class': 'form-control'}),
             'price': forms.NumberInput(attrs={'class': 'form-control'}),
             'discount_price': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -32,6 +33,7 @@ class ListingForm(forms.ModelForm):
             'category': 'دسته بندی',
             'title': 'تیتر',
             'description': 'توضیحات',
+            'about_platform': 'درباره پلتفرم',
             'location': 'موقعیت مکانی',
             'price': 'قیمت پایه',
             'discount_price': 'قیمت تخفیف خورده',

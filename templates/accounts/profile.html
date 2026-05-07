@@ -76,6 +76,12 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label">ایمیل عمومی</label>
+                        {{ base_form.email_address }}
+                    </div>
+
+
+                    <div class="mb-3">
                         <label class="form-label">کد پستی</label>
                         {{ base_form.postal_code }}
                     </div>
@@ -272,7 +278,7 @@
                 </div>
                 {% endif %}
                 {% endif %}
-                
+
 
                 <h5>{{ user.username }}</h5>
                 <p class="text-muted">{{ user.email }}</p>
@@ -290,10 +296,6 @@
                     <span class="badge bg-success">تایید شده ✓</span>
                     {% else %}
                     <span class="badge bg-warning">تایید نشده</span>
-                    {% endif %}
-
-                    {% if profile.is_seller_approved %}
-                    <span class="badge bg-info">فروشنده تایید شده</span>
                     {% endif %}
                 </div>
 

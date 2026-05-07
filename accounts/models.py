@@ -76,7 +76,6 @@ class UserProfile(models.Model):
 
     # وضعیت
     kyc_level = models.IntegerField(default=0, verbose_name='سطح احراز هویت')
-    is_seller_approved = models.BooleanField(default=False, verbose_name='تأیید فروشندگی')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='آخرین بروزرسانی')
 
     def __str__(self):
