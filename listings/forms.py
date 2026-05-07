@@ -19,16 +19,14 @@ class ListingForm(forms.ModelForm):
             'discount_price': forms.NumberInput(attrs={'class': 'form-control'}),
             'platform_url': forms.URLInput(attrs={'class': 'form-control'}),
             'followers_count': forms.NumberInput(attrs={'class': 'form-control'}),
-            'monthly_income': forms.NumberInput(attrs={'class': 'form-control'}),
+            'monthly_income': forms.NumberInput(attrs={'class': 'form-control', 'id': 'id_monthly_income'}),
             'platform_age': forms.NumberInput(attrs={'class': 'form-control'}),
             'most_like': forms.NumberInput(attrs={'class': 'form-control'}),
             'most_view': forms.NumberInput(attrs={'class': 'form-control'}),
             'most_comment': forms.NumberInput(attrs={'class': 'form-control'}),
             'main_image': forms.FileInput(attrs={'class': 'form-control'}),
             'is_private': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'is_income': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'is_verified': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'is_preferment': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_income': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_is_income'}),
         }
         labels = {
             'category': 'دسته بندی',
@@ -47,8 +45,6 @@ class ListingForm(forms.ModelForm):
             'main_image': 'عکس اصلی',
             'is_private': 'اگهی خصوصی',
             'is_income': 'درامد داشتن اگهی',
-            'is_verified': 'اگهی مورد تایید',
-            'is_preferment': 'ارتقا اگهی ',
         }
 
 class IncomeProofForm(forms.ModelForm):

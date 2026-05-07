@@ -15,42 +15,125 @@
                     {% csrf_token %}
                     
                     <h5 class="mb-3">اطلاعات آگهی</h5>
-                    {{ form.as_p }}
+                    
+                    {% for field in form %}
+                        {% if field.name == 'monthly_income' %}
+                            <div id="monthly-income-field" style="display: none;">
+                                <p>
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                    {% if field.errors %}
+                                        <div class="text-danger">{{ field.errors }}</div>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        {% else %}
+                            <p>
+                                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                {% endif %}
+                                {% if field.errors %}
+                                    <div class="text-danger">{{ field.errors }}</div>
+                                {% endif %}
+                            </p>
+                        {% endif %}
+                    {% endfor %}
                     
                     <hr class="my-4">
                     
-                    <h5 class="mb-3">اثبات درآمد</h5>
-                    <p class="text-muted">می‌توانید چند تصویر برای اثبات درآمد خود آپلود کنید</p>
-                    
-                    {{ income_proof_formset.management_form }}
-                    
-                    <div id="income-proofs"></div>
-                    
-                    <button type="button" class="btn btn-primary mb-3" id="add-income-proof">
-                        <i class="bi bi-plus-circle"></i> افزودن اثبات درآمد
-                    </button>
-                    
-                    <hr class="my-4">
-                    
-                    <h5 class="mb-3">نمودار درآمد (اختیاری)</h5>
-                    <p class="text-muted">برای نمایش نمودار درآمد، نقاط داده را وارد کنید</p>
-                    
-                    {{ income_data_formset.management_form }}
-                    
-                    <div id="income-data-points"></div>
-                    
-                    <button type="button" class="btn btn-success mb-3" id="add-income-data">
-                        <i class="bi bi-plus-circle"></i> افزودن نقطه داده درآمد
-                    </button>
-                    
-                    <hr class="my-4">
+                    <div id="income-sections" style="display: none;">
+                        <h5 class="mb-3">اثبات درآمد</h5>
+                        <p class="text-muted">می‌توانید چند تصویر برای اثبات درآمد خود آپلود کنید</p>
+                        
+                        {{ income_proof_formset.management_form }}
+                        
+                        <div id="income-proofs">
+                            {% for form in income_proof_formset %}
+                                <div class="income-proof-form border p-3 mb-3 rounded bg-light">
+                                    {% for field in form %}
+                                        <div class="mb-3">
+                                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}:</label>
+                                            {{ field }}
+                                            {% if field.errors %}
+                                                <div class="text-danger">{{ field.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary mb-3" id="add-income-proof">
+                            <i class="bi bi-plus-circle"></i> افزودن اثبات درآمد
+                        </button>
+                        
+                        <hr class="my-4">
+                        
+                        <h5 class="mb-3">نمودار درآمد (اختیاری)</h5>
+                        <p class="text-muted">برای نمایش نمودار درآمد، نقاط داده را وارد کنید</p>
+                        
+                        {{ income_data_formset.management_form }}
+                        
+                        <div id="income-data-points">
+                            {% for form in income_data_formset %}
+                                <div class="income-data-form border p-3 mb-3 rounded bg-light">
+                                    <div class="row">
+                                        {% for field in form %}
+                                            {% if field.name != 'id' and field.name != 'DELETE' %}
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}:</label>
+                                                    {{ field }}
+                                                    {% if field.errors %}
+                                                        <div class="text-danger">{{ field.errors }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            {% else %}
+                                                {{ field }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <button type="button" class="btn btn-success mb-3" id="add-income-data">
+                            <i class="bi bi-plus-circle"></i> افزودن نقطه داده درآمد
+                        </button>
+                        
+                        <hr class="my-4">
+                    </div>
                     
                     <h5 class="mb-3">نمودار بازدید (اختیاری)</h5>
                     <p class="text-muted">برای نمایش نمودار بازدید، نقاط داده را وارد کنید</p>
                     
                     {{ views_data_formset.management_form }}
                     
-                    <div id="views-data-points"></div>
+                    <div id="views-data-points">
+                        {% for form in views_data_formset %}
+                            <div class="views-data-form border p-3 mb-3 rounded bg-light">
+                                <div class="row">
+                                    {% for field in form %}
+                                        {% if field.name != 'id' and field.name != 'DELETE' %}
+                                            <div class="col-md-6 mb-3">
+                                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}:</label>
+                                                {{ field }}
+                                                {% if field.errors %}
+                                                    <div class="text-danger">{{ field.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        {% else %}
+                                            {{ field }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                     
                     <button type="button" class="btn btn-info mb-3" id="add-views-data">
                         <i class="bi bi-plus-circle"></i> افزودن نقطه داده بازدید
@@ -68,248 +151,290 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // ==================== مدیریت نمایش/مخفی کردن فیلدهای درآمد ====================
+    const isIncomeCheckbox = document.getElementById('id_is_income');
+    const monthlyIncomeField = document.getElementById('monthly-income-field');
+    const incomeSections = document.getElementById('income-sections');
+    
+    function toggleIncomeFields() {
+        if (isIncomeCheckbox && isIncomeCheckbox.checked) {
+            monthlyIncomeField.style.display = 'block';
+            incomeSections.style.display = 'block';
+        } else {
+            monthlyIncomeField.style.display = 'none';
+            incomeSections.style.display = 'none';
+            const monthlyIncomeInput = document.getElementById('id_monthly_income');
+            if (monthlyIncomeInput) {
+                monthlyIncomeInput.value = '';
+            }
+        }
+    }
+    
+    if (isIncomeCheckbox) {
+        toggleIncomeFields();
+        isIncomeCheckbox.addEventListener('change', toggleIncomeFields);
+    }
+    
     // ==================== مدیریت اثبات درآمد ====================
     const incomeProofContainer = document.getElementById('income-proofs');
     const addIncomeProofBtn = document.getElementById('add-income-proof');
-    const totalIncomeProofForms = document.querySelector('#id_income_proofs-TOTAL_FORMS');
-    let incomeProofCount = 0;
+    const totalIncomeProofForms = document.querySelector('input[name="income_proofs-TOTAL_FORMS"]');
     
-    addIncomeProofBtn.addEventListener('click', function() {
-        if (incomeProofCount >= 10) {
-            alert('حداکثر 10 اثبات درآمد می‌توانید اضافه کنید');
-            return;
-        }
+    if (totalIncomeProofForms && addIncomeProofBtn) {
+        let incomeProofCount = parseInt(totalIncomeProofForms.value) || 0;
         
-        const newForm = `
-            <div class="income-proof-form border p-3 mb-3 rounded bg-light" data-index="${incomeProofCount}">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6>اثبات درآمد ${incomeProofCount + 1}</h6>
-                    <button type="button" class="btn btn-danger btn-sm remove-income-proof">
-                        <i class="bi bi-trash"></i> حذف
-                    </button>
+        addIncomeProofBtn.addEventListener('click', function() {
+            if (incomeProofCount >= 10) {
+                alert('حداکثر 10 اثبات درآمد می‌توانید اضافه کنید');
+                return;
+            }
+            
+            const newForm = `
+                <div class="income-proof-form border p-3 mb-3 rounded bg-light" data-index="${incomeProofCount}">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6>اثبات درآمد ${incomeProofCount + 1}</h6>
+                        <button type="button" class="btn btn-danger btn-sm remove-income-proof">
+                            <i class="bi bi-trash"></i> حذف
+                        </button>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_income_proofs-${incomeProofCount}-image" class="form-label">تصویر:</label>
+                        <input type="file" name="income_proofs-${incomeProofCount}-image" 
+                               class="form-control" id="id_income_proofs-${incomeProofCount}-image" accept="image/*">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_income_proofs-${incomeProofCount}-description" class="form-label">توضیحات:</label>
+                        <textarea name="income_proofs-${incomeProofCount}-description" 
+                                  class="form-control" id="id_income_proofs-${incomeProofCount}-description" 
+                                  rows="2"></textarea>
+                    </div>
+                    
+                    <input type="hidden" name="income_proofs-${incomeProofCount}-id" id="id_income_proofs-${incomeProofCount}-id">
                 </div>
-                
-                <div class="mb-3">
-                    <label for="id_income_proofs-${incomeProofCount}-image" class="form-label">تصویر:</label>
-                    <input type="file" name="income_proofs-${incomeProofCount}-image" 
-                           class="form-control" id="id_income_proofs-${incomeProofCount}-image" accept="image/*">
-                </div>
-                
-                <div class="mb-3">
-                    <label for="id_income_proofs-${incomeProofCount}-description" class="form-label">توضیحات:</label>
-                    <textarea name="income_proofs-${incomeProofCount}-description" 
-                              class="form-control" id="id_income_proofs-${incomeProofCount}-description" 
-                              rows="2"></textarea>
-                </div>
-                
-                <input type="hidden" name="income_proofs-${incomeProofCount}-id" id="id_income_proofs-${incomeProofCount}-id">
-            </div>
-        `;
-        
-        incomeProofContainer.insertAdjacentHTML('beforeend', newForm);
-        incomeProofCount++;
-        totalIncomeProofForms.value = incomeProofCount;
-    });
-    
-    incomeProofContainer.addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-income-proof') || e.target.closest('.remove-income-proof')) {
-            const formDiv = e.target.closest('.income-proof-form');
-            formDiv.remove();
-            incomeProofCount--;
+            `;
+            
+            incomeProofContainer.insertAdjacentHTML('beforeend', newForm);
+            incomeProofCount++;
             totalIncomeProofForms.value = incomeProofCount;
-            updateIncomeProofIndices();
-        }
-    });
-    
-    function updateIncomeProofIndices() {
-        const forms = incomeProofContainer.querySelectorAll('.income-proof-form');
-        forms.forEach((form, index) => {
-            form.setAttribute('data-index', index);
-            form.querySelector('h6').textContent = `اثبات درآمد ${index + 1}`;
-            
-            const inputs = form.querySelectorAll('input, textarea');
-            inputs.forEach(input => {
-                const name = input.getAttribute('name');
-                if (name) {
-                    const newName = name.replace(/income_proofs-\d+-/, `income_proofs-${index}-`);
-                    input.setAttribute('name', newName);
-                    input.setAttribute('id', `id_${newName}`);
-                }
-            });
-            
-            const labels = form.querySelectorAll('label');
-            labels.forEach(label => {
-                const forAttr = label.getAttribute('for');
-                if (forAttr) {
-                    const newFor = forAttr.replace(/id_income_proofs-\d+-/, `id_income_proofs-${index}-`);
-                    label.setAttribute('for', newFor);
-                }
-            });
         });
+        
+        incomeProofContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-income-proof') || e.target.closest('.remove-income-proof')) {
+                const formDiv = e.target.closest('.income-proof-form');
+                formDiv.remove();
+                incomeProofCount--;
+                totalIncomeProofForms.value = incomeProofCount;
+                updateIncomeProofIndices();
+            }
+        });
+        
+        function updateIncomeProofIndices() {
+            const forms = incomeProofContainer.querySelectorAll('.income-proof-form');
+            forms.forEach((form, index) => {
+                form.setAttribute('data-index', index);
+                const heading = form.querySelector('h6');
+                if (heading) {
+                    heading.textContent = `اثبات درآمد ${index + 1}`;
+                }
+                
+                const inputs = form.querySelectorAll('input, textarea');
+                inputs.forEach(input => {
+                    const name = input.getAttribute('name');
+                    if (name) {
+                        const newName = name.replace(/income_proofs-\d+-/, `income_proofs-${index}-`);
+                        input.setAttribute('name', newName);
+                        input.setAttribute('id', `id_${newName}`);
+                    }
+                });
+                
+                const labels = form.querySelectorAll('label');
+                labels.forEach(label => {
+                    const forAttr = label.getAttribute('for');
+                    if (forAttr) {
+                        const newFor = forAttr.replace(/id_income_proofs-\d+-/, `id_income_proofs-${index}-`);
+                        label.setAttribute('for', newFor);
+                    }
+                });
+            });
+        }
     }
     
     // ==================== مدیریت نقاط داده درآمد ====================
     const incomeDataContainer = document.getElementById('income-data-points');
     const addIncomeDataBtn = document.getElementById('add-income-data');
-    const totalIncomeDataForms = document.querySelector('#id_income_data_points-TOTAL_FORMS');
-    let incomeDataCount = 0;
+    const totalIncomeDataForms = document.querySelector('input[name="income_data_points-TOTAL_FORMS"]');
     
-    addIncomeDataBtn.addEventListener('click', function() {
-        if (incomeDataCount >= 50) {
-            alert('حداکثر 50 نقطه داده می‌توانید اضافه کنید');
-            return;
-        }
+    if (totalIncomeDataForms && addIncomeDataBtn) {
+        let incomeDataCount = parseInt(totalIncomeDataForms.value) || 0;
         
-        const newForm = `
-            <div class="income-data-form border p-3 mb-3 rounded bg-light" data-index="${incomeDataCount}">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6>نقطه داده ${incomeDataCount + 1}</h6>
-                    <button type="button" class="btn btn-danger btn-sm remove-income-data">
-                        <i class="bi bi-trash"></i> حذف
-                    </button>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="id_income_data_points-${incomeDataCount}-date" class="form-label">تاریخ:</label>
-                        <input type="date" name="income_data_points-${incomeDataCount}-date" 
-                               class="form-control" id="id_income_data_points-${incomeDataCount}-date" required>
+        addIncomeDataBtn.addEventListener('click', function() {
+            if (incomeDataCount >= 50) {
+                alert('حداکثر 50 نقطه داده می‌توانید اضافه کنید');
+                return;
+            }
+            
+            const newForm = `
+                <div class="income-data-form border p-3 mb-3 rounded bg-light" data-index="${incomeDataCount}">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6>نقطه داده ${incomeDataCount + 1}</h6>
+                        <button type="button" class="btn btn-danger btn-sm remove-income-data">
+                            <i class="bi bi-trash"></i> حذف
+                        </button>
                     </div>
                     
-                    <div class="col-md-6 mb-3">
-                        <label for="id_income_data_points-${incomeDataCount}-income" class="form-label">درآمد (تومان):</label>
-                        <input type="number" name="income_data_points-${incomeDataCount}-income" 
-                               class="form-control" id="id_income_data_points-${incomeDataCount}-income" 
-                               placeholder="مثال: 5000000" required>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_income_data_points-${incomeDataCount}-date" class="form-label">تاریخ:</label>
+                            <input type="date" name="income_data_points-${incomeDataCount}-date" 
+                                   class="form-control" id="id_income_data_points-${incomeDataCount}-date" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="id_income_data_points-${incomeDataCount}-income" class="form-label">درآمد (تومان):</label>
+                            <input type="number" name="income_data_points-${incomeDataCount}-income" 
+                                   class="form-control" id="id_income_data_points-${incomeDataCount}-income" 
+                                   placeholder="مثال: 5000000" required>
+                        </div>
                     </div>
+                    
+                    <input type="hidden" name="income_data_points-${incomeDataCount}-id" id="id_income_data_points-${incomeDataCount}-id">
                 </div>
-                
-                <input type="hidden" name="income_data_points-${incomeDataCount}-id" id="id_income_data_points-${incomeDataCount}-id">
-            </div>
-        `;
-        
-        incomeDataContainer.insertAdjacentHTML('beforeend', newForm);
-        incomeDataCount++;
-        totalIncomeDataForms.value = incomeDataCount;
-    });
-    
-    incomeDataContainer.addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-income-data') || e.target.closest('.remove-income-data')) {
-            const formDiv = e.target.closest('.income-data-form');
-            formDiv.remove();
-            incomeDataCount--;
+            `;
+            
+            incomeDataContainer.insertAdjacentHTML('beforeend', newForm);
+            incomeDataCount++;
             totalIncomeDataForms.value = incomeDataCount;
-            updateIncomeDataIndices();
-        }
-    });
-    
-    function updateIncomeDataIndices() {
-        const forms = incomeDataContainer.querySelectorAll('.income-data-form');
-        forms.forEach((form, index) => {
-            form.setAttribute('data-index', index);
-            form.querySelector('h6').textContent = `نقطه داده ${index + 1}`;
-            
-            const inputs = form.querySelectorAll('input');
-            inputs.forEach(input => {
-                const name = input.getAttribute('name');
-                if (name) {
-                    const newName = name.replace(/income_data_points-\d+-/, `income_data_points-${index}-`);
-                    input.setAttribute('name', newName);
-                    input.setAttribute('id', `id_${newName}`);
-                }
-            });
-            
-            const labels = form.querySelectorAll('label');
-            labels.forEach(label => {
-                const forAttr = label.getAttribute('for');
-                if (forAttr) {
-                    const newFor = forAttr.replace(/id_income_data_points-\d+-/, `id_income_data_points-${index}-`);
-                    label.setAttribute('for', newFor);
-                }
-            });
         });
+        
+        incomeDataContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-income-data') || e.target.closest('.remove-income-data')) {
+                const formDiv = e.target.closest('.income-data-form');
+                formDiv.remove();
+                incomeDataCount--;
+                totalIncomeDataForms.value = incomeDataCount;
+                updateIncomeDataIndices();
+            }
+        });
+        
+        function updateIncomeDataIndices() {
+            const forms = incomeDataContainer.querySelectorAll('.income-data-form');
+            forms.forEach((form, index) => {
+                form.setAttribute('data-index', index);
+                const heading = form.querySelector('h6');
+                if (heading) {
+                    heading.textContent = `نقطه داده ${index + 1}`;
+                }
+                
+                const inputs = form.querySelectorAll('input');
+                inputs.forEach(input => {
+                    const name = input.getAttribute('name');
+                    if (name) {
+                        const newName = name.replace(/income_data_points-\d+-/, `income_data_points-${index}-`);
+                        input.setAttribute('name', newName);
+                        input.setAttribute('id', `id_${newName}`);
+                    }
+                });
+                
+                const labels = form.querySelectorAll('label');
+                labels.forEach(label => {
+                    const forAttr = label.getAttribute('for');
+                    if (forAttr) {
+                        const newFor = forAttr.replace(/id_income_data_points-\d+-/, `id_income_data_points-${index}-`);
+                        label.setAttribute('for', newFor);
+                    }
+                });
+            });
+        }
     }
     
     // ==================== مدیریت نقاط داده بازدید ====================
     const viewsDataContainer = document.getElementById('views-data-points');
     const addViewsDataBtn = document.getElementById('add-views-data');
-    const totalViewsDataForms = document.querySelector('#id_views_data_points-TOTAL_FORMS');
-    let viewsDataCount = 0;
+    const totalViewsDataForms = document.querySelector('input[name="views_data_points-TOTAL_FORMS"]');
     
-    addViewsDataBtn.addEventListener('click', function() {
-        if (viewsDataCount >= 50) {
-            alert('حداکثر 50 نقطه داده می‌توانید اضافه کنید');
-            return;
-        }
+    if (totalViewsDataForms && addViewsDataBtn) {
+        let viewsDataCount = parseInt(totalViewsDataForms.value) || 0;
         
-        const newForm = `
-            <div class="views-data-form border p-3 mb-3 rounded bg-light" data-index="${viewsDataCount}">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6>نقطه داده ${viewsDataCount + 1}</h6>
-                    <button type="button" class="btn btn-danger btn-sm remove-views-data">
-                        <i class="bi bi-trash"></i> حذف
-                    </button>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="id_views_data_points-${viewsDataCount}-date" class="form-label">تاریخ:</label>
-                        <input type="date" name="views_data_points-${viewsDataCount}-date" 
-                               class="form-control" id="id_views_data_points-${viewsDataCount}-date" required>
+        addViewsDataBtn.addEventListener('click', function() {
+            if (viewsDataCount >= 50) {
+                alert('حداکثر 50 نقطه داده می‌توانید اضافه کنید');
+                return;
+            }
+            
+            const newForm = `
+                <div class="views-data-form border p-3 mb-3 rounded bg-light" data-index="${viewsDataCount}">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6>نقطه داده ${viewsDataCount + 1}</h6>
+                        <button type="button" class="btn btn-danger btn-sm remove-views-data">
+                            <i class="bi bi-trash"></i> حذف
+                        </button>
                     </div>
                     
-                    <div class="col-md-6 mb-3">
-                        <label for="id_views_data_points-${viewsDataCount}-views" class="form-label">تعداد بازدید:</label>
-                        <input type="number" name="views_data_points-${viewsDataCount}-views" 
-                               class="form-control" id="id_views_data_points-${viewsDataCount}-views" 
-                               placeholder="مثال: 15000" required>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_views_data_points-${viewsDataCount}-date" class="form-label">تاریخ:</label>
+                            <input type="date" name="views_data_points-${viewsDataCount}-date" 
+                                   class="form-control" id="id_views_data_points-${viewsDataCount}-date" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="id_views_data_points-${viewsDataCount}-views" class="form-label">تعداد بازدید:</label>
+                            <input type="number" name="views_data_points-${viewsDataCount}-views" 
+                                   class="form-control" id="id_views_data_points-${viewsDataCount}-views" 
+                                   placeholder="مثال: 15000" required>
+                        </div>
                     </div>
+                    
+                    <input type="hidden" name="views_data_points-${viewsDataCount}-id" id="id_views_data_points-${viewsDataCount}-id">
                 </div>
-                
-                <input type="hidden" name="views_data_points-${viewsDataCount}-id" id="id_views_data_points-${viewsDataCount}-id">
-            </div>
-        `;
-        
-        viewsDataContainer.insertAdjacentHTML('beforeend', newForm);
-        viewsDataCount++;
-        totalViewsDataForms.value = viewsDataCount;
-    });
-    
-    viewsDataContainer.addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-views-data') || e.target.closest('.remove-views-data')) {
-            const formDiv = e.target.closest('.views-data-form');
-            formDiv.remove();
-            viewsDataCount--;
+            `;
+            
+            viewsDataContainer.insertAdjacentHTML('beforeend', newForm);
+            viewsDataCount++;
             totalViewsDataForms.value = viewsDataCount;
-            updateViewsDataIndices();
-        }
-    });
-    
-    function updateViewsDataIndices() {
-        const forms = viewsDataContainer.querySelectorAll('.views-data-form');
-        forms.forEach((form, index) => {
-            form.setAttribute('data-index', index);
-            form.querySelector('h6').textContent = `نقطه داده ${index + 1}`;
-            
-            const inputs = form.querySelectorAll('input');
-            inputs.forEach(input => {
-                const name = input.getAttribute('name');
-                if (name) {
-                    const newName = name.replace(/views_data_points-\d+-/, `views_data_points-${index}-`);
-                    input.setAttribute('name', newName);
-                    input.setAttribute('id', `id_${newName}`);
-                }
-            });
-            
-            const labels = form.querySelectorAll('label');
-            labels.forEach(label => {
-                const forAttr = label.getAttribute('for');
-                if (forAttr) {
-                    const newFor = forAttr.replace(/id_views_data_points-\d+-/, `id_views_data_points-${index}-`);
-                    label.setAttribute('for', newFor);
-                }
-            });
         });
+        
+        viewsDataContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-views-data') || e.target.closest('.remove-views-data')) {
+                const formDiv = e.target.closest('.views-data-form');
+                formDiv.remove();
+                viewsDataCount--;
+                totalViewsDataForms.value = viewsDataCount;
+                updateViewsDataIndices();
+            }
+        });
+        
+        function updateViewsDataIndices() {
+            const forms = viewsDataContainer.querySelectorAll('.views-data-form');
+            forms.forEach((form, index) => {
+                form.setAttribute('data-index', index);
+                const heading = form.querySelector('h6');
+                if (heading) {
+                    heading.textContent = `نقطه داده ${index + 1}`;
+                }
+                
+                const inputs = form.querySelectorAll('input');
+                inputs.forEach(input => {
+                    const name = input.getAttribute('name');
+                    if (name) {
+                        const newName = name.replace(/views_data_points-\d+-/, `views_data_points-${index}-`);
+                        input.setAttribute('name', newName);
+                        input.setAttribute('id', `id_${newName}`);
+                    }
+                });
+                
+                const labels = form.querySelectorAll('label');
+                labels.forEach(label => {
+                    const forAttr = label.getAttribute('for');
+                    if (forAttr) {
+                        const newFor = forAttr.replace(/id_views_data_points-\d+-/, `id_views_data_points-${index}-`);
+                        label.setAttribute('for', newFor);
+                    }
+                });
+            });
+        }
     }
 });
 </script>
@@ -330,6 +455,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .remove-income-proof:hover, .remove-income-data:hover, .remove-views-data:hover {
     transform: scale(1.1);
+}
+
+#monthly-income-field, #income-sections {
+    transition: all 0.3s ease;
 }
 </style>
 {% endblock %}

@@ -62,7 +62,11 @@
                             target="_blank">{{ listing.platform_url }}</a></li>
                     <li><strong>تعداد دنبال‌کننده:</strong> {{ listing.followers_count|floatformat:0 }}</li>
                     <li><strong>درآمد ماهانه:</strong> {{ listing.monthly_income|floatformat:0 }} تومان</li>
+
+                    {% if listing.get_roi_display %}
                     <li><strong>برگشت سرمایه:</strong> {{ listing.get_roi_display }}</li>
+                    {% endif %}
+
                     <li><strong>سن پلتفرم:</strong> {{ listing.platform_age|floatformat:0 }} سال</li>
                     <li><strong>موقعیت مکانی:</strong> {{ listing.location|default:"نامشخص" }}</li>
 
@@ -81,7 +85,7 @@
 
                 <!-- نمودارها -->
                 <div id="income-chart-container" class="mt-4" style="display: none;">
-                    <h5>نمودار درآمد ماهانه</h5>
+                    <h5>نمودار درآمد</h5>
                     <div class="card chart-card">
                         <div class="card-body">
                             <canvas id="incomeChart"></canvas>
@@ -90,7 +94,7 @@
                 </div>
 
                 <div id="views-chart-container" class="mt-4" style="display: none;">
-                    <h5>نمودار بازدید روزانه</h5>
+                    <h5>نمودار بازدید</h5>
                     <div class="card chart-card">
                         <div class="card-body">
                             <canvas id="viewsChart"></canvas>
@@ -151,9 +155,39 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h6>اطلاعات فروشنده</h6>
+
+                {% if listing.seller.profile_image %}
+                <img src="{{ listing.seller.profile_image.url }}" alt="پروفایل" class="rounded-circle mb-3"
+                    style="width: 120px; height: 120px; object-fit: cover;">
+                {% else %}
+                <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
+                    style="width: 120px; height: 120px;">
+                    <i class="fas fa-user fa-3x text-white"></i>
+                </div>
+                {% endif %}
+
                 <p><strong>نام کاربری:</strong> {{ listing.seller.username }}</p>
-                {% if listing.seller.is_verified %}
+
+                {% if listing.seller.first_name %}
+                <p><strong>نام:</strong> {{ listing.seller.first_name }}</p>
+                {% endif %}
+
+                {% if listing.seller.profile %}
+                {% if listing.seller.profile.bio %}
+                <p><strong>بیوگرافی:</strong> {{ listing.seller.profile.bio }}</p>
+                {% endif %}
+
+                {% if listing.seller.profile.address %}
+                <p><strong>آدرس:</strong> {{ listing.seller.profile.address }}</p>
+                {% endif %}
+                {% endif %}
+
+                <p><strong>تاریخ عضویت:</strong> {{ listing.seller.date_joined|date:"Y/m/d" }}</p>
+
+                {% if listing.seller.profile.is_verified %}
                 <span class="badge bg-success">تایید شده</span>
+                {% else %}
+                <span class="badge bg-warning">تایید نشده</span>
                 {% endif %}
             </div>
         </div>
@@ -361,7 +395,8 @@
                 let minDistance = Infinity;
 
                 points.forEach((point, index) => {
-                    const distance = Math.sqrt(Math.pow(x - point.x, 2) + Math.pow(y - point.y, 2));
+                    const distance = Math.sqrt(Math.pow(x - point.x, 2) + Math.pow(y - point.y,
+                        2));
                     if (distance < minDistance && distance < 20) {
                         minDistance = distance;
                         closestPoint = {

@@ -96,7 +96,7 @@ class Listing(models.Model):
         """نمایش برگشت سرمایه به صورت ماه"""
         roi_months = self.get_roi_months()
         if roi_months is None:
-            return "نامشخص"
+            return 
         
         months = int(roi_months)
         return f"{months} ماه"

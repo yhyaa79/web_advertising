@@ -79,7 +79,11 @@
 
                 <p><strong>دنبال‌کننده:</strong> {{ listing.followers_count|floatformat:0 }} نفر</p>
                 <p><strong>تاریخ انتشار اگهی:</strong> {{ listing.created_at }} </p>
+                
+                {% if listing.get_roi_display %}
                 <p><strong>برگشت سرمایه:</strong> {{ listing.get_roi_display }}</p>
+                {% endif %}
+
                 <p><strong>سن پلتفرم:</strong> {{ listing.platform_age|floatformat:0 }} سال</p>
 
                 {% if not listing.is_private or user == listing.seller %}
