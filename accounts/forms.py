@@ -31,7 +31,7 @@ class UserProfileBaseForm(forms.ModelForm):
         model = UserProfile
         fields = [
             'user_type', 'bio', 'address', 'city', 'province', 'postal_code',
-            'iban_number', 'bank_name', 'tax_info'
+            'email_address', 'iban_number', 'bank_name', 'tax_info'
         ]
         widgets = {
             'user_type': forms.Select(attrs={'class': 'form-control', 'id': 'user_type_select'}),
@@ -40,6 +40,7 @@ class UserProfileBaseForm(forms.ModelForm):
             'city': forms.TextInput(attrs={'class': 'form-control'}),
             'province': forms.TextInput(attrs={'class': 'form-control'}),
             'postal_code': forms.TextInput(attrs={'class': 'form-control'}),
+            'email_address': forms.TextInput(attrs={'class': 'form-control'}),
             'iban_number': forms.TextInput(attrs={'class': 'form-control'}),
             'bank_name': forms.TextInput(attrs={'class': 'form-control'}),
             'tax_info': forms.TextInput(attrs={'class': 'form-control'}),

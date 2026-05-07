@@ -35,7 +35,7 @@ class UserProfileAdmin(admin.ModelAdmin):
             'fields': ('user', 'user_type')
         }),
         ('اطلاعات عمومی', {
-            'fields': ('bio', 'address', 'city', 'province', 'postal_code')
+            'fields': ('bio', 'address', 'email_address', 'city', 'province', 'postal_code')
         }),
         ('اطلاعات شخص حقیقی', {
             'fields': ('first_name','last_name', 'date_of_birth', 'gender', 'national_id_image', 'selfie_with_id'),

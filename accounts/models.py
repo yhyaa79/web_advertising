@@ -33,13 +33,14 @@ class UserProfile(models.Model):
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='individual', verbose_name='نوع کاربر')
     bio = models.TextField(blank=True, verbose_name='بیو')
     address = models.TextField(blank=True, verbose_name='آدرس')
+    email_address = models.EmailField( max_length=150, blank=True, null=True, verbose_name="ایمیل عمومی")
     city = models.CharField(max_length=100, blank=True, verbose_name='شهر')
     province = models.CharField(max_length=100, blank=True, verbose_name='استان')
     postal_code = models.CharField(max_length=20, blank=True, verbose_name='کد پستی')
 
     # حقیقی
-    first_name = models.CharField(max_length=100, blank=True, verbose_name='نام')
-    last_name = models.CharField(max_length=100, blank=True, verbose_name='نام خانوادگی')
+    first_name = models.CharField(max_length=100, blank=True, null=True, verbose_name='نام')
+    last_name = models.CharField(max_length=100, blank=True, null=True, verbose_name='نام خانوادگی')
     date_of_birth = models.DateField(null=True, blank=True, verbose_name='تاریخ تولد')
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, blank=True, verbose_name='جنسیت')
     national_id_image = models.ImageField(upload_to='documents/national_ids/', null=True, blank=True, verbose_name='تصویر کارت ملی')

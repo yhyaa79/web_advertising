@@ -89,11 +89,11 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">نام</label>
-                                {{ base_form.first_name }}
+                                {{ individual_form.first_name }}
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">نام خانوادگی</label>
-                                {{ base_form.last_name }}
+                                {{ individual_form.last_name }}
                             </div>
                         </div>
 
@@ -249,6 +249,8 @@
     <div class="col-md-4">
         <div class="card">
             <div class="card-body text-center">
+
+                {% if profile.user_type == 'individual' %}
                 {% if user.profile_image %}
                 <img src="{{ user.profile_image.url }}" alt="پروفایل" class="rounded-circle mb-3"
                     style="width: 120px; height: 120px; object-fit: cover;">
@@ -258,6 +260,19 @@
                     <i class="fas fa-user fa-3x text-white"></i>
                 </div>
                 {% endif %}
+                {% else %}
+
+                {% if profile.company_logo %}
+                <img src="{{ profile.company_logo.url }}" alt="پروفایل" class="rounded-circle mb-3"
+                    style="width: 120px; height: 120px; object-fit: cover;">
+                {% else %}
+                <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
+                    style="width: 120px; height: 120px;">
+                    <i class="fas fa-user fa-3x text-white"></i>
+                </div>
+                {% endif %}
+                {% endif %}
+                
 
                 <h5>{{ user.username }}</h5>
                 <p class="text-muted">{{ user.email }}</p>

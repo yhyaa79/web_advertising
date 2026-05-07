@@ -156,6 +156,7 @@
             <div class="card-body">
                 <h6>اطلاعات فروشنده</h6>
 
+                {% if listing.seller.profile.user_type == 'individual' %}
                 {% if listing.seller.profile_image %}
                 <img src="{{ listing.seller.profile_image.url }}" alt="پروفایل" class="rounded-circle mb-3"
                     style="width: 120px; height: 120px; object-fit: cover;">
@@ -166,10 +167,47 @@
                 </div>
                 {% endif %}
 
+                {% else %}
+
+                {% if listing.seller.profile.company_logo %}
+                <img src="{{ listing.seller.profile.company_logo.url }}" alt="پروفایل" class="rounded-circle mb-3"
+                    style="width: 120px; height: 120px; object-fit: cover;">
+                {% else %}
+                <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
+                    style="width: 120px; height: 120px;">
+                    <i class="fas fa-user fa-3x text-white"></i>
+                </div>
+                {% endif %}
+                {% endif %}
+
                 <p><strong>نام کاربری:</strong> {{ listing.seller.username }}</p>
 
-                {% if listing.seller.first_name %}
-                <p><strong>نام:</strong> {{ listing.seller.first_name }}</p>
+                {% if listing.seller.profile.user_type == 'individual' %}
+                <p><strong>نوع کاربر:</strong>شخص حقیقی</p>
+                {% else %}
+                <p><strong>نوع کاربر:</strong>شخص حقوقی</p>
+                {% endif %}
+
+                {% if listing.seller.profile.first_name and listing.seller.profile.last_name %}
+                <p><strong>نام:</strong> {{ listing.seller.profile.first_name }} {{ listing.seller.profile.last_name }}
+                </p>
+                {% elif listing.seller.profile.first_name %}
+                <p><strong>نام:</strong> {{ listing.seller.profile.first_name }}</p>
+                {% elif listing.seller.profile.last_name %}
+                <p><strong>نام:</strong> {{ listing.seller.profile.last_name }}</p>
+                {% endif %}
+
+
+                {% if listing.seller.profile.company_name %}
+                <p><strong>نام شرکت:</strong> {{ listing.seller.profile.company_name }} </p>
+                {% endif %}
+
+                {% if listing.seller.profile.company_type %}
+                <p><strong>نوع شرکت:</strong> {{ listing.seller.profile.company_type }} </p>
+                {% endif %}
+
+                {% if listing.seller.profile.email_address %}
+                <p><strong>بیوگرافی:</strong> {{ listing.seller.profile.email_address }}</p>
                 {% endif %}
 
                 {% if listing.seller.profile %}
