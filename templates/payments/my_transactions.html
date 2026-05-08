@@ -1,98 +1,529 @@
-<!-- templates/payments/my_transactions.html - نسخه کامل -->
+<!-- templates/payments/my_transactions.html -->
 {% extends 'base.html' %}
 
 {% block title %}تراکنش‌های من{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">تراکنش‌های من</h2>
+<h2 style="margin-bottom: 1.5rem;">تراکنش‌ها و پیشنهادات</h2>
 
-<ul class="nav nav-tabs mb-3">
-    <li class="nav-item">
-        <a class="nav-link active" data-bs-toggle="tab" href="#purchases">خریدهای من</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="tab" href="#sales">فروش‌های من</a>
-    </li>
-</ul>
-
-<div class="tab-content">
-    <div class="tab-pane fade show active" id="purchases">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>کد پیگیری</th>
-                        <th>آگهی</th>
-                        <th>مبلغ</th>
-                        <th>وضعیت</th>
-                        <th>تاریخ</th>
-                        <th>عملیات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for transaction in purchases %}
-                        <tr>
-                            <td>{{ transaction.tracking_code }}</td>
-                            <td>{{ transaction.listing.title }}</td>
-                            <td>{{ transaction.amount|floatformat:0 }} تومان</td>
-                            <td><span class="badge bg-info">{{ transaction.get_status_display }}</span></td>
-                            <td>{{ transaction.created_at|date:"Y/m/d" }}</td>
-                            <td>
-                                <a href="{% url 'payments:transaction_detail' transaction.id %}" class="btn btn-sm btn-primary">جزئیات</a>
-                            </td>
-                        </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="6" class="text-center">تراکنشی وجود ندارد.</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+<div class="tabs-container">
+    <div class="tabs-nav">
+        <button class="tab-button active" data-tab="purchases">خریدهای من</button>
+        <button class="tab-button" data-tab="sales">فروش‌های من</button>
+        <button class="tab-button" data-tab="sent-proposals">پیشنهادات ارسالی</button>
+        <button class="tab-button" data-tab="received-proposals">پیشنهادات دریافتی</button>
+        <button class="tab-button" data-tab="accepted-proposals">پیشنهادات تایید شده</button>
     </div>
 
-    <div class="tab-pane fade" id="sales">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>کد پیگیری</th>
-                        <th>آگهی</th>
-                        <th>مبلغ</th>
-                        <th>وضعیت</th>
-                        <th>تاریخ</th>
-                        <th>عملیات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for transaction in sales %}
+    <div class="tabs-content">
+        <!-- خریدهای من -->
+        <div class="tab-pane active" id="purchases">
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>کد پیگیری</th>
+                            <th>آگهی</th>
+                            <th>مبلغ</th>
+                            <th>وضعیت</th>
+                            <th>تاریخ</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in purchases %}
                         <tr>
                             <td>{{ transaction.tracking_code }}</td>
                             <td>{{ transaction.listing.title }}</td>
                             <td>{{ transaction.amount|floatformat:0 }} تومان</td>
-                            <td>
-                                <span class="badge bg-info">
-                                    {{ transaction.get_status_display }}
-                                </span>
-                            </td>
+                            <td><span class="badge badge-info">{{ transaction.get_status_display }}</span></td>
                             <td>{{ transaction.created_at|date:"Y/m/d" }}</td>
                             <td>
-                                <a href="{% url 'payments:transaction_detail' transaction.id %}" 
-                                   class="btn btn-sm btn-primary">
-                                    جزئیات
-                                </a>
+                                <a href="{% url 'payments:transaction_detail' transaction.id %}"
+                                    class="btn btn-primary btn-sm">جزئیات</a>
                             </td>
                         </tr>
-                    {% empty %}
+                        {% empty %}
                         <tr>
-                            <td colspan="6" class="text-center">
-                                فروش ثبت‌شده‌ای ندارید.
+                            <td colspan="6" style="text-align:center;">تراکنشی وجود ندارد.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- فروش‌های من -->
+        <div class="tab-pane" id="sales">
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>کد پیگیری</th>
+                            <th>آگهی</th>
+                            <th>مبلغ</th>
+                            <th>وضعیت</th>
+                            <th>تاریخ</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in sales %}
+                        <tr>
+                            <td>{{ transaction.tracking_code }}</td>
+                            <td>{{ transaction.listing.title }}</td>
+                            <td>{{ transaction.amount|floatformat:0 }} تومان</td>
+                            <td><span class="badge badge-info">{{ transaction.get_status_display }}</span></td>
+                            <td>{{ transaction.created_at|date:"Y/m/d" }}</td>
+                            <td>
+                                <a href="{% url 'payments:transaction_detail' transaction.id %}"
+                                    class="btn btn-primary btn-sm">جزئیات</a>
                             </td>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" style="text-align:center;">تراکنشی وجود ندارد.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- پیشنهادات ارسالی -->
+        <div class="tab-pane" id="sent-proposals">
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>آگهی</th>
+                            <th>فروشنده</th>
+                            <th>قیمت پیشنهادی</th>
+                            <th>وضعیت</th>
+                            <th>تاریخ</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for proposal in sent_proposals %}
+                        <tr>
+                            <td>{{ proposal.listing.title }}</td>
+                            <td>{{ proposal.seller.username }}</td>
+                            <td>{{ proposal.proposed_price|floatformat:0 }} تومان</td>
+                            <td><span class="badge badge-warning">{{ proposal.get_status_display }}</span></td>
+                            <td>{{ proposal.created_at|date:"Y/m/d" }}</td>
+                            <td>
+                                <a href="{% url 'payments:proposal_detail' proposal.id %}"
+                                    class="btn btn-primary btn-sm">جزئیات</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" style="text-align:center;">پیشنهادی ارسال نکرده‌اید.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- پیشنهادات دریافتی -->
+        <div class="tab-pane" id="received-proposals">
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>آگهی</th>
+                            <th>خریدار</th>
+                            <th>قیمت پیشنهادی</th>
+                            <th>وضعیت</th>
+                            <th>تاریخ</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for proposal in received_proposals %}
+                        <tr>
+                            <td>{{ proposal.listing.title }}</td>
+                            <td>{{ proposal.buyer.username }}</td>
+                            <td>{{ proposal.proposed_price|floatformat:0 }} تومان</td>
+                            <td><span class="badge badge-warning">{{ proposal.get_status_display }}</span></td>
+                            <td>{{ proposal.created_at|date:"Y/m/d" }}</td>
+                            <td>
+                                {% if proposal.status == 'pending' %}
+                                <a href="{% url 'payments:respond_to_proposal' proposal.id %}"
+                                    class="btn btn-success btn-sm">پاسخ</a>
+                                {% else %}
+                                <a href="{% url 'payments:proposal_detail' proposal.id %}"
+                                    class="btn btn-primary btn-sm">جزئیات</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" style="text-align:center;">پیشنهادی دریافت نکرده‌اید.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- پیشنهادات تایید شده -->
+        <div class="tab-pane" id="accepted-proposals">
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>آگهی</th>
+                            <th>طرف مقابل</th>
+                            <th>قیمت</th>
+                            <th>وضعیت</th>
+                            <th>موافقت خریدار</th>
+                            <th>موافقت فروشنده</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for proposal in accepted_proposals %}
+                        <tr id="proposal-row-{{ proposal.id }}">
+                            <td>{{ proposal.listing.title }}</td>
+                            <td>
+                                {% if proposal.buyer == request.user %}
+                                    {{ proposal.seller.username }}
+                                {% else %}
+                                    {{ proposal.buyer.username }}
+                                {% endif %}
+                            </td>
+                            <td>{{ proposal.proposed_price|floatformat:0 }} تومان</td>
+                            <td>
+                                <span class="badge 
+                                    {% if proposal.status == 'negotiating' or proposal.status == 'accepted' %}badge-info
+                                    {% elif proposal.status == 'deal_confirmed' %}badge-success
+                                    {% elif proposal.status == 'deal_cancelled' %}badge-danger
+                                    {% endif %}" 
+                                    id="status-badge-{{ proposal.id }}">
+                                    {{ proposal.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <span id="buyer-status-{{ proposal.id }}">
+                                    {% if proposal.buyer_agreed %}
+                                        <span class="badge badge-success">✓ موافق</span>
+                                    {% else %}
+                                        <span class="badge badge-secondary">در انتظار</span>
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <span id="seller-status-{{ proposal.id }}">
+                                    {% if proposal.seller_agreed %}
+                                        <span class="badge badge-success">✓ موافق</span>
+                                    {% else %}
+                                        <span class="badge badge-secondary">در انتظار</span>
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons" id="actions-{{ proposal.id }}">
+                                    {% if proposal.status == 'negotiating' or proposal.status == 'accepted' %}
+                                        {% if proposal.buyer == request.user and not proposal.buyer_agreed %}
+                                            <button onclick="agreeToDeal('{{ proposal.id }}')" 
+                                                class="btn btn-success btn-sm">توافق</button>
+                                        {% elif proposal.seller == request.user and not proposal.seller_agreed %}
+                                            <button onclick="agreeToDeal('{{ proposal.id }}')" 
+                                                class="btn btn-success btn-sm">توافق</button>
+                                        {% endif %}
+                                        
+                                        <button onclick="cancelDeal('{{ proposal.id }}')" 
+                                            class="btn btn-danger btn-sm">کنسل</button>
+                                    {% endif %}
+                                    
+                                    <button onclick="openChat('{{ proposal.id }}', '{{ proposal.listing.title|escapejs }}')" 
+                                        class="btn btn-primary btn-sm">چت</button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" style="text-align:center;">پیشنهاد تایید شده‌ای وجود ندارد.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- مودال چت -->
+<div id="chatModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="chatTitle">چت</h3>
+            <span class="close" onclick="closeChat()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input-container" id="chatInputContainer">
+                <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." 
+                    onkeypress="if(event.key === 'Enter') sendMessage()">
+                <button onclick="sendMessage()" class="btn btn-primary">ارسال</button>
+            </div>
+            <div id="chatDisabledMessage" class="chat-disabled-message" style="display: none;">
+                <p>امکان ارسال پیام در این وضعیت وجود ندارد.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    // مدیریت تب‌ها
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const tabId = button.getAttribute('data-tab');
+
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+            button.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+
+    // متغیرهای مودال چت
+    let currentProposalId = null;
+    let chatInterval = null;
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function openChat(proposalId, listingTitle) {
+        currentProposalId = proposalId;
+        document.getElementById('chatTitle').textContent = 'چت - ' + listingTitle;
+        document.getElementById('chatModal').style.display = 'block';
+        document.getElementById('chatMessages').innerHTML = '<p style="text-align:center;">در حال بارگیری...</p>';
+
+        loadMessages();
+
+        if (chatInterval) {
+            clearInterval(chatInterval);
+        }
+        chatInterval = setInterval(loadMessages, 3000);
+    }
+
+    function closeChat() {
+        document.getElementById('chatModal').style.display = 'none';
+        currentProposalId = null;
+
+        if (chatInterval) {
+            clearInterval(chatInterval);
+            chatInterval = null;
+        }
+    }
+
+    function loadMessages() {
+        if (!currentProposalId) return;
+
+        fetch(`/payments/chat/${currentProposalId}/messages/`)
+            .then(response => response.json())
+            .then(data => {
+                const messagesContainer = document.getElementById('chatMessages');
+                messagesContainer.innerHTML = '';
+
+                if (data.messages.length === 0) {
+                    messagesContainer.innerHTML = '<p style="text-align:center;color:#999;">هنوز پیامی ارسال نشده است.</p>';
+                } else {
+                    data.messages.forEach(msg => {
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = 'chat-message ' + (msg.is_mine ? 'mine' : 'theirs');
+
+                        messageDiv.innerHTML = `
+                            <div class="chat-message-sender">${msg.sender}</div>
+                            <div class="chat-message-text">${msg.message}</div>
+                            <div class="chat-message-time">${msg.created_at}</div>
+                        `;
+
+                        messagesContainer.appendChild(messageDiv);
+                    });
+
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+
+                // بررسی وضعیت برای غیرفعال کردن ورودی
+                const chatInputContainer = document.getElementById('chatInputContainer');
+                const chatDisabledMessage = document.getElementById('chatDisabledMessage');
+
+                if (data.proposal_status === 'deal_cancelled') {
+                    chatInputContainer.style.display = 'none';
+                    chatDisabledMessage.style.display = 'block';
+                } else {
+                    chatInputContainer.style.display = 'flex';
+                    chatDisabledMessage.style.display = 'none';
+                }
+
+            })
+            .catch(error => {
+                console.error('خطا در بارگیری پیام‌ها:', error);
+            });
+    }
+
+    function sendMessage() {
+        if (!currentProposalId) return;
+
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        const csrftoken = getCookie('csrftoken');
+
+        fetch(`/payments/chat/${currentProposalId}/send/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrftoken
+            },
+            body: `message=${encodeURIComponent(message)}`
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    input.value = '';
+                    loadMessages();
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('خطا در ارسال پیام:', error);
+                alert('خطا در ارسال پیام');
+            });
+    }
+
+    // بستن مودال با کلیک خارج از آن
+    window.onclick = function (event) {
+        const modal = document.getElementById('chatModal');
+        if (event.target === modal) {
+            closeChat();
+        }
+    }
+
+    // توابع توافق و کنسل
+    function agreeToDeal(proposalId) {
+        if (!confirm('آیا با این معامله موافقید؟')) {
+            return;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        fetch(`/payments/proposal/${proposalId}/agree/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+
+                if (data.buyer_agreed !== undefined) {
+                    document.getElementById(`buyer-status-${proposalId}`).innerHTML =
+                        data.buyer_agreed
+                        ? '<span class="badge badge-success">✓ موافق</span>'
+                        : '<span class="badge badge-secondary">در انتظار</span>';
+                }
+
+                if (data.seller_agreed !== undefined) {
+                    document.getElementById(`seller-status-${proposalId}`).innerHTML =
+                        data.seller_agreed
+                        ? '<span class="badge badge-success">✓ موافق</span>'
+                        : '<span class="badge badge-secondary">در انتظار</span>';
+                }
+
+                if (data.status) {
+                    const badge = document.getElementById(`status-badge-${proposalId}`);
+
+                    if (data.status === 'deal_confirmed') {
+                        badge.className = 'badge badge-success';
+                        badge.innerText = 'توافق نهایی شد';
+                    } else if (data.status === 'accepted') {
+                        badge.className = 'badge badge-info';
+                        badge.innerText = 'در حال گفتگو';
+                    }
+                }
+
+                if (data.status === 'deal_confirmed') {
+                    const actions = document.getElementById(`actions-${proposalId}`);
+                    actions.innerHTML = `
+                        <button onclick="openChat(${proposalId})" class="btn btn-primary btn-sm">چت</button>
+                    `;
+                }
+
+            } else {
+                alert(data.error || 'خطا در ثبت توافق');
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            alert('خطا در ارتباط با سرور');
+        });
+    }
+
+    function cancelDeal(proposalId) {
+
+        if (!confirm('آیا مطمئن هستید که می‌خواهید این معامله را کنسل کنید؟')) {
+            return;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        fetch(`/payments/proposal/${proposalId}/cancel/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+
+            if (data.success) {
+
+                const badge = document.getElementById(`status-badge-${proposalId}`);
+                badge.className = 'badge badge-danger';
+                badge.innerText = 'کنسل شد';
+
+                const actions = document.getElementById(`actions-${proposalId}`);
+                actions.innerHTML = `
+                    <button onclick="openChat(${proposalId})" class="btn btn-primary btn-sm">چت</button>
+                `;
+
+            } else {
+                alert(data.error || 'خطا در کنسل کردن معامله');
+            }
+
+        })
+        .catch(error => {
+            console.error(error);
+            alert('خطا در ارتباط با سرور');
+        });
+    }
+</script>
+
 {% endblock %}

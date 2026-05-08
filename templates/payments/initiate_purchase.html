@@ -14,55 +14,61 @@
                 <div class="row">
                     <div class="col-md-4">
                         {% if listing.main_image %}
-                            <img src="{{ listing.main_image.url }}" class="img-fluid rounded" alt="{{ listing.title }}">
+                        <img src="{{ listing.main_image.url }}" class="img-fluid rounded" alt="{{ listing.title }}">
                         {% endif %}
                     </div>
                     <div class="col-md-8">
                         <h5>{{ listing.title }}</h5>
                         <p class="text-muted">{{ listing.description|truncatewords:30 }}</p>
                         <hr>
-                        <p><strong>قیمت فروشنده:</strong> <span class="text-success fs-5">{{ listing.price|floatformat:0 }} تومان</span></p>
-                        
+                        <p><strong>قیمت فروشنده:</strong> <span
+                                class="text-success fs-5">{{ listing.price|floatformat:0 }} تومان</span></p>
+
                         {% if existing_proposal %}
-                            <div class="alert alert-info">
-                                <strong>پیشنهاد قبلی شما:</strong> {{ existing_proposal.proposed_price|floatformat:0 }} تومان
-                                <br>
-                                <strong>وضعیت:</strong> {{ existing_proposal.get_status_display }}
-                            </div>
+                        <div class="alert alert-info">
+                            <strong>پیشنهاد قبلی شما:</strong> {{ existing_proposal.proposed_price|floatformat:0 }}
+                            تومان
+                            <br>
+                            <strong>وضعیت:</strong> {{ existing_proposal.get_status_display }}
+                        </div>
                         {% endif %}
                     </div>
                 </div>
-                
+
                 <hr>
-                
+
                 <form method="post">
                     {% csrf_token %}
-                    <div class="mb-3">
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="send_custom_price" name="send_custom_price"
+                            {% if existing_proposal %}checked{% endif %} onchange="togglePriceInput()">
+                        <label class="form-check-label" for="send_custom_price">
+                            ارسال قیمت پیشنهادی
+                        </label>
+                    </div>
+
+                    <div class="mb-3" id="price_input_section"
+                        style="display: {% if existing_proposal %}block{% else %}none{% endif %};">
                         <label for="proposed_price" class="form-label">قیمت پیشنهادی شما (تومان)</label>
-                        <input type="number" 
-                               class="form-control" 
-                               id="proposed_price" 
-                               name="proposed_price" 
-                               value="{% if existing_proposal %}{{ existing_proposal.proposed_price|floatformat:0 }}{% endif %}"
-                               required>
+                        <input type="number" class="form-control" id="proposed_price" name="proposed_price"
+                            value="{% if existing_proposal %}{{ existing_proposal.proposed_price|floatformat:0 }}{% endif %}">
                         <small class="text-muted">قیمت پیشنهادی خود را وارد کنید</small>
                     </div>
-                    
-                    <div class="mb-3">
+
+                    <div class="mb-3" id="message_section"
+                        style="display: {% if existing_proposal %}block{% else %}none{% endif %};">
                         <label for="message" class="form-label">پیام (اختیاری)</label>
-                        <textarea class="form-control" 
-                                  id="message" 
-                                  name="message" 
-                                  rows="3" 
-                                  placeholder="توضیحات اضافی در مورد پیشنهاد خود...">{% if existing_proposal %}{{ existing_proposal.message }}{% endif %}</textarea>
+                        <textarea class="form-control" id="message" name="message" rows="3"
+                            placeholder="توضیحات اضافی در مورد پیشنهاد خود...">{% if existing_proposal %}{{ existing_proposal.message }}{% endif %}</textarea>
                     </div>
-                    
+
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-success btn-lg">
                             {% if existing_proposal %}
-                                به‌روزرسانی پیشنهاد
+                            به‌روزرسانی پیشنهاد
                             {% else %}
-                                ارسال پیشنهاد
+                            ارسال پیشنهاد
                             {% endif %}
                         </button>
                         <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-secondary">انصراف</a>
@@ -72,4 +78,24 @@
         </div>
     </div>
 </div>
+
+<script>
+    function togglePriceInput() {
+        const checkbox = document.getElementById('send_custom_price');
+        const priceSection = document.getElementById('price_input_section');
+        const messageSection = document.getElementById('message_section');
+        const priceInput = document.getElementById('proposed_price');
+
+        if (checkbox.checked) {
+            priceSection.style.display = 'block';
+            messageSection.style.display = 'block';
+            priceInput.required = true;
+        } else {
+            priceSection.style.display = 'none';
+            messageSection.style.display = 'none';
+            priceInput.required = false;
+            priceInput.value = '';
+        }
+    }
+</script>
 {% endblock %}

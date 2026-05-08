@@ -44,6 +44,9 @@ class PriceProposal(models.Model):
         ('accepted', 'پذیرفته شده'),
         ('rejected', 'رد شده'),
         ('cancelled', 'لغو شده'),
+        ('negotiating', 'در حال گفتگو'),
+        ('deal_confirmed', 'توافق شد'),
+        ('deal_cancelled', 'کنسل شد'),
     ]
     
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='price_proposals')
@@ -56,6 +59,12 @@ class PriceProposal(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     
     seller_response = models.TextField(blank=True, verbose_name='پاسخ فروشنده')
+    
+    # فیلدهای جدید برای توافق
+    buyer_agreed = models.BooleanField(default=False, verbose_name='خریدار موافق')
+    seller_agreed = models.BooleanField(default=False, verbose_name='فروشنده موافق')
+    buyer_cancelled = models.BooleanField(default=False, verbose_name='خریدار کنسل کرد')
+    seller_cancelled = models.BooleanField(default=False, verbose_name='فروشنده کنسل کرد')
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -92,3 +101,41 @@ class Dispute(models.Model):
     
     def __str__(self):
         return f"اختلاف {self.transaction.tracking_code}"
+
+
+class ChatRoom(models.Model):
+    """اتاق چت بین خریدار و فروشنده برای یک آگهی"""
+    proposal = models.OneToOneField(PriceProposal, on_delete=models.CASCADE, related_name='chat_room')
+    buyer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='buyer_chats')
+    seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='seller_chats')
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='chat_rooms')
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'اتاق چت'
+        verbose_name_plural = 'اتاق‌های چت'
+        ordering = ['-updated_at']
+    
+    def __str__(self):
+        return f"چت {self.buyer.username} و {self.seller.username} - {self.listing.title}"
+
+
+class ChatMessage(models.Model):
+    """پیام‌های چت"""
+    chat_room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE, related_name='messages')
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    message = models.TextField(verbose_name='پیام')
+    
+    is_read = models.BooleanField(default=False, verbose_name='خوانده شده')
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = 'پیام چت'
+        verbose_name_plural = 'پیام‌های چت'
+        ordering = ['created_at']
+    
+    def __str__(self):
+        return f"{self.sender.username}: {self.message[:30]}"

@@ -69,7 +69,6 @@
                 {% endif %}
 
                 {% if proposal.seller_response %}
-                {% if proposal.seller_response %}
                 <hr>
                 <div class="alert alert-info">
                     <strong>پاسخ فروشنده:</strong>
@@ -80,7 +79,7 @@
                 <hr>
 
                 <div class="d-flex gap-2">
-                    <a href="{% url 'payments:my_proposals' %}" class="btn btn-secondary">
+                    <a href="{% url 'payments:my_transactions' %}" class="btn btn-secondary">
                         بازگشت
                     </a>
 
