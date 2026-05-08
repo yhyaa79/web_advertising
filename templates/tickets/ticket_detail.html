@@ -1,0 +1,118 @@
+<!-- templates/tickets/ticket_detail.html -->
+
+
+
+{% extends 'base.html' %}
+
+{% block title %}{{ ticket.subject }}{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <!-- هدر تیکت -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="mb-1">{{ ticket.subject }}</h4>
+                    <small class="text-muted">
+                        تیکت #{{ ticket.id }} | 
+                        دسته: {{ ticket.category.name|default:"نامشخص" }} |
+                        اولویت: {{ ticket.get_priority_display }} | 
+                        {{ ticket.created_at|date:"Y/m/d H:i" }}
+                    </small>
+                </div>
+                <div>
+                    {% if ticket.status == 'closed' %}
+                        <span class="badge bg-secondary fs-6">بسته شده</span>
+                        <form method="post" action="{% url 'tickets:ticket_reopen' ticket.pk %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-primary">بازگشایی</button>
+                        </form>
+                    {% else %}
+                        <span class="badge bg-success fs-6">{{ ticket.get_status_display }}</span>
+                        <form method="post" action="{% url 'tickets:ticket_close' ticket.pk %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">بستن تیکت</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- پیام‌ها -->
+    <div class="row">
+        <div class="col-md-12">
+            {% for msg in messages %}
+                <div class="card mb-3 {% if msg.is_staff_reply %}border-primary{% endif %}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <strong>
+                                {% if msg.is_staff_reply %}
+                                    <i class="bi bi-headset text-primary"></i> پشتیبانی
+                                {% else %}
+                                    <i class="bi bi-person-circle"></i> {{ msg.sender.get_full_name|default:msg.sender.username }}
+                                {% endif %}
+                            </strong>
+                            <small class="text-muted">{{ msg.created_at|date:"Y/m/d H:i" }}</small>
+                        </div>
+                        <p class="mb-2">{{ msg.message|linebreaks }}</p>
+                        {% if msg.attachment %}
+                            <a href="{{ msg.attachment.url }}" class="btn btn-sm btn-outline-secondary" target="_blank">
+                                <i class="bi bi-paperclip"></i> دانلود فایل پیوست
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- فرم پاسخ -->
+    {% if not ticket.is_closed %}
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">پاسخ به تیکت</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.message.label }}</label>
+                        {{ form.message }}
+                        {% if form.message.errors %}
+                            <div class="text-danger">{{ form.message.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.attachment.label }}</label>
+                        {{ form.attachment }}
+                        {% if form.attachment.errors %}
+                            <div class="text-danger">{{ form.attachment.errors }}</div>
+                        {% endif %}
+                        <small class="form-text text-muted">حداکثر حجم: 5 مگابایت</small>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">ارسال پاسخ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center">
+            <i class="bi bi-lock"></i>
+            این تیکت بسته شده است. برای ارسال پاسخ، ابتدا آن را بازگشایی کنید.
+        </div>
+    {% endif %}
+
+    <!-- دکمه بازگشت -->
+    <div class="mt-4">
+        <a href="{% url 'tickets:ticket_list' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-right"></i> بازگشت به لیست تیکت‌ها
+        </a>
+    </div>
+</div>
+{% endblock %}
