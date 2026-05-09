@@ -2,7 +2,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% load custom_tags %} 
+{% load custom_tags %}
+{% load date_filters %}
+
 
 {% block title %}{{ listing.title }}{% endblock %}
 
@@ -20,8 +22,9 @@
                     </span>
                     {% endif %}
                 </div>
-                <p class="text-muted">تاریخ انتشار اگهی: {{ listing.created_at }} | فروشنده:
+                <p class="text-muted">تاریخ انتشار اگهی: {{ listing.created_at|jalali_date }} | فروشنده:
                     {{ listing.seller.username }} | بازدید: {{ listing.views_count }}</p>
+
                 <hr>
 
                 {% if not has_access %}

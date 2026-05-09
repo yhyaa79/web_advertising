@@ -6,10 +6,11 @@
     --primary-color: #2c3e50;
     --secondary-color: #34495e;
     --accent-color: #3498db;
+    --blu-color: #0058ff;
     --success-color: #27ae60;
     --danger-color: #e74c3c;
-    --warning-color: #f39c12;
-    --info-color: #16a085;
+    --warning-color: #f39c12d9;
+    --info-color: #16a085cc;
 
     /* رنگ‌های پس‌زمینه */
     --light-bg: #ecf0f1;
@@ -19,7 +20,7 @@
 
     /* رنگ‌های متن */
     --text-primary: #2c3e50;
-    --text-secondary: #7f8c8d;
+    --text-secondary: #737879;
     --text-muted: #999;
 
     /* رنگ‌های مرز */
@@ -36,6 +37,9 @@
     --border-radius-sm: 4px;
     --border-radius-md: 8px;
     --border-radius-lg: 12px;
+    --border-radius-xl: 14px;
+    --border-radius-50: 16px;
+    --border-radius-999: 999px;
 
     /* فاصله‌ها */
     --spacing-xs: 0.25rem;
@@ -250,14 +254,37 @@ strong {
     font-size: var(--font-size-lg);
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 0.75rem;
+    margin-bottom: var(--spacing-sm);
 }
 
 .card-text {
-    color: var(--text-secondary);
+    color: var(--text-primary);
     font-size: var(--font-size-base);
     margin-bottom: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+    font-weight: 500;
 }
+
+.inf-all-card {
+    display: flex;
+}
+
+.inf-card{
+        margin: 0 auto;
+}
+
+.strong-inf {
+    color: var(--text-secondary);
+font-size: 13px;
+    font-weight: 400;
+}
+
+.inf-card p {
+    color: var(--text-2c3e50);
+    font-size: 16px;
+    font-weight: 600;
+}
+
 
 /* تصاویر کارت */
 .image-card {
@@ -291,7 +318,7 @@ strong {
 .price-btn {
     display: grid;
     padding: 10px;
-    width: 170px;
+    width: 300px;
     height: 100%;
 }
 
@@ -300,27 +327,42 @@ strong {
    price-btn
    ======================================== */
 
-/* .price-div {
-    height: 50px;
+.price-div {
+    text-align: center;
 }
 
-.between-price-btn {
-    height: 50px;
+.income-display {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-secondary);
 }
- */
+
+.monthly-income {
+    margin-bottom: 5px;
+}
+
+/* .between-price-btn {
+    height: 50px;
+} */
+
 .btn-primary-div {
     margin-top: auto;
-} 
+    display: flex;
+    gap: 18px;
+}
 
 
 /* ========================================
    دکمه‌ها (Buttons)
    ======================================== */
 .btn {
-    padding: 0.625rem var(--spacing-lg);
-    border-radius: var(--border-radius-md);
+    padding: 8px 10px;
+    border-radius: var(--border-radius-999);
+    border-color: rgb(0 88 255);
+    ;
     border: none;
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-md);
     font-weight: 500;
     cursor: pointer;
     transition: var(--transition-base);
@@ -331,23 +373,25 @@ strong {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--accent-color) 0%, #2980b9 100%);
-    color: var(--white-bg);
+    /* background: linear-gradient(135deg, var(--accent-color) 0%, #2980b9 100%); */
+    color: var(--blu-color);
+    border: 2px solid var(--blu-color);
+    ;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #2980b9 0%, var(--accent-color) 100%);
+    background: #f1f1f1;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
 }
 
 .btn-success {
-    background: linear-gradient(135deg, var(--success-color) 0%, #229954 100%);
+    background: var(--blu-color);
     color: var(--white-bg);
 }
 
 .btn-success:hover {
-    background: linear-gradient(135deg, #229954 0%, var(--success-color) 100%);
+    background: #0050e3;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
 }
@@ -491,10 +535,10 @@ form textarea {
    ======================================== */
 .badge {
     display: inline-block;
-    padding: 0.35rem 0.75rem;
+    padding: 3px 10px;
     font-size: var(--font-size-sm);
-    font-weight: 500;
-    border-radius: var(--border-radius-md);
+    font-weight: 400;
+    border-radius: var(--border-radius-lg);
     color: var(--white-bg);
 }
 
@@ -505,12 +549,19 @@ form textarea {
 
 .badge-warning,
 .bg-warning {
-    background-color: var(--warning-color);
+    background-color: #f9bc5c63;
+    color: #e49518;
 }
 
 .badge-info,
 .bg-info {
     background-color: var(--info-color);
+}
+
+.bg-info {
+    position: absolute;
+    margin-top: 20px;
+    margin-right: 20px;
 }
 
 .badge-danger,
