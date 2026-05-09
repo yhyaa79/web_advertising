@@ -7,6 +7,7 @@
     --secondary-color: #022a5b;
     --accent-color: #3498db;
     --blu-color: #0058ff;
+    --blu-durk-color: #0544bb;
     --success-color: #27ae60;
     --danger-color: #e74c3c;
     --warning-color: #f39c12d9;
@@ -246,8 +247,14 @@ strong {
 }
 
 .card-body {
-    padding: 10px;
+    padding: 30px;
     width: 100%;
+}
+
+.description-detail {
+    margin: 10px 0;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .card-title {
@@ -269,13 +276,49 @@ strong {
     display: flex;
 }
 
-.inf-card{
-        margin: 0 auto;
+.specifications-detail {
+    display: flex;
+    flex-wrap: wrap;
+    /* رفتن به سطر بعد در صورت کمبود جا */
+    gap: 12px;
+    /* فاصله نامنظم بین آیتم‌ها */
+    direction: rtl;
+    align-items: flex-start;
+    margin: 20px 0;
+}
+
+.inf-card-detail {
+    /* کلید اصلی: کارت فقط به اندازه محتوای داخلش جا می‌گیرد و کش نمی‌آید */
+    flex: 0 0 auto;
+    /*     background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px; */
+    padding: 4px 10px;
+}
+
+.strong-inf-detail {
+    display: inline-block;
+
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.inf-card-detail p {
+    margin: 0;
+    color: var(--text-2c3e50);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+.inf-card {
+    margin: 0 auto;
 }
 
 .strong-inf {
     color: var(--text-secondary);
-font-size: 13px;
+    font-size: 13px;
     font-weight: 400;
 }
 
@@ -305,6 +348,12 @@ font-size: 13px;
 .card-img-top {
     height: 200px;
     width: 350px;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+}
+
+.card-img-proof {
+    width: 100%;
     object-fit: cover;
     border-radius: var(--border-radius-md);
 }
@@ -352,6 +401,26 @@ font-size: 13px;
     gap: 18px;
 }
 
+
+.bottom-img-card {
+    padding: 10px 25px;
+}
+
+
+/* ========================================
+   hr
+   ======================================== */
+hr {
+    border: none;
+    height: 1px;
+    margin: 15px 0;
+    background-color: #00000066;
+}
+
+
+.hr-between {
+    background-color: #00000024;
+}
 
 /* ========================================
    دکمه‌ها (Buttons)
@@ -461,13 +530,19 @@ font-size: 13px;
 }
 
 .btn-sm {
-    padding: 0.4rem var(--spacing-md);
-    font-size: var(--font-size-sm);
+    padding: 5px var(--spacing-md);
+    font-size: var(--font-size-base);
 }
 
 .btn-lg {
     padding: 0.875rem var(--spacing-xl);
     font-size: var(--font-size-md);
+}
+
+.text-link {
+    color: var(--blu-durk-color);
+    font-weight: 700;
+    font-size: var(--font-size-base);
 }
 
 /* ========================================
@@ -511,8 +586,6 @@ form input:focus,
 form select:focus,
 form textarea:focus {
     outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
 form textarea {
@@ -543,8 +616,7 @@ form textarea {
     padding: 3px 10px;
     font-size: var(--font-size-sm);
     font-weight: 400;
-    border-radius: var(--border-radius-lg);
-    color: var(--white-bg);
+    border-radius: var(--border-radius-999);
 }
 
 .badge-success,
@@ -580,14 +652,25 @@ form textarea {
 }
 
 .badge-secondary {
-    background-color: #6c757d;
     color: var(--white-bg);
 }
 
 .all-badge {
     display: flex;
     gap: 5px;
+    margin: auto 0;
 }
+
+.badge-detail {
+    display: inline-block;
+    padding: 4px 14px;
+    font-size: var(--font-size-base);
+    font-weight: 400;
+    border-radius: var(--border-radius-999);
+    margin: 0 3px;
+}
+
+.heder-card-about-platform {}
 
 /* ========================================
    جداول (Tables)
@@ -692,7 +775,11 @@ form textarea {
 .col-md-12 {
     flex: 0 0 100%;
     max-width: 100%;
-    margin: 0 20px;
+}
+
+.col-md-12 strong {
+    font-size: var(--font-size-md);
+    margin-right: 15px;
 }
 
 .serch-bar {
@@ -708,12 +795,12 @@ form textarea {
    Jumbotron
    ======================================== */
 .jumbotron {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    color: var(--white-bg);
+    background: linear-gradient(135deg, #f0fdfa 0%, #bbdfd6 100%);
+    color: #000000;
     padding: var(--spacing-xxl) var(--spacing-xl);
     border-radius: var(--border-radius-lg);
     text-align: center;
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: 100px;
     box-shadow: var(--card-shadow);
 }
 
@@ -728,6 +815,86 @@ form textarea {
     margin-bottom: var(--spacing-xl);
     opacity: 0.95;
 }
+
+
+.main-text {
+    color: #000000;
+    text-align: center;
+    margin: 50px 0;
+    padding: 100px;
+}
+
+
+.main-text h1 {
+    font-size: 36px;
+    margin-bottom: var(--spacing-xl);
+    font-weight: 700;
+}
+
+.main-text h2 {
+    font-size: var(--font-size-xxl);
+    margin-bottom: var(--spacing-xl);
+    font-weight: 700;
+}
+
+.main-text p {
+    font-size: var(--font-size-md);
+    margin-bottom: var(--spacing-xxl);
+    font-weight: 500;
+}
+
+
+.serch-bur-ui {
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.top-port-serch {
+    border: 2px solid var(--border-color);
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+    width: 75%;
+    height: 40px;
+    margin: 0 auto;
+    background: var(--light-bg);
+}
+
+.bottom-port-serch {
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    width: 90%;
+    height: 350px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+}
+
+.bottom-port-serch h2 {
+    margin: 20px 0;
+}
+
+.serch-home {
+    padding: 5px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-999);
+    transition: var(--transition-base);
+    font-family: Tahoma, Arial, sans-serif;
+    margin: 0 100px;
+}
+
+.serch-bar-home {
+    width: 100%;
+}
+
+.form-control-home {
+    border-radius: 999px !important;
+    border: none !important;
+    width: 100% !important;
+    font-size: var(--font-size-md) !important;
+    padding: 8px;
+}
+
 
 /* ========================================
    تب‌ها (Tabs)
@@ -1036,6 +1203,12 @@ form textarea {
 
 .text-muted {
     color: var(--text-secondary);
+    font-size: var(--font-size-md);
+}
+
+.inf-created-views-username {
+    color: var(--text-secondary);
+    font-size: var(--font-size-base) !important;
 }
 
 .text-success {

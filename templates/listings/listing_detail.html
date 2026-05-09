@@ -9,122 +9,203 @@
 {% block title %}{{ listing.title }}{% endblock %}
 
 {% block content %}
+
+
 <div class="row">
     <div class="col-md-8">
-        <div class="card">
+        <div>
 
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h2>{{ listing.title }}</h2>
-                    {% if listing.is_private %}
-                    <span class="badge bg-warning text-dark fs-6">
-                        <i class="bi bi-lock-fill"></i> آگهی خصوصی
-                    </span>
-                    {% endif %}
+                    <h2 style="margin-bottom: 5px;">{{ listing.title }}</h2>
+
                 </div>
-                <p class="text-muted">تاریخ انتشار اگهی: {{ listing.created_at|jalali_date }} | فروشنده:
+                <p class="text-muted inf-created-views-username">تاریخ انتشار اگهی: {{ listing.created_at|jalali_date }}
+                    | فروشنده:
                     {{ listing.seller.username }} | بازدید: {{ listing.views_count }}</p>
 
                 <hr>
+                <div class="description-detail">
+                    {% if not has_access %}
+                    <div class="alert alert-warning">
+                        <h5><i class="bi bi-lock"></i> این آگهی خصوصی است</h5>
+                        <p>برای مشاهده جزئیات کامل این آگهی، باید درخواست بازدید ارسال کنید و فروشنده آن را تایید کند.
+                        </p>
 
-                {% if not has_access %}
-                <div class="alert alert-warning">
-                    <h5><i class="bi bi-lock"></i> این آگهی خصوصی است</h5>
-                    <p>برای مشاهده جزئیات کامل این آگهی، باید درخواست بازدید ارسال کنید و فروشنده آن را تایید کند.</p>
+                        {% if not user.is_authenticated %}
+                        <a href="{% url 'accounts:login' %}" class="btn btn-primary">ورود برای ارسال درخواست</a>
+                        {% elif visit_request %}
+                        {% if visit_request.status == 'pending' %}
+                        <div class="alert alert-info">
+                            <i class="bi bi-clock"></i> درخواست شما در انتظار تایید فروشنده است.
+                        </div>
+                        {% elif visit_request.status == 'rejected' %}
+                        <div class="alert alert-danger">
+                            <i class="bi bi-x-circle"></i> درخواست شما رد شده است.
+                        </div>
+                        {% endif %}
+                        {% else %}
+                        <a href="{% url 'listings:request_visit' listing.pk %}" class="btn btn-warning">
+                            <i class="bi bi-send"></i> ارسال درخواست بازدید
+                        </a>
+                        {% endif %}
+                    </div>
 
-                    {% if not user.is_authenticated %}
-                    <a href="{% url 'accounts:login' %}" class="btn btn-primary">ورود برای ارسال درخواست</a>
-                    {% elif visit_request %}
-                    {% if visit_request.status == 'pending' %}
-                    <div class="alert alert-info">
-                        <i class="bi bi-clock"></i> درخواست شما در انتظار تایید فروشنده است.
-                    </div>
-                    {% elif visit_request.status == 'rejected' %}
-                    <div class="alert alert-danger">
-                        <i class="bi bi-x-circle"></i> درخواست شما رد شده است.
-                    </div>
-                    {% endif %}
+                    <p>{{ listing.description|truncatewords:30 }}</p>
                     {% else %}
-                    <a href="{% url 'listings:request_visit' listing.pk %}" class="btn btn-warning">
-                        <i class="bi bi-send"></i> ارسال درخواست بازدید
-                    </a>
-                    {% endif %}
+                    <p>{{ listing.description }}</p>
                 </div>
 
-                <h4>توضیحات محدود:</h4>
-                <p>{{ listing.description|truncatewords:30 }}</p>
-                {% else %}
-                <h4>توضیحات:</h4>
-                <p>{{ listing.description }}</p>
 
-                <h5 class="mt-4">مشخصات:</h5>
-                <ul>
-                    <li><strong>دسته‌بندی:</strong> {{ listing.category.name }}
-                        ({{ listing.category.get_platform_display }})</li>
-                    <li><strong>آدرس پلتفرم:</strong> <a href="{{ listing.platform_url }}"
-                            target="_blank">{{ listing.platform_url }}</a></li>
-                    <li><strong>تعداد دنبال‌کننده:</strong> {{ listing.followers_count|split_number }}</li>
-                    <li><strong>درآمد ماهانه:</strong> {{ listing.monthly_income|split_number }} تومان</li>
-
-                    {% if listing.get_roi_display %}
-                    <li><strong>برگشت سرمایه:</strong> {{ listing.get_roi_display }}</li>
+                <div class="all-badge">
+                    {% if listing.is_private %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge-detail bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> خصوصی
+                        </span>
+                    </div>
                     {% endif %}
 
-                    <li><strong>سن پلتفرم:</strong> {{ listing.platform_age|floatformat:0 }} سال</li>
-                    <li><strong>موقعیت مکانی:</strong> {{ listing.location|default:"نامشخص" }}</li>
-
-                    {% if listing.most_like %}
-                    <li><strong>بیشترین لایک:</strong> {{ listing.most_like|split_number }} </li>
+                    {% if listing.is_income %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge-detail bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> درامد اگهی
+                        </span>
+                    </div>
                     {% endif %}
 
-                    {% if listing.most_view %}
-                    <li><strong>بیشترین بازدید:</strong> {{ listing.most_view|split_number }} </li>
+
+                    {% if listing.is_verified %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge-detail bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
+                        </span>
+                    </div>
                     {% endif %}
 
-                    {% if listing.most_comment %}
-                    <li><strong>بیشترین کامنت:</strong> {{ listing.most_comment|split_number }} </li>
+                    {% if listing.is_preferment %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge-detail bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> ارتقا اگهی
+                        </span>
+                    </div>
                     {% endif %}
 
-                    <h4>درباره پلتفرم:</h4>
+                </div>
+
+
+
+                <div class="specifications-detail">
+
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">دسته‌بندی:</strong>
+                        <p>{{ listing.category.name }}</p>
+                        <!-- <p>({{ listing.category.get_platform_display }})</p> -->
+                    </div>
+
+
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">تعداد دنبال‌کننده:</strong>
+                        <p>{{ listing.followers_count|split_number }}</p>
+                    </div>
+
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">درآمد ماهانه:</strong>
+                        <p>{{ listing.monthly_income|split_number }} تومان</p>
+                    </div>
+
+                    <div class="inf-card-detail">
+                        {% if listing.get_roi_display %}
+                        <strong class="strong-inf-detail">برگشت سرمایه:</strong>
+                        <p>{{ listing.get_roi_display }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">سن پلتفرم:</strong>
+                        <p>{{ listing.platform_age|floatformat:0 }} سال</p>
+                    </div>
+
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">موقعیت مکانی:</strong>
+                        <p>{{ listing.location|default:"نامشخص" }}</p>
+                    </div>
+
+                    <div class="inf-card-detail">
+                        {% if listing.most_like %}
+                        <strong class="strong-inf-detail">بیشترین لایک:</strong>
+                        <p>{{ listing.most_like|split_number }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="inf-card-detail">
+                        {% if listing.most_view %}
+                        <strong class="strong-inf-detail">بیشترین بازدید:</strong>
+                        <p>{{ listing.most_view|split_number }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="inf-card-detail">
+                        {% if listing.most_comment %}
+                        <strong class="strong-inf-detail">بیشترین کامنت:</strong>
+                        <p>{{ listing.most_comment|split_number }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">آدرس پلتفرم:</strong>
+                        <p><a href="{{ listing.platform_url }}" target="_blank">{{ listing.platform_url }}</a></p>
+                    </div> -->
+
+                </div>
+
+                <div class="card card-body">
+                    <h3>درباره پلتفرم:</h3>
+                    <hr>
                     <p>{{ listing.about_platform }}</p>
-                </ul>
+                </div>
 
-                <!-- نمودارها -->
-                <div id="income-chart-container" class="mt-4" style="display: none;">
-                    <h5>نمودار درآمد</h5>
-                    <div class="card chart-card">
-                        <div class="card-body">
+                {% if listing.income_data_points.all or listing.views_data_points.all %}
+                <div class="card card-body">
+                    <h3>نمودار ها:</h3>
+                    <hr>
+                    <!-- نمودارها -->
+                    <div id="income-chart-container" class="mt-4" style="display: none;">
+                        <h5>نمودار درآمد</h5>
+                        <div class="chart-card">
                             <canvas id="incomeChart"></canvas>
                         </div>
                     </div>
-                </div>
 
-                <div id="views-chart-container" class="mt-4" style="display: none;">
-                    <h5>نمودار بازدید</h5>
-                    <div class="card chart-card">
-                        <div class="card-body">
+                    <div id="views-chart-container" class="mt-4" style="display: none;">
+                        <h5>نمودار بازدید</h5>
+                        <div class="chart-card">
                             <canvas id="viewsChart"></canvas>
                         </div>
                     </div>
                 </div>
+                {% endif %}
 
                 {% if income_proofs %}
-                <h5 class="mt-4">اثبات درآمد:</h5>
-                <div class="row">
-                    {% for proof in income_proofs %}
-                    <div class="col-md-6 mb-3">
-                        <div class="card">
-                            {% if proof.image %}
-                            <img src="{{ proof.image.url }}" class="card-img-top" alt="اثبات درآمد">
-                            {% endif %}
-                            <div class="card-body">
-                                {% if proof.description %}
-                                <p class="card-text">{{ proof.description }}</p>
+                <div class="card card-body">
+                    <h3>اثبات درآمد:</h3>
+                    <hr>
+                    <div class="row">
+                        {% for proof in income_proofs %}
+                        <div class="mb-3">
+                            <div class="card">
+                                {% if proof.image %}
+                                <img src="{{ proof.image.url }}" class="card-img-proof" alt="اثبات درآمد">
                                 {% endif %}
+                                <div class="card-body">
+                                    {% if proof.description %}
+                                    <p class="card-text">{{ proof.description }}</p>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
                 {% endif %}
                 {% endif %}
@@ -146,74 +227,81 @@
                     {% endif %}
                 </div>
 
-                <div class="price-card">
-                    {% if listing.discount_price %}
-                    <h3 class="text-success">{{ listing.discount_price|split_number }} تومان</h3>
-                    <h3 class="text-muted"><s>{{ listing.price|split_number }} تومان</s></h3>
-                    {% else %}
-                    <h3 class="text-success">{{ listing.price|split_number }} تومان</h3>
-                    {% endif %}
+                <div class="bottom-img-card">
+
+                    <div class="price-card">
+                        {% if listing.discount_price %}
+                        <h3 class="text-success">{{ listing.discount_price|split_number }} تومان</h3>
+                        <h3 class="text-muted"><s>{{ listing.price|split_number }} تومان</s></h3>
+                        {% else %}
+                        <h3 class="text-success">{{ listing.price|split_number }} تومان</h3>
+                        {% endif %}
+                    </div>
+
+                    <hr class="hr-between" style="margin-bottom: 22px;">
+
+                    <div class="btn-buy-edit-login-card">
+
+                        {% if user.is_authenticated and user != listing.seller %}
+
+                        {% if listing.status == 'active' %}
+
+                        {% if has_access %}
+                        <div class="btn-buy-card">
+                            <a href="{% url 'payments:initiate_purchase' listing.pk %}"
+                                class="btn btn-success w-100">خرید</a>
+                        </div>
+                        {% else %}
+                        <div class="btn-buy-access-card">
+                            <p class="text-muted">برای خرید ابتدا باید دسترسی بازدید داشته باشید</p>
+                        </div>
+                        {% endif %}
+
+                        {% else %}
+                        <div class="btn-status-card">
+                            <p class="text-muted">وضعیت: {{ listing.get_status_display }}</p>
+                        </div>
+                        {% endif %}
+
+                        {% elif user == listing.seller %}
+                        <div class="btn-edit-card">
+                            <a href="{% url 'listings:listing_edit' listing.pk %}" class="btn btn-success w-100">ویرایش
+                                آگهی</a>
+                        </div>
+
+                        {% else %}
+                        <div class="btn-login-card">
+                            <a href="{% url 'accounts:login' %}" class="btn btn-success w-100">ورود برای خرید</a>
+                        </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="ad-views">
+                        <a href="{{ listing.platform_url }}" class="btn btn-primary w-100" target="_blank">بازدید
+                            پلتفرم</a>
+                    </div>
+
+                    <hr class="hr-between">
+
+                    <div>
+                        <a href="{% url 'tickets:ticket_create' %}" class="text-link" target="_blank">ایا این آگهی
+                            تخلف
+                            کرده
+                            است؟ گزارش دهید</a>
+                    </div>
                 </div>
-
-                <div class="btn-buy-edit-login-card">
-
-                    {% if user.is_authenticated and user != listing.seller %}
-
-                    {% if listing.status == 'active' %}
-
-                    {% if has_access %}
-                    <div class="btn-buy-card">
-                        <a href="{% url 'payments:initiate_purchase' listing.pk %}"
-                            class="btn btn-success btn-lg w-100">خرید</a>
-                    </div>
-                    {% else %}
-                    <div class="btn-buy-access-card">
-                        <p class="text-muted">برای خرید ابتدا باید دسترسی بازدید داشته باشید</p>
-                    </div>
-                    {% endif %}
-
-                    {% else %}
-                    <div class="btn-status-card">
-                        <p class="text-muted">وضعیت: {{ listing.get_status_display }}</p>
-                    </div>
-                    {% endif %}
-
-                    {% elif user == listing.seller %}
-                    <div class="btn-edit-card">
-                        <a href="{% url 'listings:listing_edit' listing.pk %}" class="btn btn-warning w-100">ویرایش
-                            آگهی</a>
-                    </div>
-
-                    {% else %}
-                    <div class="btn-login-card">
-                        <a href="{% url 'accounts:login' %}" class="btn btn-primary w-100">ورود برای خرید</a>
-                    </div>
-                    {% endif %}
-
-                </div>
-
-
-                <div class="ad-views">
-                    <a href="{{ listing.platform_url }}" class="btn btn-success w-100" target="_blank">بازدید پلتفرم</a>
-                </div>
-
-
             </div>
         </div>
 
         <div class="card mt-3">
             <div class="card-body">
-                <h6>اطلاعات فروشنده</h6>
 
                 {% if listing.seller.profile.user_type == 'individual' %}
                 {% if listing.seller.profile_image %}
                 <img src="{{ listing.seller.profile_image.url }}" alt="پروفایل" class="rounded-circle mb-3"
                     style="width: 120px; height: 120px; object-fit: cover;">
-                {% else %}
-                <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
-                    style="width: 120px; height: 120px;">
-                    <i class="fas fa-user fa-3x text-white"></i>
-                </div>
                 {% endif %}
 
                 {% else %}
@@ -238,7 +326,8 @@
                 {% endif %}
 
                 {% if listing.seller.profile.first_name and listing.seller.profile.last_name %}
-                <p><strong>نام:</strong> {{ listing.seller.profile.first_name }} {{ listing.seller.profile.last_name }}
+                <p><strong>نام:</strong> {{ listing.seller.profile.first_name }}
+                    {{ listing.seller.profile.last_name }}
                 </p>
                 {% elif listing.seller.profile.first_name %}
                 <p><strong>نام:</strong> {{ listing.seller.profile.first_name }}</p>
@@ -273,13 +362,60 @@
 
                 <div class="mt-3">
                     {% if listing.seller.is_verified %}
-                    <span class="badge bg-success">تایید شده ✓</span>
+                    <span class="badge-detail bg-success">تایید شده ✓</span>
                     {% else %}
-                    <span class="badge bg-warning">تایید نشده</span>
+                    <span class="badge-detail bg-warning">تایید نشده</span>
                     {% endif %}
                 </div>
             </div>
         </div>
+
+
+
+        {% if listing.is_verified %}
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5>اطلاعات تایید شده</h5>
+                <p>
+                    این فهرست باکیفیت توسط تیم فلیپا یا کارگزار بررسی شده است تا از صحت اطلاعات ارائه شده اطمینان حاصل
+                    شود.
+
+                    تیم بررسی ما این فهرست را بررسی و موارد زیر را تأیید کرده است:
+                </p>
+            </div>
+        </div>
+        {% endif %}
+
+
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5>مشاغل مشابه</h5>
+                <p>
+                    این فهرست باکیفیت توسط تیم فلیپا یا کارگزار بررسی شده است تا از صحت اطلاعات ارائه شده اطمینان حاصل
+                    شود.
+
+                    تیم بررسی ما این فهرست را بررسی و موارد زیر را تأیید کرده است:
+                </p>
+            </div>
+        </div>
+
+
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5>مشاوره خرید</h5>
+                <p>
+                    این فهرست باکیفیت توسط تیم فلیپا یا کارگزار بررسی شده است تا از صحت اطلاعات ارائه شده اطمینان حاصل
+                    شود.
+
+                    تیم بررسی ما این فهرست را بررسی و موارد زیر را تأیید کرده است:
+                </p>
+            </div>
+        </div>
+
+
+
     </div>
 </div>
 
@@ -287,7 +423,7 @@
 <div id="chart-data" data-income='{{ income_chart_data|safe }}' data-views='{{ views_chart_data|safe }}'
     style="display: none;">
 </div>
-
+</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const chartDataElement = document.getElementById('chart-data');
@@ -484,7 +620,8 @@
                 let minDistance = Infinity;
 
                 points.forEach((point, index) => {
-                    const distance = Math.sqrt(Math.pow(x - point.x, 2) + Math.pow(y - point.y,
+                    const distance = Math.sqrt(Math.pow(x - point.x, 2) + Math.pow(y - point
+                        .y,
                         2));
                     if (distance < minDistance && distance < 20) {
                         minDistance = distance;
@@ -585,7 +722,8 @@
                 if (incomeDataRaw && incomeDataRaw !== 'None' && incomeDataRaw !== '') {
                     try {
                         const incomeData = JSON.parse(incomeDataRaw);
-                        if (incomeData && incomeData.labels && incomeData.labels.length > 0) {
+                        if (incomeData && incomeData.labels && incomeData.labels.length >
+                            0) {
                             drawChart('incomeChart', incomeData.labels, incomeData.data, {
                                 color: '#10b981',
                                 unit: 'تومان'
@@ -611,7 +749,7 @@
 </script>
 
 
-<style>
+<!-- <style>
     .chart-card {
         border: none;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -661,5 +799,5 @@
         color: #1f2937;
         margin-bottom: 15px;
     }
-</style>
+</style> -->
 {% endblock %}

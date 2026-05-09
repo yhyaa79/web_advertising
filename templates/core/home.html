@@ -1,47 +1,214 @@
 <!-- templates/core/home.html -->
 {% extends 'base.html' %}
+{% load custom_tags %}
+{% load date_filters %}
 
 {% block title %}صفحه اصلی{% endblock %}
 
 {% block content %}
+
+
+<div class="text-center main-text">
+    <h1>BUYSELL</h1>
+    <h2>خرید و فروش پلتفرم‌های درآمدزا</h2>
+    <p class="lead">وبسایت، اینستاگرام، تلگرام و سایر پلتفرم‌ها را با اطمینان خرید و بفروش</p>
+    <p class="lead">بزرگترین بازار خرید و فروش کسب‌وکارهای دیجیتال. وب‌سایت، اپلیکیشن، کانال‌های تلگرامی و صفحات
+        شبکه‌های اجتماعی خود را با خیال راحت و در بستری امن معامله کنید. مسیر سرمایه‌گذاری دیجیتال شما از اینجا آغاز
+        می‌شود.</p>
+</div>
+
 <div class="jumbotron text-center py-5 bg-light rounded">
     <h1>خرید و فروش پلتفرم‌های درآمدزا</h1>
     <p class="lead">وبسایت، اینستاگرام، تلگرام و سایر پلتفرم‌ها را با اطمینان خرید و بفروش</p>
+    <p class="lead">بزرگترین بازار خرید و فروش کسب‌وکارهای دیجیتال. وب‌سایت، اپلیکیشن، کانال‌های تلگرامی و صفحات
+        شبکه‌های اجتماعی خود را با خیال راحت و در بستری امن معامله کنید. مسیر سرمایه‌گذاری دیجیتال شما از اینجا آغاز
+        می‌شود.</p>
     <a href="{% url 'listings:listing_list' %}" class="btn btn-primary btn-lg">مشاهده آگهی‌ها</a>
     {% if user.is_authenticated %}
-        <a href="{% url 'listings:listing_create' %}" class="btn btn-success btn-lg">ثبت آگهی</a>
+    <a href="{% url 'listings:listing_create' %}" class="btn btn-success btn-lg">ثبت آگهی</a>
     {% endif %}
 </div>
 
-<h3 class="mt-5 mb-3">آخرین آگهی‌ها</h3>
-<div class="row">
-    {% for listing in latest_listings %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                {% if listing.main_image %}
-                    <img src="{{ listing.main_image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ listing.title }}</h5>
-                    <p class="card-text">{{ listing.description|truncatewords:15 }}</p>
-                    <p class="text-success fw-bold">{{ listing.price|floatformat:0 }} تومان</p>
-                    <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-outline-primary">مشاهده جزئیات</a>
-                </div>
+
+<div class="serch-bur-ui">
+    <div class="top-port-serch">
+
+    </div>
+    <div class="bottom-port-serch">
+
+        <h2>پلتفرم خرید و فروش</h2>
+
+        <div class="row mb-4 serch-home">
+            <div class="serch-bar-home">
+                <!-- اضافه کردن action به فرم -->
+                <form action="{% url 'listings:listing_list' %}" method="get" class="d-flex">
+                    <input type="text" name="search" class="form-control-home me-2" placeholder="جستجو..."
+                        value="{{ request.GET.search }}">
+                    <button type="submit" class="btn btn-success btm-serch-bar">جستجو</button>
+                </form>
             </div>
         </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <a href="{% url 'listings:listing_list' %}" class="btn btn-sm btn-outline-secondary">همه</a>
+                {% for category in categories %}
+                <a href="?category={{ category.id }}" class="btn btn-sm btn-outline-secondary">{{ category.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<div class="list-notice">
+    {% for listing in latest_listings %}
+    <div class="mb-4">
+        <div class="card h-100 {% if listing.is_private %}border-warning{% endif %}">
+            <div class="in-card">
+
+                <div class="img-badge">
+                    <span class="badge bg-info">{{ listing.category.get_platform_display }}</span>
+                    {% if listing.main_image %}
+                    <div class="card-img">
+                        <img src="{{ listing.main_image.url }}" class="card-img-top">
+                    </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <h5 class="card-title">{{ listing.title }}</h5>
+
+                    <div class="all-badge">
+                        {% if listing.is_private %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-lock-fill"></i> خصوصی
+                            </span>
+                        </div>
+                        {% endif %}
+
+                        {% if listing.is_income %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-lock-fill"></i> درامد اگهی
+                            </span>
+                        </div>
+                        {% endif %}
+
+
+                        {% if listing.is_verified %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
+                            </span>
+                        </div>
+                        {% endif %}
+
+                        {% if listing.is_preferment %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-lock-fill"></i> ارتقا اگهی
+                            </span>
+                        </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <p class="card-text">{{ listing.description|truncatewords:30 }}</p>
+
+                    <div class="inf-all-card">
+                        <div class="inf-card">
+                            <strong class="strong-inf">دنبال‌کننده:</strong>
+                            <p> {{ listing.followers_count|split_number }} نفر</p>
+                        </div>
+
+                        <div class="inf-card">
+                            <strong class="strong-inf">تاریخ انتشار اگهی:</strong>
+                            <p>{{ listing.created_at|time_ago }}</p>
+                        </div>
+
+                        <div class="inf-card">
+                            <strong class="strong-inf">سن پلتفرم:</strong>
+                            <p> {{ listing.platform_age|floatformat:0 }} سال</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="all-btn">
+
+                    <div class="price-btn">
+                        <div class="price-div">
+
+
+                            {% if listing.discount_price %}
+                            <h3 class="text-success fw-bold fs-5">{{ listing.discount_price|split_number }} تومان</h3>
+                            <h3 class="text-muted fw-bold fs-5"><s>{{ listing.price|split_number }} تومان</s></h3>
+                            {% else %}
+                            <h3 class="text-success">{{ listing.price|split_number }} تومان</h3>
+                            {% endif %}
+
+                            <div class="income-display">
+                                <div class="monthly-income">
+                                    {% if not listing.is_private or user == listing.seller %}
+                                    {% if listing.monthly_income %}
+
+                                    <p> {{ listing.monthly_income|split_number }}</p>
+                                    <p> تومان درآمد ماهانه</p>
+
+                                    {% else %}
+                                    <p>این اگهی به درامد نرسیده است</p>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+
+                                {% if listing.get_roi_display %}
+                                <p>برگشت سرمایه در {{ listing.get_roi_display }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="between-price-btn">
+
+                        </div>
+
+                        <div class="btn-primary-div">
+
+                            <a href="{{ listing.platform_url }}" class="btn btn-success w-100"
+                                target="_blank">بازدید</a>
+
+
+                            <a href="{% url 'listings:listing_detail' listing.pk %}"
+                                class="btn btn-primary w-100">مشاهده</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
     {% empty %}
-        <p>هیچ آگهی فعالی وجود ندارد.</p>
+    <p class="text-center">آگهی فعالی یافت نشد.</p>
     {% endfor %}
 </div>
 
 <h4 class="mt-5 mb-3">دسته‌بندی‌ها</h4>
 <div class="row">
     {% for category in categories %}
-        <div class="col-md-3 mb-3">
-            <a href="{% url 'listings:listing_list' %}?category={{ category.id }}" class="btn btn-outline-secondary w-100">
-                {{ category.name }}
-            </a>
-        </div>
+    <div class="col-md-3 mb-3">
+        <a href="{% url 'listings:listing_list' %}?category={{ category.id }}" class="btn btn-outline-secondary w-100">
+            {{ category.name }}
+        </a>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}
