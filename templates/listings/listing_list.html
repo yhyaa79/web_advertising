@@ -9,25 +9,28 @@
 {% block title %}لیست آگهی‌ها{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">آگهی‌های فعال</h2>
 
-<div class="row mb-4">
-    <div class="col-md-8">
-        <form method="get" class="d-flex">
-            <input type="text" name="search" class="form-control me-2" placeholder="جستجو..."
-                value="{{ request.GET.search }}">
-            <button type="submit" class="btn btn-primary">جستجو</button>
-        </form>
+<div class="heder-listing-list">
+    <h2 class="mb-4" style="text-align: center;">آگهی‌های فعال</h2>
+
+    <div class="row mb-4">
+        <div class="serch-bar col-md-8">
+            <form method="get" class="d-flex">
+                <input type="text" name="search" class="form-control me-2" placeholder="جستجو..."
+                    value="{{ request.GET.search }}">
+                <button type="submit" class="btn btn-success btm-serch-bar">جستجو</button>
+            </form>
+        </div>
     </div>
-</div>
 
-<div class="row mb-3">
-    <div class="col-md-12">
-        <strong>دسته‌بندی:</strong>
-        <a href="{% url 'listings:listing_list' %}" class="btn btn-sm btn-outline-secondary">همه</a>
-        {% for category in categories %}
-        <a href="?category={{ category.id }}" class="btn btn-sm btn-outline-secondary">{{ category.name }}</a>
-        {% endfor %}
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <strong>دسته‌بندی:</strong>
+            <a href="{% url 'listings:listing_list' %}" class="btn btn-sm btn-outline-secondary">همه</a>
+            {% for category in categories %}
+            <a href="?category={{ category.id }}" class="btn btn-sm btn-outline-secondary">{{ category.name }}</a>
+            {% endfor %}
+        </div>
     </div>
 </div>
 

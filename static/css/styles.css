@@ -3,8 +3,8 @@
    ======================================== */
 :root {
     /* رنگ‌های اصلی */
-    --primary-color: #2c3e50;
-    --secondary-color: #34495e;
+    --primary-color: #011f44;
+    --secondary-color: #022a5b;
     --accent-color: #3498db;
     --blu-color: #0058ff;
     --success-color: #27ae60;
@@ -485,6 +485,10 @@ form label {
     font-size: var(--font-size-base);
 }
 
+.form-control {
+    border-radius: var(--border-radius-lg) !important;
+}
+
 form input[type="text"],
 form input[type="email"],
 form input[type="password"],
@@ -501,6 +505,7 @@ form textarea {
     transition: var(--transition-base);
     font-family: Tahoma, Arial, sans-serif;
 }
+
 
 form input:focus,
 form select:focus,
@@ -655,10 +660,8 @@ form textarea {
 .col-md-4,
 .col-md-6,
 .col-md-8,
-.col-md-10,
-.col-md-12 {
-    padding: 0 0.75rem;
-    margin-bottom: var(--spacing-lg);
+.col-md-10 {
+    padding: 0 15px;
 }
 
 .col-md-3 {
@@ -689,6 +692,16 @@ form textarea {
 .col-md-12 {
     flex: 0 0 100%;
     max-width: 100%;
+    margin: 0 20px;
+}
+
+.serch-bar {
+    margin: auto;
+}
+
+.btm-serch-bar {
+    margin: 0 !important;
+    padding: 0 25px;
 }
 
 /* ========================================
