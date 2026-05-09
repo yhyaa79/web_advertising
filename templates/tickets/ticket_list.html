@@ -1,106 +1,75 @@
 <!-- templates/tickets/ticket_list.html -->
 
-
-
 {% extends 'base.html' %}
 
 {% block title %}تیکت‌های من{% endblock %}
 
 {% block content %}
-<div class="container my-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>تیکت‌های پشتیبانی</h2>
-        <a href="{% url 'tickets:ticket_create' %}" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> تیکت جدید
-        </a>
-    </div>
-
-    <!-- فیلتر و جستجو -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <form method="get" class="row g-3">
-                <div class="col-md-3">
-                    <input type="text" name="search" class="form-control" placeholder="جستجو..." value="{{ search_query }}">
-                </div>
-                <div class="col-md-2">
-                    {{ filter_form.status }}
-                </div>
-                <div class="col-md-3">
-                    {{ filter_form.category }}
-                </div>
-                <div class="col-md-2">
-                    {{ filter_form.priority }}
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-secondary w-100">فیلتر</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- لیست تیکت‌ها -->
-    {% if page_obj %}
-        <div class="list-group">
-            {% for ticket in page_obj %}
-                <a href="{% url 'tickets:ticket_detail' ticket.pk %}" class="list-group-item list-group-item-action">
-                    <div class="d-flex w-100 justify-content-between align-items-start">
-                        <div class="flex-grow-1">
-                            <h5 class="mb-1">
-                                {{ ticket.subject }}
-                                {% if ticket.status == 'closed' %}
-                                    <span class="badge bg-secondary">بسته شده</span>
-                                {% elif ticket.status == 'in_progress' %}
-                                    <span class="badge bg-info">در حال بررسی</span>
-                                {% elif ticket.status == 'waiting_user' %}
-                                    <span class="badge bg-warning">در انتظار پاسخ شما</span>
-                                {% else %}
-                                    <span class="badge bg-success">باز</span>
-                                {% endif %}
-                            </h5>
-                            <p class="mb-1 text-muted">
-                                <small>
-                                    دسته: {{ ticket.category.name|default:"نامشخص" }} | 
-                                    اولویت: {{ ticket.get_priority_display }} |
-                                    پیام‌ها: {{ ticket.message_count }}
-                                </small>
-                            </p>
-                        </div>
-                        <small class="text-muted">{{ ticket.created_at|date:"Y/m/d H:i" }}</small>
-                    </div>
-                </a>
-            {% endfor %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>تیکت‌های من</h2>
+            <a href="{% url 'tickets:ticket_create' %}" class="btn btn-primary">تیکت جدید</a>
         </div>
 
-        <!-- صفحه‌بندی -->
-        {% if page_obj.has_other_pages %}
-            <nav class="mt-4">
-                <ul class="pagination justify-content-center">
-                    {% if page_obj.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">قبلی</a>
-                        </li>
-                    {% endif %}
-
-                    {% for num in page_obj.paginator.page_range %}
-                        {% if page_obj.number == num %}
-                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-                        {% else %}
-                            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-                        {% endif %}
+        {% if tickets %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>شماره</th>
+                        <th>موضوع</th>
+                        <th>دسته‌بندی</th>
+                        <th>اولویت</th>
+                        <th>وضعیت</th>
+                        <th>تاریخ ایجاد</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in tickets %}
+                    <tr>
+                        <td>#{{ ticket.id }}</td>
+                        <td>{{ ticket.subject }}</td>
+                        <td>
+                            {% if ticket.category %}
+                            <span class="badge bg-info">{{ ticket.category.name }}</span>
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if ticket.priority == 'low' %}
+                            <span class="badge bg-info">کم</span>
+                            {% elif ticket.priority == 'medium' %}
+                            <span class="badge bg-warning">متوسط</span>
+                            {% else %}
+                            <span class="badge bg-danger">بالا</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if ticket.status == 'open' %}
+                            <span class="badge bg-success">باز</span>
+                            {% elif ticket.status == 'answered' %}
+                            <span class="badge bg-primary">پاسخ داده شده</span>
+                            {% else %}
+                            <span class="badge bg-secondary">بسته شده</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ ticket.created_at|date:"Y/m/d H:i" }}</td>
+                        <td>
+                            <a href="{% url 'tickets:ticket_detail' ticket.pk %}" class="btn btn-sm btn-primary">مشاهده</a>
+                        </td>
+                    </tr>
                     {% endfor %}
-
-                    {% if page_obj.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">بعدی</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        {% endif %}
-    {% else %}
-        <div class="alert alert-info text-center">
-            <p class="mb-0">شما هنوز تیکتی ثبت نکرده‌اید.</p>
+                </tbody>
+            </table>
         </div>
-    {% endif %}
+        {% else %}
+        <div class="alert alert-info">
+            شما هنوز تیکتی ثبت نکرده‌اید.
+        </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

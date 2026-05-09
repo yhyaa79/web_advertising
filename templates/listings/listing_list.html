@@ -1,5 +1,9 @@
 <!-- templates/listings/listing_list.html -->
+
 {% extends 'base.html' %}
+{% load static %}
+
+{% load custom_tags %} 
 
 {% block title %}لیست آگهی‌ها{% endblock %}
 
@@ -31,76 +35,112 @@
     </div>
 </div>
 
-<div class="row">
+<div class="list-notice">
     {% for listing in listings %}
-    <div class="col-md-4 mb-4">
+    <div class="mb-4">
         <div class="card h-100 {% if listing.is_private %}border-warning{% endif %}">
-            {% if listing.main_image %}
-            <img src="{{ listing.main_image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
-            {% endif %}
+            <div class="in-card">
 
-            {% if listing.is_private %}
-            <div class="position-absolute top-0 end-0 m-2">
-                <span class="badge bg-warning text-dark">
-                    <i class="bi bi-lock-fill"></i> خصوصی
-                </span>
-            </div>
-            {% endif %}
+                <div class="img-badge">
+                    {% if listing.main_image %}
+                    <div class="card-img">
+                        <img src="{{ listing.main_image.url }}" class="card-img-top">
+                    </div>
+                    {% endif %}
 
-            {% if listing.is_income %}
-            <div class="position-absolute top-0 end-0 m-2">
-                <span class="badge bg-warning text-dark">
-                    <i class="bi bi-lock-fill"></i> درامد اگهی
-                </span>
-            </div>
-            {% endif %}
+                    <div class="all-badge">
+                        {% if listing.is_private %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-lock-fill"></i> خصوصی
+                            </span>
+                        </div>
+                        {% endif %}
 
-
-            {% if listing.is_verified %}
-            <div class="position-absolute top-0 end-0 m-2">
-                <span class="badge bg-warning text-dark">
-                    <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
-                </span>
-            </div>
-            {% endif %}
-
-            {% if listing.is_preferment %}
-            <div class="position-absolute top-0 end-0 m-2">
-                <span class="badge bg-warning text-dark">
-                    <i class="bi bi-lock-fill"></i> ارتقا اگهی
-                </span>
-            </div>
-            {% endif %}
-
-            <div class="card-body">
-                <span class="badge bg-info">{{ listing.category.get_platform_display }}</span>
-                <h5 class="card-title mt-2">{{ listing.title }}</h5>
-                <p class="card-text">{{ listing.description|truncatewords:20 }}</p>
-
-                <p><strong>دنبال‌کننده:</strong> {{ listing.followers_count|floatformat:0 }} نفر</p>
-                <p><strong>تاریخ انتشار اگهی:</strong> {{ listing.created_at }} </p>
-                
-                {% if listing.get_roi_display %}
-                <p><strong>برگشت سرمایه:</strong> {{ listing.get_roi_display }}</p>
-                {% endif %}
-
-                <p><strong>سن پلتفرم:</strong> {{ listing.platform_age|floatformat:0 }} سال</p>
-
-                {% if not listing.is_private or user == listing.seller %}
-                <p><strong>درآمد ماهانه:</strong> {{ listing.monthly_income|floatformat:0 }} تومان</p>
-                {% else %}
-                <p class="text-muted"><i class="bi bi-lock"></i> اطلاعات محرمانه</p>
-                {% endif %}
+                        {% if listing.is_income %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-lock-fill"></i> درامد اگهی
+                            </span>
+                        </div>
+                        {% endif %}
 
 
-                {% if listing.discount_price %}
-                <h3 class="text-success fw-bold fs-5">{{ listing.discount_price|floatformat:0 }} تومان</h3>
-                <h3 class="text-muted fw-bold fs-5"><s>{{ listing.price|floatformat:0 }} تومان</s></h3>
-                {% else %}
-                <h3 class="text-success">{{ listing.price|floatformat:0 }} تومان</h3>
-                {% endif %}
+                        {% if listing.is_verified %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
+                            </span>
+                        </div>
+                        {% endif %}
 
-                <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-primary w-100">مشاهده جزئیات</a>
+                        {% if listing.is_preferment %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-lock-fill"></i> ارتقا اگهی
+                            </span>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+
+                <div class="card-body">
+                    <span class="badge bg-info">{{ listing.category.get_platform_display }}</span>
+                    <h5 class="card-title mt-2">{{ listing.title }}</h5>
+                    <p class="card-text">{{ listing.description|truncatewords:20 }}</p>
+
+                    <p><strong>دنبال‌کننده:</strong> {{ listing.followers_count|split_number }} نفر</p>
+                    <p><strong>تاریخ انتشار اگهی:</strong> {{ listing.created_at }} </p>
+
+                    <p><strong>سن پلتفرم:</strong> {{ listing.platform_age|floatformat:0 }} سال</p>
+
+                </div>
+
+                <div class="all-btn">
+
+                    <div class="price-btn">
+                        <div class="price-div">
+
+
+                            {% if listing.discount_price %}
+                            <h3 class="text-success fw-bold fs-5">{{ listing.discount_price|split_number }} تومان</h3>
+                            <h3 class="text-muted fw-bold fs-5"><s>{{ listing.price|split_number }} تومان</s></h3>
+                            {% else %}
+                            <h3 class="text-success">{{ listing.price|split_number }} تومان</h3>
+                            {% endif %}
+
+
+                            {% if not listing.is_private or user == listing.seller %}
+                            <p><strong>درآمد ماهانه:</strong> {{ listing.monthly_income|split_number }} تومان</p>
+                            {% else %}
+                            <p class="text-muted"><i class="bi bi-lock"></i> اطلاعات محرمانه</p>
+                            {% endif %}
+
+                            {% if listing.get_roi_display %}
+                            <p><strong>برگشت سرمایه:</strong> {{ listing.get_roi_display }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="between-price-btn">
+
+                        </div>
+
+                        <div class="btn-primary-div">
+
+                            <a href="{{ listing.platform_url }}" class="btn btn-success w-100" target="_blank">بازدید
+                                پلتفرم</a>
+
+
+                            <a href="{% url 'listings:listing_detail' listing.pk %}"
+                                class="btn btn-primary w-100">مشاهده
+                                جزئیات</a>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
         </div>
     </div>

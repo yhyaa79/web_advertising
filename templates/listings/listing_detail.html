@@ -2,6 +2,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% load custom_tags %} 
+
 {% block title %}{{ listing.title }}{% endblock %}
 
 {% block content %}
@@ -58,8 +60,8 @@
                         ({{ listing.category.get_platform_display }})</li>
                     <li><strong>آدرس پلتفرم:</strong> <a href="{{ listing.platform_url }}"
                             target="_blank">{{ listing.platform_url }}</a></li>
-                    <li><strong>تعداد دنبال‌کننده:</strong> {{ listing.followers_count|floatformat:0 }}</li>
-                    <li><strong>درآمد ماهانه:</strong> {{ listing.monthly_income|floatformat:0 }} تومان</li>
+                    <li><strong>تعداد دنبال‌کننده:</strong> {{ listing.followers_count|split_number }}</li>
+                    <li><strong>درآمد ماهانه:</strong> {{ listing.monthly_income|split_number }} تومان</li>
 
                     {% if listing.get_roi_display %}
                     <li><strong>برگشت سرمایه:</strong> {{ listing.get_roi_display }}</li>
@@ -69,15 +71,15 @@
                     <li><strong>موقعیت مکانی:</strong> {{ listing.location|default:"نامشخص" }}</li>
 
                     {% if listing.most_like %}
-                    <li><strong>بیشترین لایک:</strong> {{ listing.most_like|floatformat:0 }} </li>
+                    <li><strong>بیشترین لایک:</strong> {{ listing.most_like|split_number }} </li>
                     {% endif %}
 
                     {% if listing.most_view %}
-                    <li><strong>بیشترین بازدید:</strong> {{ listing.most_view|floatformat:0 }} </li>
+                    <li><strong>بیشترین بازدید:</strong> {{ listing.most_view|split_number }} </li>
                     {% endif %}
 
                     {% if listing.most_comment %}
-                    <li><strong>بیشترین کامنت:</strong> {{ listing.most_comment|floatformat:0 }} </li>
+                    <li><strong>بیشترین کامنت:</strong> {{ listing.most_comment|split_number }} </li>
                     {% endif %}
 
                     <h4>درباره پلتفرم:</h4>
@@ -143,10 +145,10 @@
 
                 <div class="price-card">
                     {% if listing.discount_price %}
-                    <h3 class="text-success">{{ listing.discount_price|floatformat:0 }} تومان</h3>
-                    <h3 class="text-muted"><s>{{ listing.price|floatformat:0 }} تومان</s></h3>
+                    <h3 class="text-success">{{ listing.discount_price|split_number }} تومان</h3>
+                    <h3 class="text-muted"><s>{{ listing.price|split_number }} تومان</s></h3>
                     {% else %}
-                    <h3 class="text-success">{{ listing.price|floatformat:0 }} تومان</h3>
+                    <h3 class="text-success">{{ listing.price|split_number }} تومان</h3>
                     {% endif %}
                 </div>
 

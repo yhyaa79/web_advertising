@@ -1,4 +1,4 @@
-<!-- templates/base.html  -->
+<!-- templates/base.html -->
 
 {% load static %}
 
@@ -10,62 +10,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}پلتفرم خرید و فروش{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <style>
-        body {
-            font-family: Tahoma, Arial;
-        }
-        .notification-badge {
-            position: relative;
-            display: inline-block;
-        }
-        .notification-badge .badge {
-            position: absolute;
-            top: -8px;
-            right: -10px;
-            padding: 3px 6px;
-            border-radius: 50%;
-            background: red;
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-        }
-        .nav-link.notification-link {
-            position: relative;
-        }
-    </style>
+
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="{% url 'core:home' %}">پلتفرم آگهی</a>
-            <div class="navbar-nav me-auto">
-                <a class="nav-link" href="{% url 'listings:listing_list' %}">آگهی‌ها</a>
-                {% if user.is_authenticated %}
-                <a class="nav-link" href="{% url 'listings:my_listings' %}">آگهی‌های من</a>
-                <a class="nav-link" href="{% url 'payments:my_transactions' %}">تراکنش‌ها</a>
-                
-                <!-- آیکون اعلان‌ها -->
-                <a class="nav-link notification-link" href="{% url 'notifications:notification_list' %}">
-                    <span class="notification-badge">
-                         اعلان‌ها
-                        {% if unread_notifications_count > 0 %}
-                        <span class="badge">{{ unread_notifications_count }}</span>
-                        {% endif %}
-                    </span>
-                </a>
-                
-                <!-- لینک پشتیبانی -->
-                <a class="nav-link" href="{% url 'tickets:ticket_list' %}">
-                    <i class="bi bi-headset"></i> پشتیبانی
-                </a>
-                
-                <a class="nav-link" href="{% url 'accounts:profile' %}">پروفایل</a>
-                <a class="nav-link" href="{% url 'accounts:logout' %}">خروج</a>
-                {% else %}
-                <a class="nav-link" href="{% url 'accounts:login' %}">ورود</a>
-                <a class="nav-link" href="{% url 'accounts:register' %}">ثبت‌نام</a>
-                {% endif %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav me-auto">
+                    <a class="nav-link" href="{% url 'listings:listing_list' %}">آگهی‌ها</a>
+                    {% if user.is_authenticated %}
+                    <a class="nav-link" href="{% url 'listings:my_listings' %}">آگهی‌های من</a>
+                    <a class="nav-link" href="{% url 'payments:my_transactions' %}">تراکنش‌ها</a>
+
+                    <!-- آیکون اعلان‌ها -->
+                    <a class="nav-link notification-link" href="{% url 'notifications:notification_list' %}">
+                        <span class="notification-badge">
+                            اعلان‌ها
+                            {% if unread_notifications_count > 0 %}
+                            <span class="badge">{{ unread_notifications_count }}</span>
+                            {% endif %}
+                        </span>
+                    </a>
+
+                    <!-- منوی پشتیبانی -->
+
+                    <a class="nav-link" href="{% url 'tickets:ticket_list' %}">پشتیبانی</a>
+
+
+                    <a class="nav-link" href="{% url 'accounts:profile' %}">پروفایل</a>
+                    <a class="nav-link" href="{% url 'accounts:logout' %}">خروج</a>
+                    {% else %}
+                    <a class="nav-link" href="{% url 'accounts:login' %}">ورود</a>
+                    <a class="nav-link" href="{% url 'accounts:register' %}">ثبت‌نام</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
@@ -82,6 +65,7 @@
 
         {% block content %}{% endblock %}
     </div>
+
 </body>
 
 </html>

@@ -1,142 +1,82 @@
 # tickets/views.py
 
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.paginator import Paginator
-from django.db.models import Q, Count, Max
-from .models import Ticket, TicketMessage, TicketCategory, TicketStatus
-from .forms import TicketCreateForm, TicketReplyForm, TicketFilterForm
-
+from .models import Ticket, TicketMessage
+from .forms import TicketForm, TicketReplyForm
 
 @login_required
 def ticket_list(request):
-    """لیست تیکت‌های کاربر"""
-    tickets = Ticket.objects.filter(user=request.user).annotate(
-        message_count=Count('messages'),
-        last_update=Max('messages__created_at')
-    ).select_related('category')
-
-    # فیلتر کردن
-    filter_form = TicketFilterForm(request.GET)
-    if filter_form.is_valid():
-        status = filter_form.cleaned_data.get('status')
-        category = filter_form.cleaned_data.get('category')
-        priority = filter_form.cleaned_data.get('priority')
-
-        if status:
-            tickets = tickets.filter(status=status)
-        if category:
-            tickets = tickets.filter(category=category)
-        if priority:
-            tickets = tickets.filter(priority=priority)
-
-    # جستجو
-    search_query = request.GET.get('search', '')
-    if search_query:
-        tickets = tickets.filter(
-            Q(subject__icontains=search_query) |
-            Q(messages__message__icontains=search_query)
-        ).distinct()
-
-    # صفحه‌بندی
-    paginator = Paginator(tickets, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        'page_obj': page_obj,
-        'filter_form': filter_form,
-        'search_query': search_query,
-    }
-    return render(request, 'tickets/ticket_list.html', context)
-
+    tickets = Ticket.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'tickets/ticket_list.html', {'tickets': tickets})
 
 @login_required
 def ticket_create(request):
-    """ایجاد تیکت جدید"""
     if request.method == 'POST':
-        form = TicketCreateForm(request.POST, request.FILES)
+        form = TicketForm(request.POST, request.FILES)
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.user = request.user
             ticket.save()
-
-            # ایجاد اولین پیام
+            
+            # ذخیره پیام اول
+            message_text = form.cleaned_data['message']
+            attachment = form.cleaned_data.get('attachment')
             TicketMessage.objects.create(
                 ticket=ticket,
                 sender=request.user,
-                message=form.cleaned_data['message'],
-                attachment=form.cleaned_data.get('attachment')
+                message=message_text,
+                attachment=attachment,
+                is_admin_reply=False
             )
-
+            
             messages.success(request, 'تیکت شما با موفقیت ثبت شد.')
             return redirect('tickets:ticket_detail', pk=ticket.pk)
     else:
-        form = TicketCreateForm()
-
-    context = {'form': form}
-    return render(request, 'tickets/ticket_create.html', context)
-
+        form = TicketForm()
+    
+    return render(request, 'tickets/ticket_create.html', {'form': form})
 
 @login_required
 def ticket_detail(request, pk):
-    """جزئیات و پاسخ به تیکت"""
     ticket = get_object_or_404(Ticket, pk=pk, user=request.user)
-    ticket_messages = ticket.messages.select_related('sender').order_by('created_at')
-
-    if request.method == 'POST':
-        if ticket.is_closed:
-            messages.warning(request, 'این تیکت بسته شده است. ابتدا آن را بازگشایی کنید.')
-            return redirect('tickets:ticket_detail', pk=pk)
-
+    ticket_messages = ticket.messages.all().order_by('created_at')
+    
+    # بررسی اینکه آیا کاربر می‌تواند پاسخ دهد
+    can_reply = ticket.status != 'closed' and ticket.has_admin_reply()
+    
+    if request.method == 'POST' and can_reply:
         form = TicketReplyForm(request.POST, request.FILES)
         if form.is_valid():
             reply = form.save(commit=False)
             reply.ticket = ticket
             reply.sender = request.user
+            reply.is_admin_reply = False
             reply.save()
-
-            # تغییر وضعیت تیکت به "باز" اگر در انتظار پاسخ کاربر بود
-            if ticket.status == TicketStatus.WAITING_USER:
-                ticket.status = TicketStatus.OPEN
-                ticket.save()
-
-            messages.success(request, 'پاسخ شما ثبت شد.')
-            return redirect('tickets:ticket_detail', pk=pk)
+            
+            # تغییر وضعیت تیکت به باز
+            ticket.status = 'open'
+            ticket.save()
+            
+            messages.success(request, 'پاسخ شما ارسال شد.')
+            return redirect('tickets:ticket_detail', pk=ticket.pk)
     else:
         form = TicketReplyForm()
-
+    
     context = {
         'ticket': ticket,
-        'messages': ticket_messages,
+        'ticket_messages': ticket_messages,
         'form': form,
+        'can_reply': can_reply,
     }
     return render(request, 'tickets/ticket_detail.html', context)
 
-
 @login_required
 def ticket_close(request, pk):
-    """بستن تیکت"""
     ticket = get_object_or_404(Ticket, pk=pk, user=request.user)
-    
-    if request.method == 'POST':
-        ticket.close()
-        messages.success(request, 'تیکت با موفقیت بسته شد.')
-        return redirect('tickets:ticket_detail', pk=pk)
-    
-    return redirect('tickets:ticket_detail', pk=pk)
-
-
-@login_required
-def ticket_reopen(request, pk):
-    """بازگشایی تیکت"""
-    ticket = get_object_or_404(Ticket, pk=pk, user=request.user)
-    
-    if request.method == 'POST':
-        ticket.reopen()
-        messages.success(request, 'تیکت مجدداً بازگشایی شد.')
-        return redirect('tickets:ticket_detail', pk=pk)
-    
-    return redirect('tickets:ticket_detail', pk=pk)
+    if ticket.status != 'closed':
+        ticket.status = 'closed'
+        ticket.save()
+        messages.success(request, 'تیکت بسته شد.')
+    return redirect('tickets:ticket_detail', pk=ticket.pk)

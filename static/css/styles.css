@@ -1,6 +1,8 @@
-/* static/css/style.css */
-
+/* ========================================
+   متغیرهای رنگ و استایل
+   ======================================== */
 :root {
+    /* رنگ‌های اصلی */
     --primary-color: #2c3e50;
     --secondary-color: #34495e;
     --accent-color: #3498db;
@@ -8,15 +10,57 @@
     --danger-color: #e74c3c;
     --warning-color: #f39c12;
     --info-color: #16a085;
+
+    /* رنگ‌های پس‌زمینه */
     --light-bg: #ecf0f1;
     --dark-bg: #1a252f;
+    --body-bg: #f5f6fa;
+    --white-bg: #ffffff;
+
+    /* رنگ‌های متن */
     --text-primary: #2c3e50;
     --text-secondary: #7f8c8d;
+    --text-muted: #999;
+
+    /* رنگ‌های مرز */
     --border-color: #bdc3c7;
+    --border-light: #dee2e6;
+    --border-dark: #ddd;
+
+    /* سایه‌ها */
     --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     --hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --modal-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    /* شعاع گوشه‌ها */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+
+    /* فاصله‌ها */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-xxl: 3rem;
+
+    /* اندازه فونت */
+    --font-size-xs: 10px;
+    --font-size-sm: 12px;
+    --font-size-base: 14px;
+    --font-size-md: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 20px;
+    --font-size-xxl: 22px;
+
+    /* انتقال */
+    --transition-base: all 0.3s ease;
 }
 
+/* ========================================
+   تنظیمات پایه
+   ======================================== */
 * {
     margin: 0;
     padding: 0;
@@ -24,26 +68,33 @@
 }
 
 body {
-    font-family: Tahoma, Arial, sans-serif;
-    background-color: #f5f6fa;
+    font-family: system-ui;
+    background-color: var(--body-bg);
     color: var(--text-primary);
     line-height: 1.6;
     direction: rtl;
 }
 
-/* Navbar */
+strong {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+}
+
+/* ========================================
+   نوار ناوبری (Navbar)
+   ======================================== */
 .navbar {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    padding: 1rem 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: var(--spacing-md) 0;
+    box-shadow: var(--card-shadow);
 }
 
 .navbar-brand {
-    font-size: 1.5rem;
+    font-size: var(--font-size-xl);
     font-weight: bold;
-    color: #fff !important;
+    color: var(--white-bg) !important;
     text-decoration: none;
-    transition: opacity 0.3s;
+    transition: var(--transition-base);
 }
 
 .navbar-brand:hover {
@@ -52,7 +103,7 @@ body {
 
 .navbar-nav {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--spacing-sm);
     list-style: none;
     margin: 0;
 }
@@ -60,29 +111,65 @@ body {
 .nav-link {
     color: rgba(255, 255, 255, 0.9) !important;
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    transition: all 0.3s;
-    font-size: 0.95rem;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    transition: var(--transition-base);
+    font-size: var(--font-size-base);
 }
 
 .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    color: #fff !important;
+    color: var(--white-bg) !important;
 }
 
-/* Container */
+.nav-link.notification-link {
+    position: relative;
+}
+
+/* ========================================
+   نشان اعلان (Notification Badge)
+   ======================================== */
+.notification-badge {
+    position: relative;
+    display: inline-block;
+}
+
+.notification-badge .badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    padding: 3px 6px;
+    border-radius: 50%;
+    background: var(--danger-color);
+    color: var(--white-bg);
+    font-size: var(--font-size-xs);
+    font-weight: bold;
+}
+
+/* ========================================
+   منوی کشویی (Dropdown)
+   ======================================== */
+.dropdown-menu {
+    right: 0;
+    left: auto;
+}
+
+/* ========================================
+   کانتینر
+   ======================================== */
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 var(--spacing-md);
 }
 
-/* Alerts */
+/* ========================================
+   پیام‌های هشدار (Alerts)
+   ======================================== */
 .alert {
-    padding: 1rem 1.25rem;
-    margin-bottom: 1rem;
-    border-radius: 8px;
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    border-radius: var(--border-radius-md);
     border: none;
     position: relative;
 }
@@ -109,12 +196,12 @@ body {
 
 .alert-dismissible .btn-close {
     position: absolute;
-    left: 1rem;
+    left: var(--spacing-md);
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
     border: none;
-    font-size: 1.5rem;
+    font-size: var(--font-size-xl);
     cursor: pointer;
     opacity: 0.5;
 }
@@ -123,15 +210,17 @@ body {
     opacity: 1;
 }
 
-/* Cards */
+/* ========================================
+   کارت‌ها (Cards)
+   ======================================== */
 .card {
-    background: #fff;
-    border-radius: 12px;
+    background: var(--white-bg);
+    border-radius: var(--border-radius-lg);
     box-shadow: var(--card-shadow);
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--spacing-lg);
     border: none;
     overflow: hidden;
-    transition: all 0.3s;
+    transition: var(--transition-base);
 }
 
 .card:hover {
@@ -141,34 +230,24 @@ body {
 
 .card-header {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    color: #fff;
-    padding: 1.25rem;
+    color: var(--white-bg);
+    padding: var(--spacing-lg);
     border-bottom: none;
 }
 
 .card-header h4 {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: var(--font-size-lg);
     font-weight: 600;
 }
 
 .card-body {
-    padding: 1.5rem;
-}
-
-.image-card {
+    padding: 10px;
     width: 100%;
 }
-
-.card-img-top , .img-fluid {
-    width: 100%;
-    object-fit: cover;
-}
-
-
 
 .card-title {
-    font-size: 1.1rem;
+    font-size: var(--font-size-lg);
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: 0.75rem;
@@ -176,19 +255,75 @@ body {
 
 .card-text {
     color: var(--text-secondary);
-    font-size: 0.95rem;
-    margin-bottom: 0.5rem;
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-sm);
 }
 
-/* Buttons */
+/* تصاویر کارت */
+.image-card {
+    width: 100%;
+}
+
+.in-card {
+    padding: 10px;
+    display: inline-flex;
+    width: 100%;
+}
+
+.card-img {
+    padding: 10px;
+    display: inline-block;
+}
+
+.card-img-top {
+    height: 200px;
+    width: 350px;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+}
+
+.img-fluid {
+    width: 100%;
+    object-fit: cover;
+}
+
+/* دکمه‌های قیمت */
+.price-btn {
+    display: grid;
+    padding: 10px;
+    width: 170px;
+    height: 100%;
+}
+
+
+/* ========================================
+   price-btn
+   ======================================== */
+
+/* .price-div {
+    height: 50px;
+}
+
+.between-price-btn {
+    height: 50px;
+}
+ */
+.btn-primary-div {
+    margin-top: auto;
+} 
+
+
+/* ========================================
+   دکمه‌ها (Buttons)
+   ======================================== */
 .btn {
-    padding: 0.625rem 1.5rem;
-    border-radius: 8px;
+    padding: 0.625rem var(--spacing-lg);
+    border-radius: var(--border-radius-md);
     border: none;
-    font-size: 0.95rem;
+    font-size: var(--font-size-base);
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: var(--transition-base);
     text-decoration: none;
     display: inline-block;
     text-align: center;
@@ -197,7 +332,7 @@ body {
 
 .btn-primary {
     background: linear-gradient(135deg, var(--accent-color) 0%, #2980b9 100%);
-    color: #fff;
+    color: var(--white-bg);
 }
 
 .btn-primary:hover {
@@ -208,7 +343,7 @@ body {
 
 .btn-success {
     background: linear-gradient(135deg, var(--success-color) 0%, #229954 100%);
-    color: #fff;
+    color: var(--white-bg);
 }
 
 .btn-success:hover {
@@ -219,7 +354,7 @@ body {
 
 .btn-danger {
     background: linear-gradient(135deg, var(--danger-color) 0%, #c0392b 100%);
-    color: #fff;
+    color: var(--white-bg);
 }
 
 .btn-danger:hover {
@@ -230,7 +365,7 @@ body {
 
 .btn-warning {
     background: linear-gradient(135deg, var(--warning-color) 0%, #e67e22 100%);
-    color: #fff;
+    color: var(--white-bg);
 }
 
 .btn-warning:hover {
@@ -240,7 +375,7 @@ body {
 
 .btn-info {
     background: linear-gradient(135deg, var(--info-color) 0%, #138d75 100%);
-    color: #fff;
+    color: var(--white-bg);
 }
 
 .btn-info:hover {
@@ -250,7 +385,7 @@ body {
 
 .btn-secondary {
     background-color: #95a5a6;
-    color: #fff;
+    color: var(--white-bg);
 }
 
 .btn-secondary:hover {
@@ -266,7 +401,7 @@ body {
 
 .btn-outline-primary:hover {
     background: var(--accent-color);
-    color: #fff;
+    color: var(--white-bg);
 }
 
 .btn-outline-secondary {
@@ -277,35 +412,33 @@ body {
 
 .btn-outline-secondary:hover {
     background: var(--secondary-color);
-    color: #fff;
+    color: var(--white-bg);
     border-color: var(--secondary-color);
 }
 
 .btn-sm {
-    padding: 0.4rem 1rem;
-    font-size: 0.875rem;
+    padding: 0.4rem var(--spacing-md);
+    font-size: var(--font-size-sm);
 }
 
 .btn-lg {
-    padding: 0.875rem 2rem;
-    font-size: 1.1rem;
+    padding: 0.875rem var(--spacing-xl);
+    font-size: var(--font-size-md);
 }
 
-.w-100 {
-    width: 100%;
-}
-
-/* Forms */
+/* ========================================
+   فرم‌ها (Forms)
+   ======================================== */
 form p {
-    margin-bottom: 1.25rem;
+    margin-bottom: var(--spacing-lg);
 }
 
 form label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--spacing-sm);
     color: var(--text-primary);
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: var(--font-size-base);
 }
 
 form input[type="text"],
@@ -319,9 +452,9 @@ form textarea {
     width: 100%;
     padding: 0.75rem;
     border: 2px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 0.95rem;
-    transition: all 0.3s;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-base);
+    transition: var(--transition-base);
     font-family: Tahoma, Arial, sans-serif;
 }
 
@@ -342,76 +475,101 @@ form textarea {
     width: 100%;
     padding: 0.75rem;
     border: 2px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 0.95rem;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-base);
 }
 
 .form-label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--spacing-sm);
     color: var(--text-primary);
     font-weight: 500;
 }
 
-/* Badges */
+/* ========================================
+   نشان‌ها (Badges)
+   ======================================== */
 .badge {
     display: inline-block;
     padding: 0.35rem 0.75rem;
-    font-size: 0.85rem;
+    font-size: var(--font-size-sm);
     font-weight: 500;
-    border-radius: 6px;
-    color: #fff;
+    border-radius: var(--border-radius-md);
+    color: var(--white-bg);
 }
 
+.badge-success,
 .bg-success {
     background-color: var(--success-color);
 }
 
+.badge-warning,
 .bg-warning {
     background-color: var(--warning-color);
 }
 
+.badge-info,
 .bg-info {
     background-color: var(--info-color);
 }
 
+.badge-danger,
 .bg-danger {
     background-color: var(--danger-color);
 }
 
+.badge-primary,
 .bg-primary {
     background-color: var(--accent-color);
 }
 
-/* Tables */
-.table-responsive {
-    overflow-x: auto;
-    margin-bottom: 1.5rem;
+.badge-secondary {
+    background-color: #6c757d;
+    color: var(--white-bg);
 }
 
-.table {
+.all-badge {
+    display: flex;
+    gap: 5px;
+}
+
+/* ========================================
+   جداول (Tables)
+   ======================================== */
+.table-responsive {
+    overflow-x: auto;
+    margin-bottom: var(--spacing-lg);
+}
+
+.table,
+.data-table {
     width: 100%;
     border-collapse: collapse;
-    background: #fff;
-    border-radius: 12px;
+    background: var(--white-bg);
+    border-radius: var(--border-radius-lg);
     overflow: hidden;
     box-shadow: var(--card-shadow);
 }
 
-.table thead {
+.table thead,
+.data-table thead {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    color: #fff;
+    color: var(--white-bg);
 }
 
-.table th {
-    padding: 1rem;
+.table th,
+.data-table th {
+    padding: var(--spacing-md);
     text-align: right;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: var(--font-size-base);
+    background: #f8f9fa;
+    color: #333;
 }
 
-.table td {
-    padding: 1rem;
+.table td,
+.data-table td {
+    padding: var(--spacing-md);
     border-bottom: 1px solid var(--light-bg);
     color: var(--text-primary);
 }
@@ -420,26 +578,36 @@ form textarea {
     background-color: #f8f9fa;
 }
 
-.table tbody tr:hover {
+.table tbody tr:hover,
+.data-table tbody tr:hover {
     background-color: var(--light-bg);
 }
 
-/* Grid System */
+.table-container {
+    overflow-x: auto;
+}
+
+.data-table {
+    margin-top: var(--spacing-md);
+}
+
+/* ========================================
+   سیستم Grid
+   ======================================== */
 .row {
     display: flex;
     flex-wrap: wrap;
     margin: 0 -0.75rem;
 }
 
-
-
 .col-md-3,
 .col-md-4,
 .col-md-6,
 .col-md-8,
+.col-md-10,
 .col-md-12 {
     padding: 0 0.75rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--spacing-lg);
 }
 
 .col-md-3 {
@@ -462,54 +630,94 @@ form textarea {
     max-width: 66.666%;
 }
 
+.col-md-10 {
+    flex: 0 0 70%;
+    max-width: 70%;
+}
+
 .col-md-12 {
     flex: 0 0 100%;
     max-width: 100%;
 }
 
-/* Jumbotron */
+/* ========================================
+   Jumbotron
+   ======================================== */
 .jumbotron {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    color: #fff;
-    padding: 3rem 2rem;
-    border-radius: 12px;
+    color: var(--white-bg);
+    padding: var(--spacing-xxl) var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-xl);
     box-shadow: var(--card-shadow);
 }
 
 .jumbotron h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+    font-size: var(--font-size-xxl);
+    margin-bottom: var(--spacing-md);
     font-weight: 700;
 }
 
 .jumbotron .lead {
-    font-size: 1.25rem;
-    margin-bottom: 2rem;
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-xl);
     opacity: 0.95;
 }
 
-/* Tabs */
+/* ========================================
+   تب‌ها (Tabs)
+   ======================================== */
+.tabs-container {
+    background: var(--white-bg);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+}
+
+.tabs-nav,
 .nav-tabs {
     display: flex;
-    border-bottom: 2px solid var(--border-color);
-    margin-bottom: 1.5rem;
+    background: #f5f5f5;
+    border-bottom: 2px solid var(--border-dark);
     list-style: none;
+    overflow-x: auto;
+}
+
+.tab-button {
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    color: #666;
+    transition: var(--transition-base);
+    white-space: nowrap;
+}
+
+.tab-button:hover {
+    background: #e8e8e8;
+}
+
+.tab-button.active {
+    background: var(--white-bg);
+    color: #007bff;
+    border-bottom: 3px solid #007bff;
+    font-weight: bold;
 }
 
 .nav-item {
-    margin-left: 0.5rem;
+    margin-left: var(--spacing-sm);
 }
 
 .nav-tabs .nav-link {
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem var(--spacing-lg);
     border: none;
     background: transparent;
     color: var(--text-secondary);
     cursor: pointer;
     border-bottom: 3px solid transparent;
-    transition: all 0.3s;
+    transition: var(--transition-base);
 }
 
 .nav-tabs .nav-link.active {
@@ -522,58 +730,236 @@ form textarea {
     color: var(--accent-color);
 }
 
+.tabs-content,
 .tab-content {
-    padding: 1rem 0;
+    padding: var(--spacing-lg) 0;
 }
 
 .tab-pane {
     display: none;
 }
 
-.tab-pane.show.active {
+.tab-pane.show.active,
+.tab-pane.active {
     display: block;
 }
 
-/* Utility Classes */
+/* ========================================
+   مودال‌ها (Modals)
+   ======================================== */
+.custom-modal,
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.custom-modal-content,
+.modal-content {
+    background-color: var(--white-bg);
+    margin: 5% auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 800px;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--modal-shadow);
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-modal-header,
+.modal-header {
+    padding: var(--spacing-md) var(--spacing-lg);
+    background-color: #f8f9fa;
+    border-bottom: 1px solid var(--border-light);
+    border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.custom-modal-header h5,
+.modal-header h3 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+}
+
+.custom-modal-close,
+.close {
+    background: none;
+    border: none;
+    font-size: var(--font-size-xl);
+    font-weight: bold;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 1;
+}
+
+.custom-modal-close:hover,
+.custom-modal-close:focus,
+.close:hover {
+    color: #333;
+}
+
+.custom-modal-body,
+.modal-body {
+    padding: var(--spacing-lg);
+    max-height: 70vh;
+    overflow-y: auto;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-modal-footer {
+    padding: var(--spacing-md) var(--spacing-lg);
+    background-color: #f8f9fa;
+    border-top: 1px solid var(--border-light);
+    border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+    text-align: left;
+}
+
+/* ========================================
+   چت (Chat)
+   ======================================== */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: #f8f9fa;
+    border-radius: var(--border-radius-md);
+    max-height: 400px;
+}
+
+.chat-message {
+    margin-bottom: var(--spacing-md);
+    padding: 0.75rem;
+    border-radius: var(--border-radius-md);
+    max-width: 70%;
+}
+
+.chat-message.mine {
+    background: #007bff;
+    color: var(--white-bg);
+    margin-left: auto;
+    text-align: right;
+}
+
+.chat-message.theirs {
+    background: var(--white-bg);
+    border: 1px solid var(--border-dark);
+    margin-right: auto;
+}
+
+.chat-message-sender {
+    font-weight: bold;
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xs);
+}
+
+.chat-message-text {
+    margin-bottom: var(--spacing-xs);
+}
+
+.chat-message-time {
+    font-size: var(--font-size-xs);
+    opacity: 0.7;
+}
+
+.chat-input-container {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.chat-input-container input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--border-dark);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-base);
+}
+
+.chat-disabled-message {
+    padding: var(--spacing-md);
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: var(--border-radius-sm);
+    text-align: center;
+}
+
+/* ========================================
+   دکمه‌های عملیات (Action Buttons)
+   ======================================== */
+.action-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+/* ========================================
+   کلاس‌های کمکی (Utility Classes)
+   ======================================== */
+.w-100 {
+    width: 100%;
+}
+
+.h-100 {
+    height: 100%;
+}
+
 .mt-2 {
-    margin-top: 0.5rem;
+    margin-top: var(--spacing-sm);
 }
 
 .mt-3 {
-    margin-top: 1rem;
+    margin-top: var(--spacing-md);
 }
 
 .mt-4 {
-    margin-top: 1.5rem;
+    margin-top: var(--spacing-lg);
 }
 
 .mt-5 {
-    margin-top: 3rem;
+    margin-top: var(--spacing-xxl);
 }
 
 .mb-2 {
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--spacing-sm);
 }
 
 .mb-3 {
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
 }
 
 .mb-4 {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--spacing-lg);
 }
 
 .mb-5 {
-    margin-bottom: 3rem;
+    margin-bottom: var(--spacing-xxl);
 }
 
 .me-2 {
-    margin-left: 0.5rem;
+    margin-left: var(--spacing-sm);
 }
 
 .py-5 {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
+    padding-top: var(--spacing-xxl);
+    padding-bottom: var(--spacing-xxl);
 }
 
 .text-center {
@@ -605,11 +991,11 @@ form textarea {
 }
 
 .fs-4 {
-    font-size: 1.5rem;
+    font-size: var(--font-size-xl);
 }
 
 .fs-5 {
-    font-size: 1.25rem;
+    font-size: var(--font-size-lg);
 }
 
 .d-flex {
@@ -620,65 +1006,18 @@ form textarea {
     justify-content: center;
 }
 
-.h-100 {
-    height: 100%;
-}
-
-/* 404/500 Pages */
+/* ========================================
+   صفحات خطا (404/500)
+   ======================================== */
 .display-1 {
-    font-size: 6rem;
+    font-size: var(--font-size-xxl);
     font-weight: 700;
     color: var(--primary-color);
 }
 
-.col-md-10 {
-    width: 70%;
-}
-
-
-/* Responsive */
-@media (max-width: 768px) {
-
-    .col-md-3,
-    .col-md-4,
-    .col-md-6,
-    .col-md-8 {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-
-    .navbar-nav {
-        flex-direction: column;
-        gap: 0;
-    }
-
-    .nav-link {
-        padding: 0.75rem 1rem;
-    }
-
-    .jumbotron h1 {
-        font-size: 1.75rem;
-    }
-
-    .jumbotron .lead {
-        font-size: 1rem;
-    }
-
-    .display-1 {
-        font-size: 4rem;
-    }
-
-    .table {
-        font-size: 0.875rem;
-    }
-
-    .table th,
-    .table td {
-        padding: 0.75rem 0.5rem;
-    }
-}
-
-/* Animations */
+/* ========================================
+   انیمیشن‌ها (Animations)
+   ======================================== */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -696,7 +1035,9 @@ form textarea {
     animation: fadeIn 0.5s ease-out;
 }
 
-/* Scrollbar */
+/* ========================================
+   اسکرول‌بار (Scrollbar)
+   ======================================== */
 ::-webkit-scrollbar {
     width: 10px;
 }
@@ -714,313 +1055,63 @@ form textarea {
     background: var(--primary-color);
 }
 
+/* ========================================
+   ریسپانسیو (Responsive)
+   ======================================== */
+@media (max-width: 768px) {
 
+    .col-md-3,
+    .col-md-4,
+    .col-md-6,
+    .col-md-8,
+    .col-md-10 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
 
+    .navbar-nav {
+        flex-direction: column;
+        gap: 0;
+    }
 
+    .nav-link {
+        padding: 0.75rem var(--spacing-md);
+    }
 
+    .jumbotron h1 {
+        font-size: var(--font-size-md);
+    }
 
+    .jumbotron .lead {
+        font-size: var(--font-size-md);
+    }
 
+    .display-1 {
+        font-size: var(--font-size-xxl);
+    }
 
+    .table,
+    .data-table {
+        font-size: var(--font-size-sm);
+    }
 
-
-    .tabs-container {
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
+    .table th,
+    .table td,
+    .data-table th,
+    .data-table td {
+        padding: 0.75rem var(--spacing-sm);
     }
 
     .tabs-nav {
-        display: flex;
-        background: #f5f5f5;
-        border-bottom: 2px solid #ddd;
-        overflow-x: auto;
-    }
-
-    .tab-button {
-        padding: 1rem 1.5rem;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        font-size: 0.95rem;
-        color: #666;
-        transition: all 0.3s;
-        white-space: nowrap;
-    }
-
-    .tab-button:hover {
-        background: #e8e8e8;
-    }
-
-    .tab-button.active {
-        background: white;
-        color: #007bff;
-        border-bottom: 3px solid #007bff;
-        font-weight: bold;
-    }
-
-    .tabs-content {
-        padding: 1.5rem;
-    }
-
-    .tab-pane {
-        display: none;
-    }
-
-    .tab-pane.active {
-        display: block;
-    }
-
-    .table-container {
-        overflow-x: auto;
-    }
-
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 1rem;
-    }
-
-    .data-table th,
-    .data-table td {
-        padding: 0.75rem;
-        text-align: right;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .data-table th {
-        background: #f8f9fa;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .data-table tbody tr:hover {
-        background: #f5f5f5;
-    }
-
-    .badge {
-        padding: 0.25rem 0.75rem;
-        border-radius: 12px;
-        font-size: 0.85rem;
-        font-weight: 500;
-    }
-
-    .badge-info {
-        background: #17a2b8;
-        color: white;
-    }
-
-    .badge-warning {
-        background: #ffc107;
-        color: #333;
-    }
-
-    .badge-success {
-        background: #28a745;
-        color: white;
-    }
-
-    .badge-danger {
-        background: #dc3545;
-        color: white;
-    }
-
-    .badge-secondary {
-        background: #6c757d;
-        color: white;
-    }
-
-    .btn {
-        padding: 0.5rem 1rem;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        transition: all 0.3s;
-        text-decoration: none;
-        display: inline-block;
-    }
-
-    .btn-sm {
-        padding: 0.35rem 0.75rem;
-        font-size: 0.85rem;
-    }
-
-    .btn-primary {
-        background: #007bff;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background: #0056b3;
-    }
-
-    .btn-success {
-        background: #28a745;
-        color: white;
-    }
-
-    .btn-success:hover {
-        background: #218838;
-    }
-
-    .btn-danger {
-        background: #dc3545;
-        color: white;
-    }
-
-    .btn-danger:hover {
-        background: #c82333;
+        flex-wrap: nowrap;
     }
 
     .action-buttons {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-    }
-
-    /* استایل مودال */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        flex-direction: column;
     }
 
     .modal-content {
-        background-color: white;
-        margin: 5% auto;
-        width: 90%;
-        max-width: 600px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        max-height: 80vh;
-        display: flex;
-        flex-direction: column;
+        width: 95%;
+        margin: 10% auto;
     }
-
-    .modal-header {
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #ddd;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .modal-header h3 {
-        margin: 0;
-    }
-
-    .close {
-        font-size: 1.5rem;
-        font-weight: bold;
-        cursor: pointer;
-        color: #999;
-    }
-
-    .close:hover {
-        color: #333;
-    }
-
-    .modal-body {
-        padding: 1.5rem;
-        flex: 1;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .chat-messages {
-        flex: 1;
-        overflow-y: auto;
-        margin-bottom: 1rem;
-        padding: 1rem;
-        background: #f8f9fa;
-        border-radius: 8px;
-        max-height: 400px;
-    }
-
-    .chat-message {
-        margin-bottom: 1rem;
-        padding: 0.75rem;
-        border-radius: 8px;
-        max-width: 70%;
-    }
-
-    .chat-message.mine {
-        background: #007bff;
-        color: white;
-        margin-left: auto;
-        text-align: right;
-    }
-
-    .chat-message.theirs {
-        background: white;
-        border: 1px solid #ddd;
-        margin-right: auto;
-    }
-
-    .chat-message-sender {
-        font-weight: bold;
-        font-size: 0.85rem;
-        margin-bottom: 0.25rem;
-    }
-
-    .chat-message-text {
-        margin-bottom: 0.25rem;
-    }
-
-    .chat-message-time {
-        font-size: 0.75rem;
-        opacity: 0.7;
-    }
-
-    .chat-input-container {
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .chat-input-container input {
-        flex: 1;
-        padding: 0.75rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 0.95rem;
-    }
-
-    .chat-disabled-message {
-        padding: 1rem;
-        background: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
-        border-radius: 4px;
-        text-align: center;
-    }
-
-    @media (max-width: 768px) {
-        .tabs-nav {
-            flex-wrap: nowrap;
-        }
-
-        .data-table {
-            font-size: 0.85rem;
-        }
-
-        .data-table th,
-        .data-table td {
-            padding: 0.5rem;
-        }
-
-        .action-buttons {
-            flex-direction: column;
-        }
-
-        .modal-content {
-            width: 95%;
-            margin: 10% auto;
-        }
-    }
+}
