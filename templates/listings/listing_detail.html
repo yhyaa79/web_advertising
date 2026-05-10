@@ -33,7 +33,7 @@
                     <a href="{% url 'accounts:login' %}" class="btn btn-primary">ورود برای ارسال درخواست</a>
                     {% elif visit_request %}
                     {% if visit_request.status == 'pending' %}
-                    <div class="alert alert-info">
+                    <div class="alert-info">
                         <i class="bi bi-clock"></i> درخواست شما در انتظار تایید فروشنده است.
                     </div>
                     {% elif visit_request.status == 'rejected' %}
