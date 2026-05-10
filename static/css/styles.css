@@ -163,7 +163,7 @@ strong {
    کانتینر
    ======================================== */
 .container {
-    max-width: 1200px;
+    max-width: 1250px;
     margin: 0 auto;
     padding: 0 var(--spacing-md);
 }
@@ -297,7 +297,7 @@ strong {
     /*     background-color: #f9f9f9;
     border: 1px solid #e0e0e0;
     border-radius: 12px; */
-    padding: 4px 10px;
+    padding: 5px 12px;
 }
 
 .strong-inf-detail {
@@ -879,6 +879,12 @@ form textarea {
     margin: 20px 0;
 }
 
+
+/* ========================================
+   ohki (home)
+   ======================================== */
+
+
 .serch-home {
     padding: 5px;
     border: 2px solid var(--border-color);
@@ -911,6 +917,79 @@ form textarea {
     font-weight: 300;
 }
 
+
+.in-card-home {
+    padding: 10px;
+    display: flow;
+}
+
+.list-notice-home {
+    display: flex;
+    gap: 20px;
+    overflow: auto;
+}
+
+
+.card-home {
+    background: var(--white-bg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--card-shadow);
+    margin-bottom: var(--spacing-xl);
+    border: none;
+    overflow: hidden;
+    transition: var(--transition-base);
+    width: 380px;
+}
+
+.card-img-top-home {
+    height: 200px;
+    width: 360px;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+}
+
+.card-img-top-detail{
+    height: 200px;
+    width: 315px;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+}
+
+
+.card-img-hom {
+    display: inline-block;
+}
+
+.card-body-home {
+    padding: 10px;
+    width: 100%;
+    padding-top: 5px;
+}
+
+.inf-card-home {
+    margin: 0 auto;
+}
+
+.inf-card-home p {
+    color: var(--text-2c3e50);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.price-btn-home {
+    display: grid;
+    padding: 0 10px;
+    height: 100%;
+}
+
+.price-div-home {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.bg-info-home {
+    background-color: var(--info-color);
+}
 
 /* ========================================
    تب‌ها (Tabs)
@@ -1207,6 +1286,10 @@ form textarea {
 .py-5 {
     padding-top: var(--spacing-xxl);
     padding-bottom: var(--spacing-xxl);
+}
+
+.pad-10 {
+    padding: var(--spacing-md) !important;
 }
 
 .text-center {

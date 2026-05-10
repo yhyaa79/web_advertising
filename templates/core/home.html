@@ -7,7 +7,6 @@
 
 {% block content %}
 
-
 <div class="text-center main-text">
     <h1>BUYSELL</h1>
     <h2>خرید و فروش پلتفرم‌های درآمدزا</h2>
@@ -29,18 +28,14 @@
     {% endif %}
 </div>
 
-
 <div class="serch-bur-ui">
     <div class="top-port-serch">
-
     </div>
     <div class="bottom-port-serch">
-
         <h2>پلتفرم خرید و فروش</h2>
 
         <div class="row mb-4 serch-home">
             <div class="serch-bar-home">
-                <!-- اضافه کردن action به فرم -->
                 <form action="{% url 'listings:listing_list' %}" method="get" class="d-flex">
                     <input type="text" name="search" class="form-control-home me-2" placeholder="جستجو..."
                         value="{{ request.GET.search }}">
@@ -57,53 +52,74 @@
                 {% endfor %}
             </div>
         </div>
-
     </div>
 </div>
 
-
-
+<!-- تازه‌ترین آگهی‌های فروش -->
 <div class="dic-list-notice">
-    <h2>کسب و کارهای آنلاین برتر را مرور کنید</h2>
+    <h2>تازه‌ترین آگهی‌های فروش</h2>
     <p>اینها همه وب‌سایت‌های درآمدزا، فروشگاه‌های تجارت الکترونیک و سایر کسب‌وکارهای آنلاین هستند.</p>
 </div>
-
-<div id="latest-list" class="list-notice">
+<div id="latest-list" class="list-notice-home">
     {% include 'core/partials/listing_cards.html' with listings=latest_listings %}
+    <button class="load-more-btn" data-target="latest-list" data-type="latest" data-offset="10">نمایش بیشتر</button>
 </div>
-<!-- دکمه نمایش بیشتر برای این لیست -->
-<button class="load-more-btn" data-target="latest-list" data-type="latest" data-offset="6">نمایش بیشتر</button>
 
+<!-- پربازدیدترین آگهی‌ها -->
 <div class="dic-list-notice">
-    <h2>کسب و کارهای آنلاین برتر را مرور کنید</h2>
-    <p>اینها همه وب‌سایت‌های درآمدزا، فروشگاه‌های تجارت الکترونیک و سایر کسب‌وکارهای آنلاین هستند.</p>
+    <h2>پربازدیدترین آگهی‌ها</h2>
 </div>
-
-
-<div id="latest-list" class="list-notice">
+<div id="viewed-list" class="list-notice-home">
     {% include 'core/partials/listing_cards.html' with listings=most_viewed_listings %}
 </div>
-<!-- دکمه نمایش بیشتر برای این لیست -->
-<button class="load-more-btn" data-target="latest-list" data-type="latest" data-offset="6">نمایش بیشتر</button>
+<button class="load-more-btn" data-target="viewed-list" data-type="viewed" data-offset="10">نمایش بیشتر</button>
 
-
+<!-- بیشترین دنبال‌کننده -->
 <div class="dic-list-notice">
-    <h2>کسب و کارهای آنلاین برتر را مرور کنید</h2>
-    <p>اینها همه وب‌سایت‌های درآمدزا، فروشگاه‌های تجارت الکترونیک و سایر کسب‌وکارهای آنلاین هستند.</p>
+    <h2>بیشترین دنبال‌کننده‌ترین پلتفرم‌ها</h2>
 </div>
-
-
-<div id="latest-list" class="list-notice">
+<div id="followed-list" class="list-notice-home">
     {% include 'core/partials/listing_cards.html' with listings=most_followed_listings %}
 </div>
-<!-- دکمه نمایش بیشتر برای این لیست -->
-<button class="load-more-btn" data-target="latest-list" data-type="latest" data-offset="6">نمایش بیشتر</button>
+<button class="load-more-btn" data-target="followed-list" data-type="followed" data-offset="10">نمایش بیشتر</button>
 
+<!-- قدیمی‌ترین پلتفرم‌ها -->
+<div class="dic-list-notice">
+    <h2>قدیمی‌ترین پلتفرم‌ها</h2>
+</div>
+<div id="oldest-list" class="list-notice-home">
+    {% include 'core/partials/listing_cards.html' with listings=oldest_platforms %}
+</div>
+<button class="load-more-btn" data-target="oldest-list" data-type="oldest" data-offset="10">نمایش بیشتر</button>
 
+<!-- آگهی‌های ارتقا یافته -->
+<div class="dic-list-notice">
+    <h2>آگهی‌های ارتقا یافته</h2>
+</div>
+<div id="promoted-list" class="list-notice-home">
+    {% include 'core/partials/listing_cards.html' with listings=promoted_listings %}
+</div>
+<button class="load-more-btn" data-target="promoted-list" data-type="promoted" data-offset="10">نمایش بیشتر</button>
 
+<!-- آگهی‌های مورد تایید -->
+<div class="dic-list-notice">
+    <h2>آگهی‌های مورد تایید</h2>
+</div>
+<div id="verified-list" class="list-notice-home">
+    {% include 'core/partials/listing_cards.html' with listings=verified_listings %}
+</div>
+<button class="load-more-btn" data-target="verified-list" data-type="verified" data-offset="10">نمایش بیشتر</button>
 
+<!-- بیشترین درآمد ماهیانه -->
+<div class="dic-list-notice">
+    <h2>بیشترین درآمد ماهیانه</h2>
+</div>
+<div id="income-list" class="list-notice-home">
+    {% include 'core/partials/listing_cards.html' with listings=highest_income_listings %}
+</div>
+<button class="load-more-btn" data-target="income-list" data-type="highest_income" data-offset="10">نمایش بیشتر</button>
 
-
+<!-- دسته‌بندی‌ها -->
 <h4 class="mt-5 mb-3">دسته‌بندی‌ها</h4>
 <div class="row">
     {% for category in categories %}
@@ -116,42 +132,40 @@
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const loadMoreBtns = document.querySelectorAll('.load-more-btn');
+    document.addEventListener("DOMContentLoaded", function () {
+        const loadMoreBtns = document.querySelectorAll('.load-more-btn');
 
-    loadMoreBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const button = this;
-            const targetId = button.getAttribute('data-target');
-            const listType = button.getAttribute('data-type');
-            let offset = parseInt(button.getAttribute('data-offset'));
+        loadMoreBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const button = this;
+                const targetId = button.getAttribute('data-target');
+                const listType = button.getAttribute('data-type');
+                let offset = parseInt(button.getAttribute('data-offset'));
 
-            // تغییر متن دکمه به حالت بارگذاری
-            button.innerText = 'در حال بارگذاری...';
+                button.innerText = 'در حال بارگذاری...';
+                button.disabled = true;
 
-            fetch(`/load-more/?type=${listType}&offset=${offset}`)
-                .then(response => response.text())
-                .then(html => {
-                    if (html.trim() === '') {
-                        button.innerText = 'آگهی دیگری نیست';
-                        button.disabled = true;
-                    } else {
-                        // اضافه کردن کدهای جدید به انتهای لیست
-                        document.getElementById(targetId).insertAdjacentHTML('beforeend', html);
-                        
-                        // آپدیت کردن offset برای کلیک بعدی (+6)
-                        button.setAttribute('data-offset', offset + 6);
-                        button.innerText = 'نمایش بیشتر';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    button.innerText = 'خطا در بارگذاری';
-                });
+                fetch(`/load-more/?type=${listType}&offset=${offset}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        if (html.trim() === '') {
+                            button.innerText = 'آگهی دیگری نیست';
+                        } else {
+                            document.getElementById(targetId).insertAdjacentHTML(
+                                'beforeend', html);
+                            button.setAttribute('data-offset', offset + 10);
+                            button.innerText = 'نمایش بیشتر';
+                            button.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        button.innerText = 'خطا در بارگذاری';
+                        button.disabled = false;
+                    });
+            });
         });
     });
-});
 </script>
-
 
 {% endblock %}
