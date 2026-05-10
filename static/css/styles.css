@@ -231,16 +231,15 @@ strong {
     transition: var(--transition-base);
 }
 
-.card:hover {
+/* .card:hover {
     box-shadow: var(--hover-shadow);
     transform: translateY(-2px);
-}
+} */
 
 .card-header {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    color: var(--white-bg);
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
     border-bottom: none;
+    font-size: 20px;
 }
 
 .card-header h4 {
@@ -250,7 +249,7 @@ strong {
 }
 
 .card-body {
-    padding: 30px;
+    padding: 0px 20px;
     width: 100%;
 }
 
@@ -367,6 +366,10 @@ strong {
     object-fit: cover;
 }
 
+.all-btn {
+    margin-right: auto;
+}
+
 /* دکمه‌های قیمت */
 .price-btn {
     display: grid;
@@ -375,6 +378,15 @@ strong {
     height: 100%;
 }
 
+
+.btn-listing-create {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.btn-listing-create .btn-success {
+    margin-right: auto;
+}
 
 /* ========================================
    price-btn
@@ -697,9 +709,9 @@ hr {
 }
 
 .btn-primary:hover {
-    background: #f1f1f1;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+    background: #5151511d;
+    /* transform: translateY(-2px); */
+    box-shadow: 0 3px 8px #0049cf81;
 }
 
 .btn-success {
@@ -708,9 +720,9 @@ hr {
 }
 
 .btn-success:hover {
-    background: #0050e3;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+    background: #014bd4;
+    /* transform: translateY(-2px); */
+    box-shadow: 0 3px 8px #004fe3c0;
 }
 
 .btn-danger {
@@ -868,6 +880,96 @@ form textarea {
     border-radius: var(--border-radius-999);
 }
 
+
+/* تگ‌های وضعیت */
+
+.tag-active {
+   background: #92d391; /* سبز تیره و ملایم (فعال/تایید شده) */
+   color: #ffffff;
+   padding: 3px 10px;
+   font-size: var(--font-size-sm);
+   border-radius: var(--border-radius-999);
+}
+
+.tag-waiting {
+   background: #f2a676; /* نارنجی چرک (در انتظار/در حال بررسی) */
+   color: #ffffff;
+   padding: 3px 10px;
+   font-size: var(--font-size-sm);
+   border-radius: var(--border-radius-999);
+}
+
+.tag-not-accepted {
+   background: #d46469; /* قرمز تیره (رد شده/پذیرفته نشده) */
+   color: #ffffff;
+   padding: 3px 10px;
+   font-size: var(--font-size-sm);
+   border-radius: var(--border-radius-999);
+}
+
+.tag-deleted {
+   background: #949494; /* خاکستری تیره (حذف شده/خنثی) */
+   color: #ffffff;
+   padding: 3px 10px;
+   font-size: var(--font-size-sm);
+   border-radius: var(--border-radius-999);
+}
+
+.tag-sold {
+   background: #6da69d; /* سبزآبی تیره/کله‌غازی (فروخته شده/تکمیل شده) */
+   color: #ffffff;
+   padding: 3px 10px;
+   font-size: var(--font-size-sm);
+   border-radius: var(--border-radius-999);
+}
+
+.tag-general {
+   background: #81a9bc; /* خاکستری متمایل به آبی (عمومی/پیش‌فرض) */
+   color: #ffffff;
+   padding: 3px 10px;
+   font-size: var(--font-size-sm);
+   border-radius: var(--border-radius-999);
+}
+
+.tag-private {
+   background: #ae9ed3; /* بنفش تیره (خصوصی/ویژه) */
+   color: #ffffff;
+   padding: 3px 10px;
+   font-size: var(--font-size-sm);
+   border-radius: var(--border-radius-999);
+}
+
+/* دکمه‌ها */
+
+.btn-remove {
+   background: #da5457; /* قرمز استاندارد اما غیرجیغ (حذف) */
+   color: #ffffff;
+   border: none;
+   cursor: pointer;
+}
+
+.btn-edit {
+   background: #4e90d9; /* آبی ملایم و حرفه‌ای (ویرایش) */
+   color: #ffffff;
+   border: none;
+   cursor: pointer;
+}
+
+
+
+.btn-activation {
+   background: #e0da66; /* آبی ملایم و حرفه‌ای (ویرایش) */
+   color: #ffffff;
+   border: none;
+   cursor: pointer;
+}
+
+
+
+
+
+
+
 .badge-success,
 .bg-success {
     background-color: var(--success-color);
@@ -968,6 +1070,11 @@ form textarea {
     padding: var(--spacing-md);
     border-bottom: 1px solid var(--light-bg);
     color: var(--text-primary);
+}
+
+.table td {
+    padding: var(--spacing-sm) !important;
+
 }
 
 .table-striped tbody tr:nth-child(even) {
@@ -1077,8 +1184,8 @@ form textarea {
 .main-text {
     color: #000000;
     text-align: center;
-    margin: 50px 0;
-    padding: 100px;
+    /* margin: 50px 0; */
+    padding: 20px 100px;
 }
 
 
@@ -1138,12 +1245,18 @@ form textarea {
 
 
 .serch-home {
-    padding: 5px;
+    padding: 2px;
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius-999);
     transition: var(--transition-base);
     font-family: Tahoma, Arial, sans-serif;
-    margin: 0 100px;
+    margin: 0 auto;
+        max-width: 700px;
+    background: var(--white-bg);
+}
+
+.serch-home input{
+    background: var(--white-bg);
 }
 
 .serch-bar-home {

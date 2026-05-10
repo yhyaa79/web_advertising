@@ -16,17 +16,6 @@
         می‌شود.</p>
 </div>
 
-<div class="jumbotron text-center py-5 bg-light rounded">
-    <h1>خرید و فروش پلتفرم‌های درآمدزا</h1>
-    <p class="lead">وبسایت، اینستاگرام، تلگرام و سایر پلتفرم‌ها را با اطمینان خرید و بفروش</p>
-    <p class="lead">بزرگترین بازار خرید و فروش کسب‌وکارهای دیجیتال. وب‌سایت، اپلیکیشن، کانال‌های تلگرامی و صفحات
-        شبکه‌های اجتماعی خود را با خیال راحت و در بستری امن معامله کنید. مسیر سرمایه‌گذاری دیجیتال شما از اینجا آغاز
-        می‌شود.</p>
-    <a href="{% url 'listings:listing_list' %}" class="btn btn-primary btn-lg">مشاهده آگهی‌ها</a>
-    {% if user.is_authenticated %}
-    <a href="{% url 'listings:listing_create' %}" class="btn btn-success btn-lg">ثبت آگهی</a>
-    {% endif %}
-</div>
 
 <div class="serch-bur-ui">
     <div class="top-port-serch">
@@ -54,6 +43,20 @@
         </div>
     </div>
 </div>
+
+
+<div class="jumbotron text-center py-5 bg-light rounded">
+    <h1>خرید و فروش پلتفرم‌های درآمدزا</h1>
+    <p class="lead">وبسایت، اینستاگرام، تلگرام و سایر پلتفرم‌ها را با اطمینان خرید و بفروش</p>
+    <p class="lead">بزرگترین بازار خرید و فروش کسب‌وکارهای دیجیتال. وب‌سایت، اپلیکیشن، کانال‌های تلگرامی و صفحات
+        شبکه‌های اجتماعی خود را با خیال راحت و در بستری امن معامله کنید. مسیر سرمایه‌گذاری دیجیتال شما از اینجا آغاز
+        می‌شود.</p>
+    <a href="{% url 'listings:listing_list' %}" class="btn btn-primary btn-lg">مشاهده آگهی‌ها</a>
+    {% if user.is_authenticated %}
+    <a href="{% url 'listings:listing_create' %}" class="btn btn-success btn-lg">ثبت آگهی</a>
+    {% endif %}
+</div>
+
 
 <!-- تازه‌ترین آگهی‌های فروش -->
 <div class="dic-list-notice">

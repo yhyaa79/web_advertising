@@ -193,7 +193,7 @@
                 <div class="row">
                     {% for proof in income_proofs %}
                     <div class="mb-3">
-                        <div class="card">
+                        <div class="">
                             {% if proof.image %}
                             <img src="{{ proof.image.url }}" class="card-img-proof" alt="اثبات درآمد">
                             {% endif %}
@@ -202,6 +202,7 @@
                                 <p class="card-text">{{ proof.description }}</p>
                                 {% endif %}
                             </div>
+                            <hr>
                         </div>
                     </div>
                     {% endfor %}

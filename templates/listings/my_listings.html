@@ -4,15 +4,19 @@
 {% block title %}آگهی‌های من{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">آگهی‌های من</h2>
 
-<a href="{% url 'listings:listing_create' %}" class="btn btn-success mb-3">ثبت آگهی جدید</a>
+
+<div class="btn-listing-create">
+    <h2 class="mb-4">آگهی‌های من</h2>
+    <a href="{% url 'listings:listing_create' %}" class="btn btn-success mb-3">ثبت آگهی جدید</a>
+</div>
 
 <!-- درخواست‌های بازدید در انتظار -->
 {% if pending_requests %}
 <div class="card mb-4">
-    <div class="card-header bg-warning text-dark">
+    <div class="card-header">
         <h5 class="mb-0">درخواست‌های بازدید در انتظار ({{ pending_requests.count }})</h5>
+        <hr>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -34,28 +38,30 @@
                                 {{ request.listing.title }}
                             </a>
                         </td>
-                        <td>{{ request.requester.username }}</td>
+                        <td>
+                            <button type="button" class="custom-modal-close"
+                                onclick="openModal('profileModal{{ request.pk }}')">
+                               {{ request.requester.username }}
+                            </button>
+                        </td>
+
                         <td>
                             {% if request.message %}
-                                {{ request.message|truncatewords:15 }}
+                            {{ request.message|truncatewords:15 }}
                             {% else %}
-                                <em class="text-muted">بدون پیام</em>
+                            <em class="text-muted">بدون پیام</em>
                             {% endif %}
                         </td>
                         <td>{{ request.created_at|date:"Y/m/d H:i" }}</td>
                         <td>
-                            <button type="button" class="btn btn-sm btn-primary" 
-                                    onclick="openModal('profileModal{{ request.pk }}')">
-                                بازدید پروفایل
-                            </button>
-                            <a href="{% url 'listings:manage_visit_request' request.pk 'approve' %}" 
-                               class="btn btn-sm btn-success"
-                               onclick="return confirm('آیا از تایید این درخواست اطمینان دارید؟')">
+                            <a href="{% url 'listings:manage_visit_request' request.pk 'approve' %}"
+                                class="btn btn-sm btn-success"
+                                onclick="return confirm('آیا از تایید این درخواست اطمینان دارید؟')">
                                 تایید
                             </a>
-                            <a href="{% url 'listings:manage_visit_request' request.pk 'reject' %}" 
-                               class="btn btn-sm btn-danger"
-                               onclick="return confirm('آیا از رد این درخواست اطمینان دارید؟')">
+                            <a href="{% url 'listings:manage_visit_request' request.pk 'reject' %}"
+                                class="btn btn-sm btn-danger"
+                                onclick="return confirm('آیا از رد این درخواست اطمینان دارید؟')">
                                 رد
                             </a>
                         </td>
@@ -73,7 +79,8 @@
     <div class="custom-modal-content">
         <div class="custom-modal-header">
             <h5>پروفایل درخواست‌کننده</h5>
-            <button type="button" class="custom-modal-close" onclick="closeModal('profileModal{{ request.pk }}')">&times;</button>
+            <button type="button" class="custom-modal-close"
+                onclick="closeModal('profileModal{{ request.pk }}')">&times;</button>
         </div>
         <div class="custom-modal-body">
             <div class="card">
@@ -81,25 +88,25 @@
                     <h6 class="mb-3">اطلاعات کاربر</h6>
 
                     {% if request.requester.profile.user_type == 'individual' %}
-                        {% if request.requester.profile_image %}
-                        <img src="{{ request.requester.profile_image.url }}" alt="پروفایل" class="rounded-circle mb-3"
-                            style="width: 120px; height: 120px; object-fit: cover;">
-                        {% else %}
-                        <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
-                            style="width: 120px; height: 120px;">
-                            <i class="fas fa-user fa-3x text-white"></i>
-                        </div>
-                        {% endif %}
+                    {% if request.requester.profile_image %}
+                    <img src="{{ request.requester.profile_image.url }}" alt="پروفایل" class="rounded-circle mb-3"
+                        style="width: 120px; height: 120px; object-fit: cover;">
                     {% else %}
-                        {% if request.requester.profile.company_logo %}
-                        <img src="{{ request.requester.profile.company_logo.url }}" alt="پروفایل" class="rounded-circle mb-3"
-                            style="width: 120px; height: 120px; object-fit: cover;">
-                        {% else %}
-                        <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
-                            style="width: 120px; height: 120px;">
-                            <i class="fas fa-building fa-3x text-white"></i>
-                        </div>
-                        {% endif %}
+                    <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
+                        style="width: 120px; height: 120px;">
+                        <i class="fas fa-user fa-3x text-white"></i>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    {% if request.requester.profile.company_logo %}
+                    <img src="{{ request.requester.profile.company_logo.url }}" alt="پروفایل"
+                        class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                    {% else %}
+                    <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
+                        style="width: 120px; height: 120px;">
+                        <i class="fas fa-building fa-3x text-white"></i>
+                    </div>
+                    {% endif %}
                     {% endif %}
 
                     <div class="text-start mt-3">
@@ -112,7 +119,8 @@
                         {% endif %}
 
                         {% if request.requester.profile.first_name and request.requester.profile.last_name %}
-                        <p><strong>نام:</strong> {{ request.requester.profile.first_name }} {{ request.requester.profile.last_name }}</p>
+                        <p><strong>نام:</strong> {{ request.requester.profile.first_name }}
+                            {{ request.requester.profile.last_name }}</p>
                         {% elif request.requester.profile.first_name %}
                         <p><strong>نام:</strong> {{ request.requester.profile.first_name }}</p>
                         {% elif request.requester.profile.last_name %}
@@ -153,7 +161,8 @@
             </div>
         </div>
         <div class="custom-modal-footer">
-            <button type="button" class="btn btn-secondary" onclick="closeModal('profileModal{{ request.pk }}')">بستن</button>
+            <button type="button" class="btn btn-secondary"
+                onclick="closeModal('profileModal{{ request.pk }}')">بستن</button>
         </div>
     </div>
 </div>
@@ -165,6 +174,7 @@
 <div class="card">
     <div class="card-header">
         <h5 class="mb-0">لیست آگهی‌ها</h5>
+        <hr>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -173,8 +183,8 @@
                     <tr>
                         <th>عنوان</th>
                         <th>دسته‌بندی</th>
-                        <th>قیمت</th>
                         <th>نوع</th>
+                        <th>قیمت</th>
                         <th>وضعیت</th>
                         <th>بازدید</th>
                         <th>تاریخ ثبت</th>
@@ -183,45 +193,48 @@
                 </thead>
                 <tbody>
                     {% for listing in listings %}
-                        <tr>
-                            <td>{{ listing.title }}</td>
-                            <td>{{ listing.category.name }}</td>
-                            <td>{{ listing.price|floatformat:0 }} تومان</td>
-                            <td>
-                                {% if listing.is_private %}
-                                    <span class="badge bg-secondary">خصوصی</span>
-                                {% else %}
-                                    <span class="badge bg-info">عمومی</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <span class="badge bg-{% if listing.status == 'active' %}success{% elif listing.status == 'sold' %}info{% elif listing.status == 'rejected' %}danger{% elif listing.status == 'deleted' %}secondary{% else %}warning{% endif %}">
-                                    {{ listing.get_status_display }}
-                                </span>
-                                {% if listing.status == 'rejected' and listing.rejection_reason %}
-                                    <br>
-                                    <small class="text-danger">دلیل: {{ listing.rejection_reason }}</small>
-                                {% endif %}
-                            </td>
-                            <td>{{ listing.views_count }}</td>
-                            <td>{{ listing.created_at|date:"Y/m/d" }}</td>
-                            <td>
-                                <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-sm btn-info">مشاهده</a>
-                                
-                                {% if listing.status != 'deleted' and listing.status != 'sold' %}
-                                    <a href="{% url 'listings:listing_edit' listing.pk %}" class="btn btn-sm btn-warning">ویرایش</a>
-                                    <a href="{% url 'listings:listing_delete' listing.pk %}" class="btn btn-sm btn-danger">حذف</a>
-                                {% endif %}
-                                
-                                {% if listing.status == 'deleted' %}
-                                    <a href="{% url 'listings:listing_activate' listing.pk %}" class="btn btn-sm btn-success">فعال‌سازی</a>
-                                {% endif %}
-                            </td>
-                        </tr>
+                    <tr style="cursor: pointer;"
+                        onclick="window.location='{% url 'listings:listing_detail' listing.pk %}';">
+                        <td>{{ listing.title }}</td>
+                        <td>{{ listing.category.name }}</td>
+                        <td>
+                            {% if listing.is_private %}
+                            <span class="badge tag-private">خصوصی</span>
+                            {% else %}
+                            <span class="badge tag-general">عمومی</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ listing.price|floatformat:0 }} تومان</td>
+                        <td>
+                            <span
+                                class="badge tag-{% if listing.status == 'active' %}active{% elif listing.status == 'sold' %}sold{% elif listing.status == 'rejected' %}not-accepted{% elif listing.status == 'deleted' %}deleted{% else %}waiting{% endif %}">
+                                {{ listing.get_status_display }}
+                            </span>
+                            {% if listing.status == 'rejected' and listing.rejection_reason %}
+                            <br>
+                            <small class="text-danger">دلیل: {{ listing.rejection_reason }}</small>
+                            {% endif %}
+                        </td>
+                        <td>{{ listing.views_count }}</td>
+                        <td>{{ listing.created_at|date:"Y/m/d" }}</td>
+                        <td onclick="event.stopPropagation();">
+                            {% if listing.status != 'deleted' and listing.status != 'sold' %}
+                            <a href="{% url 'listings:listing_edit' listing.pk %}"
+                                class="btn btn-sm btn-edit">ویرایش</a>
+                            <a href="{% url 'listings:listing_delete' listing.pk %}"
+                                class="btn btn-sm btn-remove">حذف</a>
+                            {% endif %}
+
+                            {% if listing.status == 'deleted' %}
+                            <a href="{% url 'listings:listing_activate' listing.pk %}"
+                                class="btn btn-sm btn-activation">فعال‌سازی</a>
+                            {% endif %}
+                        </td>
+                    </tr>
                     {% empty %}
-                        <tr>
-                            <td colspan="8" class="text-center">شما هنوز آگهی ثبت نکرده‌اید.</td>
-                        </tr>
+                    <tr>
+                        <td colspan="8" class="text-center">شما هنوز آگهی ثبت نکرده‌اید.</td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -231,35 +244,35 @@
 
 
 <script>
-function openModal(modalId) {
-    document.getElementById(modalId).style.display = 'block';
-    document.body.style.overflow = 'hidden';
-}
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
 
-function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
-// بستن مودال با کلیک روی پس‌زمینه
-window.onclick = function(event) {
-    if (event.target.classList.contains('custom-modal')) {
-        event.target.style.display = 'none';
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
         document.body.style.overflow = 'auto';
     }
-}
 
-// بستن مودال با کلید Escape
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        const modals = document.querySelectorAll('.custom-modal');
-        modals.forEach(modal => {
-            if (modal.style.display === 'block') {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
+    // بستن مودال با کلیک روی پس‌زمینه
+    window.onclick = function (event) {
+        if (event.target.classList.contains('custom-modal')) {
+            event.target.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
     }
-});
+
+    // بستن مودال با کلید Escape
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            const modals = document.querySelectorAll('.custom-modal');
+            modals.forEach(modal => {
+                if (modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+    });
 </script>
 {% endblock %}
