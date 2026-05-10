@@ -7,77 +7,81 @@
     <div class="card-home h-100 {% if listing.is_private %}border-warning{% endif %}">
         <div class="in-card-home">
 
-            <div class="img-badge">
-                {% if listing.main_image %}
-                <div class="card-img-hom">
-                    <img src="{{ listing.main_image.url }}" class="card-img-top-home">
-                </div>
-                {% endif %}
-
-            </div>
-
-
-            <div class="card-body-home">
-
-                <h5 class="card-title">{{ listing.title }} <span class="badge bg-info-home">{{ listing.category.get_platform_display }}</span></h5>
-
-                <div class="all-badge">
-                    {% if listing.is_private %}
-                    <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge bg-warning text-dark">
-                            <i class="bi bi-lock-fill"></i> خصوصی
-                        </span>
-                    </div>
-                    {% endif %}
-
-                    {% if listing.is_income %}
-                    <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge bg-warning text-dark">
-                            <i class="bi bi-lock-fill"></i> درامد اگهی
-                        </span>
-                    </div>
-                    {% endif %}
-
-
-                    {% if listing.is_verified %}
-                    <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge bg-warning text-dark">
-                            <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
-                        </span>
-                    </div>
-                    {% endif %}
-
-                    {% if listing.is_preferment %}
-                    <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge bg-warning text-dark">
-                            <i class="bi bi-lock-fill"></i> ارتقا اگهی
-                        </span>
+            <a href="{% url 'listings:listing_detail' listing.pk %}" style="text-decoration: none; color: inherit;">
+                <div class="img-badge">
+                    {% if listing.main_image %}
+                    <div class="card-img-hom">
+                        <img src="{{ listing.main_image.url }}" class="card-img-top-home">
                     </div>
                     {% endif %}
 
                 </div>
+            </a>
+
+            <a href="{% url 'listings:listing_detail' listing.pk %}" style="text-decoration: none; color: inherit;">
+                <div class="card-body-home">
+
+                    <h5 class="card-title">{{ listing.title }} <span
+                            class="badge bg-info-home">{{ listing.category.get_platform_display }}</span></h5>
+
+                    <div class="all-badge">
+                        {% if listing.is_private %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-lock-fill"></i> خصوصی
+                            </span>
+                        </div>
+                        {% endif %}
+
+                        {% if listing.is_income %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-lock-fill"></i> درامد اگهی
+                            </span>
+                        </div>
+                        {% endif %}
 
 
-                <p class="card-text">{{ listing.description|truncatewords:15 }}</p>
+                        {% if listing.is_verified %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
+                            </span>
+                        </div>
+                        {% endif %}
 
-                <div class="inf-all-card">
-                    <div class="inf-card-home">
-                        <strong class="strong-inf">دنبال‌کننده:</strong>
-                        <p> {{ listing.followers_count|split_number }} نفر</p>
+                        {% if listing.is_preferment %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-lock-fill"></i> ارتقا اگهی
+                            </span>
+                        </div>
+                        {% endif %}
+
                     </div>
 
-                    <div class="inf-card-home">
-                        <strong class="strong-inf">تاریخ انتشار اگهی:</strong>
-                        <p>{{ listing.created_at|time_ago }}</p>
-                    </div>
 
-                    <div class="inf-card-home">
-                        <strong class="strong-inf">سن پلتفرم:</strong>
-                        <p> {{ listing.platform_age|floatformat:0 }} سال</p>
-                    </div>
+                    <p class="card-text">{{ listing.description|truncatewords:15 }}</p>
 
+                    <div class="inf-all-card">
+                        <div class="inf-card-home">
+                            <strong class="strong-inf">دنبال‌کننده:</strong>
+                            <p> {{ listing.followers_count|split_number }} نفر</p>
+                        </div>
+
+                        <div class="inf-card-home">
+                            <strong class="strong-inf">تاریخ انتشار اگهی:</strong>
+                            <p>{{ listing.created_at|time_ago }}</p>
+                        </div>
+
+                        <div class="inf-card-home">
+                            <strong class="strong-inf">سن پلتفرم:</strong>
+                            <p> {{ listing.platform_age|floatformat:0 }} سال</p>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
+            </a>
 
             <div class="all-btn">
 

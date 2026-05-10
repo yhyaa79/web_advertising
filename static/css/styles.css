@@ -411,6 +411,250 @@ strong {
 }
 
 
+
+/* ========================================
+   detail
+   ======================================== */
+
+/* تنظیمات کانتینر اصلی */
+.ad-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    /* برای لیست افقی نیاز به فضای بیشتری است */
+    direction: rtl;
+}
+
+/* استایل بدنه هر آگهی (چیدمان افقی) */
+.ad-item {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    /* هم‌ارتفاع شدن ستون‌ها */
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 5px;
+    gap: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ad-item:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.16);
+}
+
+.ad-item--private {
+    border-color: #ffc107;
+}
+
+/* 1. سمت راست: تصویر */
+.ad-item__media {
+    position: relative;
+    /* عرض ثابت برای عکس */
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+.ad-item__image-wrap,
+.ad-item__image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+/* 2. وسط: محتوا و توضیحات */
+.ad-item__content {
+    flex: 1;
+    /* اشغال تمام فضای باقیمانده در وسط */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.ad-item__title {
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+}
+
+.ad-item__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.ad-badge {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ad-badge--platform {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #17a2b8a6;
+    color: #fff;
+    z-index: 2;
+    font-size: 9px;
+    padding: 4px 6px;
+    border-radius: 11px;
+}
+
+.ad-badge--warning {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+.ad-item__desc {
+    font-size: 13px;
+    color: #666;
+    margin: 0 0 12px 0;
+    line-height: 1.6;
+}
+
+/* آمارهای وسط به صورت خطی */
+.ad-item__stats {
+    display: flex;
+    gap: 8px;
+    background: #f8f9fa;
+    padding: 4px;
+    font-size: 12px;
+    font-weight: 300;
+    border-radius: 6px;
+}
+
+
+.ad-stat__label {
+    color: #777;
+    margin: 0 auto;
+}
+
+.ad-stat__value {
+    color: #222;
+    margin-right: 4px;
+}
+
+/* 3. سمت چپ: قیمت و دکمه‌ها */
+.ad-item__actions-panel {
+    width: 220px;
+    /* عرض ثابت برای ستون چپ */
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid #eee;
+    /* خط جداکننده از توضیحات */
+    padding-right: 20px;
+}
+
+.ad-price-section {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.ad-price {}
+
+.ad-price__current {
+    font-size: 15px;
+    font-weight: 700;
+    color: #28a745;
+}
+
+.ad-price__old {
+    font-size: 13px;
+    color: #999;
+    text-decoration: line-through;
+    margin-bottom: 4px;
+}
+
+.ad-income-info {
+    font-size: 11px;
+    color: #555;
+    margin-top: 8px;
+}
+
+.ad-item__actions {
+    display: flex;
+    flex-direction: column;
+    /* دکمه ها زیر هم */
+    width: 100%;
+    gap: 8px;
+}
+
+.ad-btn {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.ad-btn:hover {
+    opacity: 0.85;
+}
+
+.ad-btn--primary {
+    background: #0d6efd;
+    color: #fff;
+}
+
+.ad-btn--secondary {
+    background: #e9ecef;
+    color: #333;
+}
+
+.ad-empty-state {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* ریسپانسیو کردن برای موبایل */
+@media (max-width: 768px) {
+    .ad-item {
+        flex-direction: column;
+        /* در موبایل دوباره عمودی می‌شود */
+        gap: 12px;
+    }
+
+    .ad-item__media {
+        width: 100%;
+        height: 180px;
+    }
+
+    .ad-item__actions-panel {
+        width: 100%;
+        border-right: none;
+        border-top: 1px solid #eee;
+        padding-right: 0;
+        padding-top: 16px;
+    }
+
+    .ad-item__stats {
+        flex-direction: column;
+        gap: 6px;
+    }
+}
+
+
 /* ========================================
    hr
    ======================================== */
@@ -644,6 +888,14 @@ form textarea {
     position: absolute;
     margin-top: 20px;
     margin-right: 20px;
+}
+
+.bg-info-detail {
+    background-color: var(--info-color);
+    height: fit-content;
+    margin: auto 10px;
+    font-size: var(--font-size-base) !important;
+    font-weight: 500 !important;
 }
 
 .badge-danger,
@@ -948,7 +1200,7 @@ form textarea {
     border-radius: var(--border-radius-md);
 }
 
-.card-img-top-detail{
+.card-img-top-detail {
     height: 200px;
     width: 315px;
     object-fit: cover;

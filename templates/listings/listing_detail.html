@@ -16,6 +16,7 @@
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
                 <h2 style="margin-bottom: 5px;">{{ listing.title }}</h2>
+                <span class="badge bg-info-detail">{{ listing.category.get_platform_display }}</span>
             </div>
             <p class="text-muted inf-created-views-username">تاریخ انتشار اگهی: {{ listing.created_at|jalali_date }}
                 | فروشنده:
@@ -296,6 +297,8 @@
 
         <div class="card mt-3">
             <div class="card-body pad-10">
+                <h5>اطلاعات فروشنده</h5>
+                <hr>
 
                 {% if listing.seller.profile.user_type == 'individual' %}
                 {% if listing.seller.profile_image %}
@@ -413,30 +416,135 @@
         <div class="card mt-3">
             <div class="card-body pad-10">
                 <h5>اطلاعات تایید شده</h5>
+                <hr>
                 <p>
                     این فهرست باکیفیت توسط تیم فلیپا یا کارگزار بررسی شده است تا از صحت اطلاعات ارائه شده اطمینان حاصل
                     شود.
 
                     تیم بررسی ما این فهرست را بررسی و موارد زیر را تأیید کرده است:
+
                 </p>
             </div>
         </div>
         {% endif %}
 
 
-
         <div class="card mt-3">
             <div class="card-body pad-10">
-                <h5>مشاغل مشابه</h5>
+                <h5>چگونه خرید کنم؟</h5>
+                <hr>
                 <p>
-                    این فهرست باکیفیت توسط تیم فلیپا یا کارگزار بررسی شده است تا از صحت اطلاعات ارائه شده اطمینان حاصل
-                    شود.
-
-                    تیم بررسی ما این فهرست را بررسی و موارد زیر را تأیید کرده است:
+                    با انتخواب گزینه "خرید" وارد صفحه پیشنهاد قیمت میشوید.
+                </p>
+                <br>
+                <p>
+                    درصورت تمایل به پیشنهاد قیمت خودتان تیک این گزینه را فعال کنید قیمت خود را وارد کنید و در انتها
+                    گزینه "ارسال درخواست" را انتخاب کنید.
+                </p>
+                <br>
+                <p>
+                    صبر کنید تا فروشنده درخواست شما را تایید کند و از قسمت "پیشنهادات ارسالی" در "تراکنش‌ها" میتوانید
+                    وضعیت درخواست خود را چک کنید.
+                </p>
+                <br>
+                <p>
+                    با تایید درخواست شما از طرف فروشنده میتوانید اگهی مورد نظر را در قسمت "پیشنهادات تایید شده" پیدا
+                    کنید و با فروشنده تعامل داشته باشد.
+                </p>
+                <br>
+                <p>
+                    در مرحله اخر در صورت موافقط هر دو طرفین و با انتخاب "توافق" مراحل خرید تکمیل میشود و اگهی به لیست
+                    خرید ها اضافه میشود.
                 </p>
             </div>
         </div>
 
+
+
+        <div class="card mt-3">
+            <div class="card-body pad-10">
+                <h5>مشاغل مشابه</h5>
+
+                <hr>
+
+                <div class="ad-list-container">
+                    {% for listing in listings %}
+
+                    <!-- تگ div به a تغییر یافت و href اضافه شد -->
+                    <a href="{% url 'listings:listing_detail' listing.pk %}"
+                        class="ad-item {% if listing.is_verified %}ad-item--private{% endif %}"
+                        style="text-decoration: none; color: inherit;">
+
+                        <!-- راست: بخش تصویر و نشان پلتفرم -->
+                        <div class="ad-item__media">
+                            <span class="ad-badge ad-badge--platform">{{ listing.category.get_platform_display }}</span>
+                            {% if listing.main_image %}
+                            <div class="ad-item__image-wrap">
+                                <img src="{{ listing.main_image.url }}" class="ad-item__image"
+                                    alt="{{ listing.title }}">
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- وسط: بخش اطلاعات اصلی -->
+                        <div class="ad-item__content">
+                            <h5 class="ad-item__title">{{ listing.title|truncatewords:5 }}</h5>
+
+                            <div class="ad-item__stats">
+                                <div class="ad-stat">
+                                    <span class="ad-stat__value">{{ listing.followers_count|split_number }}
+                                        دنبال‌کننده</span>
+                                </div>
+                                <div class="ad-stat">
+                                    <span class="ad-stat__value">{{ listing.created_at|time_ago }}</span>
+                                </div>
+                                <div class="ad-stat">
+                                    <span class="ad-stat__value">{{ listing.platform_age|floatformat:0 }} سال</span>
+                                </div>
+                            </div>
+
+                            {% if listing.discount_price %}
+                            <div class="ad-price ad-price--discount">
+                                <span class="ad-price__current">{{ listing.discount_price|split_number }}
+                                    تومان</span>
+                            </div>
+                            {% else %}
+                            <div class="ad-price">
+                                <span class="ad-price__current">{{ listing.price|split_number }} تومان</span>
+                            </div>
+                            {% endif %}
+
+                        </div>
+
+                    </a> <!-- پایان تگ a -->
+
+                    {% empty %}
+                    <div class="ad-empty-state">آگهی فعالی یافت نشد.</div>
+                    {% endfor %}
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <div class="card mt-3">
+            <div class="card-body pad-10">
+                <h5>گزارش تخلف</h5>
+
+                <hr>
+
+                <p>
+                    دیده‌بان جامعه
+                    آیا این آگهی، شرایط و ضوابط Flippa را نقض می‌کند؟
+                </p>
+
+                <p>
+                    در این صورت، آن را <a href="{% url 'tickets:ticket_create' %}" class="text-link"
+                        target="_blank">اینجا</a> گزارش دهید.
+                </p>
+            </div>
+        </div>
 
 
         <div class="card mt-3">

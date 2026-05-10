@@ -62,14 +62,23 @@ def listing_detail(request, pk):
     if has_access:
         income_data = listing.get_income_chart_data()
         if income_data:
-            income_chart_data = json.dumps(income_data)  # فقط یکبار json.dumps
+            income_chart_data = json.dumps(income_data)
         
         views_data = listing.get_views_chart_data()
         if views_data:
-            views_chart_data = json.dumps(views_data)  # فقط یکبار json.dumps
+            views_chart_data = json.dumps(views_data)
+            
+    # --- کدهای اضافه شده برای رفع مشکل ---
+    # پیدا کردن آگهی‌های مشابه (مثلا ۳ آگهی فعال در همان دسته‌بندی به جز آگهی فعلی)
+    similar_listings = Listing.objects.filter(
+        category=listing.category, 
+        status='active'
+    ).exclude(pk=listing.pk)[:6]
+    # -------------------------------------
     
     context = {
         'listing': listing,
+        'listings': similar_listings, # این خط باید اضافه شود
         'income_proofs': income_proofs,
         'has_access': has_access,
         'visit_request': visit_request,
@@ -77,6 +86,7 @@ def listing_detail(request, pk):
         'views_chart_data': views_chart_data,
     }
     return render(request, 'listings/listing_detail.html', context)
+
 
 
 @login_required
