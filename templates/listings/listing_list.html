@@ -152,12 +152,12 @@
 
                         <div class="btn-primary-div">
 
+                            <a href="{% url 'listings:listing_detail' listing.pk %}"
+                                class="btn btn-primary w-100">مشاهده</a>
+
                             <a href="{{ listing.platform_url }}" class="btn btn-success w-100"
                                 target="_blank">بازدید</a>
 
-
-                            <a href="{% url 'listings:listing_detail' listing.pk %}"
-                                class="btn btn-primary w-100">مشاهده</a>
                         </div>
                     </div>
 

@@ -63,6 +63,10 @@
 
 
 
+<div class="dic-list-notice">
+    <h2>کسب و کارهای آنلاین برتر را مرور کنید</h2>
+    <p>اینها همه وب‌سایت‌های درآمدزا، فروشگاه‌های تجارت الکترونیک و سایر کسب‌وکارهای آنلاین هستند.</p>
+</div>
 
 <div class="list-notice">
     {% for listing in latest_listings %}
@@ -182,12 +186,12 @@
 
                         <div class="btn-primary-div">
 
+                            <a href="{% url 'listings:listing_detail' listing.pk %}"
+                                class="btn btn-primary w-100">مشاهده</a>
+
                             <a href="{{ listing.platform_url }}" class="btn btn-success w-100"
                                 target="_blank">بازدید</a>
 
-
-                            <a href="{% url 'listings:listing_detail' listing.pk %}"
-                                class="btn btn-primary w-100">مشاهده</a>
                         </div>
                     </div>
 
