@@ -158,12 +158,20 @@
             </div>
 
             {% if listing.about_platform %}
-            <div class="card card-body">
-                <h3>درباره پلتفرم:</h3>
+            <div class="card card-body aboutplatform-card" id="aboutplatform-card">
+                <div class="aboutplatform-card-h3">
+                    <h3>درباره پلتفرم:</h3>
+                    <div class="btn-aboutplatform-card">
+                        <button onclick="toggleHeight()" id="more-height-btn"></button>
+                    </div>
+                </div>
                 <hr>
-                <p>{{ listing.about_platform }}</p>
+                <div class="aboutplatform-detail">
+                    <p>{{ listing.about_platform }}</p>
+                </div>
             </div>
             {% endif %}
+
 
             {% if listing.income_data_points.all or listing.views_data_points.all %}
             <div class="card card-body">
@@ -287,10 +295,7 @@
                     <hr class="hr-between">
 
                     <div>
-                        <a href="{% url 'tickets:ticket_create' %}" class="text-link" target="_blank">ایا این آگهی
-                            تخلف
-                            کرده
-                            است؟ گزارش دهید</a>
+                        <a href="{% url 'tickets:ticket_create' %}" class="text-link" target="_blank">شما میتواند از این قسمت نظرات خودتان را در مورد این اگهی به اشتراک بزارید.</a>
                     </div>
                 </div>
             </div>
@@ -892,6 +897,17 @@
             }, 250);
         });
     });
+
+    function toggleHeight() {
+        const aboutplatformCard = document.getElementById('aboutplatform-card');
+        const moreBtn = document.getElementById('more-height-btn');
+
+        // کلاس 'expanded' را به کارت اضافه یا از آن حذف می‌کند
+        aboutplatformCard.classList.toggle('expanded');
+
+        // کلاس 'open' را به دکمه اضافه یا از آن حذف می‌کند تا فلش بچرخد
+        moreBtn.classList.toggle('open');
+    }
 </script>
 
 

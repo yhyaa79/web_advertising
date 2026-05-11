@@ -249,7 +249,7 @@ strong {
 }
 
 .card-body {
-    padding: 0px 20px;
+    padding: 20px;
     width: 100%;
 }
 
@@ -258,7 +258,69 @@ strong {
     font-size: 16px;
     font-weight: 500;
     line-height: 23px;
+    white-space: pre-line;
 }
+
+
+.aboutplatform-detail {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 23px;
+    white-space: pre-line;
+}
+
+.aboutplatform-card {
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.aboutplatform-card-h3 {
+    display: flex;
+}
+
+/* --- برای انیمیشن باز و بسته شدن نرم --- */
+.aboutplatform-card {
+    max-height: 400px;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.aboutplatform-card.expanded {
+    max-height: 10000px;
+}
+
+.btn-aboutplatform-card {
+    margin-right: auto;
+    margin-left: 15px;
+}
+
+#more-height-btn {
+    background: none;
+    border: none;
+    width: 40px;
+    height: 40px;
+    justify-content: left;
+    align-items: center;
+    transition: transform 0.6s ease;
+}
+
+#more-height-btn::before {
+    content: '';
+    border: solid var(--text-secondary);
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 4px;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease-in-out;
+}
+
+#more-height-btn.open::before {
+    transform: rotate(-135deg);
+}
+
+
+
 
 .card-title {
     font-size: var(--font-size-lg);
@@ -884,84 +946,94 @@ form textarea {
 /* تگ‌های وضعیت */
 
 .tag-active {
-   background: #92d391; /* سبز تیره و ملایم (فعال/تایید شده) */
-   color: #ffffff;
-   padding: 3px 10px;
-   font-size: var(--font-size-sm);
-   border-radius: var(--border-radius-999);
+    background: #92d391;
+    /* سبز تیره و ملایم (فعال/تایید شده) */
+    color: #ffffff;
+    padding: 3px 10px;
+    font-size: var(--font-size-sm);
+    border-radius: var(--border-radius-999);
 }
 
 .tag-waiting {
-   background: #f2a676; /* نارنجی چرک (در انتظار/در حال بررسی) */
-   color: #ffffff;
-   padding: 3px 10px;
-   font-size: var(--font-size-sm);
-   border-radius: var(--border-radius-999);
+    background: #f2a676;
+    /* نارنجی چرک (در انتظار/در حال بررسی) */
+    color: #ffffff;
+    padding: 3px 10px;
+    font-size: var(--font-size-sm);
+    border-radius: var(--border-radius-999);
 }
 
 .tag-not-accepted {
-   background: #d46469; /* قرمز تیره (رد شده/پذیرفته نشده) */
-   color: #ffffff;
-   padding: 3px 10px;
-   font-size: var(--font-size-sm);
-   border-radius: var(--border-radius-999);
+    background: #d46469;
+    /* قرمز تیره (رد شده/پذیرفته نشده) */
+    color: #ffffff;
+    padding: 3px 10px;
+    font-size: var(--font-size-sm);
+    border-radius: var(--border-radius-999);
 }
 
 .tag-deleted {
-   background: #949494; /* خاکستری تیره (حذف شده/خنثی) */
-   color: #ffffff;
-   padding: 3px 10px;
-   font-size: var(--font-size-sm);
-   border-radius: var(--border-radius-999);
+    background: #949494;
+    /* خاکستری تیره (حذف شده/خنثی) */
+    color: #ffffff;
+    padding: 3px 10px;
+    font-size: var(--font-size-sm);
+    border-radius: var(--border-radius-999);
 }
 
 .tag-sold {
-   background: #6da69d; /* سبزآبی تیره/کله‌غازی (فروخته شده/تکمیل شده) */
-   color: #ffffff;
-   padding: 3px 10px;
-   font-size: var(--font-size-sm);
-   border-radius: var(--border-radius-999);
+    background: #6da69d;
+    /* سبزآبی تیره/کله‌غازی (فروخته شده/تکمیل شده) */
+    color: #ffffff;
+    padding: 3px 10px;
+    font-size: var(--font-size-sm);
+    border-radius: var(--border-radius-999);
 }
 
 .tag-general {
-   background: #81a9bc; /* خاکستری متمایل به آبی (عمومی/پیش‌فرض) */
-   color: #ffffff;
-   padding: 3px 10px;
-   font-size: var(--font-size-sm);
-   border-radius: var(--border-radius-999);
+    background: #81a9bc;
+    /* خاکستری متمایل به آبی (عمومی/پیش‌فرض) */
+    color: #ffffff;
+    padding: 3px 10px;
+    font-size: var(--font-size-sm);
+    border-radius: var(--border-radius-999);
 }
 
 .tag-private {
-   background: #ae9ed3; /* بنفش تیره (خصوصی/ویژه) */
-   color: #ffffff;
-   padding: 3px 10px;
-   font-size: var(--font-size-sm);
-   border-radius: var(--border-radius-999);
+    background: #ae9ed3;
+    /* بنفش تیره (خصوصی/ویژه) */
+    color: #ffffff;
+    padding: 3px 10px;
+    font-size: var(--font-size-sm);
+    border-radius: var(--border-radius-999);
 }
 
 /* دکمه‌ها */
 
 .btn-remove {
-   background: #da5457; /* قرمز استاندارد اما غیرجیغ (حذف) */
-   color: #ffffff;
-   border: none;
-   cursor: pointer;
+    background: #da5457;
+    /* قرمز استاندارد اما غیرجیغ (حذف) */
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
 }
 
 .btn-edit {
-   background: #4e90d9; /* آبی ملایم و حرفه‌ای (ویرایش) */
-   color: #ffffff;
-   border: none;
-   cursor: pointer;
+    background: #4e90d9;
+    /* آبی ملایم و حرفه‌ای (ویرایش) */
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
 }
 
 
 
 .btn-activation {
-   background: #e0da66; /* آبی ملایم و حرفه‌ای (ویرایش) */
-   color: #ffffff;
-   border: none;
-   cursor: pointer;
+    background: #e0da66;
+    /* آبی ملایم و حرفه‌ای (ویرایش) */
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
 }
 
 
@@ -1251,11 +1323,11 @@ form textarea {
     transition: var(--transition-base);
     font-family: Tahoma, Arial, sans-serif;
     margin: 0 auto;
-        max-width: 700px;
+    max-width: 700px;
     background: var(--white-bg);
 }
 
-.serch-home input{
+.serch-home input {
     background: var(--white-bg);
 }
 
