@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from core.views import ComingSoonView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,6 +14,7 @@ urlpatterns = [
     path('payments/', include('payments.urls')),
     path('notifications/', include('notifications.urls')), 
     path('tickets/', include('tickets.urls')),
+    path('coming-soon/', ComingSoonView.as_view(), name='coming_soon'),
 
 ]
 

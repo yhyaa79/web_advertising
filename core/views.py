@@ -2,6 +2,10 @@
 
 from django.shortcuts import render
 from listings.models import Listing, Category
+from django.views.generic import TemplateView 
+
+class ComingSoonView(TemplateView):
+    template_name = 'coming_soon.html'
 
 def home(request):
     active_listings = Listing.objects.filter(status='active')
