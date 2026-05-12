@@ -1072,7 +1072,8 @@ form textarea {
 }
 
 .badge-warning,
-.bg-warning {
+.bg-warning,
+.badge-secondary {
     background-color: #f9bc5c63;
     color: #e49518;
 }
@@ -1562,6 +1563,10 @@ form textarea {
     flex-direction: column;
 }
 
+.modal-content {
+    height: 80vh !important;
+}
+
 .custom-modal-header,
 .modal-header {
     padding: var(--spacing-md) var(--spacing-lg);
@@ -1628,7 +1633,6 @@ form textarea {
     padding: var(--spacing-md);
     background: #f8f9fa;
     border-radius: var(--border-radius-md);
-    max-height: 400px;
 }
 
 .chat-message {
