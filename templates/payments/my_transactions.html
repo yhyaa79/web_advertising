@@ -23,7 +23,9 @@
                             <th>آگهی</th>
                             <th>نوع</th>
                             <th>طرف مقابل</th>
-                            <th>قیمت</th>
+                            <th>وضعیت</th>
+                            <th>قیمت آگهی</th>
+                            <th>قیمت پیشنهادی</th>
                             <th>موافقت خریدار</th>
                             <th>موافقت فروشنده</th>
                             <th>عملیات</th>
@@ -33,54 +35,86 @@
                         {% for proposal in conversations %}
                         <tr id="conversation-row-{{ proposal.id }}">
                             <td>{{ proposal.listing.title }}</td>
+
                             <td>
                                 {% if proposal.buyer == request.user %}
-                                    <span class="badge badge-primary">خرید</span>
+                                <span class="badge badge-primary">خرید</span>
                                 {% else %}
-                                    <span class="badge badge-success">فروش</span>
+                                <span class="badge badge-success">فروش</span>
                                 {% endif %}
                             </td>
+
                             <td>
                                 {% if proposal.buyer == request.user %}
-                                    {{ proposal.seller.username }}
+                                {{ proposal.seller.username }}
                                 {% else %}
-                                    {{ proposal.buyer.username }}
+                                {{ proposal.buyer.username }}
                                 {% endif %}
                             </td>
-                            <td>{{ proposal.proposed_price|floatformat:0 }} تومان</td>
+
+                            <td>
+                                <!-- اضافه کن -->
+                                {% if proposal.status == 'negotiating' %}
+                                <span class="badge bg-warning">در حال گفتگو</span>
+                                {% elif proposal.status == 'deal_confirmed' %}
+                                <span class="badge bg-success">تایید شده</span>
+                                {% elif proposal.status == 'rejected' %}
+                                <span class="badge bg-danger">رد شده</span>
+                                {% endif %}
+                            </td>
+
+                            <td>{{ proposal.listing.price|floatformat:0 }} تومان</td> <!-- قیمت اصلی آگهی -->
+
+                            <td>{{ proposal.proposed_price|floatformat:0 }} تومان</td> <!-- قیمت پیشنهادی -->
+
                             <td>
                                 <span id="buyer-status-{{ proposal.id }}">
-                                    {% if proposal.buyer_agreed %}
-                                        <span class="badge badge-success">✓ موافق</span>
+                                    {% if proposal.status == 'rejected' and proposal.buyer_rejected %}
+                                    <span class="badge badge-danger">✗ رد کرده</span>
+                                    {% elif proposal.buyer_agreed %}
+                                    <span class="badge badge-success">✓ موافق</span>
                                     {% else %}
-                                        <span class="badge badge-secondary">در انتظار</span>
+                                    <span class="badge badge-secondary">در انتظار</span>
                                     {% endif %}
                                 </span>
                             </td>
                             <td>
                                 <span id="seller-status-{{ proposal.id }}">
-                                    {% if proposal.seller_agreed %}
-                                        <span class="badge badge-success">✓ موافق</span>
+                                    {% if proposal.status == 'rejected' and proposal.seller_rejected %}
+                                    <span class="badge badge-danger">✗ رد کرده</span>
+                                    {% elif proposal.seller_agreed %}
+                                    <span class="badge badge-success">✓ موافق</span>
                                     {% else %}
-                                        <span class="badge badge-secondary">در انتظار</span>
+                                    <span class="badge badge-secondary">در انتظار</span>
                                     {% endif %}
                                 </span>
                             </td>
                             <td>
                                 <div class="action-buttons" id="actions-{{ proposal.id }}">
-                                    <button onclick="openChat('{{ proposal.id }}', '{{ proposal.listing.title|escapejs }}')" 
+                                    <button
+                                        onclick="openChat('{{ proposal.id }}', '{{ proposal.listing.title|escapejs }}', '{{ proposal.status }}')"
                                         class="btn btn-primary btn-sm">چت</button>
-                                    
-                                    {% if proposal.buyer == request.user and not proposal.buyer_agreed %}
-                                        <button onclick="confirmDeal('{{ proposal.id }}')" 
-                                            class="btn btn-success btn-sm">تایید</button>
-                                    {% elif proposal.seller == request.user and not proposal.seller_agreed %}
-                                        <button onclick="confirmDeal('{{ proposal.id }}')" 
-                                            class="btn btn-success btn-sm">تایید</button>
+
+                                    {% if proposal.status == 'rejected' %}
+                                    {% if proposal.buyer == request.user and proposal.buyer_rejected %}
+                                    <button onclick="undoRejection('{{ proposal.id }}')"
+                                        class="btn btn-warning btn-sm">برگرداندن</button>
+                                    {% elif proposal.seller == request.user and proposal.seller_rejected %}
+                                    <button onclick="undoRejection('{{ proposal.id }}')"
+                                        class="btn btn-warning btn-sm">برگرداندن</button>
                                     {% endif %}
-                                    
-                                    <button onclick="rejectDeal('{{ proposal.id }}')" 
+                                    {% elif proposal.status == 'negotiating' %}
+                                    {% if proposal.buyer == request.user and not proposal.buyer_agreed %}
+                                    <button onclick="confirmDeal('{{ proposal.id }}')"
+                                        class="btn btn-success btn-sm">تایید</button>
+                                    {% elif proposal.seller == request.user and not proposal.seller_agreed %}
+                                    <button onclick="confirmDeal('{{ proposal.id }}')"
+                                        class="btn btn-success btn-sm">تایید</button>
+                                    {% endif %}
+
+                                    <button onclick="rejectDeal('{{ proposal.id }}')"
                                         class="btn btn-danger btn-sm">رد</button>
+                                    {% endif %}
                                 </div>
                             </td>
                         </tr>
@@ -90,6 +124,7 @@
                         </tr>
                         {% endfor %}
                     </tbody>
+
                 </table>
             </div>
         </div>
@@ -115,7 +150,8 @@
                             <td>{{ transaction.listing.title }}</td>
                             <td>{{ transaction.amount|floatformat:0 }} تومان</td>
                             <td>
-                                <span class="badge {% if transaction.status == 'completed' %}badge-success{% else %}badge-danger{% endif %}">
+                                <span
+                                    class="badge {% if transaction.status == 'completed' %}badge-success{% else %}badge-danger{% endif %}">
                                     {{ transaction.get_status_display }}
                                 </span>
                             </td>
@@ -156,7 +192,8 @@
                             <td>{{ transaction.listing.title }}</td>
                             <td>{{ transaction.amount|floatformat:0 }} تومان</td>
                             <td>
-                                <span class="badge {% if transaction.status == 'completed' %}badge-success{% else %}badge-danger{% endif %}">
+                                <span
+                                    class="badge {% if transaction.status == 'completed' %}badge-success{% else %}badge-danger{% endif %}">
                                     {{ transaction.get_status_display }}
                                 </span>
                             </td>
@@ -188,7 +225,7 @@
         <div class="modal-body">
             <div id="chatMessages" class="chat-messages"></div>
             <div class="chat-input-container" id="chatInputContainer">
-                <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." 
+                <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..."
                     onkeypress="if(event.key === 'Enter') sendMessage()">
                 <button onclick="sendMessage()" class="btn btn-primary">ارسال</button>
             </div>
@@ -232,8 +269,9 @@
         return cookieValue;
     }
 
-    function openChat(proposalId, listingTitle) {
+    function openChat(proposalId, listingTitle, status) {
         currentProposalId = proposalId;
+        currentProposalStatus = status;
         document.getElementById('chatTitle').textContent = 'چت - ' + listingTitle;
         document.getElementById('chatModal').style.display = 'block';
         document.getElementById('chatMessages').innerHTML = '<p style="text-align:center;">در حال بارگیری...</p>';
@@ -245,6 +283,7 @@
         }
         chatInterval = setInterval(loadMessages, 3000);
     }
+
 
     function closeChat() {
         document.getElementById('chatModal').style.display = 'none';
@@ -266,17 +305,18 @@
                 messagesContainer.innerHTML = '';
 
                 if (data.messages.length === 0) {
-                    messagesContainer.innerHTML = '<p style="text-align:center;color:#999;">هنوز پیامی ارسال نشده است.</p>';
+                    messagesContainer.innerHTML =
+                        '<p style="text-align:center;color:#999;">هنوز پیامی ارسال نشده است.</p>';
                 } else {
                     data.messages.forEach(msg => {
                         const messageDiv = document.createElement('div');
                         messageDiv.className = 'chat-message ' + (msg.is_mine ? 'mine' : 'theirs');
 
                         messageDiv.innerHTML = `
-                            <div class="chat-message-sender">${msg.sender}</div>
-                            <div class="chat-message-text">${msg.message}</div>
-                            <div class="chat-message-time">${msg.created_at}</div>
-                        `;
+                        <div class="chat-message-sender">${msg.sender}</div>
+                        <div class="chat-message-text">${msg.message}</div>
+                        <div class="chat-message-time">${msg.created_at}</div>
+                    `;
 
                         messagesContainer.appendChild(messageDiv);
                     });
@@ -287,7 +327,8 @@
                 const chatInputContainer = document.getElementById('chatInputContainer');
                 const chatDisabledMessage = document.getElementById('chatDisabledMessage');
 
-                if (data.proposal_status !== 'negotiating') {
+                // چت فقط برای rejected غیرفعال می‌شود
+                if (data.proposal_status === 'rejected') {
                     chatInputContainer.style.display = 'none';
                     chatDisabledMessage.style.display = 'block';
                 } else {
@@ -301,6 +342,7 @@
             });
     }
 
+
     function sendMessage() {
         if (!currentProposalId) return;
 
@@ -312,13 +354,13 @@
         const csrftoken = getCookie('csrftoken');
 
         fetch(`/payments/chat/${currentProposalId}/send/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': csrftoken
-            },
-            body: `message=${encodeURIComponent(message)}`
-        })
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrftoken
+                },
+                body: `message=${encodeURIComponent(message)}`
+            })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -349,47 +391,47 @@
         const csrftoken = getCookie('csrftoken');
 
         fetch(`/payments/proposal/${proposalId}/confirm/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrftoken,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                if (data.redirect) {
-                    alert(data.message);
-                    location.relolocation.reload();
-                } else {
-                    alert(data.message);
-
-                    // بروزرسانی وضعیت‌ها
-                    const buyerStatus = document.getElementById(`buyer-status-${proposalId}`);
-                    const sellerStatus = document.getElementById(`seller-status-${proposalId}`);
-
-                    if (data.buyer_agreed) {
-                        buyerStatus.innerHTML = '<span class="badge badge-success">✓ موافق</span>';
-                    }
-
-                    if (data.seller_agreed) {
-                        sellerStatus.innerHTML = '<span class="badge badge-success">✓ موافق</span>';
-                    }
-
-                    // حذف دکمه تایید
-                    const actions = document.getElementById(`actions-${proposalId}`);
-                    const confirmButtons = actions.querySelectorAll('.btn-success');
-
-                    confirmButtons.forEach(btn => btn.remove());
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json'
                 }
-            } else {
-                alert(data.error || 'خطا در تایید معامله');
-            }
-        })
-        .catch(error => {
-            console.error(error);
-            alert('خطا در ارتباط با سرور');
-        });
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.redirect) {
+                        alert(data.message);
+                        location.relolocation.reload();
+                    } else {
+                        alert(data.message);
+
+                        // بروزرسانی وضعیت‌ها
+                        const buyerStatus = document.getElementById(`buyer-status-${proposalId}`);
+                        const sellerStatus = document.getElementById(`seller-status-${proposalId}`);
+
+                        if (data.buyer_agreed) {
+                            buyerStatus.innerHTML = '<span class="badge badge-success">✓ موافق</span>';
+                        }
+
+                        if (data.seller_agreed) {
+                            sellerStatus.innerHTML = '<span class="badge badge-success">✓ موافق</span>';
+                        }
+
+                        // حذف دکمه تایید
+                        const actions = document.getElementById(`actions-${proposalId}`);
+                        const confirmButtons = actions.querySelectorAll('.btn-success');
+
+                        confirmButtons.forEach(btn => btn.remove());
+                    }
+                } else {
+                    alert(data.error || 'خطا در تایید معامله');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                alert('خطا در ارتباط با سرور');
+            });
     }
 
     function rejectDeal(proposalId) {
@@ -400,25 +442,55 @@
         const csrftoken = getCookie('csrftoken');
 
         fetch(`/payments/proposal/${proposalId}/reject/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrftoken,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
-                location.reload();
-            } else {
-                alert(data.error || 'خطا در رد معامله');
-            }
-        })
-        .catch(error => {
-            console.error(error);
-            alert('خطا در ارتباط با سرور');
-        });
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert(data.error || 'خطا در رد معامله');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                alert('خطا در ارتباط با سرور');
+            });
+    }
+
+
+    function undoRejection(proposalId) {
+        if (!confirm('آیا می‌خواهید وضعیت رد را برگردانید؟')) {
+            return;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        fetch(`/payments/proposal/${proposalId}/undo-rejection/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert(data.error || 'خطا در برگرداندن وضعیت');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                alert('خطا در ارتباط با سرور');
+            });
     }
 </script>
 {% endblock %}

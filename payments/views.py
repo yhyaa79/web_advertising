@@ -175,31 +175,29 @@ def reject_deal(request, proposal_id):
     if proposal.buyer != request.user and proposal.seller != request.user:
         return JsonResponse({'error': 'دسترسی غیرمجاز'}, status=403)
     
-    if proposal.status != 'negotiating':
+    if proposal.status not in ['negotiating', 'deal_confirmed']:
         return JsonResponse({'error': 'این پیشنهاد قابل رد نیست'}, status=400)
     
+    # ثبت رد توسط کاربر
+    if request.user == proposal.buyer:
+        proposal.buyer_rejected = True
+        proposal.buyer_agreed = False
+    elif request.user == proposal.seller:
+        proposal.seller_rejected = True
+        proposal.seller_agreed = False
+    
     proposal.status = 'rejected'
-    
-    # ایجاد تراکنش با وضعیت لغو شده
-    tracking_code = str(uuid.uuid4())[:8].upper()
-    Transaction.objects.create(
-        buyer=proposal.buyer,
-        seller=proposal.seller,
-        listing=proposal.listing,
-        amount=proposal.proposed_price,
-        commission=0,
-        tracking_code=tracking_code,
-        status='cancelled'
-    )
-    
     proposal.save()
     
     return JsonResponse({
         'success': True,
-        'message': 'معامله رد شد و به لیست تراکنش‌ها منتقل شد.',
+        'message': 'معامله رد شد.',
         'status': 'rejected',
-        'redirect': True
+        'buyer_rejected': proposal.buyer_rejected,
+        'seller_rejected': proposal.seller_rejected,
+        'redirect': False
     })
+
 
 
 
@@ -243,6 +241,8 @@ def respond_to_proposal(request, proposal_id):
         return redirect('payments:my_transactions')
     
     return render(request, 'payments/respond_to_proposal.html', {'proposal': proposal})
+
+
 
 
 @login_required
@@ -346,6 +346,41 @@ def cancel_deal(request, proposal_id):
 
 
 @login_required
+@require_POST
+def undo_rejection(request, proposal_id):
+    """برگرداندن وضعیت رد به حالت عادی"""
+    proposal = get_object_or_404(PriceProposal, id=proposal_id)
+    
+    if proposal.buyer != request.user and proposal.seller != request.user:
+        return JsonResponse({'error': 'دسترسی غیرمجاز'}, status=403)
+    
+    if proposal.status != 'rejected':
+        return JsonResponse({'error': 'این پیشنهاد در وضعیت رد نیست'}, status=400)
+    
+    # برگرداندن وضعیت رد کاربر
+    if request.user == proposal.buyer:
+        proposal.buyer_rejected = False
+    elif request.user == proposal.seller:
+        proposal.seller_rejected = False
+    
+    # اگر هیچ‌کدام رد نکرده‌اند، برگشت به negotiating
+    if not proposal.buyer_rejected and not proposal.seller_rejected:
+        proposal.status = 'negotiating'
+    
+    proposal.save()
+    
+    return JsonResponse({
+        'success': True,
+        'message': 'وضعیت رد برگردانده شد.',
+        'status': proposal.status,
+        'buyer_rejected': proposal.buyer_rejected,
+        'seller_rejected': proposal.seller_rejected,
+        'redirect': False
+    })
+
+
+
+@login_required
 def payment_gateway(request, transaction_id):
     transaction = get_object_or_404(Transaction, id=transaction_id, buyer=request.user)
     
@@ -411,9 +446,9 @@ def my_transactions(request):
         status__in=['completed', 'cancelled']
     ).select_related('listing', 'buyer').order_by('-created_at')
     
-    # گفت‌وگوهای فعال (negotiating)
+    # گفت‌وگوها (همه وضعیت‌ها به جز موارد خاص)
     conversations = PriceProposal.objects.filter(
-        status='negotiating'
+        status__in=['negotiating', 'deal_confirmed', 'rejected']
     ).filter(
         models.Q(buyer=request.user) | models.Q(seller=request.user)
     ).select_related('listing', 'buyer', 'seller').order_by('-updated_at')
@@ -424,6 +459,7 @@ def my_transactions(request):
         'conversations': conversations,
     }
     return render(request, 'payments/my_transactions.html', context)
+
 
 
 
@@ -525,11 +561,14 @@ def get_chat_messages(request, proposal_id):
 @login_required
 @require_POST
 def send_chat_message(request, proposal_id):
-    """ارسال پیام چت (AJAX)"""
     proposal = get_object_or_404(PriceProposal, id=proposal_id)
     
     if proposal.buyer != request.user and proposal.seller != request.user:
         return JsonResponse({'error': 'دسترسی غیرمجاز'}, status=403)
+    
+    # چت فقط برای rejected غیرفعال است
+    if proposal.status == 'rejected':
+        return JsonResponse({'error': 'چت در وضعیت رد غیرفعال است'}, status=400)
     
     # بررسی وضعیت - اگر کنسل یا تایید شده، نمی‌توان پیام فرستاد
     if proposal.status in ['deal_cancelled']:

@@ -47,6 +47,7 @@ class PriceProposal(models.Model):
         ('negotiating', 'در حال گفتگو'),
         ('deal_confirmed', 'توافق شد'),
         ('deal_cancelled', 'کنسل شد'),
+        
     ]
     
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='price_proposals')
@@ -65,9 +66,12 @@ class PriceProposal(models.Model):
     seller_agreed = models.BooleanField(default=False, verbose_name='فروشنده موافق')
     buyer_cancelled = models.BooleanField(default=False, verbose_name='خریدار کنسل کرد')
     seller_cancelled = models.BooleanField(default=False, verbose_name='فروشنده کنسل کرد')
+    buyer_rejected = models.BooleanField(default=False)  # جدید
+    seller_rejected = models.BooleanField(default=False)  # جدید
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     
     class Meta:
         verbose_name = 'پیشنهاد قیمت'

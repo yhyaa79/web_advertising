@@ -7,9 +7,10 @@ urlpatterns = [
     path('purchase/<int:listing_pk>/', views.initiate_purchase, name='initiate_purchase'),
     path('proposal/<int:proposal_id>/', views.proposal_detail, name='proposal_detail'),
     
-    # URLهای جدید
     path('proposal/<int:proposal_id>/confirm/', views.confirm_deal, name='confirm_deal'),
     path('proposal/<int:proposal_id>/reject/', views.reject_deal, name='reject_deal'),
+    path('proposal/<int:proposal_id>/undo-rejection/', views.undo_rejection, name='undo_rejection'),
+
     
     path('gateway/<int:transaction_id>/', views.payment_gateway, name='payment_gateway'),
     path('transaction/<int:transaction_id>/', views.transaction_detail, name='transaction_detail'),
