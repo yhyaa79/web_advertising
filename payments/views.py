@@ -13,7 +13,6 @@ from django.db import models
 from notifications.utils import notify_new_proposal, notify_proposal_accepted, notify_proposal_rejected
 
 
-
 @login_required
 def initiate_purchase(request, listing_pk):
     listing = get_object_or_404(Listing, pk=listing_pk, status='active')
@@ -57,7 +56,7 @@ def initiate_purchase(request, listing_pk):
         if existing_proposal:
             existing_proposal.proposed_price = proposed_price
             existing_proposal.message = message
-            existing_proposal.status = 'negotiating'  # تغییر از pending به negotiating
+            existing_proposal.status = 'negotiating'
             existing_proposal.save()
             
             # ایجاد یا دریافت اتاق چت
@@ -80,7 +79,7 @@ def initiate_purchase(request, listing_pk):
                 seller=listing.seller,
                 proposed_price=proposed_price,
                 message=message,
-                status='negotiating'  # مستقیم negotiating به جای pending
+                status='negotiating'  # مستقیم negotiating
             )
             
             # ایجاد اتاق چت
@@ -95,7 +94,7 @@ def initiate_purchase(request, listing_pk):
             
             notify_new_proposal(new_proposal)
             
-            messages.success(request, 'پیشنهاد قیمت شما با موفقیت ارسال شد و می‌توانید با فروشنده چت کنید.')
+            messages.success(request, 'درخواست شما ارسال شد و می‌توانید با فروشنده چت کنید.')
         
         return redirect('payments:my_transactions')
     
@@ -104,6 +103,103 @@ def initiate_purchase(request, listing_pk):
         'existing_proposal': existing_proposal
     }
     return render(request, 'payments/initiate_purchase.html', context)
+
+
+
+@login_required
+@require_POST
+def confirm_deal(request, proposal_id):
+    """تایید نهایی معامله توسط هر دو طرف"""
+    proposal = get_object_or_404(PriceProposal, id=proposal_id)
+    
+    if proposal.buyer != request.user and proposal.seller != request.user:
+        return JsonResponse({'error': 'دسترسی غیرمجاز'}, status=403)
+    
+    if proposal.status != 'negotiating':
+        return JsonResponse({'error': 'این پیشنهاد قابل تایید نیست'}, status=400)
+    
+    # ثبت موافقت کاربر
+    if request.user == proposal.buyer:
+        proposal.buyer_agreed = True
+    elif request.user == proposal.seller:
+        proposal.seller_agreed = True
+    
+    # اگر هر دو موافقت کردند
+    if proposal.buyer_agreed and proposal.seller_agreed:
+        proposal.status = 'deal_confirmed'
+        
+        # ایجاد تراکنش
+        tracking_code = str(uuid.uuid4())[:8].upper()
+        transaction = Transaction.objects.create(
+            buyer=proposal.buyer,
+            seller=proposal.seller,
+            listing=proposal.listing,
+            amount=proposal.proposed_price,
+            commission=0,
+            tracking_code=tracking_code,
+            status='completed'
+        )
+        
+        # تغییر وضعیت آگهی
+        proposal.listing.status = 'sold'
+        proposal.listing.save()
+        
+        proposal.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'معامله تایید شد! تراکنش ایجاد گردید.',
+            'status': 'deal_confirmed',
+            'buyer_agreed': proposal.buyer_agreed,
+            'seller_agreed': proposal.seller_agreed,
+            'redirect': True
+        })
+    else:
+        proposal.save()
+        return JsonResponse({
+            'success': True,
+            'message': 'موافقت شما ثبت شد. منتظر تایید طرف مقابل هستیم.',
+            'status': proposal.status,
+            'buyer_agreed': proposal.buyer_agreed,
+            'seller_agreed': proposal.seller_agreed,
+            'redirect': False
+        })
+
+
+@login_required
+@require_POST
+def reject_deal(request, proposal_id):
+    """رد کردن معامله"""
+    proposal = get_object_or_404(PriceProposal, id=proposal_id)
+    
+    if proposal.buyer != request.user and proposal.seller != request.user:
+        return JsonResponse({'error': 'دسترسی غیرمجاز'}, status=403)
+    
+    if proposal.status != 'negotiating':
+        return JsonResponse({'error': 'این پیشنهاد قابل رد نیست'}, status=400)
+    
+    proposal.status = 'rejected'
+    
+    # ایجاد تراکنش با وضعیت لغو شده
+    tracking_code = str(uuid.uuid4())[:8].upper()
+    Transaction.objects.create(
+        buyer=proposal.buyer,
+        seller=proposal.seller,
+        listing=proposal.listing,
+        amount=proposal.proposed_price,
+        commission=0,
+        tracking_code=tracking_code,
+        status='cancelled'
+    )
+    
+    proposal.save()
+    
+    return JsonResponse({
+        'success': True,
+        'message': 'معامله رد شد و به لیست تراکنش‌ها منتقل شد.',
+        'status': 'rejected',
+        'redirect': True
+    })
 
 
 
@@ -304,20 +400,20 @@ def confirm_delivery(request, transaction_id):
 
 @login_required
 def my_transactions(request):
-    purchases = Transaction.objects.filter(buyer=request.user).select_related('listing', 'seller').order_by('-created_at')
-    sales = Transaction.objects.filter(seller=request.user).select_related('listing', 'buyer').order_by('-created_at')
-    
-    sent_proposals = PriceProposal.objects.filter(
-        buyer=request.user
+    # تراکنش‌های تکمیل شده
+    purchases = Transaction.objects.filter(
+        buyer=request.user,
+        status__in=['completed', 'cancelled']
     ).select_related('listing', 'seller').order_by('-created_at')
     
-    received_proposals = PriceProposal.objects.filter(
-        seller=request.user
+    sales = Transaction.objects.filter(
+        seller=request.user,
+        status__in=['completed', 'cancelled']
     ).select_related('listing', 'buyer').order_by('-created_at')
     
-    # پیشنهادات تایید شده
-    accepted_proposals = PriceProposal.objects.filter(
-        status__in=['negotiating', 'accepted', 'deal_confirmed', 'deal_cancelled']
+    # گفت‌وگوهای فعال (negotiating)
+    conversations = PriceProposal.objects.filter(
+        status='negotiating'
     ).filter(
         models.Q(buyer=request.user) | models.Q(seller=request.user)
     ).select_related('listing', 'buyer', 'seller').order_by('-updated_at')
@@ -325,11 +421,10 @@ def my_transactions(request):
     context = {
         'purchases': purchases,
         'sales': sales,
-        'sent_proposals': sent_proposals,
-        'received_proposals': received_proposals,
-        'accepted_proposals': accepted_proposals,
+        'conversations': conversations,
     }
     return render(request, 'payments/my_transactions.html', context)
+
 
 
 @login_required
