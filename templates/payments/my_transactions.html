@@ -275,7 +275,8 @@
         document.getElementById('chatTitle').textContent = 'چت - ' + listingTitle;
         document.getElementById('chatModal').style.display = 'block';
         document.getElementById('chatMessages').innerHTML = '<p style="text-align:center;">در حال بارگیری...</p>';
-
+        document.body.style.overflow = 'hidden';
+        
         loadMessages();
 
         if (chatInterval) {
@@ -313,13 +314,14 @@
                         messageDiv.className = 'chat-message ' + (msg.is_mine ? 'mine' : 'theirs');
 
                         messageDiv.innerHTML = `
-                        <div class="chat-message-sender">${msg.sender}</div>
-                        <div class="chat-message-text">${msg.message}</div>
-                        <div class="chat-message-time">${msg.created_at}</div>
-                    `;
+                                <div class="chat-message-sender">${msg.is_mine ? 'you' : msg.sender}</div>
+                                <div class="chat-message-text">${msg.message}</div>
+                                <div class="chat-message-time">${msg.created_at}</div>
+                            `;
 
                         messagesContainer.appendChild(messageDiv);
                     });
+
 
                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
                 }
