@@ -8,9 +8,7 @@ app_name = 'payments'
 urlpatterns = [
     path('purchase/<int:listing_pk>/', views.initiate_purchase, name='initiate_purchase'),
     path('proposal/<int:proposal_id>/', views.proposal_detail, name='proposal_detail'),
-    path('proposal/<int:proposal_id>/respond/', views.respond_to_proposal, name='respond_to_proposal'),
     
-    # URLهای جدید برای توافق و کنسل
     path('proposal/<int:proposal_id>/agree/', views.agree_to_deal, name='agree_to_deal'),
     path('proposal/<int:proposal_id>/cancel/', views.cancel_deal, name='cancel_deal'),
     

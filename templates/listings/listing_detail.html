@@ -158,7 +158,7 @@
             </div>
 
             {% if listing.about_platform %}
-            <div class="card card-body aboutplatform-card" id="aboutplatform-card">
+            <div class="card card-body aboutplatform-card">
                 <div class="aboutplatform-card-h3">
                     <h3>درباره پلتفرم:</h3>
                     <div class="btn-aboutplatform-card">
@@ -166,9 +166,13 @@
                     </div>
                 </div>
                 <hr>
-                <div class="aboutplatform-detail">
-                    <p>{{ listing.about_platform }}</p>
+                <div id="aboutplatform-text">
+                    <div class="aboutplatform-detail">
+                        <p>{{ listing.about_platform }}</p>
+
+                    </div>
                 </div>
+                <p id="text-aboutplatform-card">برای مشاهده بیشتر روی "∨" کلیک کنید.</p>
             </div>
             {% endif %}
 
@@ -205,12 +209,11 @@
                             {% if proof.image %}
                             <img src="{{ proof.image.url }}" class="card-img-proof" alt="اثبات درآمد">
                             {% endif %}
-                            <div class="card-body">
-                                {% if proof.description %}
-                                <p class="card-text">{{ proof.description }}</p>
-                                {% endif %}
-                            </div>
-                            <hr>
+
+                            {% if proof.description %}
+                            <p class="card-text-income-proofs">{{ proof.description }}</p>
+                            {% endif %}
+
                         </div>
                     </div>
                     {% endfor %}
@@ -295,7 +298,8 @@
                     <hr class="hr-between">
 
                     <div>
-                        <a href="{% url 'coming_soon' %}" class="text-link" target="_blank">شما میتواند از این قسمت نظرات خودتان را در مورد این اگهی به اشتراک بگذارید.</a>
+                        <a href="{% url 'coming_soon' %}" class="text-link" target="_blank">شما میتواند از این قسمت
+                            نظرات خودتان را در مورد این اگهی به اشتراک بگذارید.</a>
                     </div>
                 </div>
             </div>
@@ -561,6 +565,17 @@
                     شود.
 
                     تیم بررسی ما این فهرست را بررسی و موارد زیر را تأیید کرده است:
+                </p>
+            </div>
+        </div>
+
+
+        <div class="card mt-3">
+            <div class="card-body pad-10">
+                <h5>ایده و همکاری</h5>
+                <p>
+                    با ارسال ایده های خود و نظرات بهبود بخشنده برای سایت ما در صورت تایید میتوانید از بسته های ویژه به
+                    صورت رایگان استفاده کنید
                 </p>
             </div>
         </div>
@@ -899,14 +914,24 @@
     });
 
     function toggleHeight() {
-        const aboutplatformCard = document.getElementById('aboutplatform-card');
+        const aboutplatformCard = document.getElementById('aboutplatform-text');
         const moreBtn = document.getElementById('more-height-btn');
 
-        // کلاس 'expanded' را به کارت اضافه یا از آن حذف می‌کند
-        aboutplatformCard.classList.toggle('expanded');
+        // آیدی تگ p خود را به جای 'my-text' قرار دهید
+        const myTextElement = document.getElementById('text-aboutplatform-card');
 
-        // کلاس 'open' را به دکمه اضافه یا از آن حذف می‌کند تا فلش بچرخد
+        const isExpanded = aboutplatformCard.classList.toggle('expanded');
         moreBtn.classList.toggle('open');
+
+        if (isExpanded) {
+            // حالت باز شده
+            aboutplatformCard.style.maxHeight = '10000px';
+            myTextElement.innerText = ''; // متن حذف می‌شود
+        } else {
+            // حالت بسته شده
+            aboutplatformCard.style.maxHeight = '300px';
+            myTextElement.innerText = 'برای مشاهده بیشتر روی "∨" کلیک کنید.'; // متن نمایش داده می‌شود
+        }
     }
 </script>
 

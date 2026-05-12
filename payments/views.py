@@ -13,6 +13,7 @@ from django.db import models
 from notifications.utils import notify_new_proposal, notify_proposal_accepted, notify_proposal_rejected
 
 
+
 @login_required
 def initiate_purchase(request, listing_pk):
     listing = get_object_or_404(Listing, pk=listing_pk, status='active')
@@ -29,7 +30,6 @@ def initiate_purchase(request, listing_pk):
     if request.method == 'POST':
         send_custom_price = request.POST.get('send_custom_price')
         
-        # اگر چک‌باکس انتخاب نشده، از قیمت فروشنده استفاده می‌کنیم
         if send_custom_price:
             proposed_price = request.POST.get('proposed_price')
             message = request.POST.get('message', '')
@@ -51,31 +51,51 @@ def initiate_purchase(request, listing_pk):
                     'existing_proposal': existing_proposal
                 })
         else:
-            # استفاده از قیمت فروشنده
             proposed_price = listing.price
             message = ''
         
         if existing_proposal:
             existing_proposal.proposed_price = proposed_price
             existing_proposal.message = message
-            existing_proposal.status = 'pending'
+            existing_proposal.status = 'negotiating'  # تغییر از pending به negotiating
             existing_proposal.save()
+            
+            # ایجاد یا دریافت اتاق چت
+            ChatRoom.objects.get_or_create(
+                proposal=existing_proposal,
+                defaults={
+                    'buyer': existing_proposal.buyer,
+                    'seller': existing_proposal.seller,
+                    'listing': existing_proposal.listing
+                }
+            )
             
             notify_new_proposal(existing_proposal)
             
-            messages.success(request, 'پیشنهاد قیمت شما به‌روزرسانی شد.')
+            messages.success(request, 'پیشنهاد قیمت شما به‌روزرسانی شد و می‌توانید با فروشنده چت کنید.')
         else:
             new_proposal = PriceProposal.objects.create(
                 listing=listing,
                 buyer=request.user,
                 seller=listing.seller,
                 proposed_price=proposed_price,
-                message=message
+                message=message,
+                status='negotiating'  # مستقیم negotiating به جای pending
+            )
+            
+            # ایجاد اتاق چت
+            ChatRoom.objects.get_or_create(
+                proposal=new_proposal,
+                defaults={
+                    'buyer': new_proposal.buyer,
+                    'seller': new_proposal.seller,
+                    'listing': new_proposal.listing
+                }
             )
             
             notify_new_proposal(new_proposal)
             
-            messages.success(request, 'پیشنهاد قیمت شما با موفقیت ارسال شد.')
+            messages.success(request, 'پیشنهاد قیمت شما با موفقیت ارسال شد و می‌توانید با فروشنده چت کنید.')
         
         return redirect('payments:my_transactions')
     
@@ -84,6 +104,7 @@ def initiate_purchase(request, listing_pk):
         'existing_proposal': existing_proposal
     }
     return render(request, 'payments/initiate_purchase.html', context)
+
 
 
 @login_required

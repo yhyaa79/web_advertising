@@ -262,6 +262,12 @@ strong {
 }
 
 
+
+/* ========================================
+   aboutplatform
+   ======================================== */
+
+
 .aboutplatform-detail {
     font-size: 16px;
     font-weight: 400;
@@ -269,8 +275,10 @@ strong {
     white-space: pre-line;
 }
 
-.aboutplatform-card {
-    max-height: 500px;
+#aboutplatform-text {
+    max-height: 300px;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
     overflow: hidden;
     transition: max-height 0.5s ease-in-out;
 }
@@ -279,16 +287,6 @@ strong {
     display: flex;
 }
 
-/* --- برای انیمیشن باز و بسته شدن نرم --- */
-.aboutplatform-card {
-    max-height: 400px;
-    overflow: hidden;
-    transition: max-height 0.5s ease-in-out;
-}
-
-.aboutplatform-card.expanded {
-    max-height: 10000px;
-}
 
 .btn-aboutplatform-card {
     margin-right: auto;
@@ -320,6 +318,16 @@ strong {
 }
 
 
+#text-aboutplatform-card {
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+
+/* ========================================
+   card
+   ======================================== */
 
 
 .card-title {
@@ -449,6 +457,22 @@ strong {
 .btn-listing-create .btn-success {
     margin-right: auto;
 }
+
+
+
+/* ========================================
+   proofs
+   ======================================== */
+
+.card-text-income-proofs {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 23px;
+    white-space: pre-line;
+}
+
+
 
 /* ========================================
    price-btn

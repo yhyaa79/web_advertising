@@ -11,7 +11,7 @@
         <button class="tab-button active" data-tab="purchases">خریدهای من</button>
         <button class="tab-button" data-tab="sales">فروش‌های من</button>
         <button class="tab-button" data-tab="sent-proposals">پیشنهادات ارسالی</button>
-        <button class="tab-button" data-tab="received-proposals">پیشنهادات دریافتی</button>
+        <!-- تب پیشنهادات دریافتی حذف شد -->
         <button class="tab-button" data-tab="accepted-proposals">پیشنهادات تایید شده</button>
     </div>
 
@@ -127,48 +127,6 @@
             </div>
         </div>
 
-        <!-- پیشنهادات دریافتی -->
-        <div class="tab-pane" id="received-proposals">
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>آگهی</th>
-                            <th>خریدار</th>
-                            <th>قیمت پیشنهادی</th>
-                            <th>وضعیت</th>
-                            <th>تاریخ</th>
-                            <th>عملیات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for proposal in received_proposals %}
-                        <tr>
-                            <td>{{ proposal.listing.title }}</td>
-                            <td>{{ proposal.buyer.username }}</td>
-                            <td>{{ proposal.proposed_price|floatformat:0 }} تومان</td>
-                            <td><span class="badge badge-warning">{{ proposal.get_status_display }}</span></td>
-                            <td>{{ proposal.created_at|date:"Y/m/d" }}</td>
-                            <td>
-                                {% if proposal.status == 'pending' %}
-                                <a href="{% url 'payments:respond_to_proposal' proposal.id %}"
-                                    class="btn btn-success btn-sm">پاسخ</a>
-                                {% else %}
-                                <a href="{% url 'payments:proposal_detail' proposal.id %}"
-                                    class="btn btn-primary btn-sm">جزئیات</a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="6" style="text-align:center;">پیشنهادی دریافت نکرده‌اید.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
         <!-- پیشنهادات تایید شده -->
         <div class="tab-pane" id="accepted-proposals">
             <div class="table-container">
@@ -190,9 +148,9 @@
                             <td>{{ proposal.listing.title }}</td>
                             <td>
                                 {% if proposal.buyer == request.user %}
-                                    {{ proposal.seller.username }}
+                                {{ proposal.seller.username }}
                                 {% else %}
-                                    {{ proposal.buyer.username }}
+                                {{ proposal.buyer.username }}
                                 {% endif %}
                             </td>
                             <td>{{ proposal.proposed_price|floatformat:0 }} تومان</td>
@@ -201,45 +159,45 @@
                                     {% if proposal.status == 'negotiating' or proposal.status == 'accepted' %}badge-info
                                     {% elif proposal.status == 'deal_confirmed' %}badge-success
                                     {% elif proposal.status == 'deal_cancelled' %}badge-danger
-                                    {% endif %}" 
-                                    id="status-badge-{{ proposal.id }}">
+                                    {% endif %}" id="status-badge-{{ proposal.id }}">
                                     {{ proposal.get_status_display }}
                                 </span>
                             </td>
                             <td>
                                 <span id="buyer-status-{{ proposal.id }}">
                                     {% if proposal.buyer_agreed %}
-                                        <span class="badge badge-success">✓ موافق</span>
+                                    <span class="badge badge-success">✓ موافق</span>
                                     {% else %}
-                                        <span class="badge badge-secondary">در انتظار</span>
+                                    <span class="badge badge-secondary">در انتظار</span>
                                     {% endif %}
                                 </span>
                             </td>
                             <td>
                                 <span id="seller-status-{{ proposal.id }}">
                                     {% if proposal.seller_agreed %}
-                                        <span class="badge badge-success">✓ موافق</span>
+                                    <span class="badge badge-success">✓ موافق</span>
                                     {% else %}
-                                        <span class="badge badge-secondary">در انتظار</span>
+                                    <span class="badge badge-secondary">در انتظار</span>
                                     {% endif %}
                                 </span>
                             </td>
                             <td>
                                 <div class="action-buttons" id="actions-{{ proposal.id }}">
                                     {% if proposal.status == 'negotiating' or proposal.status == 'accepted' %}
-                                        {% if proposal.buyer == request.user and not proposal.buyer_agreed %}
-                                            <button onclick="agreeToDeal('{{ proposal.id }}')" 
-                                                class="btn btn-success btn-sm">توافق</button>
-                                        {% elif proposal.seller == request.user and not proposal.seller_agreed %}
-                                            <button onclick="agreeToDeal('{{ proposal.id }}')" 
-                                                class="btn btn-success btn-sm">توافق</button>
-                                        {% endif %}
-                                        
-                                        <button onclick="cancelDeal('{{ proposal.id }}')" 
-                                            class="btn btn-danger btn-sm">کنسل</button>
+                                    {% if proposal.buyer == request.user and not proposal.buyer_agreed %}
+                                    <button onclick="agreeToDeal('{{ proposal.id }}')"
+                                        class="btn btn-success btn-sm">توافق</button>
+                                    {% elif proposal.seller == request.user and not proposal.seller_agreed %}
+                                    <button onclick="agreeToDeal('{{ proposal.id }}')"
+                                        class="btn btn-success btn-sm">توافق</button>
                                     {% endif %}
-                                    
-                                    <button onclick="openChat('{{ proposal.id }}', '{{ proposal.listing.title|escapejs }}')" 
+
+                                    <button onclick="cancelDeal('{{ proposal.id }}')"
+                                        class="btn btn-danger btn-sm">کنسل</button>
+                                    {% endif %}
+
+                                    <button
+                                        onclick="openChat('{{ proposal.id }}', '{{ proposal.listing.title|escapejs }}')"
                                         class="btn btn-primary btn-sm">چت</button>
                                 </div>
                             </td>
@@ -266,7 +224,7 @@
         <div class="modal-body">
             <div id="chatMessages" class="chat-messages"></div>
             <div class="chat-input-container" id="chatInputContainer">
-                <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." 
+                <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..."
                     onkeypress="if(event.key === 'Enter') sendMessage()">
                 <button onclick="sendMessage()" class="btn btn-primary">ارسال</button>
             </div>
@@ -276,8 +234,6 @@
         </div>
     </div>
 </div>
-
-
 
 <script>
     // مدیریت تب‌ها
@@ -346,7 +302,8 @@
                 messagesContainer.innerHTML = '';
 
                 if (data.messages.length === 0) {
-                    messagesContainer.innerHTML = '<p style="text-align:center;color:#999;">هنوز پیامی ارسال نشده است.</p>';
+                    messagesContainer.innerHTML =
+                        '<p style="text-align:center;color:#999;">هنوز پیامی ارسال نشده است.</p>';
                 } else {
                     data.messages.forEach(msg => {
                         const messageDiv = document.createElement('div');
@@ -364,7 +321,6 @@
                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
                 }
 
-                // بررسی وضعیت برای غیرفعال کردن ورودی
                 const chatInputContainer = document.getElementById('chatInputContainer');
                 const chatDisabledMessage = document.getElementById('chatDisabledMessage');
 
@@ -393,13 +349,13 @@
         const csrftoken = getCookie('csrftoken');
 
         fetch(`/payments/chat/${currentProposalId}/send/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': csrftoken
-            },
-            body: `message=${encodeURIComponent(message)}`
-        })
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrftoken
+                },
+                body: `message=${encodeURIComponent(message)}`
+            })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -415,7 +371,6 @@
             });
     }
 
-    // بستن مودال با کلیک خارج از آن
     window.onclick = function (event) {
         const modal = document.getElementById('chatModal');
         if (event.target === modal) {
@@ -423,7 +378,6 @@
         }
     }
 
-    // توابع توافق و کنسل
     function agreeToDeal(proposalId) {
         if (!confirm('آیا با این معامله موافقید؟')) {
             return;
@@ -432,57 +386,57 @@
         const csrftoken = getCookie('csrftoken');
 
         fetch(`/payments/proposal/${proposalId}/agree/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrftoken,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-
-                if (data.buyer_agreed !== undefined) {
-                    document.getElementById(`buyer-status-${proposalId}`).innerHTML =
-                        data.buyer_agreed
-                        ? '<span class="badge badge-success">✓ موافق</span>'
-                        : '<span class="badge badge-secondary">در انتظار</span>';
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json'
                 }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
 
-                if (data.seller_agreed !== undefined) {
-                    document.getElementById(`seller-status-${proposalId}`).innerHTML =
-                        data.seller_agreed
-                        ? '<span class="badge badge-success">✓ موافق</span>'
-                        : '<span class="badge badge-secondary">در انتظار</span>';
-                }
+                    if (data.buyer_agreed !== undefined) {
+                        document.getElementById(`buyer-status-${proposalId}`).innerHTML =
+                            data.buyer_agreed ?
+                            '<span class="badge badge-success">✓ موافق</span>' :
+                            '<span class="badge badge-secondary">در انتظار</span>';
+                    }
 
-                if (data.status) {
-                    const badge = document.getElementById(`status-badge-${proposalId}`);
+                    if (data.seller_agreed !== undefined) {
+                        document.getElementById(`seller-status-${proposalId}`).innerHTML =
+                            data.seller_agreed ?
+                            '<span class="badge badge-success">✓ موافق</span>' :
+                            '<span class="badge badge-secondary">در انتظار</span>';
+                    }
+
+                    if (data.status) {
+                        const badge = document.getElementById(`status-badge-${proposalId}`);
+
+                        if (data.status === 'deal_confirmed') {
+                            badge.className = 'badge badge-success';
+                            badge.innerText = 'توافق نهایی شد';
+                        } else if (data.status === 'accepted') {
+                            badge.className = 'badge badge-info';
+                            badge.innerText = 'در حال گفتگو';
+                        }
+                    }
 
                     if (data.status === 'deal_confirmed') {
-                        badge.className = 'badge badge-success';
-                        badge.innerText = 'توافق نهایی شد';
-                    } else if (data.status === 'accepted') {
-                        badge.className = 'badge badge-info';
-                        badge.innerText = 'در حال گفتگو';
-                    }
-                }
-
-                if (data.status === 'deal_confirmed') {
-                    const actions = document.getElementById(`actions-${proposalId}`);
-                    actions.innerHTML = `
+                        const actions = document.getElementById(`actions-${proposalId}`);
+                        actions.innerHTML = `
                         <button onclick="openChat(${proposalId})" class="btn btn-primary btn-sm">چت</button>
                     `;
-                }
+                    }
 
-            } else {
-                alert(data.error || 'خطا در ثبت توافق');
-            }
-        })
-        .catch(error => {
-            console.error(error);
-            alert('خطا در ارتباط با سرور');
-        });
+                } else {
+                    alert(data.error || 'خطا در ثبت توافق');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                alert('خطا در ارتباط با سرور');
+            });
     }
 
     function cancelDeal(proposalId) {
@@ -494,35 +448,37 @@
         const csrftoken = getCookie('csrftoken');
 
         fetch(`/payments/proposal/${proposalId}/cancel/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrftoken,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
 
-            if (data.success) {
+                if (data.success) {
 
-                const badge = document.getElementById(`status-badge-${proposalId}`);
-                badge.className = 'badge badge-danger';
-                badge.innerText = 'کنسل شد';
+                    const badge = document.getElementById(`status-badge-${proposalId}`);
+                    badge.className = 'badge badge-danger';
+                    badge.innerText = 'کنسل شده';
 
-                const actions = document.getElementById(`actions-${proposalId}`);
-                actions.innerHTML = `
-                    <button onclick="openChat(${proposalId})" class="btn btn-primary btn-sm">چت</button>
+                    document.getElementById(`actions-${proposalId}`).innerHTML = `
+                    <button onclick="openChat('${proposalId}')" 
+                        class="btn btn-primary btn-sm">چت</button>
                 `;
 
-            } else {
-                alert(data.error || 'خطا در کنسل کردن معامله');
-            }
+                    alert('معامله کنسل شد.');
 
-        })
-        .catch(error => {
-            console.error(error);
-            alert('خطا در ارتباط با سرور');
-        });
+                } else {
+                    alert(data.error || 'خطا در کنسل کردن معامله');
+                }
+
+            })
+            .catch(error => {
+                console.error(error);
+                alert('خطا در ارتباط با سرور');
+            });
     }
 </script>
 
