@@ -18,9 +18,13 @@
                 <h2 style="margin-bottom: 5px;">{{ listing.title }}</h2>
                 <span class="badge bg-info-detail">{{ listing.category.get_platform_display }}</span>
             </div>
-            <p class="text-muted inf-created-views-username">تاریخ انتشار اگهی: {{ listing.created_at|jalali_date }}
-                | فروشنده:
-                {{ listing.seller.username }} | بازدید: {{ listing.views_count }}</p>
+
+            <div class="inf-created-views-username">
+                <p class="text-muted"> بازدید: {{ listing.views_count|split_number }}</p>
+                <p class="text-muted"> فروشنده: {{ listing.seller.username }}</p>
+                <p class="text-muted">تاریخ انتشار اگهی: {{ listing.created_at|jalali_date }}
+                </p>
+            </div>
 
             <hr>
             <div>
@@ -311,19 +315,19 @@
                 <hr>
 
                 {% if listing.seller.profile.user_type == 'individual' %}
-                    {% if listing.seller.profile_image %}
-                    <img src="{{ listing.seller.profile_image.url }}" alt="پروفایل" class="rounded-circle mb-3">
-                    {% endif %}
+                {% if listing.seller.profile_image %}
+                <img src="{{ listing.seller.profile_image.url }}" alt="پروفایل" class="rounded-circle mb-3">
+                {% endif %}
                 {% else %}
-                    <div class="profile-img-detail">
-                        {% if listing.seller.profile.company_logo %}
-                        <img src="{{ listing.seller.profile.company_logo.url }}" alt="پروفایل" class="rounded-circle">
-                        {% else %}
-                        <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center">
-                            <i class="fas fa-user fa-3x text-white"></i>
-                        </div>
-                        {% endif %}
-                    </div> <!-- این تگ بسته باید اینجا و داخل else باشد -->
+                <div class="profile-img-detail">
+                    {% if listing.seller.profile.company_logo %}
+                    <img src="{{ listing.seller.profile.company_logo.url }}" alt="پروفایل" class="rounded-circle">
+                    {% else %}
+                    <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center">
+                        <i class="fas fa-user fa-3x text-white"></i>
+                    </div>
+                    {% endif %}
+                </div> <!-- این تگ بسته باید اینجا و داخل else باشد -->
                 {% endif %}
 
                 <div class="profile-detail">

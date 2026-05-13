@@ -361,7 +361,7 @@ td {
 }
 
 .rounded-circle {
-        width: 80px;
+    width: 80px;
     height: 80px;
     object-fit: cover;
 }
@@ -376,6 +376,7 @@ td {
     align-items: flex-start;
     margin: 20px 0;
 }
+
 .specifications-detail {
     display: flex;
     flex-wrap: wrap;
@@ -1940,6 +1941,11 @@ form textarea {
 }
 
 .inf-created-views-username {
+    display: flex;
+    gap: 50px;
+}
+
+.inf-created-views-username p {
     color: var(--text-secondary);
     font-size: var(--font-size-base) !important;
 }
