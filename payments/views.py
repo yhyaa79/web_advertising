@@ -433,6 +433,8 @@ def confirm_delivery(request, transaction_id):
     return render(request, 'payments/confirm_delivery.html', {'transaction': transaction})
 
 
+# payments/views.py
+
 @login_required
 def my_transactions(request):
     # تراکنش‌های تکمیل شده
@@ -451,7 +453,11 @@ def my_transactions(request):
         status__in=['negotiating', 'deal_confirmed', 'rejected']
     ).filter(
         models.Q(buyer=request.user) | models.Q(seller=request.user)
-    ).select_related('listing', 'buyer', 'seller').order_by('-updated_at')
+    ).select_related('listing', 'buyer', 'seller').prefetch_related('chat_room__messages').order_by('-updated_at')
+    
+    # اضافه کردن تعداد پیام‌های خوانده نشده به هر conversation
+    for conv in conversations:
+        conv.unread_count = conv.get_unread_count_for_user(request.user)
     
     context = {
         'purchases': purchases,
@@ -459,6 +465,7 @@ def my_transactions(request):
         'conversations': conversations,
     }
     return render(request, 'payments/my_transactions.html', context)
+
 
 
 

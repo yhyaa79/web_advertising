@@ -89,11 +89,21 @@
                                     {% endif %}
                                 </span>
                             </td>
+                            <!-- templates/payments/my_transactions.html -->
+
+                            <!-- در قسمت عملیات، دکمه چت را اینگونه تغییر دهید: -->
+
                             <td>
                                 <div class="action-buttons" id="actions-{{ proposal.id }}">
                                     <button
                                         onclick="openChat('{{ proposal.id }}', '{{ proposal.listing.title|escapejs }}', '{{ proposal.status }}')"
-                                        class="btn btn-primary btn-sm">چت</button>
+                                        class="btn btn-primary btn-sm chat-btn-with-badge">
+                                        چت
+                                        {% if proposal.unread_count > 0 %}
+                                        <span class="chat-badge"
+                                            id="chat-badge-{{ proposal.id }}">{{ proposal.unread_count }}</span>
+                                        {% endif %}
+                                    </button>
 
                                     {% if proposal.status == 'rejected' %}
                                     {% if proposal.buyer == request.user and proposal.buyer_rejected %}
@@ -117,6 +127,7 @@
                                     {% endif %}
                                 </div>
                             </td>
+
                         </tr>
                         {% empty %}
                         <tr>
@@ -225,9 +236,9 @@
         <div class="modal-body">
             <div id="chatMessages" class="chat-messages"></div>
             <div class="chat-input-container" id="chatInputContainer">
-                <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..."
-                    onkeypress="if(event.key === 'Enter') sendMessage()">
-                <button onclick="sendMessage()" class="btn btn-primary">ارسال</button>
+                <textarea id="chatInput" placeholder="پیام خود را بنویسید... (Shift+Enter برای خط جدید)"
+                    onkeydown="handleChatKeydown(event)" rows="1"></textarea>
+                <button onclick="sendMessage()" class="btn btn-primary send-message-btn">ارسال</button>
             </div>
             <div id="chatDisabledMessage" class="chat-disabled-message" style="display: none;">
                 <p>امکان ارسال پیام در این وضعیت وجود ندارد.</p>
@@ -276,7 +287,7 @@
         document.getElementById('chatModal').style.display = 'block';
         document.getElementById('chatMessages').innerHTML = '<p style="text-align:center;">در حال بارگیری...</p>';
         document.body.style.overflow = 'hidden';
-        
+
         loadMessages();
 
         if (chatInterval) {
@@ -296,13 +307,18 @@
         }
     }
 
+    // در قسمت script تمپلیت my_transactions.html
+
     function loadMessages() {
         if (!currentProposalId) return;
+
+        const messagesContainer = document.getElementById('chatMessages');
+        const wasAtBottom = messagesContainer.scrollHeight - messagesContainer.scrollTop <= messagesContainer
+            .clientHeight + 50;
 
         fetch(`/payments/chat/${currentProposalId}/messages/`)
             .then(response => response.json())
             .then(data => {
-                const messagesContainer = document.getElementById('chatMessages');
                 messagesContainer.innerHTML = '';
 
                 if (data.messages.length === 0) {
@@ -314,22 +330,22 @@
                         messageDiv.className = 'chat-message ' + (msg.is_mine ? 'mine' : 'theirs');
 
                         messageDiv.innerHTML = `
-                                <div class="chat-message-sender">${msg.is_mine ? 'you' : msg.sender}</div>
-                                <div class="chat-message-text">${msg.message}</div>
-                                <div class="chat-message-time">${msg.created_at}</div>
-                            `;
+                    <div class="chat-message-sender">${msg.is_mine ? 'شما' : msg.sender}</div>
+                    <div class="chat-message-text">${escapeHtml(msg.message)}</div>
+                    <div class="chat-message-time">${msg.created_at}</div>
+                `;
 
                         messagesContainer.appendChild(messageDiv);
                     });
 
-
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    if (wasAtBottom) {
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    }
                 }
 
                 const chatInputContainer = document.getElementById('chatInputContainer');
                 const chatDisabledMessage = document.getElementById('chatDisabledMessage');
 
-                // چت فقط برای rejected غیرفعال می‌شود
                 if (data.proposal_status === 'rejected') {
                     chatInputContainer.style.display = 'none';
                     chatDisabledMessage.style.display = 'block';
@@ -338,11 +354,25 @@
                     chatDisabledMessage.style.display = 'none';
                 }
 
+                // حذف badge پیام‌های خوانده نشده
+                const badge = document.getElementById(`chat-badge-${currentProposalId}`);
+                if (badge) {
+                    badge.remove();
+                }
             })
             .catch(error => {
                 console.error('خطا در بارگیری پیام‌ها:', error);
             });
     }
+
+
+    // تابع کمکی برای escape کردن HTML
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
 
 
     function sendMessage() {
@@ -493,6 +523,88 @@
                 console.error(error);
                 alert('خطا در ارتباط با سرور');
             });
+    }
+
+    // توابع جدید و اصلاح شده - اضافه کنید به script
+
+    function handleChatKeydown(event) {
+        const textarea = event.target;
+
+        // Enter بدون Shift: ارسال پیام
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+            return;
+        }
+
+        // Shift+Enter: خط جدید (رفتار پیش‌فرض)
+        // تنظیم خودکار ارتفاع
+        setTimeout(() => {
+            autoResizeTextarea(textarea);
+        }, 0);
+    }
+
+    function autoResizeTextarea(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
+    }
+
+    // اصلاح تابع sendMessage
+    function sendMessage() {
+        if (!currentProposalId) return;
+
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        const csrftoken = getCookie('csrftoken');
+
+        fetch(`/payments/chat/${currentProposalId}/send/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrftoken
+                },
+                body: `message=${encodeURIComponent(message)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    input.value = '';
+                    input.style.height = 'auto'; // ریست ارتفاع
+                    loadMessages();
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('خطا در ارسال پیام:', error);
+                alert('خطا در ارسال پیام');
+            });
+    }
+
+    // اصلاح تابع openChat
+    function openChat(proposalId, listingTitle, status) {
+        currentProposalId = proposalId;
+        currentProposalStatus = status;
+        document.getElementById('chatTitle').textContent = 'چت - ' + listingTitle;
+        document.getElementById('chatModal').style.display = 'block';
+        document.getElementById('chatMessages').innerHTML = '<p style="text-align:center;">در حال بارگیری...</p>';
+        document.body.style.overflow = 'hidden';
+
+        // ریست ارتفاع textarea
+        const chatInput = document.getElementById('chatInput');
+        if (chatInput) {
+            chatInput.style.height = 'auto';
+        }
+
+        loadMessages();
+
+        if (chatInterval) {
+            clearInterval(chatInterval);
+        }
+        chatInterval = setInterval(loadMessages, 3000);
     }
 </script>
 {% endblock %}

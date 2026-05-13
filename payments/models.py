@@ -81,6 +81,14 @@ class PriceProposal(models.Model):
     
     def __str__(self):
         return f"پیشنهاد {self.buyer.username} برای {self.listing.title}"
+    
+    def get_unread_count_for_user(self, user):
+        """تعداد پیام‌های خوانده نشده برای کاربر مشخص"""
+        try:
+            chat_room = self.chat_room
+            return chat_room.messages.filter(is_read=False).exclude(sender=user).count()
+        except ChatRoom.DoesNotExist:
+            return 0
 
 
 class Dispute(models.Model):
