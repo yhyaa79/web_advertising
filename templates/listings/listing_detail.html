@@ -417,6 +417,12 @@
                     <span class="badge-detail bg-warning">تایید نشده</span>
                     {% endif %}
                 </div>
+
+                <div>
+                    <a href="{% url 'listings:user_profile' listing.seller.username %}" class="btn btn-sm btn-link">
+                       نمایش بیشتر
+                    </a>
+                </div>
             </div>
         </div>
 

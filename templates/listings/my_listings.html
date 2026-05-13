@@ -54,11 +54,32 @@
 
                         <td>
                             {% if request.message %}
-                            {{ request.message|truncatewords:15 }}
+                            <!-- متن خلاصه شده با قابلیت کلیک -->
+                            <a href="javascript:void(0);" onclick="openModal('messageModal{{ request.pk }}')"
+                                class="text-decoration-none">
+                                {{ request.message|truncatewords:5 }}
+                            </a>
+
+                            <!-- مینی مودال برای نمایش کل پیام -->
+                            <div id="messageModal{{ request.pk }}" class="custom-modal">
+                                <div class="custom-modal-content">
+                                    <div
+                                        class="custom-modal-header d-flex justify-content-between align-items-center mb-3">
+                                        <h4 class="mb-0 fw-bold">متن کامل پیام</h4>
+                                        <button type="button" class="close"
+                                            onclick="closeModal('messageModal{{ request.pk }}')">&times;</button>
+                                    </div>
+                                    <div class="custom-modal-body text-wrap text-break" >
+                                        <textarea class="text-request-message">{{ request.message }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
                             {% else %}
                             <em class="text-muted">بدون پیام</em>
                             {% endif %}
                         </td>
+
+
                         <td>{{ request.created_at|to_jalali }}</td>
                         <td>
                             <a href="{% url 'listings:manage_visit_request' request.pk 'approve' %}"
@@ -230,7 +251,7 @@
                             <small class="text-danger">دلیل: {{ listing.rejection_reason }}</small>
                             {% endif %}
                         </td>
-                        <td>{{ listing.views_count }}</td>
+                        <td>{{ listing.views_count|split_number }}</td>
                         <td>{{ listing.created_at|jalali_date_numeric }}</td>
                         <td onclick="event.stopPropagation();">
                             {% if listing.status != 'deleted' and listing.status != 'sold' %}

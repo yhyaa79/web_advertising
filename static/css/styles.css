@@ -479,6 +479,43 @@ td {
 
 
 
+
+.custom-modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.custom-modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    position: relative;
+}
+
+.custom-modal-body {
+    line-height: 1.8;
+}
+
+.text-request-message {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-base);
+    transition: var(--transition-base);
+    font-family: Tahoma, Arial, sans-serif;
+    height: 250px;
+}
+
+
 /* ========================================
    price-btn
    ======================================== */
@@ -1564,14 +1601,14 @@ form textarea {
 .custom-modal-content,
 .modal-content {
     background-color: var(--white-bg);
-    margin: 5% auto;
+    margin: 15% auto;
     padding: 0;
     border: 1px solid #888;
     width: 90%;
-    max-width: 800px;
+    max-width: 650px;
     border-radius: var(--border-radius-md);
     box-shadow: var(--modal-shadow);
-    max-height: 80vh;
+    max-height: 136vh;
     display: flex;
     flex-direction: column;
 }
