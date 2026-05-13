@@ -1673,6 +1673,32 @@ form textarea {
     text-align: left;
 }
 
+
+.card-body-how-buy {
+    display: flex;
+    gap: 5px;
+}
+
+.steps-how-buy {
+    border-radius: var(--border-radius-999);
+    border: 2px solid var(--border-color);
+    width: 30px;
+    height: 30px;
+    color: var(--text-secondary);
+    text-align: center;
+    font-size: var(--font-size-md);
+    padding: 0 10px
+}
+
+.card-body-text-how-buy {
+    padding: 5px;
+    margin-bottom: 7px;
+    /* border: 2px solid var(--border-color); */
+    border-radius: var(--border-radius-md);
+    color: var(--text-secondary);
+    background: #d6d6d645;
+}
+
 /* ========================================
    چت (Chat)
    ======================================== */
