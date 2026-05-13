@@ -2,7 +2,7 @@
 
 from django import forms
 from django.forms import inlineformset_factory
-from .models import Listing, IncomeProof, ListingImage, VisitRequest, IncomeDataPoint, ViewsDataPoint
+from .models import Listing, IncomeProof, ListingImage, VisitRequest, IncomeDataPoint, ViewsDataPoint, ListingFAQ
 
 class ListingForm(forms.ModelForm):
     class Meta:
@@ -127,4 +127,13 @@ ViewsDataPointFormSet = inlineformset_factory(
     extra=0,
     can_delete=True,
     max_num=50
+)
+
+
+FAQFormSet = inlineformset_factory(
+    Listing,
+    ListingFAQ,
+    fields=['question', 'answer', 'order'],
+    extra=1,
+    can_delete=True,
 )

@@ -181,6 +181,46 @@
             {% endif %}
 
 
+            {% if listing.faqs.all %}
+            <div class="card card-body mt-3">
+                <h3>پرسش و پاسخ:</h3>
+                <hr>
+                <div class="faq-list">
+                    {% for faq in listing.faqs.all %}
+                    <div class="faq-item mb-2">
+                        <button
+                            class="btn btn-light w-100 text-end d-flex justify-content-between align-items-center faq-question"
+                            type="button" data-faq-id="{{ faq.id }}" aria-expanded="false"
+                            aria-controls="faq-answer-{{ faq.id }}">
+                            <span>{{ faq.question }}</span>
+                            <i class="bi bi-chevron-down faq-icon"></i>
+                        </button>
+                        <div class="faq-answer p-3 bg-light rounded mt-1" id="faq-answer-{{ faq.id }}"
+                            style="display: none; white-space: pre-wrap;">{{ faq.answer }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <script>
+                document.querySelectorAll('.faq-question').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        const faqId = this.dataset.faqId;
+                        const answer = document.getElementById('faq-answer-' + faqId);
+                        const icon = this.querySelector('.faq-icon');
+                        const isOpen = answer.style.display !== 'none';
+
+                        answer.style.display = isOpen ? 'none' : 'block';
+                        icon.classList.toggle('bi-chevron-down', isOpen);
+                        icon.classList.toggle('bi-chevron-up', !isOpen);
+                        this.setAttribute('aria-expanded', String(!isOpen));
+                    });
+                });
+            </script>
+            {% endif %}
+
+
+
             {% if listing.income_data_points.all or listing.views_data_points.all %}
             <div class="card card-body">
                 <h3>نمودار ها:</h3>

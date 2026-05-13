@@ -219,3 +219,19 @@ class ListingImage(models.Model):
     
     def __str__(self):
         return f"تصویر {self.listing.title}"
+
+
+
+class ListingFAQ(models.Model):
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='faqs')
+    question = models.CharField(max_length=300, verbose_name='پرسش')
+    answer = models.TextField(verbose_name='پاسخ')
+    order = models.PositiveIntegerField(default=0, verbose_name='ترتیب')
+
+    class Meta:
+        verbose_name = 'پرسش و پاسخ'
+        verbose_name_plural = 'پرسش‌ها و پاسخ‌ها'
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return f"{self.listing.title} - {self.question}"

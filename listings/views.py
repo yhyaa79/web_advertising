@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
 from .models import Listing, Category, IncomeProof, VisitRequest
-from .forms import (ListingForm, IncomeProofFormSet, VisitRequestForm, 
-                    IncomeDataPointFormSet, ViewsDataPointFormSet)
+from .forms import (ListingForm, IncomeProofFormSet, VisitRequestForm,
+                    IncomeDataPointFormSet, ViewsDataPointFormSet, FAQFormSet)
 import json
 from notifications.utils import notify_visit_request, notify_visit_approved, notify_visit_rejected
 from django.contrib.auth import get_user_model
@@ -100,23 +100,28 @@ def listing_create(request):
         income_proof_formset = IncomeProofFormSet(request.POST, request.FILES)
         income_data_formset = IncomeDataPointFormSet(request.POST)
         views_data_formset = ViewsDataPointFormSet(request.POST)
-        
-        if (form.is_valid() and income_proof_formset.is_valid() and 
-            income_data_formset.is_valid() and views_data_formset.is_valid()):
-            
+        faq_formset = FAQFormSet(request.POST)
+
+        if (form.is_valid() and income_proof_formset.is_valid() and
+            income_data_formset.is_valid() and views_data_formset.is_valid() and
+            faq_formset.is_valid()):
+
             listing = form.save(commit=False)
             listing.seller = request.user
             listing.save()
-            
+
             income_proof_formset.instance = listing
             income_proof_formset.save()
-            
+
             income_data_formset.instance = listing
             income_data_formset.save()
-            
+
             views_data_formset.instance = listing
             views_data_formset.save()
-            
+
+            faq_formset.instance = listing
+            faq_formset.save()
+
             messages.success(request, 'آگهی شما با موفقیت ثبت شد و در انتظار تایید است.')
             return redirect('listings:my_listings')
     else:
@@ -124,32 +129,38 @@ def listing_create(request):
         income_proof_formset = IncomeProofFormSet()
         income_data_formset = IncomeDataPointFormSet()
         views_data_formset = ViewsDataPointFormSet()
-    
+        faq_formset = FAQFormSet()
+
     return render(request, 'listings/listing_create.html', {
         'form': form,
         'income_proof_formset': income_proof_formset,
         'income_data_formset': income_data_formset,
         'views_data_formset': views_data_formset,
+        'faq_formset': faq_formset,
     })
+
 
 @login_required
 def listing_edit(request, pk):
     listing = get_object_or_404(Listing, pk=pk, seller=request.user)
-    
+
     if request.method == 'POST':
         form = ListingForm(request.POST, request.FILES, instance=listing)
         income_proof_formset = IncomeProofFormSet(request.POST, request.FILES, instance=listing)
         income_data_formset = IncomeDataPointFormSet(request.POST, instance=listing)
         views_data_formset = ViewsDataPointFormSet(request.POST, instance=listing)
-        
-        if (form.is_valid() and income_proof_formset.is_valid() and 
-            income_data_formset.is_valid() and views_data_formset.is_valid()):
-            
+        faq_formset = FAQFormSet(request.POST, instance=listing)
+
+        if (form.is_valid() and income_proof_formset.is_valid() and
+            income_data_formset.is_valid() and views_data_formset.is_valid() and
+            faq_formset.is_valid()):
+
             form.save()
             income_proof_formset.save()
             income_data_formset.save()
             views_data_formset.save()
-            
+            faq_formset.save()
+
             messages.success(request, 'آگهی با موفقیت ویرایش شد.')
             return redirect('listings:listing_detail', pk=listing.pk)
     else:
@@ -157,14 +168,18 @@ def listing_edit(request, pk):
         income_proof_formset = IncomeProofFormSet(instance=listing)
         income_data_formset = IncomeDataPointFormSet(instance=listing)
         views_data_formset = ViewsDataPointFormSet(instance=listing)
-    
+        faq_formset = FAQFormSet(instance=listing)
+
     return render(request, 'listings/listing_edit.html', {
         'form': form,
         'income_proof_formset': income_proof_formset,
         'income_data_formset': income_data_formset,
         'views_data_formset': views_data_formset,
+        'faq_formset': faq_formset,
         'listing': listing
     })
+
+
 
 @login_required
 def my_listings(request):

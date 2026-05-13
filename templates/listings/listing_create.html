@@ -13,134 +13,198 @@
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data" id="listing-form">
                     {% csrf_token %}
-                    
+
                     <h5 class="mb-3">اطلاعات آگهی</h5>
-                    
+
                     {% for field in form %}
-                        {% if field.name == 'monthly_income' %}
-                            <div id="monthly-income-field" style="display: none;">
-                                <p>
-                                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                                    {{ field }}
-                                    {% if field.help_text %}
-                                        <small class="form-text text-muted">{{ field.help_text }}</small>
-                                    {% endif %}
-                                    {% if field.errors %}
-                                        <div class="text-danger">{{ field.errors }}</div>
-                                    {% endif %}
-                                </p>
-                            </div>
-                        {% else %}
-                            <p>
-                                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                                {{ field }}
-                                {% if field.help_text %}
-                                    <small class="form-text text-muted">{{ field.help_text }}</small>
-                                {% endif %}
-                                {% if field.errors %}
-                                    <div class="text-danger">{{ field.errors }}</div>
-                                {% endif %}
-                            </p>
+                    {% if field.name == 'monthly_income' %}
+                    <div id="monthly-income-field" style="display: none;">
+                        <p>
+                            <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% if field.errors %}
+                            <div class="text-danger">{{ field.errors }}</div>
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% else %}
+                    <p>
+                        <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
                         {% endif %}
+                        {% if field.errors %}
+                        <div class="text-danger">{{ field.errors }}</div>
+                        {% endif %}
+                    </p>
+                    {% endif %}
                     {% endfor %}
-                    
+
+
                     <hr class="my-4">
-                    
+                    <h5 class="mb-3">پرسش و پاسخ (اختیاری)</h5>
+
+                    {{ faq_formset.management_form }}
+
+                    <div id="faq-forms"></div>
+
+                    <button type="button" class="btn btn-secondary mb-3" id="add-faq">
+                        <i class="bi bi-plus-circle"></i> افزودن پرسش و پاسخ
+                    </button>
+
+                    <hr class="my-4">
+
+                    <script>
+                        (function () {
+                            const container = document.getElementById('faq-forms');
+                            const totalForms = document.getElementById('id_faqs-TOTAL_FORMS');
+
+                            function createFaqForm(index) {
+                                const div = document.createElement('div');
+                                div.className = 'faq-form border p-3 mb-3 rounded bg-light position-relative';
+                                div.innerHTML = `
+            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 remove-faq">
+                <i class="bi bi-trash">حذف</i>
+            </button>
+            <div class="mb-2">
+                <label class="form-label">پرسش:</label>
+                <input type="text" name="faqs-${index}-question" maxlength="300" class="form-control" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">پاسخ:</label>
+                <textarea name="faqs-${index}-answer" class="form-control" rows="3" required></textarea>
+            </div>
+            <input type="hidden" name="faqs-${index}-id" value="">
+            <input type="hidden" name="faqs-${index}-listing" value="">
+        `;
+                                div.querySelector('.remove-faq').addEventListener('click', function () {
+                                    div.remove();
+                                    reindex();
+                                });
+                                return div;
+                            }
+
+                            function reindex() {
+                                container.querySelectorAll('.faq-form').forEach((form, i) => {
+                                    form.querySelectorAll('[name]').forEach(el => {
+                                        el.name = el.name.replace(/faqs-\d+-/, `faqs-${i}-`);
+                                    });
+                                });
+                                totalForms.value = container.querySelectorAll('.faq-form').length;
+                            }
+
+                            document.getElementById('add-faq').addEventListener('click', function () {
+                                const index = container.querySelectorAll('.faq-form').length;
+                                container.appendChild(createFaqForm(index));
+                                totalForms.value = index + 1;
+                            });
+                        })();
+                    </script>
+
+
+
+                    <hr class="my-4">
+
                     <div id="income-sections" style="display: none;">
                         <h5 class="mb-3">اثبات درآمد</h5>
                         <p class="text-muted">می‌توانید چند تصویر برای اثبات درآمد خود آپلود کنید</p>
-                        
+
                         {{ income_proof_formset.management_form }}
-                        
+
                         <div id="income-proofs">
                             {% for form in income_proof_formset %}
-                                <div class="income-proof-form border p-3 mb-3 rounded bg-light">
-                                    {% for field in form %}
-                                        <div class="mb-3">
-                                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}:</label>
-                                            {{ field }}
-                                            {% if field.errors %}
-                                                <div class="text-danger">{{ field.errors }}</div>
-                                            {% endif %}
-                                        </div>
-                                    {% endfor %}
+                            <div class="income-proof-form border p-3 mb-3 rounded bg-light">
+                                {% for field in form %}
+                                <div class="mb-3">
+                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}:</label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                    <div class="text-danger">{{ field.errors }}</div>
+                                    {% endif %}
                                 </div>
+                                {% endfor %}
+                            </div>
                             {% endfor %}
                         </div>
-                        
+
                         <button type="button" class="btn btn-primary mb-3" id="add-income-proof">
                             <i class="bi bi-plus-circle"></i> افزودن اثبات درآمد
                         </button>
-                        
+
                         <hr class="my-4">
-                        
+
                         <h5 class="mb-3">نمودار درآمد (اختیاری)</h5>
                         <p class="text-muted">برای نمایش نمودار درآمد، نقاط داده را وارد کنید</p>
-                        
+
                         {{ income_data_formset.management_form }}
-                        
+
                         <div id="income-data-points">
                             {% for form in income_data_formset %}
-                                <div class="income-data-form border p-3 mb-3 rounded bg-light">
-                                    <div class="row">
-                                        {% for field in form %}
-                                            {% if field.name != 'id' and field.name != 'DELETE' %}
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}:</label>
-                                                    {{ field }}
-                                                    {% if field.errors %}
-                                                        <div class="text-danger">{{ field.errors }}</div>
-                                                    {% endif %}
-                                                </div>
-                                            {% else %}
-                                                {{ field }}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        
-                        <button type="button" class="btn btn-success mb-3" id="add-income-data">
-                            <i class="bi bi-plus-circle"></i> افزودن نقطه داده درآمد
-                        </button>
-                        
-                        <hr class="my-4">
-                    </div>
-                    
-                    <h5 class="mb-3">نمودار بازدید (اختیاری)</h5>
-                    <p class="text-muted">برای نمایش نمودار بازدید، نقاط داده را وارد کنید</p>
-                    
-                    {{ views_data_formset.management_form }}
-                    
-                    <div id="views-data-points">
-                        {% for form in views_data_formset %}
-                            <div class="views-data-form border p-3 mb-3 rounded bg-light">
+                            <div class="income-data-form border p-3 mb-3 rounded bg-light">
                                 <div class="row">
                                     {% for field in form %}
-                                        {% if field.name != 'id' and field.name != 'DELETE' %}
-                                            <div class="col-md-6 mb-3">
-                                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}:</label>
-                                                {{ field }}
-                                                {% if field.errors %}
-                                                    <div class="text-danger">{{ field.errors }}</div>
-                                                {% endif %}
-                                            </div>
-                                        {% else %}
-                                            {{ field }}
+                                    {% if field.name != 'id' and field.name != 'DELETE' %}
+                                    <div class="col-md-6 mb-3">
+                                        <label for="{{ field.id_for_label }}"
+                                            class="form-label">{{ field.label }}:</label>
+                                        {{ field }}
+                                        {% if field.errors %}
+                                        <div class="text-danger">{{ field.errors }}</div>
                                         {% endif %}
+                                    </div>
+                                    {% else %}
+                                    {{ field }}
+                                    {% endif %}
                                     {% endfor %}
                                 </div>
                             </div>
+                            {% endfor %}
+                        </div>
+
+                        <button type="button" class="btn btn-success mb-3" id="add-income-data">
+                            <i class="bi bi-plus-circle"></i> افزودن نقطه داده درآمد
+                        </button>
+
+                        <hr class="my-4">
+                    </div>
+
+                    <h5 class="mb-3">نمودار بازدید (اختیاری)</h5>
+                    <p class="text-muted">برای نمایش نمودار بازدید، نقاط داده را وارد کنید</p>
+
+                    {{ views_data_formset.management_form }}
+
+                    <div id="views-data-points">
+                        {% for form in views_data_formset %}
+                        <div class="views-data-form border p-3 mb-3 rounded bg-light">
+                            <div class="row">
+                                {% for field in form %}
+                                {% if field.name != 'id' and field.name != 'DELETE' %}
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}:</label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                    <div class="text-danger">{{ field.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                {% else %}
+                                {{ field }}
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
                         {% endfor %}
                     </div>
-                    
+
                     <button type="button" class="btn btn-info mb-3" id="add-views-data">
                         <i class="bi bi-plus-circle"></i> افزودن نقطه داده بازدید
                     </button>
-                    
+
                     <hr class="my-4">
-                    
+
                     <button type="submit" class="btn btn-success btn-lg">ثبت آگهی</button>
                     <a href="{% url 'listings:listing_list' %}" class="btn btn-secondary btn-lg">انصراف</a>
                 </form>
@@ -149,47 +213,49 @@
     </div>
 </div>
 
+
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // ==================== مدیریت نمایش/مخفی کردن فیلدهای درآمد ====================
-    const isIncomeCheckbox = document.getElementById('id_is_income');
-    const monthlyIncomeField = document.getElementById('monthly-income-field');
-    const incomeSections = document.getElementById('income-sections');
-    
-    function toggleIncomeFields() {
-        if (isIncomeCheckbox && isIncomeCheckbox.checked) {
-            monthlyIncomeField.style.display = 'block';
-            incomeSections.style.display = 'block';
-        } else {
-            monthlyIncomeField.style.display = 'none';
-            incomeSections.style.display = 'none';
-            const monthlyIncomeInput = document.getElementById('id_monthly_income');
-            if (monthlyIncomeInput) {
-                monthlyIncomeInput.value = '';
+    document.addEventListener('DOMContentLoaded', function () {
+        // ==================== مدیریت نمایش/مخفی کردن فیلدهای درآمد ====================
+        const isIncomeCheckbox = document.getElementById('id_is_income');
+        const monthlyIncomeField = document.getElementById('monthly-income-field');
+        const incomeSections = document.getElementById('income-sections');
+
+        function toggleIncomeFields() {
+            if (isIncomeCheckbox && isIncomeCheckbox.checked) {
+                monthlyIncomeField.style.display = 'block';
+                incomeSections.style.display = 'block';
+            } else {
+                monthlyIncomeField.style.display = 'none';
+                incomeSections.style.display = 'none';
+                const monthlyIncomeInput = document.getElementById('id_monthly_income');
+                if (monthlyIncomeInput) {
+                    monthlyIncomeInput.value = '';
+                }
             }
         }
-    }
-    
-    if (isIncomeCheckbox) {
-        toggleIncomeFields();
-        isIncomeCheckbox.addEventListener('change', toggleIncomeFields);
-    }
-    
-    // ==================== مدیریت اثبات درآمد ====================
-    const incomeProofContainer = document.getElementById('income-proofs');
-    const addIncomeProofBtn = document.getElementById('add-income-proof');
-    const totalIncomeProofForms = document.querySelector('input[name="income_proofs-TOTAL_FORMS"]');
-    
-    if (totalIncomeProofForms && addIncomeProofBtn) {
-        let incomeProofCount = parseInt(totalIncomeProofForms.value) || 0;
-        
-        addIncomeProofBtn.addEventListener('click', function() {
-            if (incomeProofCount >= 10) {
-                alert('حداکثر 10 اثبات درآمد می‌توانید اضافه کنید');
-                return;
-            }
-            
-            const newForm = `
+
+        if (isIncomeCheckbox) {
+            toggleIncomeFields();
+            isIncomeCheckbox.addEventListener('change', toggleIncomeFields);
+        }
+
+        // ==================== مدیریت اثبات درآمد ====================
+        const incomeProofContainer = document.getElementById('income-proofs');
+        const addIncomeProofBtn = document.getElementById('add-income-proof');
+        const totalIncomeProofForms = document.querySelector('input[name="income_proofs-TOTAL_FORMS"]');
+
+        if (totalIncomeProofForms && addIncomeProofBtn) {
+            let incomeProofCount = parseInt(totalIncomeProofForms.value) || 0;
+
+            addIncomeProofBtn.addEventListener('click', function () {
+                if (incomeProofCount >= 10) {
+                    alert('حداکثر 10 اثبات درآمد می‌توانید اضافه کنید');
+                    return;
+                }
+
+                const newForm = `
                 <div class="income-proof-form border p-3 mb-3 rounded bg-light" data-index="${incomeProofCount}">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <h6>اثبات درآمد ${incomeProofCount + 1}</h6>
@@ -214,68 +280,71 @@ document.addEventListener('DOMContentLoaded', function() {
                     <input type="hidden" name="income_proofs-${incomeProofCount}-id" id="id_income_proofs-${incomeProofCount}-id">
                 </div>
             `;
-            
-            incomeProofContainer.insertAdjacentHTML('beforeend', newForm);
-            incomeProofCount++;
-            totalIncomeProofForms.value = incomeProofCount;
-        });
-        
-        incomeProofContainer.addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-income-proof') || e.target.closest('.remove-income-proof')) {
-                const formDiv = e.target.closest('.income-proof-form');
-                formDiv.remove();
-                incomeProofCount--;
+
+                incomeProofContainer.insertAdjacentHTML('beforeend', newForm);
+                incomeProofCount++;
                 totalIncomeProofForms.value = incomeProofCount;
-                updateIncomeProofIndices();
-            }
-        });
-        
-        function updateIncomeProofIndices() {
-            const forms = incomeProofContainer.querySelectorAll('.income-proof-form');
-            forms.forEach((form, index) => {
-                form.setAttribute('data-index', index);
-                const heading = form.querySelector('h6');
-                if (heading) {
-                    heading.textContent = `اثبات درآمد ${index + 1}`;
-                }
-                
-                const inputs = form.querySelectorAll('input, textarea');
-                inputs.forEach(input => {
-                    const name = input.getAttribute('name');
-                    if (name) {
-                        const newName = name.replace(/income_proofs-\d+-/, `income_proofs-${index}-`);
-                        input.setAttribute('name', newName);
-                        input.setAttribute('id', `id_${newName}`);
-                    }
-                });
-                
-                const labels = form.querySelectorAll('label');
-                labels.forEach(label => {
-                    const forAttr = label.getAttribute('for');
-                    if (forAttr) {
-                        const newFor = forAttr.replace(/id_income_proofs-\d+-/, `id_income_proofs-${index}-`);
-                        label.setAttribute('for', newFor);
-                    }
-                });
             });
-        }
-    }
-    
-    // ==================== مدیریت نقاط داده درآمد ====================
-    const incomeDataContainer = document.getElementById('income-data-points');
-    const addIncomeDataBtn = document.getElementById('add-income-data');
-    const totalIncomeDataForms = document.querySelector('input[name="income_data_points-TOTAL_FORMS"]');
-    
-    if (totalIncomeDataForms && addIncomeDataBtn) {
-        let incomeDataCount = parseInt(totalIncomeDataForms.value) || 0;
-        
-        addIncomeDataBtn.addEventListener('click', function() {
-            if (incomeDataCount >= 50) {
-                alert('حداکثر 50 نقطه داده می‌توانید اضافه کنید');
-                return;
+
+            incomeProofContainer.addEventListener('click', function (e) {
+                if (e.target.classList.contains('remove-income-proof') || e.target.closest(
+                        '.remove-income-proof')) {
+                    const formDiv = e.target.closest('.income-proof-form');
+                    formDiv.remove();
+                    incomeProofCount--;
+                    totalIncomeProofForms.value = incomeProofCount;
+                    updateIncomeProofIndices();
+                }
+            });
+
+            function updateIncomeProofIndices() {
+                const forms = incomeProofContainer.querySelectorAll('.income-proof-form');
+                forms.forEach((form, index) => {
+                    form.setAttribute('data-index', index);
+                    const heading = form.querySelector('h6');
+                    if (heading) {
+                        heading.textContent = `اثبات درآمد ${index + 1}`;
+                    }
+
+                    const inputs = form.querySelectorAll('input, textarea');
+                    inputs.forEach(input => {
+                        const name = input.getAttribute('name');
+                        if (name) {
+                            const newName = name.replace(/income_proofs-\d+-/,
+                                `income_proofs-${index}-`);
+                            input.setAttribute('name', newName);
+                            input.setAttribute('id', `id_${newName}`);
+                        }
+                    });
+
+                    const labels = form.querySelectorAll('label');
+                    labels.forEach(label => {
+                        const forAttr = label.getAttribute('for');
+                        if (forAttr) {
+                            const newFor = forAttr.replace(/id_income_proofs-\d+-/,
+                                `id_income_proofs-${index}-`);
+                            label.setAttribute('for', newFor);
+                        }
+                    });
+                });
             }
-            
-            const newForm = `
+        }
+
+        // ==================== مدیریت نقاط داده درآمد ====================
+        const incomeDataContainer = document.getElementById('income-data-points');
+        const addIncomeDataBtn = document.getElementById('add-income-data');
+        const totalIncomeDataForms = document.querySelector('input[name="income_data_points-TOTAL_FORMS"]');
+
+        if (totalIncomeDataForms && addIncomeDataBtn) {
+            let incomeDataCount = parseInt(totalIncomeDataForms.value) || 0;
+
+            addIncomeDataBtn.addEventListener('click', function () {
+                if (incomeDataCount >= 50) {
+                    alert('حداکثر 50 نقطه داده می‌توانید اضافه کنید');
+                    return;
+                }
+
+                const newForm = `
                 <div class="income-data-form border p-3 mb-3 rounded bg-light" data-index="${incomeDataCount}">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <h6>نقطه داده ${incomeDataCount + 1}</h6>
@@ -302,68 +371,71 @@ document.addEventListener('DOMContentLoaded', function() {
                     <input type="hidden" name="income_data_points-${incomeDataCount}-id" id="id_income_data_points-${incomeDataCount}-id">
                 </div>
             `;
-            
-            incomeDataContainer.insertAdjacentHTML('beforeend', newForm);
-            incomeDataCount++;
-            totalIncomeDataForms.value = incomeDataCount;
-        });
-        
-        incomeDataContainer.addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-income-data') || e.target.closest('.remove-income-data')) {
-                const formDiv = e.target.closest('.income-data-form');
-                formDiv.remove();
-                incomeDataCount--;
+
+                incomeDataContainer.insertAdjacentHTML('beforeend', newForm);
+                incomeDataCount++;
                 totalIncomeDataForms.value = incomeDataCount;
-                updateIncomeDataIndices();
-            }
-        });
-        
-        function updateIncomeDataIndices() {
-            const forms = incomeDataContainer.querySelectorAll('.income-data-form');
-            forms.forEach((form, index) => {
-                form.setAttribute('data-index', index);
-                const heading = form.querySelector('h6');
-                if (heading) {
-                    heading.textContent = `نقطه داده ${index + 1}`;
-                }
-                
-                const inputs = form.querySelectorAll('input');
-                inputs.forEach(input => {
-                    const name = input.getAttribute('name');
-                    if (name) {
-                        const newName = name.replace(/income_data_points-\d+-/, `income_data_points-${index}-`);
-                        input.setAttribute('name', newName);
-                        input.setAttribute('id', `id_${newName}`);
-                    }
-                });
-                
-                const labels = form.querySelectorAll('label');
-                labels.forEach(label => {
-                    const forAttr = label.getAttribute('for');
-                    if (forAttr) {
-                        const newFor = forAttr.replace(/id_income_data_points-\d+-/, `id_income_data_points-${index}-`);
-                        label.setAttribute('for', newFor);
-                    }
-                });
             });
-        }
-    }
-    
-    // ==================== مدیریت نقاط داده بازدید ====================
-    const viewsDataContainer = document.getElementById('views-data-points');
-    const addViewsDataBtn = document.getElementById('add-views-data');
-    const totalViewsDataForms = document.querySelector('input[name="views_data_points-TOTAL_FORMS"]');
-    
-    if (totalViewsDataForms && addViewsDataBtn) {
-        let viewsDataCount = parseInt(totalViewsDataForms.value) || 0;
-        
-        addViewsDataBtn.addEventListener('click', function() {
-            if (viewsDataCount >= 50) {
-                alert('حداکثر 50 نقطه داده می‌توانید اضافه کنید');
-                return;
+
+            incomeDataContainer.addEventListener('click', function (e) {
+                if (e.target.classList.contains('remove-income-data') || e.target.closest(
+                        '.remove-income-data')) {
+                    const formDiv = e.target.closest('.income-data-form');
+                    formDiv.remove();
+                    incomeDataCount--;
+                    totalIncomeDataForms.value = incomeDataCount;
+                    updateIncomeDataIndices();
+                }
+            });
+
+            function updateIncomeDataIndices() {
+                const forms = incomeDataContainer.querySelectorAll('.income-data-form');
+                forms.forEach((form, index) => {
+                    form.setAttribute('data-index', index);
+                    const heading = form.querySelector('h6');
+                    if (heading) {
+                        heading.textContent = `نقطه داده ${index + 1}`;
+                    }
+
+                    const inputs = form.querySelectorAll('input');
+                    inputs.forEach(input => {
+                        const name = input.getAttribute('name');
+                        if (name) {
+                            const newName = name.replace(/income_data_points-\d+-/,
+                                `income_data_points-${index}-`);
+                            input.setAttribute('name', newName);
+                            input.setAttribute('id', `id_${newName}`);
+                        }
+                    });
+
+                    const labels = form.querySelectorAll('label');
+                    labels.forEach(label => {
+                        const forAttr = label.getAttribute('for');
+                        if (forAttr) {
+                            const newFor = forAttr.replace(/id_income_data_points-\d+-/,
+                                `id_income_data_points-${index}-`);
+                            label.setAttribute('for', newFor);
+                        }
+                    });
+                });
             }
-            
-            const newForm = `
+        }
+
+        // ==================== مدیریت نقاط داده بازدید ====================
+        const viewsDataContainer = document.getElementById('views-data-points');
+        const addViewsDataBtn = document.getElementById('add-views-data');
+        const totalViewsDataForms = document.querySelector('input[name="views_data_points-TOTAL_FORMS"]');
+
+        if (totalViewsDataForms && addViewsDataBtn) {
+            let viewsDataCount = parseInt(totalViewsDataForms.value) || 0;
+
+            addViewsDataBtn.addEventListener('click', function () {
+                if (viewsDataCount >= 50) {
+                    alert('حداکثر 50 نقطه داده می‌توانید اضافه کنید');
+                    return;
+                }
+
+                const newForm = `
                 <div class="views-data-form border p-3 mb-3 rounded bg-light" data-index="${viewsDataCount}">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <h6>نقطه داده ${viewsDataCount + 1}</h6>
@@ -390,75 +462,87 @@ document.addEventListener('DOMContentLoaded', function() {
                     <input type="hidden" name="views_data_points-${viewsDataCount}-id" id="id_views_data_points-${viewsDataCount}-id">
                 </div>
             `;
-            
-            viewsDataContainer.insertAdjacentHTML('beforeend', newForm);
-            viewsDataCount++;
-            totalViewsDataForms.value = viewsDataCount;
-        });
-        
-        viewsDataContainer.addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-views-data') || e.target.closest('.remove-views-data')) {
-                const formDiv = e.target.closest('.views-data-form');
-                formDiv.remove();
-                viewsDataCount--;
+
+                viewsDataContainer.insertAdjacentHTML('beforeend', newForm);
+                viewsDataCount++;
                 totalViewsDataForms.value = viewsDataCount;
-                updateViewsDataIndices();
-            }
-        });
-        
-        function updateViewsDataIndices() {
-            const forms = viewsDataContainer.querySelectorAll('.views-data-form');
-            forms.forEach((form, index) => {
-                form.setAttribute('data-index', index);
-                const heading = form.querySelector('h6');
-                if (heading) {
-                    heading.textContent = `نقطه داده ${index + 1}`;
-                }
-                
-                const inputs = form.querySelectorAll('input');
-                inputs.forEach(input => {
-                    const name = input.getAttribute('name');
-                    if (name) {
-                        const newName = name.replace(/views_data_points-\d+-/, `views_data_points-${index}-`);
-                        input.setAttribute('name', newName);
-                        input.setAttribute('id', `id_${newName}`);
-                    }
-                });
-                
-                const labels = form.querySelectorAll('label');
-                labels.forEach(label => {
-                    const forAttr = label.getAttribute('for');
-                    if (forAttr) {
-                        const newFor = forAttr.replace(/id_views_data_points-\d+-/, `id_views_data_points-${index}-`);
-                        label.setAttribute('for', newFor);
-                    }
-                });
             });
+
+            viewsDataContainer.addEventListener('click', function (e) {
+                if (e.target.classList.contains('remove-views-data') || e.target.closest(
+                        '.remove-views-data')) {
+                    const formDiv = e.target.closest('.views-data-form');
+                    formDiv.remove();
+                    viewsDataCount--;
+                    totalViewsDataForms.value = viewsDataCount;
+                    updateViewsDataIndices();
+                }
+            });
+
+            function updateViewsDataIndices() {
+                const forms = viewsDataContainer.querySelectorAll('.views-data-form');
+                forms.forEach((form, index) => {
+                    form.setAttribute('data-index', index);
+                    const heading = form.querySelector('h6');
+                    if (heading) {
+                        heading.textContent = `نقطه داده ${index + 1}`;
+                    }
+
+                    const inputs = form.querySelectorAll('input');
+                    inputs.forEach(input => {
+                        const name = input.getAttribute('name');
+                        if (name) {
+                            const newName = name.replace(/views_data_points-\d+-/,
+                                `views_data_points-${index}-`);
+                            input.setAttribute('name', newName);
+                            input.setAttribute('id', `id_${newName}`);
+                        }
+                    });
+
+                    const labels = form.querySelectorAll('label');
+                    labels.forEach(label => {
+                        const forAttr = label.getAttribute('for');
+                        if (forAttr) {
+                            const newFor = forAttr.replace(/id_views_data_points-\d+-/,
+                                `id_views_data_points-${index}-`);
+                            label.setAttribute('for', newFor);
+                        }
+                    });
+                });
+            }
         }
-    }
-});
+    });
 </script>
 
 <style>
-.income-proof-form, .income-data-form, .views-data-form {
-    position: relative;
-    transition: all 0.3s ease;
-}
+    .income-proof-form,
+    .income-data-form,
+    .views-data-form {
+        position: relative;
+        transition: all 0.3s ease;
+    }
 
-.income-proof-form:hover, .income-data-form:hover, .views-data-form:hover {
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
+    .income-proof-form:hover,
+    .income-data-form:hover,
+    .views-data-form:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-.remove-income-proof, .remove-income-data, .remove-views-data {
-    transition: all 0.2s ease;
-}
+    .remove-income-proof,
+    .remove-income-data,
+    .remove-views-data {
+        transition: all 0.2s ease;
+    }
 
-.remove-income-proof:hover, .remove-income-data:hover, .remove-views-data:hover {
-    transform: scale(1.1);
-}
+    .remove-income-proof:hover,
+    .remove-income-data:hover,
+    .remove-views-data:hover {
+        transform: scale(1.1);
+    }
 
-#monthly-income-field, #income-sections {
-    transition: all 0.3s ease;
-}
+    #monthly-income-field,
+    #income-sections {
+        transition: all 0.3s ease;
+    }
 </style>
 {% endblock %}
