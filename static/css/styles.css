@@ -354,24 +354,29 @@ td {
     display: flex;
 }
 
-.specifications-detail {
+.profile-img-detail {
     display: flex;
-    flex-wrap: wrap;
-    /* رفتن به سطر بعد در صورت کمبود جا */
-    gap: 12px;
-    /* فاصله نامنظم بین آیتم‌ها */
+    gap: 25px;
+    align-items: center;
+}
+
+.rounded-circle {
+        width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+.specifications-detail {
     direction: rtl;
     align-items: flex-start;
-    margin: 20px 0;
+    margin-bottom: 5px;
 }
 
 .inf-card-detail {
     /* کلید اصلی: کارت فقط به اندازه محتوای داخلش جا می‌گیرد و کش نمی‌آید */
     flex: 0 0 auto;
-    /*     background-color: #f9f9f9;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px; */
-    padding: 5px 12px;
+    display: flex;
+    gap: 5px;
 }
 
 .strong-inf-detail {
@@ -1698,6 +1703,11 @@ form textarea {
     color: var(--text-secondary);
     background: #d6d6d645;
 }
+
+.ad-views {
+    margin-top: 10px;
+}
+
 
 /* ========================================
    چت (Chat)
