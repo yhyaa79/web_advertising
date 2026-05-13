@@ -9,7 +9,9 @@ from .forms import (ListingForm, IncomeProofFormSet, VisitRequestForm,
                     IncomeDataPointFormSet, ViewsDataPointFormSet)
 import json
 from notifications.utils import notify_visit_request, notify_visit_approved, notify_visit_rejected
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 def listing_list(request):
     listings = Listing.objects.filter(status='active')
@@ -283,3 +285,27 @@ def manage_visit_request(request, pk, action):
     return redirect('listings:my_listings')
 
 
+
+
+def user_profile(request, username):
+    """نمایش پروفایل عمومی کاربر"""
+    profile_user = get_object_or_404(User, username=username)
+    
+    # آگهی‌های فعال کاربر
+    user_listings = Listing.objects.filter(
+        seller=profile_user,
+        status='active'
+    )
+    
+    # آمار کاربر
+    total_listings = user_listings.count()
+    total_views = sum(listing.views_count for listing in user_listings)
+    
+    context = {
+        'profile_user': profile_user,
+        'user_listings': user_listings,
+        'total_listings': total_listings,
+        'total_views': total_views,
+    }
+    
+    return render(request, 'listings/user_profile.html', context)

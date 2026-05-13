@@ -66,3 +66,24 @@ def jalali_date(value):
     }
 
     return f"{j_date.day} {month_names[j_date.month]} {j_date.year}"
+
+
+@register.filter
+def jalali_date_numeric(value):
+    if not value:
+        return ""
+
+    # تبدیل به تاریخ شمسی
+    j_date = jdatetime.datetime.fromgregorian(datetime=value)
+
+    # فرمت‌دهی به صورت YYYY/MM/DD (مانند: 1403/05/12)
+    return j_date.strftime("%Y/%m/%d")
+
+
+
+@register.filter
+def to_jalali(value):
+    if value:
+        jalali_date = jdatetime.datetime.fromgregorian(datetime=value)
+        return jalali_date.strftime('%Y/%m/%d %H:%M')
+    return ''
