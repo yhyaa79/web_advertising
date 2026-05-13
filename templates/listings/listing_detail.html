@@ -326,37 +326,37 @@
                     </div> <!-- این تگ بسته باید اینجا و داخل else باشد -->
                 {% endif %}
 
-                <div class="specifications-detail">
+                <div class="profile-detail">
 
-                    <div class="inf-card-detail">
+                    <div class="inf-card-profile-detail">
                         <strong class="strong-inf-detail">نام کاربری:</strong>
                         <p>{{ listing.seller.username }}</p>
                     </div>
 
                     {% if listing.seller.profile.user_type == 'individual' %}
-                    <div class="inf-card-detail">
+                    <div class="inf-card-profile-detail">
                         <strong class="strong-inf-detail">نوع کاربر:</strong>
                         <p>شخص حقیقی</p>
                     </div>
                     {% else %}
-                    <div class="inf-card-detail">
+                    <div class="inf-card-profile-detail">
                         <strong class="strong-inf-detail">نوع کاربر:</strong>
                         <p>شخص حقوقی</p>
                     </div>
                     {% endif %}
 
                     {% if listing.seller.profile.first_name and listing.seller.profile.last_name %}
-                    <div class="inf-card-detail">
+                    <div class="inf-card-profile-detail">
                         <strong class="strong-inf-detail">نام:</strong>
                         <p>{{ listing.seller.profile.first_name }} {{ listing.seller.profile.last_name }}</p>
                     </div>
                     {% elif listing.seller.profile.first_name %}
-                    <div class="inf-card-detail">
+                    <div class="inf-card-profile-detail">
                         <strong class="strong-inf-detail">نام:</strong>
                         <p>{{ listing.seller.profile.first_name }}</p>
                     </div>
                     {% elif listing.seller.profile.last_name %}
-                    <div class="inf-card-detail">
+                    <div class="inf-card-profile-detail">
                         <strong class="strong-inf-detail">نام خانوادگی:</strong>
                         <p>{{ listing.seller.profile.last_name }}</p>
                     </div>
@@ -364,7 +364,7 @@
 
 
                     {% if listing.seller.profile.company_name %}
-                    <div class="inf-card-detail">
+                    <div class="inf-card-profile-detail">
                         <strong class="strong-inf-detail">نام شرکت:</strong>
                         <p>{{ listing.seller.profile.company_name }}</p>
                     </div>
