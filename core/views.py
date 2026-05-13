@@ -8,42 +8,11 @@ class ComingSoonView(TemplateView):
     template_name = 'coming_soon.html'
 
 def home(request):
-    active_listings = Listing.objects.filter(status='active')
-    
-    # ۱۰ آگهی جدید
-    latest_listings = active_listings.order_by('-created_at')[:10]
-    
-    # ۱۰ آگهی پربازدید
-    most_viewed_listings = active_listings.order_by('-views_count')[:10]
-    
-    # ۱۰ آگهی با بیشترین دنبال‌کننده
-    most_followed_listings = active_listings.order_by('-followers_count')[:10]
-    
-    # ۱۰ قدیمی‌ترین پلتفرم‌ها (بر اساس سن پلتفرم)
-    oldest_platforms = active_listings.order_by('-platform_age')[:10]
-    
-    # ۱۰ آگهی ارتقا یافته
-    promoted_listings = active_listings.filter(is_preferment=True).order_by('-created_at')[:10]
-    
-    # ۱۰ آگهی مورد تایید
-    verified_listings = active_listings.filter(is_verified=True).order_by('-created_at')[:10]
-    
-    # ۱۰ آگهی با بیشترین درآمد ماهیانه
-    highest_income_listings = active_listings.filter(
-        monthly_income__isnull=False
-    ).order_by('-monthly_income')[:10]
-    
-    categories = Category.objects.all()
+    # گرفتن 5 آگهی آخر (در صورت نیاز فیلترهای دلخواه مثل is_active=True را اضافه کنید)
+    latest_listings = Listing.objects.order_by('-created_at')[:5]
     
     context = {
-        'latest_listings': latest_listings,
-        'most_viewed_listings': most_viewed_listings,
-        'most_followed_listings': most_followed_listings,
-        'oldest_platforms': oldest_platforms,
-        'promoted_listings': promoted_listings,
-        'verified_listings': verified_listings,
-        'highest_income_listings': highest_income_listings,
-        'categories': categories,
+        'listings': latest_listings
     }
     return render(request, 'core/home.html', context)
 

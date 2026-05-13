@@ -7,168 +7,557 @@
 
 {% block content %}
 
-<div class="text-center main-text">
-    <h1>BUYSELL</h1>
-    <h2>خرید و فروش پلتفرم‌های درآمدزا</h2>
-    <p class="lead">وبسایت، اینستاگرام، تلگرام و سایر پلتفرم‌ها را با اطمینان خرید و بفروش</p>
-    <p class="lead">بزرگترین بازار خرید و فروش کسب‌وکارهای دیجیتال. وب‌سایت، اپلیکیشن، کانال‌های تلگرامی و صفحات
-        شبکه‌های اجتماعی خود را با خیال راحت و در بستری امن معامله کنید. مسیر سرمایه‌گذاری دیجیتال شما از اینجا آغاز
-        می‌شود.</p>
+
+
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-badge">
+        <span class="badge-dot"></span>
+        #1 بازار خرید استارتاپ شماره
+    </div>
+    <h1>خرید و فروش<br><span class="gradient">استارت آپ های آنلاین</span></h1>
+    <p>بزرگترین بازار جهان برای خرید و فروش کسب و کارهای آنلاین. هزاران لیست تأیید شده، از SaaS گرفته تا تجارت
+        الکترونیک.</p>
+    <div class="hero-actions">
+        <a href="#listings" class="btn btn-primary btn-lg">استارت آپ ها را مرور کنید</a>
+        <a href="#" class="btn btn-ghost btn-lg">استارت آپ خود را بفروشید</a>
+    </div>
+    <div class="hero-stats">
+        <div class="stat">
+            <div class="stat-num" data-target="10000">0</div>
+            <div class="stat-label">استارتاپ های فهرست شده</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num" data-target="500" data-suffix="M+">0</div>
+            <div class="stat-label">در خریدها</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num" data-target="150" data-suffix="K+">0</div>
+            <div class="stat-label">خریداران ثبت نام شده</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num" data-target="98" data-suffix="%">0</div>
+            <div class="stat-label">Satisfaction Rate</div>
+        </div>
+    </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+    <p class="marquee-label">مورد اعتماد بنیانگذاران در سراسر ایران</p>
+    <div class="marquee-track" id="marquee">
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>SaaS Startups</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>E-Commerce</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>Mobile Apps</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>Marketplaces</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>Analytics Tools</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>Gaming</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>AI Products</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>Media & Content</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>B2B Tools</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>Cybersecurity</div>
+        <!-- duplicate for seamless loop -->
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>SaaS Startups</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>E-Commerce</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>Mobile Apps</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>Marketplaces</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>Analytics Tools</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>Gaming</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>AI Products</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>Media & Content</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>B2B Tools</div>
+        <div class="marquee-item"><span class="icon" style="background:#1a1a2e"></span>Cybersecurity</div>
+    </div>
 </div>
 
 
-<div class="serch-bur-ui">
-    <div class="top-port-serch">
-    </div>
-    <div class="bottom-port-serch">
-        <h2>پلتفرم خرید و فروش</h2>
 
-        <div class="row mb-4 serch-home">
-            <div class="serch-bar-home">
-                <form action="{% url 'listings:listing_list' %}" method="get" class="d-flex">
-                    <input type="text" name="search" class="form-control-home me-2" placeholder="جستجو..."
-                        value="{{ request.GET.search }}">
-                    <button type="submit" class="btn btn-success btm-serch-bar">جستجو</button>
-                </form>
+<section class="section-serch">
+    <div class="section-header reveal">
+        <p class="section-label">سرچ و دسته بندی</p>
+        <h2 class="section-title-white">استارت آپ مورد نیاز خود را پیدا کنید</h2>
+        <p class="section-sub-white">با سرچ کردن کلمات کلیدی توی تیتر اگهی ها و و با انتخاب دسته بندی اگهی های مناسبتان را پیدا کنید.</p>
+    </div>
+    <div class="steps">
+        <div class="serch-bur-ui">
+            <div class="top-port-serch">
+            </div>
+            <div class="bottom-port-serch">
+                <h2>پلتفرم خرید و فروش</h2>
+
+                <div class="row mb-4 serch-home">
+                    <div class="serch-bar-home">
+                        <form action="{% url 'listings:listing_list' %}" method="get" class="d-flex">
+                            <input type="text" name="search" class="form-control-home me-2" placeholder="جستجو..."
+                                value="{{ request.GET.search }}">
+                            <button type="submit" class="btn btn-success btm-serch-bar">جستجو</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <a href="{% url 'listings:listing_list' %}" class="btn btn-sm btn-outline-secondary">همه</a>
+                        {% for category in categories %}
+                        <a href="?category={{ category.id }}"
+                            class="btn btn-sm btn-outline-secondary">{{ category.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+</section>
 
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <a href="{% url 'listings:listing_list' %}" class="btn btn-sm btn-outline-secondary">همه</a>
-                {% for category in categories %}
-                <a href="?category={{ category.id }}" class="btn btn-sm btn-outline-secondary">{{ category.name }}</a>
-                {% endfor %}
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+    <div class="section-header reveal">
+        <p class="section-label">چگونه کار می کند</p>
+        <h2 class="section-title-white">خرید یا فروش در ۴ مرحله ساده</h2>
+        <p class="section-sub-white">فرآیند ساده ما، خریدها را سریع، ایمن و شفاف می‌کند.</p>
+    </div>
+    <div class="steps">
+        <div class="step reveal">
+            <div class="step-num">01</div>
+            <h3>یک حساب کاربری ایجاد کنید</h3>
+            <p>برای دسترسی به هزاران آگهی تأیید شده، به صورت رایگان ثبت نام کنید و پروفایل خود را تکمیل کنید.</p>
+        </div>
+        <div class="step reveal">
+            <div class="step-num">02</div>
+            <h3>مرور و فیلتر کردن</h3>
+            <p>برای یافتن هدف جذب ایده‌آل خود، بر اساس صنعت، درآمد، محدوده قیمت و موارد دیگر جستجو کنید.</p>
+        </div>
+        <div class="step reveal">
+            <div class="step-num">03</div>
+            <h3>ارتباط و مذاکره</h3>
+            <p>از طریق پلتفرم امن ما، مستقیماً به فروشندگان پیام دهید، امور مالی را بررسی کنید و در مورد شرایط مذاکره
+                کنید.</p>
+        </div>
+        <div class="step reveal">
+            <div class="step-num">04</div>
+            <h3>معامله را ببندید</h3>
+            <p>از خدمات سپرده و قالب‌های قانونی ما برای بستن ایمن و انتقال مالکیت یکپارچه استفاده کنید.</p>
+        </div>
+    </div>
+</section>
+
+<!-- LISTINGS -->
+<section id="listings">
+    <div class="section-header reveal">
+        <p class="section-label">آگهی‌های ویژه</p>
+        <h2 class="section-title-black">استارتاپ‌هایی که همین الان در دسترس هستند</h2>
+        <p class="section-sub-black">کسب و کارهای تأیید شده با صورت‌های مالی شفاف، آماده برای خرید.</p>
+    </div>
+
+    <div class="list-notice">
+        <!-- استفاده از slice برای محدود کردن به 6 عدد در قالب -->
+        {% for listing in listings|slice:":6" %}
+        <div class="mb-4">
+            <div class="card h-100 {% if listing.is_private %}border-warning{% endif %}">
+                <div class="in-card">
+
+                    <a href="{% url 'listings:listing_detail' listing.pk %}"
+                        style="text-decoration: none; color: inherit;">
+                        <div class="img-badge">
+                            <span class="badge bg-info">{{ listing.category.get_platform_display }}</span>
+                            {% if listing.main_image %}
+                            <div class="card-img">
+                                <img src="{{ listing.main_image.url }}" class="card-img-top">
+                            </div>
+                            {% endif %}
+
+                        </div>
+                    </a>
+
+                    <a href="{% url 'listings:listing_detail' listing.pk %}"
+                        style="text-decoration: none; color: inherit;">
+                        <div class="card-body">
+
+                            <h5 class="card-title">{{ listing.title }}</h5>
+
+                            <div class="all-badge">
+                                {% if listing.is_private %}
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="bi bi-lock-fill"></i> خصوصی
+                                    </span>
+                                </div>
+                                {% endif %}
+
+                                {% if listing.is_income %}
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="bi bi-lock-fill"></i> درامد اگهی
+                                    </span>
+                                </div>
+                                {% endif %}
+
+
+                                {% if listing.is_verified %}
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
+                                    </span>
+                                </div>
+                                {% endif %}
+
+                                {% if listing.is_preferment %}
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="bi bi-lock-fill"></i> ارتقا اگهی
+                                    </span>
+                                </div>
+                                {% endif %}
+
+                            </div>
+
+
+                            <p class="card-text">{{ listing.description|truncatewords:30 }}</p>
+
+                            <div class="inf-all-card">
+                                <div class="inf-card">
+                                    <strong class="strong-inf">دنبال‌کننده:</strong>
+                                    <p> {{ listing.followers_count|split_number }} نفر</p>
+                                </div>
+
+                                <div class="inf-card">
+                                    <strong class="strong-inf">تاریخ انتشار اگهی:</strong>
+                                    <p>{{ listing.created_at|time_ago }}</p>
+                                </div>
+
+                                <div class="inf-card">
+                                    <strong class="strong-inf">سن پلتفرم:</strong>
+                                    <p> {{ listing.platform_age|floatformat:0 }} سال</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="all-btn">
+
+                        <div class="price-btn">
+                            <div class="price-div">
+
+
+                                {% if listing.discount_price %}
+                                <h3 class="text-success fw-bold fs-5">{{ listing.discount_price|split_number }} تومان
+                                </h3>
+                                <h3 class="text-muted fw-bold fs-5"><s>{{ listing.price|split_number }} تومان</s></h3>
+                                {% else %}
+                                <h3 class="text-success">{{ listing.price|split_number }} تومان</h3>
+                                {% endif %}
+
+                                <div class="income-display">
+                                    <div class="monthly-income">
+                                        {% if not listing.is_private or user == listing.seller %}
+                                        {% if listing.monthly_income %}
+
+                                        <p> {{ listing.monthly_income|split_number }}</p>
+                                        <p> تومان درآمد ماهانه</p>
+
+                                        {% else %}
+                                        <p>این اگهی به درامد نرسیده است</p>
+                                        {% endif %}
+                                        {% endif %}
+                                    </div>
+
+                                    {% if listing.get_roi_display %}
+                                    <p>برگشت سرمایه در {{ listing.get_roi_display }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="between-price-btn">
+
+                            </div>
+
+                            <div class="btn-primary-div">
+
+                                <a href="{% url 'listings:listing_detail' listing.pk %}"
+                                    class="btn btn-primary w-100">مشاهده</a>
+
+                                <a href="{{ listing.platform_url }}" class="btn btn-success w-100"
+                                    target="_blank">بازدید</a>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">آگهی فعالی یافت نشد.</p>
+        {% endfor %}
+    </div>
+
+
+    <div style="text-align:center;margin-top:2.5rem">
+        <a href="#" class="btn btn-ghost-darck btn-lg">مشاهده همه آگهی‌ها →</a>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+    <div class="features-grid">
+        <div>
+            <div class="section-header reveal">
+                <p class="section-label">چرا Acquire</p>
+                <h2 class="section-title-white">هر آنچه برای بستن قراردادها نیاز دارید</h2>
+                <p class="section-sub-white">ساخته شده برای بنیانگذاران، سرمایه‌گذاران و اپراتورهایی که می‌خواهند یک تجربه خرید یکپارچه داشته باشند.</p>
+            </div>
+            <div class="feature-list">
+                <div class="feature-item active reveal">
+                    <div class="feature-icon">🔍</div>
+                    <div>
+                        <h3>اعتبارات مالی تایید شده</h3>
+                        <p>هر آگهی از فرآیند تأیید ما عبور می‌کند. درآمد، ترافیک و معیارها قبل از انتشار تأیید می‌شوند.</p>
+                    </div>
+                </div>
+                <div class="feature-item reveal">
+                    <div class="feature-icon">🔒</div>
+                    <div>
+                        <h3>سپرده امن</h3>
+                        <p>وجوه تا زمانی که هر دو طرف تکمیل انتقال را تأیید کنند، به صورت امانی نگهداری می‌شوند.</p>
+                    </div>
+                </div>
+                <div class="feature-item reveal">
+                    <div class="feature-icon">⚡</div>
+                    <div>
+                        <h3>بسته شدن سریع</h3>
+                        <p>فرآیند ساده ما به این معنی است که اکثر معاملات در کمتر از 30 روز با قالب‌های قانونی ارائه شده، نهایی می‌شوند.</p>
+                    </div>
+                </div>
+                <div class="feature-item reveal">
+                    <div class="feature-icon">🤝</div>
+                    <div>
+                        <h3>پشتیبانی اختصاصی</h3>
+                        <p>یک مشاور اختصاصی شما را در هر مرحله، از LOI تا انتقال نهایی، راهنمایی می‌کند.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="feature-visual reveal">
+            <div class="visual-chart">
+                <div class="chart-value" id="chartVal">$2.4M</div>
+                <div class="chart-change">↑ 34% vs last quarter</div>
+                <div class="chart-bars" id="chartBars">
+                    <div class="bar" style="height:40%"></div>
+                    <div class="bar" style="height:55%"></div>
+                    <div class="bar" style="height:45%"></div>
+                    <div class="bar" style="height:70%"></div>
+                    <div class="bar" style="height:60%"></div>
+                    <div class="bar" style="height:80%"></div>
+                    <div class="bar" style="height:65%"></div>
+                    <div class="bar" style="height:90%"></div>
+                    <div class="bar" style="height:75%"></div>
+                    <div class="bar" style="height:100%"></div>
+                </div>
+                <div class="chart-label">Total acquisition volume — last 10 months</div>
+                <div style="display:flex;gap:1.5rem;margin-top:1.5rem;flex-wrap:wrap">
+                    <div
+                        style="background:var(--dark2);border:1px solid var(--border);border-radius:10px;padding:.75rem 1.25rem">
+                        <div style="font-size:.75rem;color:var(--muted)">Avg. Deal Size</div>
+                        <div style="font-size:1.1rem;font-weight:800;color:var(--white)">$380K</div>
+                    </div>
+                    <div
+                        style="background:var(--dark2);border:1px solid var(--border);border-radius:10px;padding:.75rem 1.25rem">
+                        <div style="font-size:.75rem;color:var(--muted)">Deals Closed</div>
+                        <div style="font-size:1.1rem;font-weight:800;color:var(--white)">1,240+</div>
+                    </div>
+                    <div
+                        style="background:var(--dark2);border:1px solid var(--border);border-radius:10px;padding:.75rem 1.25rem">
+                        <div style="font-size:.75rem;color:var(--muted)">Avg. Time</div>
+                        <div style="font-size:1.1rem;font-weight:800;color:var(--white)">24 days</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-
-<div class="jumbotron text-center py-5 bg-light rounded">
-    <h1>خرید و فروش پلتفرم‌های درآمدزا</h1>
-    <p class="lead">وبسایت، اینستاگرام، تلگرام و سایر پلتفرم‌ها را با اطمینان خرید و بفروش</p>
-    <p class="lead">بزرگترین بازار خرید و فروش کسب‌وکارهای دیجیتال. وب‌سایت، اپلیکیشن، کانال‌های تلگرامی و صفحات
-        شبکه‌های اجتماعی خود را با خیال راحت و در بستری امن معامله کنید. مسیر سرمایه‌گذاری دیجیتال شما از اینجا آغاز
-        می‌شود.</p>
-    <a href="{% url 'listings:listing_list' %}" class="btn btn-primary btn-lg">مشاهده آگهی‌ها</a>
-    {% if user.is_authenticated %}
-    <a href="{% url 'listings:listing_create' %}" class="btn btn-success btn-lg">ثبت آگهی</a>
-    {% endif %}
-</div>
-
-
-<!-- تازه‌ترین آگهی‌های فروش -->
-<div class="dic-list-notice">
-    <h2>تازه‌ترین آگهی‌های فروش</h2>
-    <p>اینها همه وب‌سایت‌های درآمدزا، فروشگاه‌های تجارت الکترونیک و سایر کسب‌وکارهای آنلاین هستند.</p>
-</div>
-<div id="latest-list" class="list-notice-home">
-    {% include 'core/partials/listing_cards.html' with listings=latest_listings %}
-    <button class="load-more-btn" data-target="latest-list" data-type="latest" data-offset="10">نمایش بیشتر</button>
-</div>
-
-<!-- پربازدیدترین آگهی‌ها -->
-<div class="dic-list-notice">
-    <h2>پربازدیدترین آگهی‌ها</h2>
-</div>
-<div id="viewed-list" class="list-notice-home">
-    {% include 'core/partials/listing_cards.html' with listings=most_viewed_listings %}
-</div>
-<button class="load-more-btn" data-target="viewed-list" data-type="viewed" data-offset="10">نمایش بیشتر</button>
-
-<!-- بیشترین دنبال‌کننده -->
-<div class="dic-list-notice">
-    <h2>بیشترین دنبال‌کننده‌ترین پلتفرم‌ها</h2>
-</div>
-<div id="followed-list" class="list-notice-home">
-    {% include 'core/partials/listing_cards.html' with listings=most_followed_listings %}
-</div>
-<button class="load-more-btn" data-target="followed-list" data-type="followed" data-offset="10">نمایش بیشتر</button>
-
-<!-- قدیمی‌ترین پلتفرم‌ها -->
-<div class="dic-list-notice">
-    <h2>قدیمی‌ترین پلتفرم‌ها</h2>
-</div>
-<div id="oldest-list" class="list-notice-home">
-    {% include 'core/partials/listing_cards.html' with listings=oldest_platforms %}
-</div>
-<button class="load-more-btn" data-target="oldest-list" data-type="oldest" data-offset="10">نمایش بیشتر</button>
-
-<!-- آگهی‌های ارتقا یافته -->
-<div class="dic-list-notice">
-    <h2>آگهی‌های ارتقا یافته</h2>
-</div>
-<div id="promoted-list" class="list-notice-home">
-    {% include 'core/partials/listing_cards.html' with listings=promoted_listings %}
-</div>
-<button class="load-more-btn" data-target="promoted-list" data-type="promoted" data-offset="10">نمایش بیشتر</button>
-
-<!-- آگهی‌های مورد تایید -->
-<div class="dic-list-notice">
-    <h2>آگهی‌های مورد تایید</h2>
-</div>
-<div id="verified-list" class="list-notice-home">
-    {% include 'core/partials/listing_cards.html' with listings=verified_listings %}
-</div>
-<button class="load-more-btn" data-target="verified-list" data-type="verified" data-offset="10">نمایش بیشتر</button>
-
-<!-- بیشترین درآمد ماهیانه -->
-<div class="dic-list-notice">
-    <h2>بیشترین درآمد ماهیانه</h2>
-</div>
-<div id="income-list" class="list-notice-home">
-    {% include 'core/partials/listing_cards.html' with listings=highest_income_listings %}
-</div>
-<button class="load-more-btn" data-target="income-list" data-type="highest_income" data-offset="10">نمایش بیشتر</button>
-
-<!-- دسته‌بندی‌ها -->
-<h4 class="mt-5 mb-3">دسته‌بندی‌ها</h4>
-<div class="row">
-    {% for category in categories %}
-    <div class="col-md-3 mb-3">
-        <a href="{% url 'listings:listing_list' %}?category={{ category.id }}" class="btn btn-outline-secondary w-100">
-            {{ category.name }}
-        </a>
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+    <div class="section-header reveal">
+        <p class="section-label">نظرات مشتریان</p>
+        <h2 class="section-title-white">بنیانگذاران عاشق Acquire هستند</h2>
+        <p class="section-sub-white">هزاران خرید موفق و همچنان در حال افزایش است.</p>
     </div>
-    {% endfor %}
-</div>
+    <div class="testimonials-grid">
+        <div class="testimonial reveal">
+            <div class="stars">★★★★★</div>
+            <p>"نرم‌افزار به عنوان سرویس (SaaS) خود را در عرض ۱۸ روز به قیمتی بالاتر از قیمت درخواستی فروختم. فرآیند تأیید به خریداران اعتماد به نفس داد و سپرده‌گذاری همه چیز را بدون استرس کرد."</p>
+            <div class="author">
+                <div class="avatar" style="background:linear-gradient(135deg,#6c47ff,#a78bfa)">JM</div>
+                <div>
+                    <div class="author-name">James Mitchell</div>
+                    <div class="author-role">Sold SaaS · $1.2M</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial reveal">
+            <div class="stars">★★★★★</div>
+            <p>"Found the perfect e-commerce acquisition within a week. The financial data was transparent and the
+                support team walked me through every step."</p>
+            <div class="author">
+                <div class="avatar" style="background:linear-gradient(135deg,#22c55e,#16a34a)">SR</div>
+                <div>
+                    <div class="author-name">Sarah Reynolds</div>
+                    <div class="author-role">Acquired E-Commerce · $650K</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial reveal">
+            <div class="stars">★★★★★</div>
+            <p>"As a serial acquirer, Acquire.com is my go-to platform. The deal flow is incredible and the quality of
+                listings is consistently high."</p>
+            <div class="author">
+                <div class="avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706)">DK</div>
+                <div>
+                    <div class="author-name">David Kim</div>
+                    <div class="author-role">Portfolio Investor · 8 Acquisitions</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <h2>آماده خرید یا فروش<br>استارت آپ بعدی شما؟</h2>
+    <p>به بیش از 150,000 بنیانگذار و سرمایه‌گذار حاضر در این پلتفرم بپیوندید.</p>
+    <div class="cta-actions">
+        <a href="#" class="btn btn-primary btn-lg">رایگان شروع کنید</a>
+        <a href="#" class="btn btn-ghost btn-lg">با یک مشاور صحبت کنید</a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <a href="#" class="logo">acq<span>uire</span></a>
+            <p>بزرگترین بازار جهان برای خرید و فروش کسب و کارهای آنلاین و استارتاپ ها.</p>
+        </div>
+        <div class="footer-col">
+            <h4>بازار</h4>
+            <ul>
+                <li><a href="#">فهرست ها را مرور کنید</a></li>
+                <li><a href="#">فروش کسب و کار</a></li>
+                <li><a href="#">قیمت گذاری</a></li>
+                <li><a href="#">سرویس امانی</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>شرکت</h4>
+            <ul>
+                <li><a href="#">درباره ما</a></li>
+                <li><a href="#">وبلاگ</a></li>
+                <li><a href="#">مشاغل</a></li>
+                <li><a href="#">را فشار دهید</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>پشتیبانی کنید</h4>
+            <ul>
+                <li><a href="#">مرکز راهنمایی</a></li>
+                <li><a href="#">تماس با ما</a></li>
+                <li><a href="#">سیاست حفظ حریم خصوصی</a></li>
+                <li><a href="#">شرایط خدمات</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 Acquire.com · تمامی حقوق محفوظ است.</p>
+        <p style="color:var(--muted);font-size:.8rem">🔒 SSL امن · مطابق با SOC 2</p>
+    </div>
+</footer>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const loadMoreBtns = document.querySelectorAll('.load-more-btn');
+    // ── Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.style.background = window.scrollY > 50 ?
+            'rgba(15,15,26,.98)' :
+            'rgba(15,15,26,.85)';
+    });
 
-        loadMoreBtns.forEach(btn => {
-            btn.addEventListener('click', function () {
-                const button = this;
-                const targetId = button.getAttribute('data-target');
-                const listType = button.getAttribute('data-type');
-                let offset = parseInt(button.getAttribute('data-offset'));
+    // ── Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((e, i) => {
+            if (e.isIntersecting) {
+                setTimeout(() => e.target.classList.add('visible'), i * 80);
+                observer.unobserve(e.target);
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+    reveals.forEach(el => observer.observe(el));
 
-                button.innerText = 'در حال بارگذاری...';
-                button.disabled = true;
+    // ── Counter animation
+    function animateCounter(el) {
+        const target = +el.dataset.target;
+        const suffix = el.dataset.suffix || '+';
+        const duration = 1800;
+        const step = target / (duration / 16);
+        let current = 0;
+        const timer = setInterval(() => {
+            current = Math.min(current + step, target);
+            el.textContent = Math.floor(current).toLocaleString() + suffix;
+            if (current >= target) clearInterval(timer);
+        }, 16);
+    }
 
-                fetch(`/load-more/?type=${listType}&offset=${offset}`)
-                    .then(response => response.text())
-                    .then(html => {
-                        if (html.trim() === '') {
-                            button.innerText = 'آگهی دیگری نیست';
-                        } else {
-                            document.getElementById(targetId).insertAdjacentHTML(
-                                'beforeend', html);
-                            button.setAttribute('data-offset', offset + 10);
-                            button.innerText = 'نمایش بیشتر';
-                            button.disabled = false;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        button.innerText = 'خطا در بارگذاری';
-                        button.disabled = false;
-                    });
-            });
+    const counters = document.querySelectorAll('[data-target]');
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                animateCounter(e.target);
+                counterObserver.unobserve(e.target);
+            }
+        });
+    }, {
+        threshold: 0.5
+    });
+    counters.forEach(el => counterObserver.observe(el));
+
+    // ── Feature item toggle
+    document.querySelectorAll('.feature-item').forEach(item => {
+        item.addEventListener('click', () => {
+            document.querySelectorAll('.feature-item').forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
         });
     });
+
+    // ── Chart bar animation on scroll
+    const chartBars = document.getElementById('chartBars');
+    if (chartBars) {
+        const bars = chartBars.querySelectorAll('.bar');
+        const heights = ['40%', '55%', '45%', '70%', '60%', '80%', '65%', '90%', '75%', '100%'];
+        bars.forEach(b => b.style.height = '0%');
+        const chartObs = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                bars.forEach((b, i) => {
+                    setTimeout(() => {
+                        b.style.height = heights[i];
+                    }, i * 80);
+                });
+                chartObs.unobserve(chartBars);
+            }
+        }, {
+            threshold: 0.3
+        });
+        chartObs.observe(chartBars);
+    }
 </script>
+
 
 {% endblock %}
