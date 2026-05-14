@@ -11,18 +11,26 @@ def ticket_list(request):
     tickets = Ticket.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'tickets/ticket_list.html', {'tickets': tickets})
 
+
 @login_required
 def ticket_create(request):
+
+    initial_data = {
+        'subject': request.GET.get('subject', ''),
+        'category': request.GET.get('category', ''),
+    }
+
     if request.method == 'POST':
         form = TicketForm(request.POST, request.FILES)
+
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.user = request.user
             ticket.save()
-            
-            # ذخیره پیام اول
+
             message_text = form.cleaned_data['message']
             attachment = form.cleaned_data.get('attachment')
+
             TicketMessage.objects.create(
                 ticket=ticket,
                 sender=request.user,
@@ -30,13 +38,15 @@ def ticket_create(request):
                 attachment=attachment,
                 is_admin_reply=False
             )
-            
+
             messages.success(request, 'تیکت شما با موفقیت ثبت شد.')
             return redirect('tickets:ticket_detail', pk=ticket.pk)
+
     else:
-        form = TicketForm()
-    
+        form = TicketForm(initial=initial_data)
+
     return render(request, 'tickets/ticket_create.html', {'form': form})
+
 
 @login_required
 def ticket_detail(request, pk):

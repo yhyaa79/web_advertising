@@ -24,7 +24,10 @@ class Category(models.Model):
         return self.name
 
 
+# tickets/models.py
+
 class Ticket(models.Model):
+
     STATUS_CHOICES = [
         ('open', 'باز'),
         ('answered', 'پاسخ داده شده'),
@@ -36,6 +39,38 @@ class Ticket(models.Model):
         ('medium', 'متوسط'),
         ('high', 'بالا'),
     ]
+    
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='tickets',
+        verbose_name='کاربر'
+    )
+
+    subject = models.CharField(max_length=200, verbose_name='موضوع')
+
+    # این قسمت اصلاح شد
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.PROTECT,
+        related_name='tickets',
+        verbose_name='دسته‌بندی'
+    )
+
+    priority = models.CharField(
+        max_length=10,
+        choices=PRIORITY_CHOICES,
+        default='medium',
+        verbose_name='اولویت'
+    )
+
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='open',
+        verbose_name='وضعیت'
+    )
+
     
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tickets', verbose_name='کاربر')
     subject = models.CharField(max_length=200, verbose_name='موضوع')

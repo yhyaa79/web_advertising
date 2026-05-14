@@ -578,6 +578,8 @@
         </div>
 
 
+        <!-- نمونه کامل -->
+
         <div class="card mt-3">
             <div class="card-body pad-10">
                 <h5>گزارش تخلف</h5>
@@ -590,11 +592,16 @@
                 </p>
 
                 <p>
-                    در این صورت، آن را <a href="{% url 'tickets:ticket_create' %}" class="text-link"
-                        target="_blank">اینجا</a> گزارش دهید.
+                    در این صورت، آن را
+                    <a href="{% url 'tickets:ticket_create' %}?category={{ 1 }}&subject={{ 'تخلف%20اگهی' }}" class="text-link"
+                        target="_blank">        <!-- href="{% url 'tickets:ticket_create' %}?category={{ category.id }}&subject={{ subject }}" -->
+                        اینجا
+                    </a>
+                    گزارش دهید.
                 </p>
             </div>
         </div>
+
 
 
         <div class="card mt-3">
