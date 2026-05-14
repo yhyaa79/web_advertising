@@ -24,17 +24,19 @@
 
 
             <li><a href="{% url 'listings:listing_list' %}" class="navbar-a">اگهی ها</a></li>
+            <li><a href="{% url 'listings:my_listings' %}" class="navbar-a" >آگهی‌های من</a></li>
             <li><a href="{% url 'payments:my_transactions' %}" class="navbar-a">تراکنش‌ها</a></li>
             <li><a href="{% url 'tickets:ticket_list' %}" class="navbar-a">پشتیبانی</a></li>
+            <li><a href="{% url 'accounts:profile' %}" class="navbar-a">پروفایل</a></li>
 
 
         </ul>
 
         <div class="nav-cta">
             {% if user.is_authenticated %}
-            <a href="{% url 'accounts:profile' %}" class="btn-home btn-ghost-nav">پروفایل</a>
+            <!-- <a href="{% url 'accounts:profile' %}" class="btn-home btn-ghost-nav">پروفایل</a> -->
             <a href="{% url 'listings:my_listings' %}" style="color: white !important;"
-                class="btn-home btn-primary-home">اگهی های من</a>
+                class="btn-home btn-primary-home">ثبت اگهی</a>
             {% else %}
             <a href="{% url 'accounts:login' %}" class="btn-home btn-ghost-nav">ورود</a>
             <a href="{% url 'accounts:register' %}" style="color: white !important;"
