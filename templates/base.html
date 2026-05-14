@@ -23,24 +23,26 @@
 
 
 
-            <li><a href="{% url 'listings:listing_list' %}">اگهی ها</a></li>
-            <li><a href="{% url 'payments:my_transactions' %}">تراکنش‌ها</a></li>
-            <li><a href="{% url 'tickets:ticket_list' %}">پشتیبانی</a></li>
+            <li><a href="{% url 'listings:listing_list' %}" class="navbar-a">اگهی ها</a></li>
+            <li><a href="{% url 'payments:my_transactions' %}" class="navbar-a">تراکنش‌ها</a></li>
+            <li><a href="{% url 'tickets:ticket_list' %}" class="navbar-a">پشتیبانی</a></li>
 
 
         </ul>
 
         <div class="nav-cta">
             {% if user.is_authenticated %}
-            <a href="{% url 'accounts:profile' %}" style="color: white !important;" class="btn-home btn-ghost">پروفایل</a>
-            <a href="{% url 'listings:my_listings' %}" class="btn-home btn-primary-home">اگهی های من</a>
+            <a href="{% url 'accounts:profile' %}" class="btn-home btn-ghost-nav">پروفایل</a>
+            <a href="{% url 'listings:my_listings' %}" style="color: white !important;"
+                class="btn-home btn-primary-home">اگهی های من</a>
             {% else %}
-            <a href="{% url 'accounts:login' %}" style="color: white !important;" class="btn-home btn-ghost">ورود</a>
-            <a href="{% url 'accounts:register' %}" class="btn-home btn-primary-home">ثبت‌نام</a>
+            <a href="{% url 'accounts:login' %}" class="btn-home btn-ghost-nav">ورود</a>
+            <a href="{% url 'accounts:register' %}" style="color: white !important;"
+                class="btn-home btn-primary-home">ثبت‌نام</a>
             {% endif %}
 
             <a></a>
-            
+
             <a class="nav-link notification-link" href="{% url 'notifications:notification_list' %}">
                 <span class="notification-badge">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -53,14 +55,27 @@
                     {% endif %}
                 </span>
             </a>
-            <a class="nav-link" href="{% url 'accounts:logout' %}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="1"></circle>
-                    <circle cx="12" cy="5" r="1"></circle>
-                    <circle cx="12" cy="19" r="1"></circle>
-                </svg>
-            </a>
+            <!-- دراپ‌داون منو -->
+            <div class="dropdown-container">
+                <a href="#" class="nav-link dropdown-toggle" id="moreMenuBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="12" cy="5" r="1"></circle>
+                        <circle cx="12" cy="19" r="1"></circle>
+                    </svg>
+                </a>
+
+                <!-- محتویات منویی که باز می‌شود -->
+                <div class="dropdown-navbar" id="moreDropdown">
+                    <a href="#">تنظیمات</a>
+                    <a href="#">سوالات متداول</a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'accounts:logout' %}" style="color: red;">خروج از حساب</a>
+                    {% endif %}
+                </div>
+            </div>
+
         </div>
     </nav>
 
@@ -119,6 +134,27 @@
         </div>
     </footer>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dropBtn = document.getElementById('moreMenuBtn');
+    const dropdown = document.getElementById('moreDropdown');
+
+    // باز و بسته کردن منو با کلیک روی دکمه
+    dropBtn.addEventListener('click', function(event) {
+        event.preventDefault(); // جلوگیری از پرش صفحه به بالا
+        dropdown.classList.toggle('show');
+    });
+
+    // بستن منو در صورت کلیک در هر جای دیگر از صفحه
+    window.addEventListener('click', function(event) {
+        if (!event.target.closest('.dropdown-container')) {
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+            }
+        }
+    });
+});
+</script>
 
 </body>
 
