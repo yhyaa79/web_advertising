@@ -8,11 +8,15 @@ class ComingSoonView(TemplateView):
     template_name = 'coming_soon.html'
 
 def home(request):
-    # گرفتن 5 آگهی آخر (در صورت نیاز فیلترهای دلخواه مثل is_active=True را اضافه کنید)
+    # گرفتن ۵ آگهی آخر
     latest_listings = Listing.objects.order_by('-created_at')[:5]
     
+    # گرفتن تمام دسته‌بندی‌ها
+    categories = Category.objects.all()
+    
     context = {
-        'listings': latest_listings
+        'listings': latest_listings,
+        'categories': categories,  # ارسال دسته‌بندی‌ها به قالب
     }
     return render(request, 'core/home.html', context)
 
