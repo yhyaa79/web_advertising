@@ -135,7 +135,8 @@ td {
 
 /* استایل پایه نوار ناوبری */
 #navbar {
-    position: fixed; /* یا sticky */
+    position: fixed;
+    /* یا sticky */
     top: 0;
     width: 100%;
     z-index: 1000;
@@ -145,24 +146,27 @@ td {
 
 /* حالت بالای صفحه (رنگ تیره) */
 .navbar-top {
-    background-color: #1a1a1a; /* رنگ تیره دلخواه شما */
+    background-color: #1a1a1a;
+    /* رنگ تیره دلخواه شما */
     box-shadow: none;
 }
 
 /* حالت اسکرول شده (رنگ روشن) */
 .navbar-scrolled {
-    background-color: #ffffff; /* رنگ روشن دلخواه شما */
+    background-color: #ffffff;
+    /* رنگ روشن دلخواه شما */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* تغییر رنگ لینک‌ها در حالت روشن (اختیاری) */
 .navbar-scrolled .nav-link,
 .navbar-scrolled .logo {
-    color: #333 !important; 
+    color: #333 !important;
 }
 
 .navbar-scrolled a {
-    color: #000 !important; /* رنگ متن تیره برای پس‌زمینه روشن */
+    color: #000 !important;
+    /* رنگ متن تیره برای پس‌زمینه روشن */
 }
 
 
@@ -189,6 +193,8 @@ td {
     color: var(--white-bg);
     font-size: var(--font-size-xs);
     font-weight: bold;
+    display: flex;
+    justify-content: center;
 }
 
 /* ========================================
@@ -205,7 +211,7 @@ td {
 .container {
     max-width: 1250px;
     margin: 0 auto;
-/*     margin-top: 100px;
+    /*     margin-top: 100px;
     padding: 0 20px; */
 }
 
@@ -248,11 +254,12 @@ td {
     position: fixed;
     top: 20px;
     left: 50%;
-    transform: translateX(-50%) translateY(-150%); /* قرارگیری اولیه بیرون از کادر بالایی */
+    transform: translateX(-50%) translateY(-150%);
+    /* قرارگیری اولیه بیرون از کادر بالایی */
     z-index: 9999;
     min-width: 300px;
     text-align: center;
-    
+
     /* اجرای انیمیشن: مجموع زمان ۶ ثانیه (۱ ثانیه ورود و خروج + ۵ ثانیه توقف) */
     animation: slideDownUp 6s ease-in-out forwards;
 }
@@ -262,21 +269,25 @@ td {
         transform: translateX(-50%) translateY(-150%);
         opacity: 0;
     }
+
     10% {
         /* بعد از 0.6 ثانیه به پایین می‌آید */
         transform: translateX(-50%) translateY(0);
         opacity: 1;
     }
+
     85% {
         /* تا ثانیه 5.1 ثابت می‌ماند */
         transform: translateX(-50%) translateY(0);
         opacity: 1;
     }
+
     100% {
         /* در نهایت به بالا برمی‌گردد و حذف می‌شود */
         transform: translateX(-50%) translateY(-150%);
         opacity: 0;
-        visibility: hidden; /* جلوگیری از کلیک خوردن بعد از مخفی شدن */
+        visibility: hidden;
+        /* جلوگیری از کلیک خوردن بعد از مخفی شدن */
     }
 }
 

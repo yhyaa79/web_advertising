@@ -32,10 +32,10 @@
 
         <div class="nav-cta">
             {% if user.is_authenticated %}
-            <a href="{% url 'accounts:profile' %}" class="btn-home btn-ghost">پروفایل</a>
+            <a href="{% url 'accounts:profile' %}" style="color: white !important;" class="btn-home btn-ghost">پروفایل</a>
             <a href="{% url 'listings:my_listings' %}" class="btn-home btn-primary-home">اگهی های من</a>
             {% else %}
-            <a href="{% url 'accounts:login' %}" class="btn-home btn-ghost">ورود</a>
+            <a href="{% url 'accounts:login' %}" style="color: white !important;" class="btn-home btn-ghost">ورود</a>
             <a href="{% url 'accounts:register' %}" class="btn-home btn-primary-home">ثبت‌نام</a>
             {% endif %}
 
