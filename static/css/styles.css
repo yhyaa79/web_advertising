@@ -133,22 +133,42 @@ td {
    ======================================== */
 
 
-.nav-link {
-    color: rgba(255, 255, 255, 0.9) !important;
-    text-decoration: none;
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--border-radius-md);
-    transition: var(--transition-base);
-    font-size: var(--font-size-base);
+/* استایل پایه نوار ناوبری */
+#navbar {
+    position: fixed; /* یا sticky */
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    /* سایر استایل‌های چینش (مثل display: flex) */
 }
 
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--white-bg) !important;
+/* حالت بالای صفحه (رنگ تیره) */
+.navbar-top {
+    background-color: #1a1a1a; /* رنگ تیره دلخواه شما */
+    box-shadow: none;
 }
 
-.nav-link.notification-link {
-    position: relative;
+/* حالت اسکرول شده (رنگ روشن) */
+.navbar-scrolled {
+    background-color: #ffffff; /* رنگ روشن دلخواه شما */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* تغییر رنگ لینک‌ها در حالت روشن (اختیاری) */
+.navbar-scrolled .nav-link,
+.navbar-scrolled .logo {
+    color: #333 !important; 
+}
+
+.navbar-scrolled a {
+    color: #000 !important; /* رنگ متن تیره برای پس‌زمینه روشن */
+}
+
+
+
+.navbar-scrolled .nav-link:hover {
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 /* ========================================
@@ -185,6 +205,8 @@ td {
 .container {
     max-width: 1250px;
     margin: 0 auto;
+/*     margin-top: 100px;
+    padding: 0 20px; */
 }
 
 /* ========================================
@@ -221,21 +243,43 @@ td {
     margin: 10px 0;
 }
 
-.alert-dismissible .btn-close {
-    position: absolute;
-    left: var(--spacing-md);
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    font-size: var(--font-size-xl);
-    cursor: pointer;
-    opacity: 0.5;
+/* ثابت کردن موقعیت هشدار در بالای صفحه */
+.alert-dismissible {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-150%); /* قرارگیری اولیه بیرون از کادر بالایی */
+    z-index: 9999;
+    min-width: 300px;
+    text-align: center;
+    
+    /* اجرای انیمیشن: مجموع زمان ۶ ثانیه (۱ ثانیه ورود و خروج + ۵ ثانیه توقف) */
+    animation: slideDownUp 6s ease-in-out forwards;
 }
 
-.alert-dismissible .btn-close:hover {
-    opacity: 1;
+@keyframes slideDownUp {
+    0% {
+        transform: translateX(-50%) translateY(-150%);
+        opacity: 0;
+    }
+    10% {
+        /* بعد از 0.6 ثانیه به پایین می‌آید */
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+    85% {
+        /* تا ثانیه 5.1 ثابت می‌ماند */
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+    100% {
+        /* در نهایت به بالا برمی‌گردد و حذف می‌شود */
+        transform: translateX(-50%) translateY(-150%);
+        opacity: 0;
+        visibility: hidden; /* جلوگیری از کلیک خوردن بعد از مخفی شدن */
+    }
 }
+
 
 /* ========================================
    کارت‌ها (Cards)
@@ -2111,7 +2155,7 @@ nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 5%;
+    padding: 0 5% 0 20px;
     height: 68px;
     background-color: #22203b;
     backdrop-filter: blur(14px);
@@ -2172,7 +2216,7 @@ nav .nav-cta .btn-ghost {
     align-items: center;
 }
 
-.btn {
+.btn-home {
     padding: .55rem 1.25rem;
     border-radius: 8px;
     font-size: .9rem;
@@ -2202,12 +2246,12 @@ nav .nav-cta .btn-ghost {
 
 
 
-.btn-primary {
+.btn-primary-home {
     background: var(--primary);
     color: #fff;
 }
 
-.btn-primary:hover {
+.btn-primary-home:hover {
     background: var(--primary-dark);
     transform: translateY(-1px);
 }
@@ -2788,10 +2832,18 @@ section {
 }
 
 /* ── TESTIMONIALS ── */
+
+.testimonial {
+    height: 260px;
+    min-width: 420px;
+    margin: 0 20px;
+}
+
+
 .testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
+    overflow: auto;
+    display: flex;
+    min-height: 300px;
 }
 
 .testimonial {

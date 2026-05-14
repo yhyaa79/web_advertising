@@ -5,6 +5,9 @@
 
 {% block title %}صفحه اصلی{% endblock %}
 
+{% block nav_class %}navbar-top{% endblock %}
+
+
 {% block content %}
 
 
@@ -22,7 +25,7 @@
     <p>بزرگترین بازار جهان برای خرید و فروش کسب و کارهای آنلاین. هزاران لیست تأیید شده، از SaaS گرفته تا تجارت
         الکترونیک.</p>
     <div class="hero-actions">
-        <a href="#listings" class="btn btn-primary btn-lg">استارت آپ ها را مرور کنید</a>
+        <a href="#listings" class="btn btn-primary-home btn-lg">استارت آپ ها را مرور کنید</a>
         <a href="#" class="btn btn-ghost btn-lg">استارت آپ خود را بفروشید</a>
     </div>
     <div class="hero-stats">
@@ -84,7 +87,15 @@
                         <form action="{% url 'listings:listing_list' %}" method="get" class="d-flex">
                             <input type="text" name="search" class="form-control-home me-2" placeholder="جستجو..."
                                 value="{{ request.GET.search }}">
-                            <button type="submit" class="btn btn-success btm-serch-bar">جستجو</button>
+                            <button type="submit" class="btn btn-success btm-serch-bar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -307,7 +318,15 @@
         <div>
             <div class="feature-list">
                 <div class="feature-item active reveal">
-                    <div class="feature-icon">🔍</div>
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
+                            <path d="M12 18V6"></path>
+                        </svg>
+
+                    </div>
                     <div>
                         <h3>اعتبارات مالی تایید شده</h3>
                         <p>هر آگهی از فرآیند تأیید ما عبور می‌کند. درآمد، ترافیک و معیارها قبل از انتشار تأیید می‌شوند.
@@ -315,14 +334,31 @@
                     </div>
                 </div>
                 <div class="feature-item reveal">
-                    <div class="feature-icon">🔒</div>
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            <rect x="9" y="11" width="6" height="5" rx="1"></rect>
+                            <path d="M10 11V9a2 2 0 0 1 4 0v2"></path>
+                        </svg>
+
+                    </div>
                     <div>
                         <h3>سپرده امن</h3>
                         <p>وجوه تا زمانی که هر دو طرف تکمیل انتقال را تأیید کنند، به صورت امانی نگهداری می‌شوند.</p>
                     </div>
                 </div>
                 <div class="feature-item reveal">
-                    <div class="feature-icon">⚡</div>
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="13" r="9"></circle>
+                            <path d="M12 2v2"></path>
+                            <path d="M13 8l-3 5h4l-2 5"></path> <!-- نماد رعد و برق -->
+                            <line x1="10" y1="2" x2="14" y2="2"></line>
+                        </svg>
+
+                    </div>
                     <div>
                         <h3>بسته شدن سریع</h3>
                         <p>فرآیند ساده ما به این معنی است که اکثر معاملات در کمتر از 30 روز با قالب‌های قانونی ارائه
@@ -330,7 +366,16 @@
                     </div>
                 </div>
                 <div class="feature-item reveal">
-                    <div class="feature-icon">🤝</div>
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                            <path
+                                d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
+                            </path>
+                        </svg>
+
+                    </div>
                     <div>
                         <h3>پشتیبانی اختصاصی</h3>
                         <p>یک مشاور اختصاصی شما را در هر مرحله، از LOI تا انتقال نهایی، راهنمایی می‌کند.</p>
@@ -399,6 +444,66 @@
         </div>
         <div class="testimonial reveal">
             <div class="stars">★★★★★</div>
+            <p>"نرم‌افزار به عنوان سرویس (SaaS) خود را در عرض ۱۸ روز به قیمتی بالاتر از قیمت درخواستی فروختم. فرآیند
+                تأیید به خریداران اعتماد به نفس داد و سپرده‌گذاری همه چیز را بدون استرس کرد."</p>
+            <div class="author">
+                <div class="avatar" style="background:linear-gradient(135deg,#6c47ff,#a78bfa)">JM</div>
+                <div>
+                    <div class="author-name">James Mitchell</div>
+                    <div class="author-role">Sold SaaS · $1.2M</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial reveal">
+            <div class="stars">★★★★★</div>
+            <p>"نرم‌افزار به عنوان سرویس (SaaS) خود را در عرض ۱۸ روز به قیمتی بالاتر از قیمت درخواستی فروختم. فرآیند
+                تأیید به خریداران اعتماد به نفس داد و سپرده‌گذاری همه چیز را بدون استرس کرد."</p>
+            <div class="author">
+                <div class="avatar" style="background:linear-gradient(135deg,#6c47ff,#a78bfa)">JM</div>
+                <div>
+                    <div class="author-name">James Mitchell</div>
+                    <div class="author-role">Sold SaaS · $1.2M</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial reveal">
+            <div class="stars">★★★★★</div>
+            <p>"نرم‌افزار به عنوان سرویس (SaaS) خود را در عرض ۱۸ روز به قیمتی بالاتر از قیمت درخواستی فروختم. فرآیند
+                تأیید به خریداران اعتماد به نفس داد و سپرده‌گذاری همه چیز را بدون استرس کرد."</p>
+            <div class="author">
+                <div class="avatar" style="background:linear-gradient(135deg,#6c47ff,#a78bfa)">JM</div>
+                <div>
+                    <div class="author-name">James Mitchell</div>
+                    <div class="author-role">Sold SaaS · $1.2M</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial reveal">
+            <div class="stars">★★★★★</div>
+            <p>"نرم‌افزار به عنوان سرویس (SaaS) خود را در عرض ۱۸ روز به قیمتی بالاتر از قیمت درخواستی فروختم. فرآیند
+                تأیید به خریداران اعتماد به نفس داد و سپرده‌گذاری همه چیز را بدون استرس کرد."</p>
+            <div class="author">
+                <div class="avatar" style="background:linear-gradient(135deg,#6c47ff,#a78bfa)">JM</div>
+                <div>
+                    <div class="author-name">James Mitchell</div>
+                    <div class="author-role">Sold SaaS · $1.2M</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial reveal">
+            <div class="stars">★★★★★</div>
+            <p>"نرم‌افزار به عنوان سرویس (SaaS) خود را در عرض ۱۸ روز به قیمتی بالاتر از قیمت درخواستی فروختم. فرآیند
+                تأیید به خریداران اعتماد به نفس داد و سپرده‌گذاری همه چیز را بدون استرس کرد."</p>
+            <div class="author">
+                <div class="avatar" style="background:linear-gradient(135deg,#6c47ff,#a78bfa)">JM</div>
+                <div>
+                    <div class="author-name">James Mitchell</div>
+                    <div class="author-role">Sold SaaS · $1.2M</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial reveal">
+            <div class="stars">★★★★★</div>
             <p>"Found the perfect e-commerce acquisition within a week. The financial data was transparent and the
                 support team walked me through every step."</p>
             <div class="author">
@@ -429,54 +534,45 @@
     <h2>آماده خرید یا فروش<br>استارت آپ بعدی شما؟</h2>
     <p>به بیش از 150,000 بنیانگذار و سرمایه‌گذار حاضر در این پلتفرم بپیوندید.</p>
     <div class="cta-actions">
-        <a href="#" class="btn btn-primary btn-lg">رایگان شروع کنید</a>
+        <a href="#" class="btn btn-primary-home btn-lg">رایگان شروع کنید</a>
         <a href="#" class="btn btn-ghost btn-lg">با یک مشاور صحبت کنید</a>
     </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-    <div class="footer-grid">
-        <div class="footer-brand">
-            <a href="#" class="logo">acq<span>uire</span></a>
-            <p>بزرگترین بازار جهان برای خرید و فروش کسب و کارهای آنلاین و استارتاپ ها.</p>
-        </div>
-        <div class="footer-col">
-            <h4>بازار</h4>
-            <ul>
-                <li><a href="#">فهرست ها را مرور کنید</a></li>
-                <li><a href="#">فروش کسب و کار</a></li>
-                <li><a href="#">قیمت گذاری</a></li>
-                <li><a href="#">سرویس امانی</a></li>
-            </ul>
-        </div>
-        <div class="footer-col">
-            <h4>شرکت</h4>
-            <ul>
-                <li><a href="#">درباره ما</a></li>
-                <li><a href="#">وبلاگ</a></li>
-                <li><a href="#">مشاغل</a></li>
-                <li><a href="#">را فشار دهید</a></li>
-            </ul>
-        </div>
-        <div class="footer-col">
-            <h4>پشتیبانی کنید</h4>
-            <ul>
-                <li><a href="#">مرکز راهنمایی</a></li>
-                <li><a href="#">تماس با ما</a></li>
-                <li><a href="#">سیاست حفظ حریم خصوصی</a></li>
-                <li><a href="#">شرایط خدمات</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>© 2026 Acquire.com · تمامی حقوق محفوظ است.</p>
-        <p style="color:var(--muted);font-size:.8rem">🔒 SSL امن · مطابق با SOC 2</p>
-    </div>
-</footer>
+
+<!-- کد های تغییر رنگ نوار -->
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const navbar = document.getElementById('navbar');
+
+        // یک تابع می‌سازیم که وضعیت نوار را بر اساس موقعیت اسکرول تنظیم کند
+        function updateNavbar() {
+            if (window.scrollY > 50) {
+                // حالت اسکرول شده: نوار باید روشن باشد
+                navbar.classList.add('navbar-scrolled');
+                navbar.classList.remove('navbar-top');
+            } else {
+                // حالت بالای صفحه: نوار باید تیره باشد
+                navbar.classList.add('navbar-top');
+                navbar.classList.remove('navbar-scrolled');
+            }
+        }
+
+        // ۱. بلافاصله بعد از لود شدن یا رفرش صفحه وضعیت را چک کن
+        updateNavbar();
+
+        // ۲. هنگام اسکرول کردن هم وضعیت را آپدیت کن
+        window.addEventListener('scroll', updateNavbar);
+    });
+</script>
+{% endblock %}
+
 
 <script>
     // ── Navbar scroll effect
+
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
@@ -487,6 +583,7 @@
             navbar.classList.remove('navbar-scrolled');
         }
     });
+
 
 
     // ── Scroll reveal
