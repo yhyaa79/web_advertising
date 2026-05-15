@@ -35,60 +35,103 @@
 
     <!-- بخش فیلترها -->
     <div class="filter-section mb-4">
-        <button class="btn btn-primary w-100 filter-toggle shadow-sm" type="button" id="customFilterToggle">
+        <button class="faq-question w-100 filter-toggle shadow-sm" type="button" id="customFilterToggle">
             <i class="bi bi-funnel"></i>
             {% if has_active_filters %}
             فیلترها (فیلتر انتخاب شده)
             {% else %}
-            فیلترها
+            <p>فیلترها</p>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+            </svg>
+
+
             {% endif %}
             <i class="bi bi-chevron-down ms-2 toggle-icon"></i>
         </button>
 
         <!-- کلاس collapse باعث می‌شود به صورت پیش‌فرض بسته باشد -->
         <div class="custom-collapse" id="filterCollapse">
-            <div class="card card-body mt-2 compact-filter-card">
+            <div class="mt-2 compact-filter-card">
                 <form method="get" id="filterForm">
                     {% if request.GET.search %}<input type="hidden" name="search"
                         value="{{ request.GET.search }}">{% endif %}
                     {% if request.GET.category %}<input type="hidden" name="category"
                         value="{{ request.GET.category }}">{% endif %}
 
-                    <div class="filter-grid">
+                    <div class="filter-label">
                         <!-- مرتب‌سازی -->
-                        <div class="filter-group">
+                        <div class="filter-group" style="width: 380px;">
                             <label class="form-label fw-bold">مرتب‌سازی:</label>
                             <select name="sort_by" class="form-select form-select-sm">
                                 <option value="">انتخاب کنید</option>
                                 <option value="newest" {% if request.GET.sort_by == 'newest' %}selected{% endif %}>
                                     جدیدترین آگهی</option>
                                 <!-- سایر آپشن‌ها... -->
+                                <option value="fastest_roi" <option value="">انتخاب کنید</option>
+                                <option value="newest" {% if request.GET.sort_by == 'newest' %}selected{% endif %}>
+                                    جدیدترین آگهی</option>
+                                <option value="oldest" {% if request.GET.sort_by == 'oldest' %}selected{% endif %}>
+                                    قدیمی‌ترین آگهی</option>
+                                <option value="newest_platform"
+                                    {% if request.GET.sort_by == 'newest_platform' %}selected{% endif %}>جدیدترین پلتفرم
+                                </option>
+                                <option value="oldest_platform"
+                                    {% if request.GET.sort_by == 'oldest_platform' %}selected{% endif %}>قدیمی‌ترین
+                                    پلتفرم</option>
+                                <option value="most_followers"
+                                    {% if request.GET.sort_by == 'most_followers' %}selected{% endif %}>بیشترین
+                                    دنبال‌کننده</option>
+                                <option value="least_followers"
+                                    {% if request.GET.sort_by == 'least_followers' %}selected{% endif %}>کمترین
+                                    دنبال‌کننده</option>
+                                <option value="most_views"
+                                    {% if request.GET.sort_by == 'most_views' %}selected{% endif %}>پربازدیدترین
+                                </option>
+                                <option value="cheapest" {% if request.GET.sort_by == 'cheapest' %}selected{% endif %}>
+                                    ارزان‌ترین</option>
+                                <option value="most_expensive"
+                                    {% if request.GET.sort_by == 'most_expensive' %}selected{% endif %}>گران‌ترین
+                                </option>
+                                <option value="highest_income"
+                                    {% if request.GET.sort_by == 'highest_income' %}selected{% endif %}>بیشترین درآمد
+                                </option>
+                                <option value="lowest_income"
+                                    {% if request.GET.sort_by == 'lowest_income' %}selected{% endif %}>کمترین درآمد
+                                </option>
                                 <option value="fastest_roi"
                                     {% if request.GET.sort_by == 'fastest_roi' %}selected{% endif %}>سریع‌ترین برگشت
                                     سرمایه</option>
+                                سرمایه</option>
                             </select>
                         </div>
 
                         <!-- چک‌باکس‌ها -->
                         <div class="filter-group checkbox-group">
                             <label class="form-label fw-bold w-100">ویژگی‌ها:</label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="filter_private"
-                                    id="filter_private" {% if request.GET.filter_private %}checked{% endif %}>
-                                <label class="form-check-label" for="filter_private">خصوصی</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="filter_income" id="filter_income"
-                                    {% if request.GET.filter_income %}checked{% endif %}>
-                                <label class="form-check-label" for="filter_income">درآمددار</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="filter_verified"
-                                    id="filter_verified" {% if request.GET.filter_verified %}checked{% endif %}>
-                                <label class="form-check-label" for="filter_verified">تایید شده</label>
+                            <div class="form-all-label">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="filter_private"
+                                        id="filter_private" {% if request.GET.filter_private %}checked{% endif %}>
+                                    <label class="form-check-label" for="filter_private">خصوصی</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="filter_income"
+                                        id="filter_income" {% if request.GET.filter_income %}checked{% endif %}>
+                                    <label class="form-check-label" for="filter_income">درآمددار</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="filter_verified"
+                                        id="filter_verified" {% if request.GET.filter_verified %}checked{% endif %}>
+                                    <label class="form-check-label" for="filter_verified">تایید شده</label>
+                                </div>
                             </div>
                         </div>
+                    </div>
 
+
+                    <div class="filter-grid">
                         <!-- بازه‌های عددی -->
                         <div class="filter-group">
                             <label class="form-label fw-bold">قیمت (تومان):</label>
@@ -290,32 +333,31 @@
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const toggleButton = document.getElementById("customFilterToggle");
-    const collapseDiv = document.getElementById("filterCollapse");
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleButton = document.getElementById("customFilterToggle");
+        const collapseDiv = document.getElementById("filterCollapse");
 
-    // بررسی اینکه آیا فیلتری از قبل اعمال شده است؟ اگر بله، منو باز بماند
-    const urlParams = new URLSearchParams(window.location.search);
-    let hasFilters = false;
-    for (const [key, value] of urlParams) {
-        if (value !== "" && key !== "search" && key !== "category") {
-            hasFilters = true;
-            break;
+        // بررسی اینکه آیا فیلتری از قبل اعمال شده است؟ اگر بله، منو باز بماند
+        const urlParams = new URLSearchParams(window.location.search);
+        let hasFilters = false;
+        for (const [key, value] of urlParams) {
+            if (value !== "" && key !== "search" && key !== "category") {
+                hasFilters = true;
+                break;
+            }
         }
-    }
 
-    if (hasFilters) {
-        collapseDiv.classList.add("open");
-        toggleButton.classList.add("active");
-    }
+        if (hasFilters) {
+            collapseDiv.classList.add("open");
+            toggleButton.classList.add("active");
+        }
 
-    // عملکرد دکمه کلیک
-    toggleButton.addEventListener("click", function() {
-        collapseDiv.classList.toggle("open");
-        toggleButton.classList.toggle("active");
+        // عملکرد دکمه کلیک
+        toggleButton.addEventListener("click", function () {
+            collapseDiv.classList.toggle("open");
+            toggleButton.classList.toggle("active");
+        });
     });
-});
-
 </script>
 
 

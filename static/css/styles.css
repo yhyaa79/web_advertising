@@ -479,6 +479,10 @@ td {
 
 }
 
+.filter-section .faq-question {
+    margin-bottom: 15px;
+}
+
 .faq-question:hover {
     background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%) !important;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -894,8 +898,7 @@ td {
     position: relative;
 }
 
-.custom-modal-body {
-}
+.custom-modal-body {}
 
 .text-request-message {
     width: 100%;
@@ -1633,7 +1636,7 @@ form textarea {
 }
 
 .table td {
-    padding: var(--spacing-sm) !important;
+    padding: var(--spacing-lg) var(--spacing-sm) !important;
 
 }
 
@@ -2459,11 +2462,20 @@ form textarea {
 
 
 /* تنظیمات کارت فیلتر */
-.compact-filter-card {
-    padding: 15px;
-    font-size: 0.85rem;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
+.custom-collapse {
+    background: #f8f9fa !important;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    margin-top: 0 !important;
+    box-shadow: var(--card-shadow);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #495057;
+    /* white-space: pre-line; */
+    /* opacity: 1; */
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 /* شبکه بندی برای دسکتاپ و تبلت */
@@ -2475,13 +2487,15 @@ form textarea {
 
 @media (min-width: 768px) {
     .filter-grid {
-        grid-template-columns: repeat(2, 1fr); /* دو ستونه در تبلت */
+        grid-template-columns: repeat(2, 1fr);
+        /* دو ستونه در تبلت */
     }
 }
 
 @media (min-width: 992px) {
     .filter-grid {
-        grid-template-columns: repeat(3, 1fr); /* سه ستونه در دسکتاپ */
+        grid-template-columns: repeat(4, 1fr);
+        /* سه ستونه در دسکتاپ */
     }
 }
 
@@ -2492,18 +2506,39 @@ form textarea {
     color: #495057;
 }
 
+.compact-filter-card {
+    padding: 30px;
+
+}
+
+.filter-label {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+
+.form-check-input {
+    height: 15px;
+    width: 15px;
+}
+
 /* مدیریت چک‌باکس‌ها */
 .checkbox-group {
-    grid-column: 1 / -1; /* تمام عرض را بگیرد */
-    background: #fff;
+    grid-column: 1 / -1;
+    /* تمام عرض را بگیرد */
     padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #e9ecef;
+    width: fit-content;
+    margin-right: auto;
+    margin-left: 5%;
 }
 
 .form-check-inline {
     margin-right: 0;
     margin-left: 15px;
+    display: ruby;
+    padding: 10px;
+    align-items: center;
+    text-align: center;
 }
 
 /* انیمیشن باز و بسته شدن (Collapse) */
@@ -2513,8 +2548,14 @@ form textarea {
     transition: max-height 0.4s ease-out;
 }
 
+.input-group-sm {
+    display: grid;
+    gap: 5px;
+}
+
 .custom-collapse.open {
-    max-height: 1000px; /* یک عدد بزرگ برای باز شدن کامل */
+    max-height: 1000px;
+    /* یک عدد بزرگ برای باز شدن کامل */
 }
 
 /* چرخش آیکون فلش هنگام باز شدن */
@@ -2522,8 +2563,16 @@ form textarea {
     transition: transform 0.3s;
     display: inline-block;
 }
+
 .filter-toggle.active .toggle-icon {
     transform: rotate(180deg);
+}
+
+.filter-toggle {
+    display: flex;
+    gap: 5px;
+    font-size: 16px;
+    width: fit-content;
 }
 
 
