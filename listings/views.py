@@ -3,7 +3,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, F, Case, When, DecimalField
 from .models import Listing, Category, IncomeProof, VisitRequest
 from .forms import (ListingForm, IncomeProofFormSet, VisitRequestForm,
                     IncomeDataPointFormSet, ViewsDataPointFormSet, FAQFormSet)
@@ -16,12 +16,12 @@ User = get_user_model()
 def listing_list(request):
     listings = Listing.objects.filter(status='active')
     
+    # فیلتر دسته‌بندی
     category_id = request.GET.get('category')
     if category_id:
         listings = listings.filter(category_id=category_id)
     
-
-    
+    # جستجوی متنی
     search_query = request.GET.get('search')
     if search_query:
         listings = listings.filter(
@@ -29,15 +29,133 @@ def listing_list(request):
             Q(description__icontains=search_query)
         )
     
+    # فیلترهای چک‌باکسی
+    filter_private = request.GET.get('filter_private')
+    if filter_private:
+        listings = listings.filter(is_private=True)
+    
+    filter_income = request.GET.get('filter_income')
+    if filter_income:
+        listings = listings.filter(is_income=True)
+    
+    filter_verified = request.GET.get('filter_verified')
+    if filter_verified:
+        listings = listings.filter(is_verified=True)
+    
+    filter_preferment = request.GET.get('filter_preferment')
+    if filter_preferment:
+        listings = listings.filter(is_preferment=True)
+    
+    # جستجوی پیشرفته - بازه قیمت
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+    if min_price:
+        listings = listings.annotate(
+            final_price=Case(
+                When(discount_price__isnull=False, then=F('discount_price')),
+                default=F('price'),
+                output_field=DecimalField()
+            )
+        ).filter(final_price__gte=min_price)
+    if max_price:
+        listings = listings.annotate(
+            final_price=Case(
+                When(discount_price__isnull=False, then=F('discount_price')),
+                default=F('price'),
+                output_field=DecimalField()
+            )
+        ).filter(final_price__lte=max_price)
+    
+    # جستجوی پیشرفته - بازه سن پلتفرم
+    min_age = request.GET.get('min_age')
+    max_age = request.GET.get('max_age')
+    if min_age:
+        listings = listings.filter(platform_age__gte=min_age)
+    if max_age:
+        listings = listings.filter(platform_age__lte=max_age)
+    
+    # جستجوی پیشرفته - بازه دنبال‌کننده
+    min_followers = request.GET.get('min_followers')
+    max_followers = request.GET.get('max_followers')
+    if min_followers:
+        listings = listings.filter(followers_count__gte=min_followers)
+    if max_followers:
+        listings = listings.filter(followers_count__lte=max_followers)
+    
+    # جستجوی پیشرفته - بازه درآمد ماهیانه
+    min_income = request.GET.get('min_income')
+    max_income = request.GET.get('max_income')
+    if min_income:
+        listings = listings.filter(monthly_income__gte=min_income)
+    if max_income:
+        listings = listings.filter(monthly_income__lte=max_income)
+    
+    # مرتب‌سازی
+    sort_by = request.GET.get('sort_by')
+    if sort_by == 'newest':
+        listings = listings.order_by('-created_at')
+    elif sort_by == 'oldest':
+        listings = listings.order_by('created_at')
+    elif sort_by == 'newest_platform':
+        listings = listings.order_by('-platform_age')
+    elif sort_by == 'oldest_platform':
+        listings = listings.order_by('platform_age')
+    elif sort_by == 'most_followers':
+        listings = listings.order_by('-followers_count')
+    elif sort_by == 'least_followers':
+        listings = listings.order_by('followers_count')
+    elif sort_by == 'most_views':
+        listings = listings.order_by('-views_count')
+    elif sort_by == 'cheapest':
+        listings = listings.annotate(
+            final_price=Case(
+                When(discount_price__isnull=False, then=F('discount_price')),
+                default=F('price'),
+                output_field=DecimalField()
+            )
+        ).order_by('final_price')
+    elif sort_by == 'most_expensive':
+        listings = listings.annotate(
+            final_price=Case(
+                When(discount_price__isnull=False, then=F('discount_price')),
+                default=F('price'),
+                output_field=DecimalField()
+            )
+        ).order_by('-final_price')
+    elif sort_by == 'highest_income':
+        listings = listings.filter(monthly_income__isnull=False).order_by('-monthly_income')
+    elif sort_by == 'lowest_income':
+        listings = listings.filter(monthly_income__isnull=False).order_by('monthly_income')
+    elif sort_by == 'fastest_roi':
+        # محاسبه ROI و مرتب‌سازی
+        listings = listings.filter(monthly_income__isnull=False, monthly_income__gt=0).annotate(
+            final_price=Case(
+                When(discount_price__isnull=False, then=F('discount_price')),
+                default=F('price'),
+                output_field=DecimalField()
+            ),
+            roi_months=F('final_price') / F('monthly_income')
+        ).order_by('roi_months')
+    
     categories = Category.objects.all()
+    
+    # بررسی اینکه آیا فیلتری اعمال شده است
+    has_active_filters = any([
+        category_id, search_query, filter_private, filter_income, 
+        filter_verified, filter_preferment, min_price, max_price,
+        min_age, max_age, min_followers, max_followers, 
+        min_income, max_income, sort_by
+    ])
     
     context = {
         'listings': listings,
         'categories': categories,
+        'has_active_filters': has_active_filters,
     }
     return render(request, 'listings/listing_list.html', context)
 
-# listings/views.py
+
+
 
 def listing_detail(request, pk):
     listing = get_object_or_404(Listing, pk=pk)

@@ -13,7 +13,6 @@
 <div class="heder-listing-list">
     <h2 class="mb-4" style="text-align: center;">آگهی‌های فعال</h2>
 
-
     <div class="row mb-4 serch-home">
         <div class="serch-bar-home">
             <form method="get" class="d-flex">
@@ -24,7 +23,6 @@
         </div>
     </div>
 
-
     <div class="row mb-3">
         <div class="col-md-12">
             <strong>دسته‌بندی:</strong>
@@ -34,6 +32,121 @@
             {% endfor %}
         </div>
     </div>
+
+    <!-- بخش فیلترها -->
+    <div class="filter-section mb-4">
+        <button class="btn btn-primary w-100 filter-toggle shadow-sm" type="button" id="customFilterToggle">
+            <i class="bi bi-funnel"></i>
+            {% if has_active_filters %}
+            فیلترها (فیلتر انتخاب شده)
+            {% else %}
+            فیلترها
+            {% endif %}
+            <i class="bi bi-chevron-down ms-2 toggle-icon"></i>
+        </button>
+
+        <!-- کلاس collapse باعث می‌شود به صورت پیش‌فرض بسته باشد -->
+        <div class="custom-collapse" id="filterCollapse">
+            <div class="card card-body mt-2 compact-filter-card">
+                <form method="get" id="filterForm">
+                    {% if request.GET.search %}<input type="hidden" name="search"
+                        value="{{ request.GET.search }}">{% endif %}
+                    {% if request.GET.category %}<input type="hidden" name="category"
+                        value="{{ request.GET.category }}">{% endif %}
+
+                    <div class="filter-grid">
+                        <!-- مرتب‌سازی -->
+                        <div class="filter-group">
+                            <label class="form-label fw-bold">مرتب‌سازی:</label>
+                            <select name="sort_by" class="form-select form-select-sm">
+                                <option value="">انتخاب کنید</option>
+                                <option value="newest" {% if request.GET.sort_by == 'newest' %}selected{% endif %}>
+                                    جدیدترین آگهی</option>
+                                <!-- سایر آپشن‌ها... -->
+                                <option value="fastest_roi"
+                                    {% if request.GET.sort_by == 'fastest_roi' %}selected{% endif %}>سریع‌ترین برگشت
+                                    سرمایه</option>
+                            </select>
+                        </div>
+
+                        <!-- چک‌باکس‌ها -->
+                        <div class="filter-group checkbox-group">
+                            <label class="form-label fw-bold w-100">ویژگی‌ها:</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="filter_private"
+                                    id="filter_private" {% if request.GET.filter_private %}checked{% endif %}>
+                                <label class="form-check-label" for="filter_private">خصوصی</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="filter_income" id="filter_income"
+                                    {% if request.GET.filter_income %}checked{% endif %}>
+                                <label class="form-check-label" for="filter_income">درآمددار</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="filter_verified"
+                                    id="filter_verified" {% if request.GET.filter_verified %}checked{% endif %}>
+                                <label class="form-check-label" for="filter_verified">تایید شده</label>
+                            </div>
+                        </div>
+
+                        <!-- بازه‌های عددی -->
+                        <div class="filter-group">
+                            <label class="form-label fw-bold">قیمت (تومان):</label>
+                            <div class="input-group input-group-sm">
+                                <input type="number" name="min_price" class="form-control" placeholder="حداقل"
+                                    value="{{ request.GET.min_price }}">
+                                <input type="number" name="max_price" class="form-control" placeholder="حداکثر"
+                                    value="{{ request.GET.max_price }}">
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="form-label fw-bold">سن پلتفرم (سال):</label>
+                            <div class="input-group input-group-sm">
+                                <input type="number" name="min_age" class="form-control" placeholder="حداقل"
+                                    value="{{ request.GET.min_age }}">
+                                <input type="number" name="max_age" class="form-control" placeholder="حداکثر"
+                                    value="{{ request.GET.max_age }}">
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="form-label fw-bold">دنبال‌کننده:</label>
+                            <div class="input-group input-group-sm">
+                                <input type="number" name="min_followers" class="form-control" placeholder="حداقل"
+                                    value="{{ request.GET.min_followers }}">
+                                <input type="number" name="max_followers" class="form-control" placeholder="حداکثر"
+                                    value="{{ request.GET.max_followers }}">
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="form-label fw-bold">درآمد ماهیانه:</label>
+                            <div class="input-group input-group-sm">
+                                <input type="number" name="min_income" class="form-control" placeholder="حداقل"
+                                    value="{{ request.GET.min_income }}">
+                                <input type="number" name="max_income" class="form-control" placeholder="حداکثر"
+                                    value="{{ request.GET.max_income }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-3">
+
+                    <!-- دکمه‌ها -->
+                    <div class="d-flex gap-2 justify-content-end">
+                        <a href="{% url 'listings:listing_list' %}" class="btn btn-outline-danger btn-sm px-4">
+                            <i class="bi bi-x-circle"></i> حذف
+                        </a>
+                        <button type="submit" class="btn btn-success btn-sm px-4">
+                            <i class="bi bi-check-circle"></i> اعمال
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="list-notice">
@@ -175,4 +288,35 @@
     <p class="text-center">آگهی فعالی یافت نشد.</p>
     {% endfor %}
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const toggleButton = document.getElementById("customFilterToggle");
+    const collapseDiv = document.getElementById("filterCollapse");
+
+    // بررسی اینکه آیا فیلتری از قبل اعمال شده است؟ اگر بله، منو باز بماند
+    const urlParams = new URLSearchParams(window.location.search);
+    let hasFilters = false;
+    for (const [key, value] of urlParams) {
+        if (value !== "" && key !== "search" && key !== "category") {
+            hasFilters = true;
+            break;
+        }
+    }
+
+    if (hasFilters) {
+        collapseDiv.classList.add("open");
+        toggleButton.classList.add("active");
+    }
+
+    // عملکرد دکمه کلیک
+    toggleButton.addEventListener("click", function() {
+        collapseDiv.classList.toggle("open");
+        toggleButton.classList.toggle("active");
+    });
+});
+
+</script>
+
+
 {% endblock %}

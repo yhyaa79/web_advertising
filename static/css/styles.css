@@ -489,7 +489,6 @@ td {
 .faq-question span {
     font-size: 16px;
     font-weight: 400;
-    line-height: 23px;
 }
 
 .faq-icon {
@@ -608,7 +607,6 @@ td {
     margin: 12px 0;
     font-size: 16px;
     font-weight: 500;
-    line-height: 23px;
     white-space: pre-line;
 }
 
@@ -622,7 +620,6 @@ td {
 .aboutplatform-detail {
     font-size: 16px;
     font-weight: 400;
-    line-height: 23px;
     white-space: pre-line;
 }
 
@@ -744,6 +741,21 @@ td {
     padding: 5px 12px;
 }
 
+.seller-information {
+    display: flex;
+    text-align: center;
+    align-items: center;
+}
+
+.seller-information-success {
+    margin-right: auto;
+}
+
+.img-profile-detail {
+    display: inline-flex;
+    gap: 11px;
+}
+
 .profile-detail {
     direction: rtl;
     align-items: flex-start;
@@ -856,7 +868,6 @@ td {
     padding: 10px;
     font-size: 16px;
     font-weight: 400;
-    line-height: 23px;
     white-space: pre-line;
 }
 
@@ -884,7 +895,6 @@ td {
 }
 
 .custom-modal-body {
-    line-height: 1.8;
 }
 
 .text-request-message {
@@ -1343,16 +1353,6 @@ hr {
     font-size: var(--font-size-base);
 }
 
-
-.seller-information {
-    display: flex;
-    text-align: center;
-    align-items: center;
-}
-
-.seller-information , div {
-    margin-right: auto;
-}
 
 /* ========================================
    فرم‌ها (Forms)
@@ -2451,6 +2451,80 @@ form textarea {
     }
 }
 
+
+
+/* ========================================
+   فیلترها
+   ======================================== */
+
+
+/* تنظیمات کارت فیلتر */
+.compact-filter-card {
+    padding: 15px;
+    font-size: 0.85rem;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+
+/* شبکه بندی برای دسکتاپ و تبلت */
+.filter-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+@media (min-width: 768px) {
+    .filter-grid {
+        grid-template-columns: repeat(2, 1fr); /* دو ستونه در تبلت */
+    }
+}
+
+@media (min-width: 992px) {
+    .filter-grid {
+        grid-template-columns: repeat(3, 1fr); /* سه ستونه در دسکتاپ */
+    }
+}
+
+/* کوچکتر کردن لیبل‌ها */
+.filter-group .form-label {
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+    color: #495057;
+}
+
+/* مدیریت چک‌باکس‌ها */
+.checkbox-group {
+    grid-column: 1 / -1; /* تمام عرض را بگیرد */
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+}
+
+.form-check-inline {
+    margin-right: 0;
+    margin-left: 15px;
+}
+
+/* انیمیشن باز و بسته شدن (Collapse) */
+.custom-collapse {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out;
+}
+
+.custom-collapse.open {
+    max-height: 1000px; /* یک عدد بزرگ برای باز شدن کامل */
+}
+
+/* چرخش آیکون فلش هنگام باز شدن */
+.filter-toggle .toggle-icon {
+    transition: transform 0.3s;
+    display: inline-block;
+}
+.filter-toggle.active .toggle-icon {
+    transform: rotate(180deg);
+}
 
 
 /* ========================================
