@@ -187,35 +187,69 @@
                 <hr>
                 <div class="faq-list">
                     {% for faq in listing.faqs.all %}
-                    <div class="faq-item mb-2">
-                        <button
-                            class="btn btn-light w-100 text-end d-flex justify-content-between align-items-center faq-question"
-                            type="button" data-faq-id="{{ faq.id }}" aria-expanded="false"
-                            aria-controls="faq-answer-{{ faq.id }}">
-                            <span>{{ faq.question }}</span>
-                            <i class="bi bi-chevron-down faq-icon"></i>
-                        </button>
-                        <div class="faq-answer p-3 bg-light rounded mt-1" id="faq-answer-{{ faq.id }}"
-                            style="display: none; white-space: pre-wrap;">{{ faq.answer }}</div>
+                    <div class="faq-item">
+                        <div class="d-flex justify-content-between align-items-center faq-question">
+                            <button
+                                class="btn-light text-end flex-grow-1 d-flex justify-content-between align-items-center faq-question-div"
+                                type="button" data-faq-id="{{ faq.id }}" aria-expanded="false"
+                                aria-controls="faq-answer-{{ faq.id }}">
+                                <span>{{ faq.question }}</span>
+                                <i class="bi bi-chevron-down faq-icon"></i>
+                            </button>
+                            <div class="btn-faq-card">
+                                <button class="faq-toggle-btn" data-faq-id="{{ faq.id }}"></button>
+                            </div>
+                        </div>
+                        <div class="faq-answer-wrapper" id="faq-answer-wrapper-{{ faq.id }}">
+                            <div class="faq-answer p-3 bg-light rounded mt-1" id="faq-answer-{{ faq.id }}">
+                                {{ faq.answer }}
+                            </div>
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
             </div>
 
             <script>
-                document.querySelectorAll('.faq-question').forEach(function (btn) {
+                document.querySelectorAll('.faq-question-div').forEach(function (btn) {
                     btn.addEventListener('click', function () {
                         const faqId = this.dataset.faqId;
-                        const answer = document.getElementById('faq-answer-' + faqId);
-                        const icon = this.querySelector('.faq-icon');
-                        const isOpen = answer.style.display !== 'none';
-
-                        answer.style.display = isOpen ? 'none' : 'block';
-                        icon.classList.toggle('bi-chevron-down', isOpen);
-                        icon.classList.toggle('bi-chevron-up', !isOpen);
-                        this.setAttribute('aria-expanded', String(!isOpen));
+                        toggleFaq(faqId);
                     });
                 });
+
+                document.querySelectorAll('.faq-toggle-btn').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        const faqId = this.dataset.faqId;
+                        toggleFaq(faqId);
+                    });
+                });
+
+                function toggleFaq(faqId) {
+                    const wrapper = document.getElementById('faq-answer-wrapper-' + faqId);
+                    const answer = document.getElementById('faq-answer-' + faqId);
+                    const icon = document.querySelector(`[data-faq-id="${faqId}"].faq-question-div .faq-icon`);
+                    const toggleBtn = document.querySelector(`[data-faq-id="${faqId}"].faq-toggle-btn`);
+                    const question = document.querySelector(`[data-faq-id="${faqId}"].faq-question-div`);
+
+                    const isOpen = wrapper.classList.contains('open');
+
+                    if (isOpen) {
+                        wrapper.style.maxHeight = '0';
+                        wrapper.classList.remove('open');
+                        icon.classList.remove('bi-chevron-up');
+                        icon.classList.add('bi-chevron-down');
+                        toggleBtn.classList.remove('open');
+                        question.setAttribute('aria-expanded', 'false');
+                    } else {
+                        wrapper.style.maxHeight = answer.scrollHeight + 'px';
+                        wrapper.classList.add('open');
+                        icon.classList.remove('bi-chevron-down');
+                        icon.classList.add('bi-chevron-up');
+                        toggleBtn.classList.add('open');
+                        question.setAttribute('aria-expanded', 'true');
+                    }
+                }
             </script>
             {% endif %}
 
@@ -351,7 +385,18 @@
 
         <div class="card mt-3">
             <div class="card-body pad-10">
-                <h5>اطلاعات فروشنده</h5>
+
+                <div class="seller-information">
+                    <h5>اطلاعات فروشنده</h5>
+
+                    <div>
+                        {% if listing.seller.is_verified %}
+                        <span class="badge-detail bg-success">تایید شده ✓</span>
+                        {% else %}
+                        <span class="badge-detail bg-warning">تایید نشده</span>
+                        {% endif %}
+                    </div>
+                </div>
                 <hr>
 
                 {% if listing.seller.profile.user_type == 'individual' %}
@@ -367,7 +412,7 @@
                         <i class="fas fa-user fa-3x text-white"></i>
                     </div>
                     {% endif %}
-                </div> <!-- این تگ بسته باید اینجا و داخل else باشد -->
+                </div>
                 {% endif %}
 
                 <div class="profile-detail">
@@ -414,15 +459,8 @@
                     </div>
                     {% endif %}
                 </div>
-                <!-- تگ </div> اضافی که اینجا بود حذف شد -->
 
-                <div class="mt-3">
-                    {% if listing.seller.is_verified %}
-                    <span class="badge-detail bg-success">تایید شده ✓</span>
-                    {% else %}
-                    <span class="badge-detail bg-warning">تایید نشده</span>
-                    {% endif %}
-                </div>
+
 
                 <div>
                     <a href="{% url 'listings:user_profile' listing.seller.username %}" class="btn btn-sm btn-link">
@@ -593,8 +631,9 @@
 
                 <p>
                     در این صورت، آن را
-                    <a href="{% url 'tickets:ticket_create' %}?category={{ 1 }}&subject={{ 'تخلف%20اگهی' }}" class="text-link"
-                        target="_blank">        <!-- href="{% url 'tickets:ticket_create' %}?category={{ category.id }}&subject={{ subject }}" -->
+                    <a href="{% url 'tickets:ticket_create' %}?category={{ 1 }}&subject={{ 'تخلف%20اگهی' }}"
+                        class="text-link" target="_blank">
+                        <!-- href="{% url 'tickets:ticket_create' %}?category={{ category.id }}&subject={{ subject }}" -->
                         اینجا
                     </a>
                     گزارش دهید.

@@ -267,7 +267,7 @@ td {
     margin-top: 10px;
 }
 
-.notification-link:hover ,
+.notification-link:hover,
 .dropdown-toggle:hover {
     color: var(--primary) !important;
 }
@@ -289,12 +289,12 @@ td {
     border-radius: 50%;
     background: var(--danger-color);
     color: var(--white-bg);
-    font-size: 9px;
+    font-size: 10px;
     font-weight: bold;
     display: flex;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
 }
 
 /* ========================================
@@ -313,13 +313,13 @@ td {
     padding: 120px 5% 20px 5%;
 }
 
-.hero ,
-.marquee-section ,
-.section-serch ,
-#testimonials ,
-.features ,
-.how , 
-.listings ,
+.hero,
+.marquee-section,
+.section-serch,
+#testimonials,
+.features,
+.how,
+.listings,
 .cta-section {
     margin: 0 -75px;
 }
@@ -409,6 +409,166 @@ td {
 }
 
 
+
+
+/* FAQ Card Styles */
+.faq-list {
+    margin-top: 1rem;
+}
+
+.faq-item {
+    border-radius: 8px;
+    overflow: visible;
+    transition: all 0.3s ease;
+    margin-bottom: 12px;
+}
+
+.faq-item .d-flex {
+    gap: 10px;
+}
+
+.btn-faq-card {
+    flex-shrink: 0;
+    margin-right: auto;
+}
+
+.faq-toggle-btn {
+    background: none;
+    border: none;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.6s ease;
+    cursor: pointer;
+    padding: 0;
+}
+
+.faq-question,
+.align-items-center {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.faq-toggle-btn::before {
+    content: '';
+    border: solid var(--text-secondary);
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 4px;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease-in-out;
+}
+
+.faq-toggle-btn.open::before {
+    transform: rotate(-135deg);
+}
+
+.faq-question {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    font-weight: 500;
+    color: #2c3e50;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    align-items: center;
+    padding: 10px 14px;
+
+}
+
+.faq-question:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.faq-question span {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 23px;
+}
+
+.faq-icon {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    color: #6c757d;
+    margin-left: 0.5rem;
+}
+
+.faq-question[aria-expanded="true"] {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+    color: white;
+    border-color: #0056b3;
+}
+
+.faq-question[aria-expanded="true"] .faq-icon {
+    color: white;
+}
+
+/* Smooth Animation for FAQ Answer */
+.faq-answer-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-answer-wrapper.open {
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-answer {
+    background: #f8f9fa !important;
+    border: 1px solid #dee2e6;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    margin-top: 0 !important;
+    padding: 1.25rem !important;
+    font-size: 16px;
+    /* font-weight: 400; */
+    /* line-height: 23px; */
+    color: #495057;
+    white-space: pre-line;
+    opacity: 1;
+    /* transform: translateY(0); */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.faq-answer-wrapper:not(.open) .faq-answer {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .faq-question {
+        padding: 0.875rem 1rem;
+        font-size: 15px;
+    }
+
+    .faq-answer {
+        padding: 1rem !important;
+        font-size: 15px;
+    }
+
+    .faq-icon {
+        font-size: 1rem;
+    }
+
+    .faq-toggle-btn {
+        width: 35px;
+        height: 35px;
+    }
+
+    .faq-item .d-flex {
+        gap: 5px;
+    }
+}
+
+
 /* ========================================
    کارت‌ها (Cards)
    ======================================== */
@@ -492,6 +652,7 @@ td {
     justify-content: left;
     align-items: center;
     transition: transform 0.6s ease;
+    cursor: pointer;
 }
 
 #more-height-btn::before {
@@ -1183,7 +1344,15 @@ hr {
 }
 
 
+.seller-information {
+    display: flex;
+    text-align: center;
+    align-items: center;
+}
 
+.seller-information , div {
+    margin-right: auto;
+}
 
 /* ========================================
    فرم‌ها (Forms)
@@ -2140,7 +2309,7 @@ form textarea {
 }
 
 .text-end {
-    text-align: left;
+    text-align: right;
 }
 
 .text-muted {
