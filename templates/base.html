@@ -18,13 +18,34 @@
     <!-- NAV -->
     <nav id="navbar" class="{% block nav_class %}navbar-scrolled{% endblock %}">
 
-        <a href="{% url 'core:home' %}" class="logo">acq<span>uire</span></a>
+        <a href="{% url 'core:home' %}" class="logo">acq<span>uire</span>
+
+            {% if user.profile.premium %}
+            <div class="inf-card-profile-detail">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#F59E0B" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5ZM19 19C19 19.5523 18.5523 20 18 20H6C5.44772 20 5 19.5523 5 19V18H19V19Z" />
+                </svg>
+            </div>
+            {% elif user.profile.pro %}
+            <div class="inf-card-profile-detail">
+                <svg style="margin: 0 4px;" width="40" height="20" viewBox="0 0 40 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="20" rx="6" fill="#6366F1" />
+                    <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" fill="#FFFFFF"
+                        font-family="Arial, sans-serif" font-weight="bold" font-size="12" letter-spacing="1">PRO</text>
+                </svg>
+            </div>
+            {% endif %}
+
+        </a>
+
         <ul class="nav-links">
 
 
 
             <li><a href="{% url 'listings:listing_list' %}" class="navbar-a">اگهی ها</a></li>
-            <li><a href="{% url 'listings:my_listings' %}" class="navbar-a" >آگهی‌های من</a></li>
+            <li><a href="{% url 'listings:my_listings' %}" class="navbar-a">آگهی‌های من</a></li>
             <li><a href="{% url 'payments:my_transactions' %}" class="navbar-a">تراکنش‌ها</a></li>
             <li><a href="{% url 'tickets:ticket_list' %}" class="navbar-a">پشتیبانی</a></li>
             <li><a href="{% url 'accounts:profile' %}" class="navbar-a">پروفایل</a></li>
@@ -136,27 +157,27 @@
         </div>
     </footer>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const dropBtn = document.getElementById('moreMenuBtn');
-    const dropdown = document.getElementById('moreDropdown');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropBtn = document.getElementById('moreMenuBtn');
+            const dropdown = document.getElementById('moreDropdown');
 
-    // باز و بسته کردن منو با کلیک روی دکمه
-    dropBtn.addEventListener('click', function(event) {
-        event.preventDefault(); // جلوگیری از پرش صفحه به بالا
-        dropdown.classList.toggle('show');
-    });
+            // باز و بسته کردن منو با کلیک روی دکمه
+            dropBtn.addEventListener('click', function (event) {
+                event.preventDefault(); // جلوگیری از پرش صفحه به بالا
+                dropdown.classList.toggle('show');
+            });
 
-    // بستن منو در صورت کلیک در هر جای دیگر از صفحه
-    window.addEventListener('click', function(event) {
-        if (!event.target.closest('.dropdown-container')) {
-            if (dropdown.classList.contains('show')) {
-                dropdown.classList.remove('show');
-            }
-        }
-    });
-});
-</script>
+            // بستن منو در صورت کلیک در هر جای دیگر از صفحه
+            window.addEventListener('click', function (event) {
+                if (!event.target.closest('.dropdown-container')) {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    }
+                }
+            });
+        });
+    </script>
 
 </body>
 

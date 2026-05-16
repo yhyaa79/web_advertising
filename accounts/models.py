@@ -78,6 +78,9 @@ class UserProfile(models.Model):
     kyc_level = models.IntegerField(default=0, verbose_name='سطح احراز هویت')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='آخرین بروزرسانی')
 
+    pro = models.BooleanField(default=False, verbose_name='کاربر پرو')
+    premium = models.BooleanField(default=False, verbose_name='کاربر ویژه')
+
     def __str__(self):
         return f'پروفایل {self.user.username}'
 

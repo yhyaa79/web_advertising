@@ -85,10 +85,23 @@
                 </div>
                 {% endif %}
 
-                {% if listing.is_preferment %}
+                {% if listing.premier %}
                 <div class="position-absolute top-0 end-0 m-2">
-                    <span class="badge-detail bg-warning text-dark">
-                        <i class="bi bi-lock-fill"></i> ارتقا اگهی
+                    <span class="badge bg-warning text-dark">
+                        <i class="bi bi-lock-fill"></i> اگهی برتر
+
+                        <svg class="premier-star" width="24" height="24" viewBox="0 0 24 24" fill="#FFD700"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                        </svg>
+
+                    </span>
+                </div>
+                {% elif listing.boost %}
+                <div class="position-absolute top-0 end-0 m-2">
+                    <span class="badge bg-warning text-dark">
+                        <i class="bi bi-lock-fill"></i> اگهی پیشرفته
                     </span>
                 </div>
                 {% endif %}
@@ -213,7 +226,7 @@
                 </div>
             </div>
             {% endif %}
-        {% endif %}
+            {% endif %}
 
             <script>
                 document.querySelectorAll('.faq-question-div').forEach(function (btn) {
@@ -393,6 +406,26 @@
 
                 <div class="seller-information">
                     <h5>اطلاعات فروشنده</h5>
+                    
+                    {% if listing.seller.profile.premium %}
+                    <div class="inf-card-profile-detail">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#F59E0B"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5ZM19 19C19 19.5523 18.5523 20 18 20H6C5.44772 20 5 19.5523 5 19V18H19V19Z" />
+                        </svg>
+                    </div>
+                    {% elif listing.seller.profile.pro %}
+                    <div class="inf-card-profile-detail">
+                        <svg style="margin: 0 4px;" width="40" height="20" viewBox="0 0 40 20" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="40" height="20" rx="6" fill="#6366F1" />
+                            <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" fill="#FFFFFF"
+                                font-family="Arial, sans-serif" font-weight="bold" font-size="12"
+                                letter-spacing="1">PRO</text>
+                        </svg>
+                    </div>
+                    {% endif %}
+
 
                     <div class="seller-information-success">
                         {% if listing.seller.is_verified %}
@@ -427,6 +460,7 @@
                             <strong class="strong-inf-detail">نام کاربری:</strong>
                             <p>{{ listing.seller.username }}</p>
                         </div>
+
 
                         {% if listing.seller.profile.user_type == 'individual' %}
                         <div class="inf-card-profile-detail">

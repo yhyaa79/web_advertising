@@ -32,7 +32,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('کاربر', {
-            'fields': ('user', 'user_type')
+            'fields': ('user', 'pro', 'premium', 'user_type')
         }),
         ('اطلاعات عمومی', {
             'fields': ('bio', 'address', 'email_address', 'city', 'province', 'postal_code')

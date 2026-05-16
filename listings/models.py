@@ -66,7 +66,8 @@ class Listing(models.Model):
     main_image = models.ImageField(upload_to='listings/images/')
     
     # ارتقا اگهی 
-    is_preferment = models.BooleanField(default=False, verbose_name='آگهی ارتقا یافته')
+    boost = models.BooleanField(default=False, verbose_name='آگهی پیشرفته')
+    premier = models.BooleanField(default=False, verbose_name='آگهی برتر')
 
     # درامد اگهی 
     is_income = models.BooleanField(default=True, verbose_name='اگهی به درامد رسیده')

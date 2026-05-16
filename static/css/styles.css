@@ -1613,6 +1613,10 @@ form textarea {
     color: #e49518;
 }
 
+.premier-star {
+
+}
+
 .badge-info,
 .bg-info {
     background-color: var(--info-color);
@@ -2699,11 +2703,13 @@ nav .nav-cta .btn-ghost {
 
 
 .logo {
+    display: flex;
     font-size: 1.4rem;
     font-weight: 800;
     color: var(--white);
     text-decoration: none;
     letter-spacing: -.5px;
+    align-items: center;
 }
 
 .logo span {

@@ -262,10 +262,24 @@
                             </div>
                             {% endif %}
 
-                            {% if listing.is_preferment %}
+
+                            {% if listing.premier %}
                             <div class="position-absolute top-0 end-0 m-2">
                                 <span class="badge bg-warning text-dark">
-                                    <i class="bi bi-lock-fill"></i> ارتقا اگهی
+                                    <i class="bi bi-lock-fill"></i> اگهی برتر
+
+                                    <svg class="premier-star" width="24" height="24" viewBox="0 0 24 24" fill="#FFD700"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                    </svg>
+                                    
+                                </span>
+                            </div>
+                            {% elif listing.boost %}
+                            <div class="position-absolute top-0 end-0 m-2">
+                                <span class="badge bg-warning text-dark">
+                                    <i class="bi bi-lock-fill"></i> اگهی پیشرفته
                                 </span>
                             </div>
                             {% endif %}
@@ -372,7 +386,7 @@
         <a
             href="?page={{ listings.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">قبلی</a>
         {% endif %}
-        
+
         {% if listings.has_previous or listings.has_next %}
         <span>صفحه {{ listings.number }} از {{ listings.paginator.num_pages }}</span>
         {% endif %}
@@ -388,35 +402,37 @@
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const toggleButton = document.getElementById("customFilterToggle");
-    const collapseDiv = document.getElementById("filterCollapse");
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleButton = document.getElementById("customFilterToggle");
+        const collapseDiv = document.getElementById("filterCollapse");
 
-    // استخراج پارامترهای URL
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    // بررسی اینکه آیا فیلتری از قبل اعمال شده است
-    let hasFilters = false;
-    const filterParams = ["min_price", "max_price", "min_age", "max_age", "min_followers", "max_followers", "min_income", "max_income", "filter_private", "filter_income", "filter_verified", "sort_by"];
-    
-    for (const [key, value] of urlParams) {
-        if (value !== "" && filterParams.includes(key) && key !== "page") {
-            hasFilters = true;
-            break;
+        // استخراج پارامترهای URL
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // بررسی اینکه آیا فیلتری از قبل اعمال شده است
+        let hasFilters = false;
+        const filterParams = ["min_price", "max_price", "min_age", "max_age", "min_followers", "max_followers",
+            "min_income", "max_income", "filter_private", "filter_income", "filter_verified", "sort_by"
+        ];
+
+        for (const [key, value] of urlParams) {
+            if (value !== "" && filterParams.includes(key) && key !== "page") {
+                hasFilters = true;
+                break;
+            }
         }
-    }
 
-    if (hasFilters) {
-        collapseDiv.classList.add("open");
-        toggleButton.classList.add("active");
-    }
+        if (hasFilters) {
+            collapseDiv.classList.add("open");
+            toggleButton.classList.add("active");
+        }
 
-    // عملکرد دکمه کلیک
-    toggleButton.addEventListener("click", function () {
-        collapseDiv.classList.toggle("open");
-        toggleButton.classList.toggle("active");
+        // عملکرد دکمه کلیک
+        toggleButton.addEventListener("click", function () {
+            collapseDiv.classList.toggle("open");
+            toggleButton.classList.toggle("active");
+        });
     });
-});
 </script>
 
 

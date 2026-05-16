@@ -50,7 +50,11 @@ def listing_list(request):
     
     filter_preferment = request.GET.get('filter_preferment')
     if filter_preferment:
-        listings = listings.filter(is_preferment=True)
+        listings = listings.filter(boost=True)
+
+        filter_preferment = request.GET.get('filter_preferment')
+    if filter_preferment:
+        listings = listings.filter(premier=True)
     
     # جستجوی پیشرفته - بازه قیمت
     min_price = request.GET.get('min_price')

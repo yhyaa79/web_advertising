@@ -43,7 +43,8 @@ class ListingAdmin(admin.ModelAdmin):
         'most_like',
         'most_view',
         'most_comment',
-        'is_preferment',
+        'boost',
+        'premier',
         'is_income',
         'is_verified',
         'is_private',
@@ -51,7 +52,7 @@ class ListingAdmin(admin.ModelAdmin):
         'views_count', 
         'created_at'
     )
-    list_filter = ('status','is_preferment', 'is_private', 'category', 'created_at')
+    list_filter = ('status','boost', 'premier', 'is_private', 'category', 'created_at')
     search_fields = ('title', 'description', 'seller__username')
     readonly_fields = ('views_count', 'created_at', 'updated_at')
     inlines = [IncomeProofInline, ListingImageInline, VisitRequestInline]
@@ -67,7 +68,7 @@ class ListingAdmin(admin.ModelAdmin):
             'fields': ('platform_url', 'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment', 'about_platform')
         }),
         ('تنظیمات', {
-            'fields': ('is_preferment', 'is_private', 'status', 'rejection_reason')
+            'fields': ('boost', 'premier', 'is_private', 'status', 'rejection_reason')
         }),
         ('آمار', {
             'fields': ('views_count', 'created_at', 'updated_at'),
