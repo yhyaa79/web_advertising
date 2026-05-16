@@ -1,5 +1,6 @@
 # listings/views.py
 
+from decimal import Decimal
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -10,6 +11,8 @@ from .forms import (ListingForm, IncomeProofFormSet, VisitRequestForm,
 import json
 from notifications.utils import notify_visit_request, notify_visit_approved, notify_visit_rejected
 from django.contrib.auth import get_user_model
+from django.db.models import Q, F, Case, When, DecimalField
+
 
 User = get_user_model()
 
@@ -444,3 +447,91 @@ def user_profile(request, username):
     }
     
     return render(request, 'listings/user_profile.html', context)
+
+
+
+
+
+@login_required
+def similar_listings(request, pk):
+    """نمایش آگهی‌های مشابه بر اساس معیارهای مختلف"""
+    listing = get_object_or_404(Listing, pk=pk)
+    
+    # محاسبه قیمت نهایی آگهی اصلی
+    base_price = listing.discount_price if listing.discount_price else listing.price
+    
+    # محاسبه ROI آگهی اصلی
+    base_roi = None
+    if listing.monthly_income and listing.monthly_income > 0:
+        base_roi = float(base_price / listing.monthly_income)
+    
+    # فیلتر اولیه: همان دسته‌بندی و فعال
+    similar = Listing.objects.filter(
+        category=listing.category,
+        status='active'
+    ).exclude(pk=listing.pk)
+    
+    # محاسبه قیمت نهایی برای همه آگهی‌ها
+    similar = similar.annotate(
+        final_price=Case(
+            When(discount_price__isnull=False, then=F('discount_price')),
+            default=F('price'),
+            output_field=DecimalField()
+        )
+    )
+    
+    # فیلتر بر اساس بازه قیمت (±30%)
+    price_min = base_price * Decimal('0.7')
+    price_max = base_price * Decimal('1.3') 
+    similar = similar.filter(
+        final_price__gte=price_min,
+        final_price__lte=price_max
+    )
+    
+    # فیلتر بر اساس تعداد دنبال‌کننده (±40%)
+    if listing.followers_count > 0:
+        followers_min = listing.followers_count * Decimal('0.6')
+        followers_max = listing.followers_count * Decimal('1.4')
+        similar = similar.filter(
+            followers_count__gte=followers_min,
+            followers_count__lte=followers_max
+        )
+    
+    # فیلتر بر اساس سن پلتفرم (±2 سال)
+    if listing.platform_age > 0:
+        age_min = max(0, listing.platform_age - 3)
+        age_max = listing.platform_age + 3
+        similar = similar.filter(
+            platform_age__gte=age_min,
+            platform_age__lte=age_max
+        )
+    
+    # فیلتر بر اساس ROI (±30%)
+    if base_roi:
+        similar = similar.filter(
+            monthly_income__isnull=False,
+            monthly_income__gt=0
+        ).annotate(
+            roi_months=F('final_price') / F('monthly_income')
+        )
+        
+        roi_min = Decimal(str(base_roi)) * Decimal('0.7')
+        roi_max = Decimal(str(base_roi)) * Decimal('1.3')
+        similar = similar.filter(
+            roi_months__gte=roi_min,
+            roi_months__lte=roi_max
+        )
+    
+    # مرتب‌سازی بر اساس شباهت (نزدیک‌ترین قیمت)
+    similar = similar.order_by('final_price')[:12]
+    
+    categories = Category.objects.all()
+    
+    context = {
+        'listings': similar,
+        'base_listing': listing,
+        'categories': categories,
+        'is_similar_view': True,
+    }
+    
+    return render(request, 'listings/listing_list.html', context)

@@ -10,8 +10,28 @@
 
 {% block content %}
 
+
 <div class="heder-listing-list">
-    <h2 class="mb-4" style="text-align: center;">آگهی‌های فعال</h2>
+    {% if is_similar_view %}
+    <div class="alert alert-info text-center mb-3"
+        style="background-color: #e7f3ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 15px;">
+        <i class="bi bi-info-circle" style="font-size: 1.2rem; color: #0066cc;"></i>
+        <strong>آگهی‌های مشابه به:</strong> {{ base_listing.title }}
+        <a href="{% url 'listings:listing_list' %}" class="btn btn-sm btn-outline-primary me-2"
+            style="margin-right: 10px;">
+            <i class="bi bi-arrow-right"></i> بازگشت به لیست اصلی
+        </a>
+    </div>
+    {% endif %}
+
+    <h2 class="mb-4" style="text-align: center;">
+        {% if is_similar_view %}
+        آگهی‌های مشابه
+        {% else %}
+        آگهی‌های فعال
+        {% endif %}
+    </h2>
+
 
     <div class="row mb-4 serch-home">
         <div class="serch-bar-home">
@@ -178,10 +198,11 @@
 
                     <!-- دکمه‌ها -->
                     <div class="d-flex gap-2 justify-content-end">
-                        <a href="{% url 'listings:listing_list' %}" class="btn btn-outline-danger btn-sm px-4">
+                        <a href="{% url 'listings:listing_list' %}"
+                            class="btn btn-delet btn-outline-danger btn-md px-4">
                             <i class="bi bi-x-circle"></i> حذف
                         </a>
-                        <button type="submit" class="btn btn-success btn-sm px-4">
+                        <button type="submit" class="btn btn-success btn-md px-4">
                             <i class="bi bi-check-circle"></i> اعمال
                         </button>
                     </div>
@@ -271,6 +292,11 @@
                             </div>
 
                         </div>
+
+                        <a href="{% url 'listings:similar_listings' listing.pk %}" class="link-similar">
+                            آیا به دنبال استارت آپ های مشابه این آگهی می‌گردید؟
+                        </a>
+
                     </div>
                 </a>
 
@@ -314,10 +340,17 @@
                         <div class="btn-primary-div">
 
                             <a href="{% url 'listings:listing_detail' listing.pk %}"
-                                class="btn btn-primary w-100">مشاهده</a>
+                                class="btn btn-primary w-100">مشاهده
+                            </a>
 
-                            <a href="{{ listing.platform_url }}" class="btn btn-success w-100"
-                                target="_blank">بازدید</a>
+                            <a href="{{ listing.platform_url }}" class="btn btn-success w-100" target="_blank">بازدید
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            </a>
 
                         </div>
                     </div>

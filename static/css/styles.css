@@ -336,7 +336,7 @@ td {
    پیام‌های هشدار (Alerts)
    ======================================== */
 .alert {
-    padding: var(--spacing-lg) var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-md);
     margin: var(--spacing-xxl);
     border-radius: var(--border-radius-md);
     border: none;
@@ -369,7 +369,7 @@ td {
 /* ثابت کردن موقعیت هشدار در بالای صفحه */
 .alert-dismissible {
     position: fixed;
-    top: 20px;
+    top: 90px;
     left: 50%;
     transform: translateX(-50%) translateY(-150%);
     /* قرارگیری اولیه بیرون از کادر بالایی */
@@ -700,6 +700,12 @@ td {
 
 .inf-all-card {
     display: flex;
+}
+
+.link-similar {
+    font-size: 12px;
+    padding: 10px;
+    color: #4d4d4dcc;
 }
 
 .profile-img-detail {
@@ -1210,7 +1216,7 @@ hr {
    ======================================== */
 
 .btn {
-    padding: 8px 30px;
+    padding: 10px 30px;
     border-radius: var(--border-radius-999);
     border-color: rgb(0 88 255);
     ;
@@ -1239,6 +1245,7 @@ hr {
     ;
 }
 
+
 .btn-primary:hover {
     background: #5151511d;
     /* transform: translateY(-2px); */
@@ -1254,6 +1261,18 @@ hr {
     background: #014bd4;
     /* transform: translateY(-2px); */
     box-shadow: 0 3px 8px #004fe3c0;
+}
+
+.btn-delet {
+    color: #df1111;
+    background: #fcb3b2;
+    font-weight: bold;
+}
+
+.btn-delet:hover {
+    color: #a91a1a;
+    background: #f9918f;
+
 }
 
 .btn-danger {
@@ -1324,6 +1343,11 @@ hr {
 .btn-sm {
     padding: 5px var(--spacing-md);
     font-size: var(--font-size-base);
+}
+
+.btn-md {
+    padding: 5px var(--spacing-md);
+    font-size: var(--font-size-md);
 }
 
 .btn-lg {
@@ -2573,6 +2597,11 @@ form textarea {
     gap: 5px;
     font-size: 16px;
     width: fit-content;
+}
+
+.justify-content-end {
+    display: flex;
+    gap: 15px;
 }
 
 

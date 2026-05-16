@@ -16,6 +16,5 @@ urlpatterns = [
     path('<int:pk>/request-visit/', views.request_visit, name='request_visit'),
     path('visit-request/<int:pk>/<str:action>/', views.manage_visit_request, name='manage_visit_request'),
     path('user/<str:username>/', views.user_profile, name='user_profile'),
-
+    path('<int:pk>/similar/', views.similar_listings, name='similar_listings'),
 ]
-
