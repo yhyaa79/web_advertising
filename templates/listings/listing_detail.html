@@ -76,18 +76,9 @@
                 </div>
                 {% endif %}
 
-
-                {% if listing.is_verified %}
-                <div class="position-absolute top-0 end-0 m-2">
-                    <span class="badge-detail bg-warning text-dark">
-                        <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
-                    </span>
-                </div>
-                {% endif %}
-
                 {% if listing.premier %}
                 <div class="position-absolute top-0 end-0 m-2">
-                    <span class="badge bg-warning text-dark">
+                    <span class="badge badge-detail bg-warning text-dark">
                         <i class="bi bi-lock-fill"></i> اگهی برتر
 
                         <svg class="premier-star" width="24" height="24" viewBox="0 0 24 24" fill="#FFD700"
@@ -100,7 +91,7 @@
                 </div>
                 {% elif listing.boost %}
                 <div class="position-absolute top-0 end-0 m-2">
-                    <span class="badge bg-warning text-dark">
+                    <span class="badge badge-detail bg-warning text-dark">
                         <i class="bi bi-lock-fill"></i> اگهی پیشرفته
                     </span>
                 </div>
@@ -176,10 +167,10 @@
 
             {% if listing.about_platform %}
             <div class="card card-body aboutplatform-card">
-                <div class="aboutplatform-card-h3">
+                <div onclick="toggleHeight()" class="aboutplatform-card-h3">
                     <h3>درباره پلتفرم:</h3>
                     <div class="btn-aboutplatform-card">
-                        <button onclick="toggleHeight()" id="more-height-btn"></button>
+                        <button id="more-height-btn"></button>
                     </div>
                 </div>
                 <hr>
@@ -189,7 +180,8 @@
 
                     </div>
                 </div>
-                <p id="text-aboutplatform-card">برای مشاهده بیشتر روی "∨" کلیک کنید.</p>
+                <div id="bootstrap"></div>
+                <p id="text-aboutplatform-card" onclick="toggleHeight()">مشاهده بیشتر</p>
             </div>
             {% endif %}
 
@@ -406,7 +398,7 @@
 
                 <div class="seller-information">
                     <h5>اطلاعات فروشنده</h5>
-                    
+
                     {% if listing.seller.profile.premium %}
                     <div class="inf-card-profile-detail">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="#F59E0B"
@@ -1045,6 +1037,7 @@
 
         // آیدی تگ p خود را به جای 'my-text' قرار دهید
         const myTextElement = document.getElementById('text-aboutplatform-card');
+        const BootStrap = document.getElementById('bootstrap');
 
         const isExpanded = aboutplatformCard.classList.toggle('expanded');
         moreBtn.classList.toggle('open');
@@ -1053,10 +1046,12 @@
             // حالت باز شده
             aboutplatformCard.style.maxHeight = '10000px';
             myTextElement.innerText = ''; // متن حذف می‌شود
+            BootStrap.style.display = 'none';
         } else {
             // حالت بسته شده
             aboutplatformCard.style.maxHeight = '300px';
-            myTextElement.innerText = 'برای مشاهده بیشتر روی "∨" کلیک کنید.'; // متن نمایش داده می‌شود
+            myTextElement.innerText = 'مشاهده بیشتر'; // متن نمایش داده می‌شود
+            BootStrap.style.display = 'block';
         }
     }
 </script>

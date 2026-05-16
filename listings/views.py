@@ -21,19 +21,16 @@ User = get_user_model()
 
 
 def listing_list(request):
-    # ۱. دریافت ۳ آگهی ویژه به صورت رندوم از کل آگهی‌های فعال (مستقل از فیلترها)
-    boosted_listings = Listing.objects.filter(status='active', boost=True).order_by('?')[:3]
-    boosted_ids = boosted_listings.values_list('id', flat=True)
-
-    # ۲. تعریف متغیر پایه برای اعمال فیلترهای کاربر
+    # ۱. تعریف متغیر پایه با نام listings (نام‌ها یکسان شد)
     listings = Listing.objects.filter(status='active')
     
     # ---------------------------------------------------------
-    # اعمال فیلترها روی متغیر listings
+    # فیلتر دسته‌بندی
     category_id = request.GET.get('category')
     if category_id:
         listings = listings.filter(category_id=category_id)
     
+    # جستجوی متنی
     search_query = request.GET.get('search')
     if search_query:
         listings = listings.filter(
@@ -41,6 +38,7 @@ def listing_list(request):
             Q(description__icontains=search_query)
         )
     
+    # فیلترهای چک‌باکسی
     filter_private = request.GET.get('filter_private')
     if filter_private:
         listings = listings.filter(is_private=True)
@@ -57,10 +55,12 @@ def listing_list(request):
     if filter_preferment:
         listings = listings.filter(boost=True)
 
+    # نکته: در کد شما این قسمت تکراری بود، احتمالا منظور filter_premier بوده است
     filter_premier = request.GET.get('filter_premier') 
     if filter_premier:
         listings = listings.filter(premier=True)
     
+    # جستجوی پیشرفته - بازه قیمت
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
     if min_price:
@@ -80,6 +80,7 @@ def listing_list(request):
             )
         ).filter(final_price__lte=max_price)
     
+    # جستجوی پیشرفته - بازه سن پلتفرم
     min_age = request.GET.get('min_age')
     max_age = request.GET.get('max_age')
     if min_age:
@@ -87,6 +88,7 @@ def listing_list(request):
     if max_age:
         listings = listings.filter(platform_age__lte=max_age)
     
+    # جستجوی پیشرفته - بازه دنبال‌کننده
     min_followers = request.GET.get('min_followers')
     max_followers = request.GET.get('max_followers')
     if min_followers:
@@ -94,6 +96,7 @@ def listing_list(request):
     if max_followers:
         listings = listings.filter(followers_count__lte=max_followers)
     
+    # جستجوی پیشرفته - بازه درآمد ماهیانه
     min_income = request.GET.get('min_income')
     max_income = request.GET.get('max_income')
     if min_income:
@@ -102,11 +105,32 @@ def listing_list(request):
         listings = listings.filter(monthly_income__lte=max_income)
     # ---------------------------------------------------------
     
-    # حذف آگهی‌های ویژه‌ی انتخاب‌شده از لیست اصلی (برای جلوگیری از نمایش تکراری)
+    # ۱. دریافت آگهی‌های ویژه مرتبط با فیلترها
+    boosted_listings = list(listings.filter(boost=True).order_by('?')[:3])
+    
+    # ۲. اگر کمتر از ۳ آگهی ویژه در این فیلتر پیدا شد، بقیه را از کل آگهی‌های ویژه سیستم پر کن
+    if len(boosted_listings) < 3:
+        needed = 3 - len(boosted_listings)
+        # آیدی‌هایی که تا الان پیدا شده را حذف کن تا تکراری نباشد
+        current_boosted_ids = [item.id for item in boosted_listings]
+        
+        extra_boosted = Listing.objects.filter(
+            status='active', 
+            boost=True
+        ).exclude(id__in=current_boosted_ids).order_by('?')[:needed]
+        
+        boosted_listings.extend(extra_boosted)
+
+    # گرفتن آیدی تمام آگهی‌های ویژه (چه مرتبط چه غیرمرتبط) برای حذف از لیست اصلی
+    boosted_ids = [item.id for item in boosted_listings]
+    
+    # ایجاد لیست اصلی آگهی‌ها
     main_listings_queryset = listings.exclude(id__in=boosted_ids)
 
-    # اعمال مرتب‌سازی روی لیست اصلی
+
+    # اعمال مرتب‌سازی
     sort_by = request.GET.get('sort_by')
+    
     if sort_by == 'newest':
         main_listings_queryset = main_listings_queryset.order_by('-created_at')
     elif sort_by == 'oldest':
@@ -155,7 +179,6 @@ def listing_list(request):
     }
     
     return render(request, 'listings/listing_list.html', context)
-
 
 
 

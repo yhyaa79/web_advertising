@@ -1,32 +1,126 @@
-@import url(https://fonts.googleapis.com/css?family=Sintony);
-
-/* تعریف فونت Vazirmatn برای متون فارسی */
 @font-face {
-    font-family: 'Vazirmatn';
-    src: url('../fonts/iranyekanwebregular.e31c09af.woff2') format('woff2');
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Thin.ttf") format("truetype");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+    /* Persian/Arabic */
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+    /* Persian/Arabic */
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Regular.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+    /* Persian/Arabic */
 }
 
-/* تعریف فونت برای متون انگلیسی (مثال: Roboto) */
 @font-face {
-    font-family: 'Roboto';
-    src: url('../fonts/roboto-regular.woff2') format('woff2');
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+    /* Persian/Arabic */
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+    /* Persian/Arabic */
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-ExtraBold.ttf") format("truetype");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+    /* Persian/Arabic */
+}
+
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Thin.ttf") format("truetype");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+    /* Latin */
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+    /* Latin */
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Regular.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
+    unicode-range: U+0000-00FF;
+    /* Latin */
 }
 
-/* اعمال فونت Vazirmatn برای متون فارسی */
-:lang(fa) {
-    font-family: 'Vazirmatn', sans-serif;
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+    /* Latin */
 }
 
-/* اعمال فونت Roboto برای متون انگلیسی */
-:lang(en) {
-    font-family: 'Roboto', sans-serif;
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+    /* Latin */
 }
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-ExtraBold.ttf") format("truetype");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+    /* Latin */
+}
+
+
+
 
 /* ========================================
    متغیرهای رنگ و استایل
@@ -93,7 +187,7 @@
 
 
     /* سایه‌ها */
-    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --card-shadow: 0px 0px 20px #9d9d9d26;
     --hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     --modal-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
@@ -154,6 +248,46 @@ td {
     white-space: nowrap !important;
 }
 
+
+
+
+
+html,
+body,
+p,
+span,
+div,
+h1,
+td,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+li,
+ul,
+ol,
+label,
+small,
+medium,
+strong,
+em,
+b,
+i,
+blockquote,
+q,
+cite,
+code,
+pre,
+button,
+input,
+textarea,
+select,
+option {
+    font-family: "Vazirmatn", "Roboto", sans-serif;
+}
+
 /* ========================================
    نوار ناوبری (Navbar)
    ======================================== */
@@ -202,7 +336,7 @@ td {
     color: var(--muted);
     text-decoration: none;
     font-size: .9rem;
-    font-weight: 600;
+    font-weight: 500;
     transition: color .2s;
 }
 
@@ -285,16 +419,16 @@ td {
     position: absolute;
     top: -8px;
     right: -10px;
-    padding: 3px 6px;
+    padding: 3px;
     border-radius: 50%;
     background: var(--danger-color);
     color: var(--white-bg);
-    font-size: 10px;
+    font-size: 9px;
     font-weight: bold;
     display: flex;
     justify-content: center;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
 }
 
 /* ========================================
@@ -572,6 +706,13 @@ td {
 }
 
 
+#bootstrap {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0), white 82.57%);
+    opacity: 0.9;
+    height: 125px;
+    margin-top: -125px;
+}
+
 /* ========================================
    کارت‌ها (Cards)
    ======================================== */
@@ -609,8 +750,12 @@ td {
 
 .description-detail {
     margin: 12px 0;
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 17px;
+    font-weight: 400;
+
+}
+
+.description-detail p {
     white-space: pre-line;
 }
 
@@ -641,6 +786,7 @@ td {
 
 .aboutplatform-card-h3 {
     display: flex;
+    cursor: pointer;
 }
 
 
@@ -676,9 +822,20 @@ td {
 
 
 #text-aboutplatform-card {
-    font-size: 17px;
+    text-align: center !important;
+    font-size: 16px;
     font-weight: 600;
-    margin-top: 10px;
+    color: var(--blu-color);
+    background: var(--white-bg);
+    margin-bottom: 5px !important;
+    cursor: pointer;
+    width: fit-content;
+    margin: auto;
+}
+
+#text-aboutplatform-card:hover {
+    color: #014bd4;;
+    text-decoration: underline;
 }
 
 
@@ -1221,16 +1378,18 @@ hr {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px; /* فاصله بین دکمه‌ها */
+    gap: 8px;
+    /* فاصله بین دکمه‌ها */
     margin: 50px 0;
-    direction: rtl; /* راست‌چین کردن برای زبان فارسی */
-    font-family: 'Vazirmatn', 'IRANSans', Tahoma, sans-serif; /* فونت‌های مناسب فارسی */
+    direction: rtl;
+    /* راست‌چین کردن برای زبان فارسی */
 }
 
 /* استایل لینک‌ها (دکمه‌های اولین، قبلی، بعدی، آخرین) */
 .pagination a {
     text-decoration: none;
-    color: var(--blu-color); /* رنگ متن */
+    color: var(--blu-color);
+    /* رنگ متن */
     background-color: #ffffff;
     border: 1px solid #e5e7eb;
     padding: 8px 16px;
@@ -1357,13 +1516,9 @@ hr {
 }
 
 .btn-secondary {
-    background-color: #95a5a6;
+    background-color: #9ca3a3;
     color: var(--white-bg);
-}
-
-.btn-secondary:hover {
-    background-color: #7f8c8d;
-    transform: translateY(-2px);
+    border: 2px solid var(--border-color);
 }
 
 .btn-outline-primary {
@@ -1384,9 +1539,9 @@ hr {
 }
 
 .btn-outline-secondary:hover {
-    background: var(--secondary-color);
+    background-color: #7f898a9b;
     color: var(--white-bg);
-    border-color: var(--secondary-color);
+    border: 2px solid var(--border-color);
 }
 
 .btn-sm {
@@ -1463,7 +1618,6 @@ form textarea {
     border-radius: var(--border-radius-md);
     font-size: var(--font-size-base);
     transition: var(--transition-base);
-    font-family: Tahoma, Arial, sans-serif;
 }
 
 
@@ -1617,9 +1771,7 @@ form textarea {
     color: #e49518;
 }
 
-.premier-star {
-
-}
+.premier-star {}
 
 .badge-info,
 .bg-info {
@@ -1662,11 +1814,11 @@ form textarea {
 
 .badge-detail {
     display: inline-block;
-    padding: 4px 14px;
+    padding: 2px 11px;
     font-size: var(--font-size-base);
     font-weight: 400;
     border-radius: var(--border-radius-999);
-    margin: 0 3px;
+    margin: 0 5px;
 }
 
 .heder-card-about-platform {}
@@ -1969,6 +2121,7 @@ form textarea {
     padding: 10px;
     width: 100%;
     padding-top: 5px;
+    box-shadow: 0px 0px 20px #9d9d9d26;
 }
 
 .inf-card-home {
