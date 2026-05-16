@@ -363,34 +363,60 @@
     {% empty %}
     <p class="text-center">آگهی فعالی یافت نشد.</p>
     {% endfor %}
+
+    <!-- صفحه‌بندی -->
+    <div class="pagination">
+        {% if listings.has_previous %}
+        <a
+            href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">اولین</a>
+        <a
+            href="?page={{ listings.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">قبلی</a>
+        {% endif %}
+        
+        {% if listings.has_previous or listings.has_next %}
+        <span>صفحه {{ listings.number }} از {{ listings.paginator.num_pages }}</span>
+        {% endif %}
+
+        {% if listings.has_next %}
+        <a
+            href="?page={{ listings.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">بعدی</a>
+        <a
+            href="?page={{ listings.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">آخرین</a>
+        {% endif %}
+    </div>
+
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const toggleButton = document.getElementById("customFilterToggle");
-        const collapseDiv = document.getElementById("filterCollapse");
+document.addEventListener("DOMContentLoaded", function () {
+    const toggleButton = document.getElementById("customFilterToggle");
+    const collapseDiv = document.getElementById("filterCollapse");
 
-        // بررسی اینکه آیا فیلتری از قبل اعمال شده است؟ اگر بله، منو باز بماند
-        const urlParams = new URLSearchParams(window.location.search);
-        let hasFilters = false;
-        for (const [key, value] of urlParams) {
-            if (value !== "" && key !== "search" && key !== "category") {
-                hasFilters = true;
-                break;
-            }
+    // استخراج پارامترهای URL
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // بررسی اینکه آیا فیلتری از قبل اعمال شده است
+    let hasFilters = false;
+    const filterParams = ["min_price", "max_price", "min_age", "max_age", "min_followers", "max_followers", "min_income", "max_income", "filter_private", "filter_income", "filter_verified", "sort_by"];
+    
+    for (const [key, value] of urlParams) {
+        if (value !== "" && filterParams.includes(key) && key !== "page") {
+            hasFilters = true;
+            break;
         }
+    }
 
-        if (hasFilters) {
-            collapseDiv.classList.add("open");
-            toggleButton.classList.add("active");
-        }
+    if (hasFilters) {
+        collapseDiv.classList.add("open");
+        toggleButton.classList.add("active");
+    }
 
-        // عملکرد دکمه کلیک
-        toggleButton.addEventListener("click", function () {
-            collapseDiv.classList.toggle("open");
-            toggleButton.classList.toggle("active");
-        });
+    // عملکرد دکمه کلیک
+    toggleButton.addEventListener("click", function () {
+        collapseDiv.classList.toggle("open");
+        toggleButton.classList.toggle("active");
     });
+});
 </script>
 
 

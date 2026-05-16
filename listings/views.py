@@ -12,9 +12,12 @@ import json
 from notifications.utils import notify_visit_request, notify_visit_approved, notify_visit_rejected
 from django.contrib.auth import get_user_model
 from django.db.models import Q, F, Case, When, DecimalField
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 User = get_user_model()
+
+
 
 def listing_list(request):
     listings = Listing.objects.filter(status='active')
@@ -130,7 +133,6 @@ def listing_list(request):
     elif sort_by == 'lowest_income':
         listings = listings.filter(monthly_income__isnull=False).order_by('monthly_income')
     elif sort_by == 'fastest_roi':
-        # محاسبه ROI و مرتب‌سازی
         listings = listings.filter(monthly_income__isnull=False, monthly_income__gt=0).annotate(
             final_price=Case(
                 When(discount_price__isnull=False, then=F('discount_price')),
@@ -139,6 +141,17 @@ def listing_list(request):
             ),
             roi_months=F('final_price') / F('monthly_income')
         ).order_by('roi_months')
+    
+    # Pagination - 20 آگهی در هر صفحه
+    paginator = Paginator(listings, 20)
+    page = request.GET.get('page')
+    
+    try:
+        listings = paginator.page(page)
+    except PageNotAnInteger:
+        listings = paginator.page(1)
+    except EmptyPage:
+        listings = paginator.page(paginator.num_pages)
     
     categories = Category.objects.all()
     
@@ -240,8 +253,17 @@ def listing_create(request):
             views_data_formset.instance = listing
             views_data_formset.save()
 
-            faq_formset.instance = listing
-            faq_formset.save()
+            # ذخیره FAQ ها با فیلتر کردن رکوردهای خالی
+            faqs = faq_formset.save(commit=False)
+            for faq in faqs:
+                # فقط FAQ هایی که question یا answer دارند را ذخیره کن
+                if faq.question and faq.question.strip() and faq.answer and faq.answer.strip():
+                    faq.listing = listing
+                    faq.save()
+            
+            # حذف FAQ های marked for deletion
+            for faq in faq_formset.deleted_objects:
+                faq.delete()
 
             messages.success(request, 'آگهی شما با موفقیت ثبت شد و در انتظار تایید است.')
             return redirect('listings:my_listings')
@@ -259,6 +281,7 @@ def listing_create(request):
         'views_data_formset': views_data_formset,
         'faq_formset': faq_formset,
     })
+
 
 
 @login_required

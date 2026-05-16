@@ -226,7 +226,7 @@ class ListingFAQ(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='faqs')
     question = models.CharField(blank=True, max_length=300, verbose_name='پرسش')
     answer = models.TextField(blank=True, verbose_name='پاسخ')
-    order = models.PositiveIntegerField(default=0, verbose_name='ترتیب')
+    order = models.PositiveIntegerField(blank=True, default=0, verbose_name='ترتیب')
 
     class Meta:
         verbose_name = 'پرسش و پاسخ'

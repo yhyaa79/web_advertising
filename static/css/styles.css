@@ -1211,6 +1211,51 @@ hr {
     background-color: #00000024;
 }
 
+
+/* استایل کانتینر اصلی صفحه‌بندی */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* فاصله بین دکمه‌ها */
+    margin: 50px 0;
+    direction: rtl; /* راست‌چین کردن برای زبان فارسی */
+    font-family: 'Vazirmatn', 'IRANSans', Tahoma, sans-serif; /* فونت‌های مناسب فارسی */
+}
+
+/* استایل لینک‌ها (دکمه‌های اولین، قبلی، بعدی، آخرین) */
+.pagination a {
+    text-decoration: none;
+    color: var(--blu-color); /* رنگ متن */
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+/* افکت هاور (رفتن موس روی لینک‌ها) */
+.pagination a:hover {
+    background-color: var(--blu-color);
+    color: #ffffff;
+    border-color: var(--blu-color);
+    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+}
+
+/* استایل متن صفحه فعلی */
+.pagination span {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: default;
+}
+
 /* ========================================
    دکمه‌ها (Buttons)
    ======================================== */

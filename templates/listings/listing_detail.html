@@ -181,12 +181,15 @@
             {% endif %}
 
 
-            {% if listing.faqs.all %}
+            {% for faq in listing.faqs.all %}
+            {% if faq.question and faq.answer %}
+            {% if forloop.first %}
             <div class="card card-body mt-3">
                 <h3>پرسش و پاسخ:</h3>
                 <hr>
                 <div class="faq-list">
-                    {% for faq in listing.faqs.all %}
+                    {% endif %}
+
                     <div class="faq-item">
                         <div class="d-flex justify-content-between align-items-center faq-question">
                             <button
@@ -206,9 +209,11 @@
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
+                    {% if forloop.last %}
                 </div>
             </div>
+            {% endif %}
+        {% endif %}
 
             <script>
                 document.querySelectorAll('.faq-question-div').forEach(function (btn) {
@@ -251,7 +256,7 @@
                     }
                 }
             </script>
-            {% endif %}
+            {% endfor %}
 
 
 
