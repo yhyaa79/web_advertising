@@ -7,6 +7,8 @@ def create_notification(recipient, notification_type, title, message, related_ob
     """
     تابع کمکی برای ایجاد اعلان
     """
+
+    print("aaaaaaa")
     notification = Notification.objects.create(
         recipient=recipient,
         notification_type=notification_type,

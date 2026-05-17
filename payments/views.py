@@ -605,16 +605,7 @@ def get_chat_messages(request, proposal_id):
     ChatMessage.objects.filter(
         chat_room=chat_room,
         is_read=False
-    ).exclude(sender=request.user).update(is_read=True).create_notification(
-            recipient=msg.sender.username,
-            notification_type='proposal',
-            title='پیشنهاد شما پذیرفته شد',
-            message=f'شما در اگهی "{chat_room} پیام خوانده نشده دارید.',
-            action_url=reverse('payments:my_transactions')
-        )
-    
-
-
+    ).exclude(sender=request.user).update(is_read=True)
     
     messages_data = []
     for msg in chat_room.messages.all():
@@ -626,8 +617,6 @@ def get_chat_messages(request, proposal_id):
             'created_at': msg.created_at.strftime('%Y/%m/%d %H:%M'),
             'is_read': msg.is_read
         })
-
-    print(f"aaaaaaaaa {messages_data}")
     
     return JsonResponse({
         'messages': messages_data,
