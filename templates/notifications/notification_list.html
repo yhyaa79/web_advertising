@@ -8,18 +8,11 @@
     <div class="col-md-12">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>اعلان‌ها</h2>
-            {% if unread_notifications %}
-            <form method="post" action="{% url 'notifications:mark_all_as_read' %}" class="d-inline">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-sm btn-outline-primary">
-                    علامت‌گذاری همه به عنوان خوانده شده
-                </button>
-            </form>
-            {% endif %}
+            <!-- دکمه علامت‌گذاری گروهی حذف شد -->
         </div>
 
         {% if unread_notifications %}
-        <h4 class="mb-3">اعلان‌های جدید ({{ unread_notifications.count }})</h4>
+        <h4 class="mb-3">اعلان‌های جدید ({{ unread_notifications|length }})</h4>
         <div class="list-group mb-4">
             {% for notification in unread_notifications %}
             <div class="list-group-item list-group-item-action bg-light border-start border-primary border-4">
@@ -27,27 +20,28 @@
                     <div class="flex-grow-1">
                         <h4 class="mb-1">
                             {% if notification.notification_type == 'visit_request' %}
-                                🔔
+                            🔔
                             {% elif notification.notification_type == 'visit_approved' %}
-                                ✅
+                            ✅
                             {% elif notification.notification_type == 'visit_rejected' %}
-                                ❌
+                            ❌
                             {% endif %}
                             {{ notification.title }}
                         </h4>
-                        <p class="mb-2 card-text  message-notification">{{ notification.message }}</p>
+                        <p class="mb-2 card-text message-notification">{{ notification.message }}</p>
                         <small class="text-muted">{{ notification.created_at|timesince }} پیش</small>
                     </div>
                     <div class="btn-group-vertical ms-3" role="group">
                         {% if notification.action_url %}
-                        <a href="{% url 'notifications:mark_as_read' notification.pk %}" 
-                           class="btn btn-sm btn-primary">
+                        <!-- لینک رفتن به صفحه مربوطه -->
+                        <a href="{{ notification.action_url }}" class="btn btn-sm btn-primary mb-1">
                             مشاهده و رفتن به صفحه
                         </a>
                         {% endif %}
-                        <form method="post" action="{% url 'notifications:delete_notification' notification.pk %}" class="d-inline">
+                        <form method="post" action="{% url 'notifications:delete_notification' notification.pk %}"
+                            class="d-inline">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-delet w-100">
+                            <button type="submit" class="btn btn-sm btn-danger w-100">
                                 حذف
                             </button>
                         </form>
@@ -66,21 +60,40 @@
         <h4 class="mb-3 mt-5">اعلان‌های قبلی</h4>
         <div class="list-group">
             {% for notification in read_notifications %}
-            <div class="list-group-item">
+            <div class="list-group-item list-group-item-action bg-light border-start border-primary border-4">
                 <div class="d-flex w-100 justify-content-between align-items-start">
                     <div class="flex-grow-1">
-                        <h6 class="mb-1 text-muted">{{ notification.title }}</h6>
-                        <p class="mb-1 text-muted small">{{ notification.message }}</p>
+                        <h4 class="mb-1">
+                            {% if notification.notification_type == 'visit_request' %}
+                            🔔
+                            {% elif notification.notification_type == 'visit_approved' %}
+                            ✅
+                            {% elif notification.notification_type == 'visit_rejected' %}
+                            ❌
+                            {% endif %}
+                            {{ notification.title }}
+                        </h4>
+                        <p class="mb-2 card-text message-notification">{{ notification.message }}</p>
                         <small class="text-muted">{{ notification.created_at|timesince }} پیش</small>
                     </div>
-                    <form method="post" action="{% url 'notifications:delete_notification' notification.pk %}" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                            حذف
-                        </button>
-                    </form>
+                    <div class="btn-group-vertical ms-3" role="group">
+                        {% if notification.action_url %}
+                        <!-- لینک رفتن به صفحه مربوطه -->
+                        <a href="{{ notification.action_url }}" class="btn btn-sm btn-primary mb-1">
+                            مشاهده و رفتن به صفحه
+                        </a>
+                        {% endif %}
+                        <form method="post" action="{% url 'notifications:delete_notification' notification.pk %}"
+                            class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger w-100">
+                                حذف
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
+
             {% endfor %}
         </div>
         {% endif %}

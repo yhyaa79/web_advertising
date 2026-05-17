@@ -10,7 +10,8 @@ from listings.models import Listing
 from .models import Transaction, Dispute, PriceProposal, ChatRoom, ChatMessage
 import uuid
 from django.db import models
-from notifications.utils import notify_new_proposal, notify_proposal_accepted, notify_proposal_rejected
+from notifications.utils import create_notification
+from django.urls import reverse
 
 
 @login_required
@@ -69,7 +70,13 @@ def initiate_purchase(request, listing_pk):
                 }
             )
             
-            notify_new_proposal(existing_proposal)
+            create_notification(
+                recipient=existing_proposal.seller,
+                notification_type='proposal',
+                title='پیشنهاد قیمت جدید (بروزرسانی)',
+                message=f'{existing_proposal.buyer.username} پیشنهاد قیمت خود را برای آگهی "{existing_proposal.listing.title}" به‌روز کرد.',
+                action_url=reverse('payments:my_transactions')
+            )
             
             messages.success(request, 'پیشنهاد قیمت شما به‌روزرسانی شد و می‌توانید با فروشنده چت کنید.')
         else:
@@ -92,7 +99,13 @@ def initiate_purchase(request, listing_pk):
                 }
             )
             
-            notify_new_proposal(new_proposal)
+            create_notification(
+                recipient=new_proposal.seller,
+                notification_type='proposal',
+                title='پیشنهاد قیمت جدید',
+                message=f'{new_proposal.buyer.username} برای آگهی "{new_proposal.listing.title}" پیشنهاد قیمت داده است.',
+                action_url=reverse('payments:my_transactions')
+            )
             
             messages.success(request, 'درخواست شما ارسال شد و می‌توانید با فروشنده چت کنید.')
         
@@ -156,6 +169,20 @@ def confirm_deal(request, proposal_id):
         })
     else:
         proposal.save()
+
+        if request.user == proposal.buyer:
+            user_notif = proposal.seller
+        elif request.user == proposal.seller:
+            user_notif = proposal.buyer
+
+        create_notification(
+            recipient=user_notif,
+            notification_type='proposal',
+            title='پیشنهاد شما پذیرفته شد',
+            message=f'گفتوگو "{proposal.listing.title}" از طرف "{request.user}" تایید شد.',
+            action_url=reverse('payments:my_transactions')
+        )
+            
         return JsonResponse({
             'success': True,
             'message': 'موافقت شما ثبت شد. منتظر تایید طرف مقابل هستیم.',
@@ -188,6 +215,20 @@ def reject_deal(request, proposal_id):
     
     proposal.status = 'rejected'
     proposal.save()
+
+
+    if request.user == proposal.buyer:
+        user_notif = proposal.seller
+    elif request.user == proposal.seller:
+        user_notif = proposal.buyer
+
+    create_notification(
+        recipient=user_notif,
+        notification_type='proposal',
+        title='پیشنهاد شما پذیرفته شد',
+        message=f'گفتوگو "{proposal.listing.title}" از طرف "{request.user}" رد شد.',
+        action_url=reverse('payments:my_transactions')
+    )
     
     return JsonResponse({
         'success': True,
@@ -200,10 +241,9 @@ def reject_deal(request, proposal_id):
 
 
 
-
-@login_required
+"""پاسخ فروشنده به پیشنهاد"""
+""" @login_required
 def respond_to_proposal(request, proposal_id):
-    """پاسخ فروشنده به پیشنهاد"""
     proposal = get_object_or_404(PriceProposal, id=proposal_id, seller=request.user, status='pending')
     
     if request.method == 'POST':
@@ -225,7 +265,13 @@ def respond_to_proposal(request, proposal_id):
                 }
             )
             
-            notify_proposal_accepted(proposal)
+            create_notification(
+                recipient=proposal.buyer,
+                notification_type='proposal',
+                title='پیشنهاد شما پذیرفته شد',
+                message=f'فروشنده پیشنهاد شما برای آگهی "{proposal.listing.title}" را پذیرفت.',
+                action_url=reverse('payments:my_transactions')
+            )
             
             messages.success(request, 'پیشنهاد قیمت پذیرفته شد.')
             
@@ -234,7 +280,13 @@ def respond_to_proposal(request, proposal_id):
             proposal.seller_response = response_message
             proposal.save()
             
-            notify_proposal_rejected(proposal)
+            create_notification(
+                recipient=proposal.buyer,
+                notification_type='proposal',
+                title='پیشنهاد شما رد شد',
+                message=f'متاسفانه فروشنده پیشنهاد شما برای آگهی "{proposal.listing.title}" را رد کرد.',
+                action_url=reverse('payments:my_transactions')
+            )
             
             messages.success(request, 'پیشنهاد قیمت رد شد.')
         
@@ -242,7 +294,7 @@ def respond_to_proposal(request, proposal_id):
     
     return render(request, 'payments/respond_to_proposal.html', {'proposal': proposal})
 
-
+ """
 
 
 @login_required
@@ -257,10 +309,11 @@ def proposal_detail(request, proposal_id):
     return render(request, 'payments/proposal_detail.html', {'proposal': proposal})
 
 
-@login_required
+
+"""موافقت با معامله"""
+""" @login_required
 @require_POST
 def agree_to_deal(request, proposal_id):
-    """موافقت با معامله"""
     proposal = get_object_or_404(PriceProposal, id=proposal_id)
     
     if proposal.buyer != request.user and proposal.seller != request.user:
@@ -314,12 +367,12 @@ def agree_to_deal(request, proposal_id):
             'buyer_agreed': proposal.buyer_agreed,
             'seller_agreed': proposal.seller_agreed
         })
+ """
 
-
-@login_required
+"""کنسل کردن معامله"""
+""" @login_required
 @require_POST
 def cancel_deal(request, proposal_id):
-    """کنسل کردن معامله"""
     proposal = get_object_or_404(PriceProposal, id=proposal_id)
     
     if proposal.buyer != request.user and proposal.seller != request.user:
@@ -343,7 +396,7 @@ def cancel_deal(request, proposal_id):
         'message': 'معامله کنسل شد.',
         'status': 'deal_cancelled'
     })
-
+ """
 
 @login_required
 @require_POST
@@ -369,6 +422,14 @@ def undo_rejection(request, proposal_id):
     
     proposal.save()
     
+    create_notification(
+        recipient=proposal.buyer,
+        notification_type='proposal',
+        title='پیشنهاد شما پذیرفته شد',
+        message=f'اگهی "{proposal.listing.title}" به حالت در حال گفتگو برگردانده شد.',
+        action_url=reverse('payments:my_transactions')
+    )
+
     return JsonResponse({
         'success': True,
         'message': 'وضعیت رد برگردانده شد.',
@@ -544,7 +605,16 @@ def get_chat_messages(request, proposal_id):
     ChatMessage.objects.filter(
         chat_room=chat_room,
         is_read=False
-    ).exclude(sender=request.user).update(is_read=True)
+    ).exclude(sender=request.user).update(is_read=True).create_notification(
+            recipient=msg.sender.username,
+            notification_type='proposal',
+            title='پیشنهاد شما پذیرفته شد',
+            message=f'شما در اگهی "{chat_room} پیام خوانده نشده دارید.',
+            action_url=reverse('payments:my_transactions')
+        )
+    
+
+
     
     messages_data = []
     for msg in chat_room.messages.all():
@@ -556,6 +626,8 @@ def get_chat_messages(request, proposal_id):
             'created_at': msg.created_at.strftime('%Y/%m/%d %H:%M'),
             'is_read': msg.is_read
         })
+
+    print(f"aaaaaaaaa {messages_data}")
     
     return JsonResponse({
         'messages': messages_data,

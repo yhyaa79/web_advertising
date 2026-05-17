@@ -9,10 +9,11 @@ from .models import Listing, Category, IncomeProof, VisitRequest
 from .forms import (ListingForm, IncomeProofFormSet, VisitRequestForm,
                     IncomeDataPointFormSet, ViewsDataPointFormSet, FAQFormSet)
 import json
-from notifications.utils import notify_visit_request, notify_visit_approved, notify_visit_rejected
+from notifications.utils import create_notification
 from django.contrib.auth import get_user_model
 from django.db.models import Q, F, Case, When, DecimalField
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.urls import reverse
 
 
 User = get_user_model()
@@ -413,11 +414,19 @@ def request_visit(request, pk):
             visit_request.requester = request.user
             visit_request.save()
             
-            # ایجاد اعلان برای فروشنده
-            notify_visit_request(visit_request)
+            # ایجاد اعلان برای فروشنده به صورت مستقیم
+            create_notification(
+                recipient=listing.seller,
+                notification_type='visit_request',
+                title='درخواست بازدید جدید',
+                message=f'{request.user.username} برای آگهی "{listing.title}" درخواست بازدید ارسال کرده است.',
+                action_url=reverse('listings:my_listings')
+            )
+
             
             messages.success(request, 'درخواست بازدید شما ارسال شد و در انتظار تایید فروشنده است.')
             return redirect('listings:listing_detail', pk=pk)
+
     else:
         form = VisitRequestForm()
     
@@ -434,13 +443,21 @@ def manage_visit_request(request, pk, action):
         listing__seller=request.user,
         status='pending'
     )
+
+    listing_url = reverse('listings:listing_detail', kwargs={'pk': visit_request.listing.pk})
     
     if action == 'approve':
         visit_request.status = 'approved'
         visit_request.save()
         
         # ایجاد اعلان برای درخواست‌کننده
-        notify_visit_approved(visit_request)
+        create_notification(
+            recipient=visit_request.requester,
+            notification_type='visit_request',
+            title='درخواست بازدید جدید',
+            message=f'درخواست بازدید شما برای آگهی "{visit_request.listing.title}" تایید شد. اکنون می‌توانید جزئیات کامل را مشاهده کنید.',
+            action_url=listing_url
+        )
         
         messages.success(request, f'درخواست {visit_request.requester.username} تایید شد.')
     elif action == 'reject':
@@ -448,7 +465,13 @@ def manage_visit_request(request, pk, action):
         visit_request.save()
         
         # ایجاد اعلان برای درخواست‌کننده
-        notify_visit_rejected(visit_request)
+        create_notification(
+            recipient=visit_request.requester,
+            notification_type='visit_request',
+            title='درخواست بازدید جدید',
+            message=f'متاسفانه درخواست بازدید شما برای آگهی "{visit_request.listing.title}" رد شد.',
+            action_url=listing_url
+        )
         
         messages.success(request, f'درخواست {visit_request.requester.username} رد شد.')
     

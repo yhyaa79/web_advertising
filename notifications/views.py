@@ -9,15 +9,21 @@ from .models import Notification
 def notification_list(request):
     notifications = Notification.objects.filter(recipient=request.user)
     
-    # تفکیک اعلان‌های خوانده نشده و خوانده شده
-    unread_notifications = notifications.filter(is_read=False)
-    read_notifications = notifications.filter(is_read=True)[:20]  # فقط 20 تای آخر
+    # دریافت لیست اعلان‌های خوانده نشده و خوانده شده قبل از آپدیت دیتابیس
+    unread_notifications = list(notifications.filter(is_read=False))
+    read_notifications = list(notifications.filter(is_read=True)[:20])
+    
+    # علامت‌گذاری تمام اعلان‌های خوانده نشده به عنوان خوانده شده
+    if unread_notifications:
+        notifications.filter(is_read=False).update(is_read=True)
     
     context = {
         'unread_notifications': unread_notifications,
         'read_notifications': read_notifications,
     }
     return render(request, 'notifications/notification_list.html', context)
+
+
 
 @login_required
 def mark_as_read(request, pk):
