@@ -25,7 +25,7 @@
             <div class="list-group-item list-group-item-action bg-light border-start border-primary border-4">
                 <div class="d-flex w-100 justify-content-between align-items-start">
                     <div class="flex-grow-1">
-                        <h5 class="mb-1">
+                        <h4 class="mb-1">
                             {% if notification.notification_type == 'visit_request' %}
                                 🔔
                             {% elif notification.notification_type == 'visit_approved' %}
@@ -34,8 +34,8 @@
                                 ❌
                             {% endif %}
                             {{ notification.title }}
-                        </h5>
-                        <p class="mb-2">{{ notification.message }}</p>
+                        </h4>
+                        <p class="mb-2 card-text  message-notification">{{ notification.message }}</p>
                         <small class="text-muted">{{ notification.created_at|timesince }} پیش</small>
                     </div>
                     <div class="btn-group-vertical ms-3" role="group">
@@ -47,7 +47,7 @@
                         {% endif %}
                         <form method="post" action="{% url 'notifications:delete_notification' notification.pk %}" class="d-inline">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                            <button type="submit" class="btn btn-sm btn-delet w-100">
                                 حذف
                             </button>
                         </form>

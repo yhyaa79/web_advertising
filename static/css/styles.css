@@ -706,7 +706,7 @@ option {
 }
 
 
-#bootstrap {
+.bootstrap {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0), white 82.57%);
     opacity: 0.9;
     height: 125px;
@@ -766,6 +766,31 @@ option {
 
 
 /* ========================================
+   اعلان ها
+   ======================================== */
+
+
+.list-group-item-action {
+    background: var(--white-bg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--card-shadow);
+    margin-bottom: var(--spacing-xl);
+    border: none;
+    overflow: hidden;
+    transition: var(--transition-base);
+    padding: 8px 12px;
+}
+
+.btn-group-vertical {
+    margin-right: auto;
+    margin-top: auto;
+}
+
+.message-notification {
+    padding: 4px 16px;
+}
+
+/* ========================================
    aboutplatform
    ======================================== */
 
@@ -776,7 +801,7 @@ option {
     white-space: pre-line;
 }
 
-#aboutplatform-text {
+.aboutplatform-text {
     max-height: 300px;
     overflow: hidden;
     transition: max-height 0.5s ease-in-out;
@@ -795,7 +820,7 @@ option {
     margin-left: 15px;
 }
 
-#more-height-btn {
+.more-height-btn {
     background: none;
     border: none;
     width: 40px;
@@ -806,7 +831,7 @@ option {
     cursor: pointer;
 }
 
-#more-height-btn::before {
+.more-height-btn::before {
     content: '';
     border: solid var(--text-secondary);
     border-width: 0 3px 3px 0;
@@ -816,12 +841,12 @@ option {
     transition: transform 0.3s ease-in-out;
 }
 
-#more-height-btn.open::before {
+.more-height-btn.open::before {
     transform: rotate(-135deg);
 }
 
 
-#text-aboutplatform-card {
+.text-aboutplatform-card {
     text-align: center !important;
     font-size: 16px;
     font-weight: 600;
@@ -833,8 +858,9 @@ option {
     margin: auto;
 }
 
-#text-aboutplatform-card:hover {
-    color: #014bd4;;
+.text-aboutplatform-card:hover {
+    color: #014bd4;
+    ;
     text-decoration: underline;
 }
 
@@ -879,6 +905,7 @@ option {
     width: 80px;
     height: 80px;
     object-fit: cover;
+    border-radius: 7px;
 }
 
 .specifications-detail {
@@ -2547,7 +2574,7 @@ form textarea {
 
 .text-muted {
     color: var(--text-secondary);
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-base) !important;
 }
 
 .inf-created-views-username {
