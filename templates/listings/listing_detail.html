@@ -166,23 +166,21 @@
             </div>
 
 
-
-            <!-- این کد را دقیقا بعد از بسته شدن تگ specifications-detail قرار دهید -->
-            <div class="d-flex flex-wrap gap-2 mt-4 mb-4">
+            <div class="scroll-link">
                 {% if listing.about_platform %}
-                <a href="#section-about" class="btn btn-outline-secondary btn-sm">درباره پلتفرم</a>
+                <a href="#section-about" class="text-link-scroll">درباره پلتفرم</a>
                 {% endif %}
 
                 {% if listing.faqs.all %}
-                <a href="#section-faq" class="btn btn-outline-secondary btn-sm">پرسش و پاسخ</a>
+                <a href="#section-faq" class="text-link-scroll">پرسش و پاسخ</a>
                 {% endif %}
 
                 {% if listing.income_data_points.all or listing.views_data_points.all %}
-                <a href="#section-charts" class="btn btn-outline-secondary btn-sm">نمودار ها</a>
+                <a href="#section-charts" class="text-link-scroll">نمودار ها</a>
                 {% endif %}
 
                 {% if income_proofs %}
-                <a href="#section-proofs" class="btn btn-outline-secondary btn-sm">اثبات درآمد</a>
+                <a href="#section-proofs" class="text-link-scroll">اثبات درآمد</a>
                 {% endif %}
             </div>
 

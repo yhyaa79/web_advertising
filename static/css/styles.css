@@ -294,6 +294,9 @@ option {
     font-family: "Vazirmatn", "Roboto", sans-serif;
 }
 
+
+
+
 /* ========================================
    نوار ناوبری (Navbar)
    ======================================== */
@@ -412,6 +415,19 @@ option {
     color: var(--primary) !important;
 }
 
+
+.scroll-link {
+display: flex;
+gap: 20px;
+margin: 30px;
+}
+
+#section-about, 
+#section-faq, 
+#section-charts, 
+#section-proofs {
+    scroll-margin-top: 90px; /* اگر هدر دارید این عدد را بیشتر کنید، مثلا 80px یا 100px */
+}
 
 /* ========================================
    نشان اعلان (Notification Badge)
@@ -1149,7 +1165,13 @@ option {
 .btn-primary-div {
     margin-top: auto;
     display: flex;
-    gap: 12px;
+    gap: 30px;
+}
+
+.text-link-scroll {
+    color: var(--blu-durk-color);
+    font-weight: 500;
+    font-size: var(--font-size-base);
 }
 
 
@@ -1625,8 +1647,8 @@ hr {
 
 .text-link {
     color: var(--blu-durk-color);
-    font-weight: 700;
-    font-size: var(--font-size-base);
+    font-weight: 500;
+    font-size: var(--font-size-sm);
 }
 
 
