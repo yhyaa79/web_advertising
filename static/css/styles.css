@@ -150,7 +150,7 @@
     /* رنگ‌های پس‌زمینه */
     --light-bg: #ecf0f1;
     --dark-bg: #1a252f;
-    --body-bg: #f8faff;
+    --body-bg: #fdfdff;
     --home-bg-1: #e7f0ff;
     --home-bg-2: #f0f5ff;
     --home-bg-3: #e7f0ff;
@@ -193,6 +193,7 @@
 
     /* شعاع گوشه‌ها */
     --border-radius-sm: 4px;
+    --border-radius-sm-md: 6px;
     --border-radius-md: 8px;
     --border-radius-lg: 12px;
     --border-radius-xl: 14px;
@@ -230,6 +231,11 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+html {
+    scroll-behavior: smooth;
+}
+
 
 body {
     background-color: var(--body-bg);
@@ -601,9 +607,9 @@ option {
 }
 
 .faq-question {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    background: #fbfcfd !important;
+    border-radius: var(--border-radius-md);
     border: 1px solid #dee2e6;
-    border-radius: 10px;
     font-weight: 500;
     color: #2c3e50;
     transition: all 0.3s ease;
@@ -618,7 +624,6 @@ option {
 }
 
 .faq-question:hover {
-    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%) !important;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -658,13 +663,13 @@ option {
 }
 
 .faq-answer {
-    background: #f8f9fa !important;
+    background: #fefeff !important;
     border: 1px solid #dee2e6;
     border-top: none;
     border-radius: 0 0 8px 8px;
-    margin-top: 0 !important;
+    margin-top: -37px;
     padding: 1.25rem !important;
-    font-size: 16px;
+    font-size: 14px;
     /* font-weight: 400; */
     /* line-height: 23px; */
     color: #495057;
@@ -672,6 +677,7 @@ option {
     opacity: 1;
     /* transform: translateY(0); */
     transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .faq-answer-wrapper:not(.open) .faq-answer {
@@ -710,7 +716,7 @@ option {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0), white 82.57%);
     opacity: 0.9;
     height: 125px;
-    margin-top: -125px;
+    margin-top: -120px;
 }
 
 /* ========================================
@@ -718,7 +724,8 @@ option {
    ======================================== */
 .card {
     background: var(--white-bg);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--border-radius-sm-md);
+    border: 1px solid #dee2e6 !important;
     box-shadow: var(--card-shadow);
     margin-bottom: var(--spacing-xl);
     border: none;
@@ -730,6 +737,12 @@ option {
     box-shadow: var(--hover-shadow);
     transform: translateY(-2px);
 } */
+
+.titel-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 .card-header {
     padding: var(--spacing-md);
@@ -744,13 +757,13 @@ option {
 }
 
 .card-body {
-    padding: 10px;
+    padding: 10px 30px 20px 30px;
     width: 100%;
 }
 
 .description-detail {
     margin: 12px 0;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 400;
 
 }
@@ -799,6 +812,7 @@ option {
     font-size: 16px;
     font-weight: 400;
     white-space: pre-line;
+    margin-top: -25px;
 }
 
 .aboutplatform-text {
@@ -811,6 +825,10 @@ option {
 
 .aboutplatform-card-h3 {
     display: flex;
+    min-height: 40px;
+}
+
+.cursor-card {
     cursor: pointer;
 }
 
@@ -1390,8 +1408,8 @@ option {
 hr {
     border: none;
     height: 1px;
-    margin: 15px 0;
-    background-color: #00000066;
+    margin: 12px 0;
+    background-color: #dee2e6;
 }
 
 
@@ -2133,10 +2151,10 @@ form textarea {
 }
 
 .card-img-top-detail {
-    height: 200px;
-    width: 315px;
+    /* height: 200px; */
+    width: 100%;
     object-fit: cover;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--border-radius-sm);
 }
 
 
@@ -2841,13 +2859,6 @@ form textarea {
 /* ========================================
    core new
    ======================================== */
-
-
-
-
-html {
-    scroll-behavior: smooth;
-}
 
 
 /* ── NAV ── */

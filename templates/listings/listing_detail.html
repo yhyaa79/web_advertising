@@ -167,10 +167,32 @@
 
 
 
+            <!-- این کد را دقیقا بعد از بسته شدن تگ specifications-detail قرار دهید -->
+            <div class="d-flex flex-wrap gap-2 mt-4 mb-4">
+                {% if listing.about_platform %}
+                <a href="#section-about" class="btn btn-outline-secondary btn-sm">درباره پلتفرم</a>
+                {% endif %}
+
+                {% if listing.faqs.all %}
+                <a href="#section-faq" class="btn btn-outline-secondary btn-sm">پرسش و پاسخ</a>
+                {% endif %}
+
+                {% if listing.income_data_points.all or listing.views_data_points.all %}
+                <a href="#section-charts" class="btn btn-outline-secondary btn-sm">نمودار ها</a>
+                {% endif %}
+
+                {% if income_proofs %}
+                <a href="#section-proofs" class="btn btn-outline-secondary btn-sm">اثبات درآمد</a>
+                {% endif %}
+            </div>
+
+
+
+
             {% if listing.about_platform %}
-            <div class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('2', '1000px' , '300px')" class="aboutplatform-card-h3">
-                    <h3>درباره پلتفرم:</h3>
+            <div id="section-about" class="card card-body aboutplatform-card">
+                <div onclick="toggleHeight('2', '1000px' , '300px')" class="aboutplatform-card-h3 cursor-card">
+                    <h3 class="titel-card">درباره پلتفرم:</h3>
                     <div class="btn-aboutplatform-card">
                         <button id="more-height-btn-2" class="more-height-btn"></button>
                     </div>
@@ -192,85 +214,94 @@
             {% for faq in listing.faqs.all %}
             {% if faq.question and faq.answer %}
             {% if forloop.first %}
-            <div class="card card-body mt-3">
-                <h3>پرسش و پاسخ:</h3>
+            <div id="section-faq" class="card card-body mt-3">
+                <div class="aboutplatform-card-h3">
+                    <h3 class="titel-card">پرسش و پاسخ:</h3>
+                </div>
                 <hr>
                 <div class="faq-list">
                     {% endif %}
 
                     <div class="faq-item">
-                        <div class="d-flex justify-content-between align-items-center faq-question">
+                        <!-- کل این ردیف حالا قابل کلیک است -->
+                        <div class="d-flex justify-content-between align-items-center faq-question"
+                            data-faq-id="{{ faq.id }}" style="cursor: pointer;">
                             <button
                                 class="btn-light text-end flex-grow-1 d-flex justify-content-between align-items-center faq-question-div"
-                                type="button" data-faq-id="{{ faq.id }}" aria-expanded="false"
-                                aria-controls="faq-answer-{{ faq.id }}">
+                                type="button" aria-expanded="false" aria-controls="faq-answer-{{ faq.id }}">
                                 <span>{{ faq.question }}</span>
                                 <i class="bi bi-chevron-down faq-icon"></i>
                             </button>
                             <div class="btn-faq-card">
-                                <button class="faq-toggle-btn" data-faq-id="{{ faq.id }}"></button>
+                                <button class="faq-toggle-btn" type="button"></button>
                             </div>
                         </div>
+
                         <div class="faq-answer-wrapper" id="faq-answer-wrapper-{{ faq.id }}">
                             <div class="faq-answer p-3 bg-light rounded mt-1" id="faq-answer-{{ faq.id }}">
                                 {{ faq.answer }}
                             </div>
                         </div>
                     </div>
+
                     {% if forloop.last %}
                 </div>
             </div>
             {% endif %}
             {% endif %}
+            {% endfor %}
 
             <script>
-                document.querySelectorAll('.faq-question-div').forEach(function (btn) {
-                    btn.addEventListener('click', function () {
-                        const faqId = this.dataset.faqId;
-                        toggleFaq(faqId);
+                document.addEventListener('DOMContentLoaded', function () {
+                    // تغییر سلکتور به .faq-question تا با کلیک روی کل ردیف عمل کند
+                    document.querySelectorAll('.faq-question').forEach(function (row) {
+                        row.addEventListener('click', function () {
+                            const faqId = this.dataset.faqId;
+                            toggleFaq(faqId);
+                        });
                     });
-                });
 
-                document.querySelectorAll('.faq-toggle-btn').forEach(function (btn) {
-                    btn.addEventListener('click', function () {
-                        const faqId = this.dataset.faqId;
-                        toggleFaq(faqId);
-                    });
-                });
+                    function toggleFaq(faqId) {
+                        const wrapper = document.getElementById('faq-answer-wrapper-' + faqId);
+                        const answer = document.getElementById('faq-answer-' + faqId);
+                        // پیدا کردن آیکون و دکمه بر اساس ساختار جدید
+                        const parentRow = document.querySelector(`.faq-question[data-faq-id="${faqId}"]`);
+                        const icon = parentRow.querySelector('.faq-icon');
+                        const toggleBtn = parentRow.querySelector('.faq-toggle-btn');
+                        const questionBtn = parentRow.querySelector('.faq-question-div');
 
-                function toggleFaq(faqId) {
-                    const wrapper = document.getElementById('faq-answer-wrapper-' + faqId);
-                    const answer = document.getElementById('faq-answer-' + faqId);
-                    const icon = document.querySelector(`[data-faq-id="${faqId}"].faq-question-div .faq-icon`);
-                    const toggleBtn = document.querySelector(`[data-faq-id="${faqId}"].faq-toggle-btn`);
-                    const question = document.querySelector(`[data-faq-id="${faqId}"].faq-question-div`);
+                        const isOpen = wrapper.classList.contains('open');
 
-                    const isOpen = wrapper.classList.contains('open');
-
-                    if (isOpen) {
-                        wrapper.style.maxHeight = '0';
-                        wrapper.classList.remove('open');
-                        icon.classList.remove('bi-chevron-up');
-                        icon.classList.add('bi-chevron-down');
-                        toggleBtn.classList.remove('open');
-                        question.setAttribute('aria-expanded', 'false');
-                    } else {
-                        wrapper.style.maxHeight = answer.scrollHeight + 'px';
-                        wrapper.classList.add('open');
-                        icon.classList.remove('bi-chevron-down');
-                        icon.classList.add('bi-chevron-up');
-                        toggleBtn.classList.add('open');
-                        question.setAttribute('aria-expanded', 'true');
+                        if (isOpen) {
+                            wrapper.style.maxHeight = '0';
+                            wrapper.classList.remove('open');
+                            if (icon) {
+                                icon.classList.remove('bi-chevron-up');
+                                icon.classList.add('bi-chevron-down');
+                            }
+                            if (toggleBtn) toggleBtn.classList.remove('open');
+                            if (questionBtn) questionBtn.setAttribute('aria-expanded', 'false');
+                        } else {
+                            wrapper.style.maxHeight = answer.scrollHeight + 'px';
+                            wrapper.classList.add('open');
+                            if (icon) {
+                                icon.classList.remove('bi-chevron-down');
+                                icon.classList.add('bi-chevron-up');
+                            }
+                            if (toggleBtn) toggleBtn.classList.add('open');
+                            if (questionBtn) questionBtn.setAttribute('aria-expanded', 'true');
+                        }
                     }
-                }
+                });
             </script>
-            {% endfor %}
 
 
 
             {% if listing.income_data_points.all or listing.views_data_points.all %}
-            <div class="card card-body">
-                <h3>نمودار ها:</h3>
+            <div id="section-charts" class="card card-body">
+                <div class="aboutplatform-card-h3">
+                    <h3 class="titel-card">نمودار ها:</h3>
+                </div>
                 <hr>
                 <!-- نمودارها -->
                 <div id="income-chart-container" class="mt-4" style="display: none;">
@@ -290,8 +321,10 @@
             {% endif %}
 
             {% if income_proofs %}
-            <div class="card card-body">
-                <h3>اثبات درآمد:</h3>
+            <div id="section-proofs" class="card card-body">
+                <div class="aboutplatform-card-h3">
+                    <h3 class="titel-card">اثبات درآمد:</h3>
+                </div>
                 <hr>
                 <div class="row">
                     {% for proof in income_proofs %}
@@ -341,7 +374,7 @@
                         {% endif %}
                     </div>
 
-                    <hr class="hr-between" style="margin-bottom: 22px;">
+                    <hr class="hr-between" style="margin-top: 7px;">
 
                     <div class="btn-buy-edit-login-card">
 
@@ -1072,7 +1105,7 @@
         const BootStrap = document.getElementById(`bootstrap-${cardId}`);
         const aboutplatformCardH3 = document.getElementById('aboutplatform-card-h3');
         const headerElement = aboutplatformCard.previousElementSibling
-        .previousElementSibling; // گرفتن div هدر (aboutplatform-card-h3)
+            .previousElementSibling; // گرفتن div هدر (aboutplatform-card-h3)
 
         if (aboutplatformCard) {
             // بررسی اینکه آیا ارتفاع واقعی متن از ارتفاع مجاز حالت بسته کمتر یا مساوی است؟
