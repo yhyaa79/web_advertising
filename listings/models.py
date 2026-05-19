@@ -47,6 +47,7 @@ class Listing(models.Model):
     price = models.DecimalField(max_digits=12, decimal_places=0)
     discount_price = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True)
     about_platform = models.TextField(null=True, blank=True, verbose_name='درباره پلتفرم')
+    analyst = models.TextField(null=True, blank=True, verbose_name='تحلیلگر و مشاور')
 
     
     # سطح آگهی

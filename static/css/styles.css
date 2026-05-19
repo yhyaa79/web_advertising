@@ -417,16 +417,17 @@ option {
 
 
 .scroll-link {
-display: flex;
-gap: 20px;
-margin: 30px;
+    display: flex;
+    gap: 20px;
+    margin: 30px;
 }
 
-#section-about, 
-#section-faq, 
-#section-charts, 
+#section-about,
+#section-faq,
+#section-charts,
 #section-proofs {
-    scroll-margin-top: 90px; /* اگر هدر دارید این عدد را بیشتر کنید، مثلا 80px یا 100px */
+    scroll-margin-top: 90px;
+    /* اگر هدر دارید این عدد را بیشتر کنید، مثلا 80px یا 100px */
 }
 
 /* ========================================
@@ -757,7 +758,7 @@ margin: 30px;
 .titel-card {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: right;
 }
 
 .card-header {
@@ -773,7 +774,7 @@ margin: 30px;
 }
 
 .card-body {
-    padding: 10px 30px 20px 30px;
+    padding: 10px 30px 10px 30px;
     width: 100%;
 }
 
@@ -791,6 +792,96 @@ margin: 30px;
 
 .card-premier {
     border: 3px solid #f59e1c75;
+}
+
+
+/* ========================================
+   کارد های listing_detail 
+   ======================================== */
+
+
+
+.analyst-card {
+    border-right: 6px solid #001F44 !important;
+}
+
+.img-specifications-analyst {
+    display: inline-flex;
+    gap: 20px;
+}
+
+.img-analyst img {
+    width: 110px;
+    object-fit: cover;
+    border-radius: 7px;
+}
+
+.specifications-analyst {
+    margin: auto 0;
+}
+
+.analyst-detail {
+    padding: 10px;
+    margin-bottom: 20px;
+
+}
+
+.analyst-detail p {
+    white-space: pre-line;
+    font-size: 15px;
+}
+
+.inf-card-analyst {
+    display: flex;
+    gap: 5px;
+}
+
+.strong-inf-analyst {
+    display: inline-block;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 400;
+}
+
+
+
+.income-expense-detail {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.income-expense-detail-p {
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.specifications-income-expense {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    direction: rtl;
+    align-items: flex-start;
+    margin: 20px 0;
+    padding: 10px
+}
+
+.inf-card-income-expense {
+    flex: 0 0 auto;
+    padding: 0px 8px;
+}
+
+.strong-inf-income-expense {
+    display: inline-block;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.inf-card-income-expense {
+    margin: 0;
+    color: var(--text-2c3e50);
+    font-size: 16px;
+    font-weight: 600;
 }
 
 
@@ -1057,10 +1148,17 @@ margin: 30px;
     border-radius: var(--border-radius-md);
 }
 
-.card-img-proof {
+.div-card-img-proof {
     width: 100%;
+    display: flex;
+    padding: 20px;
+}
+
+.card-img-proof {
+    width: 50%;
+    margin: 0 auto;
     object-fit: cover;
-    border-radius: var(--border-radius-md);
+        border-radius: var(--border-radius-sm);
 }
 
 .img-fluid {
@@ -1090,6 +1188,40 @@ margin: 30px;
     margin-right: auto;
 }
 
+
+.list-social-media {
+display: grid;
+    gap: 10px;
+    padding: 15px;
+}
+
+.social-media-icon-numb {
+    display: flex;
+    gap: 10px;
+}
+
+.svg-icon-social-media {
+    width: 20px;
+}
+
+.icon-social-media {
+   display: flex;
+    align-items: center;
+    justify-content: right;
+}
+
+.text-social-media {
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+
+.social-media-text {
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
 
 
 /* ========================================
