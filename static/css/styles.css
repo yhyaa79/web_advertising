@@ -254,6 +254,11 @@ td {
     white-space: nowrap !important;
 }
 
+a {
+    color: var(--blu-durk-color) !important;
+}
+
+
 
 
 
@@ -857,12 +862,51 @@ option {
 
 .specifications-income-expense {
     display: flex;
+    gap: 6%;
+}
+
+.inf-first-card-income-expense,
+.inf-second-card-income-expense {
+    display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px 30px;
     direction: rtl;
     align-items: flex-start;
-    margin: 20px 0;
-    padding: 10px
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.inf-first-card-income-expense {
+    max-width: 310px;
+}
+
+.inf-second-card-income-expense {
+    max-width: 220px;
+}
+
+.list-revenue {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+}
+
+.revenue-item {
+    display: flex;
+    padding: 4px;
+}
+
+
+.revenue-item-text,
+.revenue-item-numb {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.between-p-revenue {
+    box-sizing: border-box;
+    display: inline-flex;
+    flex-grow: 1;
+    border-bottom: 1px dashed #c9ced2;
+    margin: auto 8px;
 }
 
 .inf-card-income-expense {
@@ -1158,7 +1202,7 @@ option {
     width: 50%;
     margin: 0 auto;
     object-fit: cover;
-        border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius-sm);
 }
 
 .img-fluid {
@@ -1189,8 +1233,9 @@ option {
 }
 
 
-.list-social-media {
-display: grid;
+.list-social-media,
+.list-file-attachments {
+    display: grid;
     gap: 10px;
     padding: 15px;
 }
@@ -1198,6 +1243,22 @@ display: grid;
 .social-media-icon-numb {
     display: flex;
     gap: 10px;
+    align-items: center;
+}
+
+.file-attachments {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.assets-sell-includes {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    width: 48%;
+    padding: 4px;
+    margin-bottom: 5px;
 }
 
 .svg-icon-social-media {
@@ -1205,7 +1266,7 @@ display: grid;
 }
 
 .icon-social-media {
-   display: flex;
+    display: flex;
     align-items: center;
     justify-content: right;
 }
@@ -1216,6 +1277,11 @@ display: grid;
     display: flex;
     align-items: center;
     justify-content: right;
+    text-decoration: unset;
+}
+
+.text-social-media:hover {
+    text-decoration: underline;
 }
 
 .social-media-text {
@@ -1223,6 +1289,98 @@ display: grid;
     transition: max-height 0.5s ease-in-out;
 }
 
+
+.file-attachments {
+    text-decoration: unset;
+}
+
+.file-attachments:hover {
+    text-decoration: underline;
+}
+
+.list-assets-sell-includes {
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.name-file-attachments-p,
+.assets-sell-includes-p {
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.text-post-sale-support {
+    font-weight: 400;
+    font-size: 14px;
+    padding: 5px 10px;
+    margin-bottom: 20px;
+}
+
+
+.item-license {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 0 5px;
+}
+
+.list-license {
+    margin-bottom: 20px;
+}
+
+.item-license-p {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.list-services-used {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    direction: rtl;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.item-services-used {
+    margin: 0 10px;
+}
+
+.item-services-used-p {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+
+.list-monetization-methods {
+    display: grid;
+    gap: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.monetization-methods-icon-numb {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 5px;
+}
+
+.icon-monetization-methods {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.text-monetization-methods {
+    font-size: 15px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
 
 /* ========================================
    proofs

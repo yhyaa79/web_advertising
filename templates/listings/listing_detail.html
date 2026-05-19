@@ -259,7 +259,7 @@
             {% if forloop.first %}
             <div id="section-faq" class="card card-body mt-3">
                 <div class="aboutplatform-card-h3">
-                    <h3 class="titel-card">پرسش و پاسخ:</h3>
+                    <h3 class="titel-card">پرسش و پاسخ</h3>
                 </div>
                 <hr>
                 <div class="faq-list">
@@ -338,74 +338,12 @@
                 });
             </script>
 
-            {% if listing.analyst %}
-            <div id="section-analyst" class="card card-body income-expense-card">
-                <div onclick="toggleHeight('3', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">درآمد و هزینه‌ها</h3>
-                    <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-3" class="more-height-btn"></button>
-                    </div>
-                </div>
-                <div id="box-text-3" class="aboutplatform-text">
-                    <div class="income-expense-detail">
-                        <hr style="margin-bottom: -14px;">
-
-
-                        <div class="specifications-income-expense">
-
-                            <div class="inf-card-income-expense">
-                                <strong class="strong-inf-income-expense">درآمد کل:</strong>
-                                <p>234,455 تومان</p>
-                            </div>
-
-                            <div class="inf-card-income-expense">
-                                <strong class="strong-inf-income-expense">سود کل:</strong>
-                                <p>234,455 تومان</p>
-                            </div>
-
-
-                            <div class="inf-card-income-expense">
-                                <strong class="strong-inf-income-expense">میانگین درآمد ماهانه:</strong>
-                                <p>234,455 تومان</p>
-                            </div>
-
-                            <div class="inf-card-income-expense">
-                                <strong class="strong-inf-income-expense">میانگین سود ماهانه:</strong>
-                                <p>234,455 تومان</p>
-                            </div>
-
-                            <div class="inf-card-income-expense">
-                                <strong class="strong-inf-income-expense">حاشیه سود:</strong>
-                                <p>23٪</p>
-                            </div>
-
-                            <div class="inf-card-income-expense">
-                                <strong class="strong-inf-income-expense">ضریب سود:</strong>
-                                <p>3.4 برابر</p>
-                            </div>
-
-                            <div class="inf-card-income-expense">
-                                <strong class="strong-inf-income-expense">ضریب درآمد:</strong>
-                                <p>2.1 برابر</p>
-                            </div>
-
-                        </div>
-
-                        <p class="income-expense-detail-p">توی کد بالا من میخوام یک card-body دیگه به اسم پرسش پاسخ وجود
-                            داشته باشه و کاربر موقع ثبت
-                            اگهی بتونه هر چعداد پرسش پاسخ اضافه کنه و توی </p>
-
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-
 
 
             {% if listing.income_data_points.all or listing.views_data_points.all %}
             <div id="section-charts" class="card card-body">
                 <div class="aboutplatform-card-h3">
-                    <h3 class="titel-card">نمودار ها:</h3>
+                    <h3 class="titel-card">نمودار ها</h3>
                 </div>
                 <hr>
                 <!-- نمودارها -->
@@ -428,7 +366,7 @@
             {% if income_proofs %}
             <div id="section-proofs" class="card card-body">
                 <div class="aboutplatform-card-h3">
-                    <h3 class="titel-card">اثبات درآمد:</h3>
+                    <h3 class="titel-card">اثبات درآمد</h3>
                 </div>
                 <hr>
                 <div class="row">
@@ -454,7 +392,7 @@
 
             <div id="section-analyst" class="card card-body income-expense-card">
                 <div onclick="toggleHeight('4', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">رسانه های اجتماعی:</h3>
+                    <h3 class="titel-card">رسانه های اجتماعی</h3>
                     <div class="btn-aboutplatform-card">
                         <button id="more-height-btn-4" class="more-height-btn"></button>
                     </div>
@@ -518,7 +456,7 @@
                                 </div>
                                 <a href="" class="text-social-media">40,000 فالور</a>
                             </div>
-<!-- 
+                            <!-- 
                             <div class="social-media-icon-numb">
                                 <div class="icon-social-media">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -608,144 +546,506 @@
 
 
 
-            {% if listing.analyst %}
-            <div id="section-analyst" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('3', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">پیوست ها:</h3>
+            <div id="section-attachments" class="card card-body aboutplatform-card">
+                <div onclick="toggleHeight('5', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
+                    <h3 class="titel-card">پیوست ها</h3>
                     <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-3" class="more-height-btn"></button>
+                        <button id="more-height-btn-5" class="more-height-btn"></button>
                     </div>
                 </div>
-                <div id="box-text-3" class="aboutplatform-text">
-                    <div class="aboutplatform-detail">
-                        <hr style="margin-bottom: -14px;">
-                        <p>{{ listing.analyst }}</p>
+                <div id="box-text-5" class="social-media-text">
+                    <div class="attachments-detail">
+                        <hr>
+
+                        <div class="list-file-attachments">
+                            <a href="" class="file-attachments">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                                <div class="name-file-attachments">
+                                    <p class="name-file-attachments-p">The_Let_Them_Theory.txt</p>
+                                </div>
+                            </a>
+
+                            <a href="" class="file-attachments">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                                <div class="name-file-attachments">
+                                    <p class="name-file-attachments-p">TheLetThemTheory.txt</p>
+                                </div>
+                            </a>
+
+                            <a href="" class="file-attachments">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                                <div class="name-file-attachments">
+                                    <p class="name-file-attachments-p">The_Theory.txt</p>
+                                </div>
+                            </a>
+                        </div>
+
                     </div>
                 </div>
             </div>
-            {% endif %}
 
 
-            {% if listing.analyst %}
-            <div id="section-analyst" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('3', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">فروش شامل:</h3>
+            <div id="section-sell-includes" class="card card-body aboutplatform-card">
+                <div onclick="toggleHeight('6', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
+                    <h3 class="titel-card">فروش شامل</h3>
                     <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-3" class="more-height-btn"></button>
+                        <button id="more-height-btn-6" class="more-height-btn"></button>
                     </div>
                 </div>
-                <div id="box-text-3" class="aboutplatform-text">
-                    <div class="aboutplatform-detail">
-                        <hr style="margin-bottom: -14px;">
-                        <p>{{ listing.analyst }}</p>
+                <div id="box-text-6" class="social-media-text">
+                    <div class="attachments-detail">
+                        <hr>
+
+                        <div class="list-sell-includes">
+                            <div class="h4-assets-sell-includes">
+                                <h4>دارایی ها</h4>
+                                <div class="list-assets-sell-includes">
+
+                                    <div class="assets-sell-includes">
+                                        <svg xmlns="http://www.w3.org/2000/svg" color="#2196f3" width="22" height="22"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M8 12l3 3 6-6"></path>
+                                        </svg>
+                                        <p class="assets-sell-includes-p">دامین ها</p>
+                                    </div>
+
+                                    <div class="assets-sell-includes">
+                                        <svg xmlns="http://www.w3.org/2000/svg" color="#2196f3" width="22" height="22"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M8 12l3 3 6-6"></path>
+                                        </svg>
+                                        <p class="assets-sell-includes-p">آدرس ایمیل</p>
+                                    </div>
+
+                                    <div class="assets-sell-includes">
+                                        <svg xmlns="http://www.w3.org/2000/svg" color="#2196f3" width="22" height="22"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M8 12l3 3 6-6"></path>
+                                        </svg>
+                                        <p class="assets-sell-includes-p"> لیست آدرس ایمیل کاربران</p>
+                                    </div>
+
+                                    <div class="assets-sell-includes">
+                                        <svg xmlns="http://www.w3.org/2000/svg" color="#2196f3" width="22" height="22"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M8 12l3 3 6-6"></path>
+                                        </svg>
+                                        <p class="assets-sell-includes-p">لوگو و طراحی ها</p>
+                                    </div>
+
+                                    <div class="assets-sell-includes">
+                                        <svg xmlns="http://www.w3.org/2000/svg" color="#2196f3" width="22" height="22"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M8 12l3 3 6-6"></path>
+                                        </svg>
+                                        <p class="assets-sell-includes-p">آدرس ایمیل</p>
+                                    </div>
+
+                                    <div class="assets-sell-includes">
+                                        <svg xmlns="http://www.w3.org/2000/svg" color="#2196f3" width="22" height="22"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M8 12l3 3 6-6"></path>
+                                        </svg>
+                                        <p class="assets-sell-includes-p">وب سایت فایل</p>
+                                    </div>
+
+                                    <div class="assets-sell-includes">
+                                        <svg xmlns="http://www.w3.org/2000/svg" color="#2196f3" width="22" height="22"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M8 12l3 3 6-6"></path>
+                                        </svg>
+                                        <p class="assets-sell-includes-p">حساب های رسانه های اجتماعی</p>
+                                    </div>
+
+                                    <div class="assets-sell-includes">
+                                        <svg xmlns="http://www.w3.org/2000/svg" color="#2196f3" width="22" height="22"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M8 12l3 3 6-6"></path>
+                                        </svg>
+                                        <p class="assets-sell-includes-p">تکنولوژی سفارشی</p>
+                                    </div>
+
+                                    <div class="assets-sell-includes">
+                                        <svg xmlns="http://www.w3.org/2000/svg" color="#2196f3" width="22" height="22"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M8 12l3 3 6-6"></path>
+                                        </svg>
+                                        <p class="assets-sell-includes-p">آدرس ایمیل</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="post-sale-support">
+                                <h4>پشتیبانی پس از فروش</h4>
+                                <p class="text-post-sale-support"> ترتیب ماده های مختلف آیین نامه باید به شکل نمایش در
+                                    کل صفحه باشد. یعنی بنویسد ماده ۱
+                                    انتشار مقاله و بعد کل گزاره های آن نمایش داده شود و یک دکمه مرحله قبل و مرحله بعد
+                                    داشته باشد و همینطور الی آخر تا زمانی که به ماده ۹ میرسد و دکمه تایید و ادامه هم
+                                    باید باشد.
+                                </p>
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
-            {% endif %}
 
 
-            {% if listing.analyst %}
-            <div id="section-analyst" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('3', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">مجوز ها:</h3>
+            <div id="section-license" class="card card-body aboutplatform-card">
+                <div onclick="toggleHeight('7', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
+                    <h3 class="titel-card">مجوز ها</h3>
                     <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-3" class="more-height-btn"></button>
+                        <button id="more-height-btn-7" class="more-height-btn"></button>
                     </div>
                 </div>
-                <div id="box-text-3" class="aboutplatform-text">
-                    <div class="aboutplatform-detail">
-                        <hr style="margin-bottom: -14px;">
-                        <p>{{ listing.analyst }}</p>
+                <div id="box-text-7" class="social-media-text">
+                    <div class="license-detail">
+                        <hr>
+
+                        <div class="list-license">
+                            <div class="item-license">
+                                <p>●</p>
+                                <p class="item-license-p">اینماد</p>
+                            </div>
+
+                            <div class="item-license">
+                                <p>●</p>
+                                <p class="item-license-p">درگاه پرداخت</p>
+                            </div>
+
+                            <div class="item-license">
+                                <p>●</p>
+                                <p class="item-license-p">موسسه حقوق گربه های بی سرپرست</p>
+                            </div>
+
+                            <div class="item-license">
+                                <p>●</p>
+                                <p class="item-license-p">حلال</p>
+                            </div>
+
+                            <div class="item-license">
+                                <p>●</p>
+                                <p class="item-license-p">وزارت معدن و طلا</p>
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
-            {% endif %}
 
 
-            {% if listing.analyst %}
-            <div id="section-analyst" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('3', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">روش های کسب درآمد:</h3>
+            <div id="section-services-used" class="card card-body aboutplatform-card">
+                <div onclick="toggleHeight('8', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
+                    <h3 class="titel-card">خدمات مورد استفاده</h3>
                     <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-3" class="more-height-btn"></button>
+                        <button id="more-height-btn-8" class="more-height-btn"></button>
                     </div>
                 </div>
-                <div id="box-text-3" class="aboutplatform-text">
-                    <div class="aboutplatform-detail">
-                        <hr style="margin-bottom: -14px;">
-                        <p>{{ listing.analyst }}</p>
+                <div id="box-text-8" class="social-media-text">
+                    <div class="services-used-detail">
+                        <hr>
+
+                        <div class="list-services-used">
+                            <div class="item-services-used">
+                                <p class="item-services-used-p">gapgpt</p>
+                            </div>
+
+                            <div class="item-services-used">
+                                <p class="item-services-used-p">moz API</p>
+                            </div>
+
+                            <div class="item-services-used">
+                                <p class="item-services-used-p">melipayamak</p>
+                            </div>
+
+                            <div class="item-services-used">
+                                <p class="item-services-used-p">zarebin</p>
+                            </div>
+
+                            <div class="item-services-used">
+                                <p class="item-services-used-p">google cloud</p>
+                            </div>
+
+                            <div class="item-services-used">
+                                <p class="item-services-used-p">startupdesignn</p>
+                            </div>
+
+                            <div class="item-services-used">
+                                <p class="item-services-used-p">poe API</p>
+                            </div>
+
+                            <div class="item-services-used">
+                                <p class="item-services-used-p">chatgpt</p>
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
-            {% endif %}
 
-            {% if listing.analyst %}
-            <div id="section-analyst" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('3', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">روش های کسب درآمد:</h3>
+
+
+
+
+
+            <div id="section-monetization-methods" class="card card-body income-expense-card">
+                <div onclick="toggleHeight('9', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
+                    <h3 class="titel-card">روش های کسب درآمد</h3>
                     <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-3" class="more-height-btn"></button>
+                        <button id="more-height-btn-9" class="more-height-btn"></button>
                     </div>
                 </div>
-                <div id="box-text-3" class="aboutplatform-text">
-                    <div class="aboutplatform-detail">
-                        <hr style="margin-bottom: -14px;">
-                        <p>{{ listing.analyst }}</p>
+                <div id="box-text-9" class="social-monetization-methods">
+                    <div class="income-expense-detail">
+                        <hr>
+                        <div class="list-monetization-methods">
+
+                            <div class="monetization-methods-icon-numb">
+                                <div class="icon-monetization-methods">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                                    </svg>
+                                </div>
+                                <p class="text-monetization-methods">تبلیغات بنری و کلیکی (PPC)</p>
+                            </div>
+
+                            <div class="monetization-methods-icon-numb">
+                                <div class="icon-monetization-methods">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    </svg>
+                                </div>
+                                <p class="text-monetization-methods">رپورتاژ آگهی و پست‌های حمایت‌شده</p>
+                            </div>
+
+                            <div class="monetization-methods-icon-numb">
+                                <div class="icon-monetization-methods">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-monetization-methods">همکاری در فروش (افیلیت مارکتینگ)</p>
+                            </div>
+                            <!-- 
+                            <div class="monetization-methods-icon-numb">
+                                <div class="icon-monetization-methods">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg>
+                                </div>
+                                <p class="text-monetization-methods">فروش اشتراک ویژه (VIP)</p>
+                            </div>
+
+                            <div class="monetization-methods-icon-numb">
+                                <div class="icon-monetization-methods">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                </div>
+                                <p class="text-monetization-methods">فروش محصولات دیجیتال (دانلودی)</p>
+                            </div>
+
+                            <div class="monetization-methods-icon-numb">
+                                <div class="icon-monetization-methods">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="9" cy="21" r="1"></circle>
+                                        <circle cx="20" cy="21" r="1"></circle>
+                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <p class="text-monetization-methods">فروش محصولات فیزیکی (فروشگاه)</p>
+                            </div>
+
+                            <div class="monetization-methods-icon-numb">
+                                <div class="icon-monetization-methods">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path
+                                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <p class="text-monetization-methods">دریافت حمایت مالی (دونیت)</p>
+                            </div>
+
+                            <div class="monetization-methods-icon-numb">
+                                <div class="icon-monetization-methods">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-monetization-methods">برگزاری دوره‌های آموزشی و وبینار</p>
+                            </div>
+
+                            <div class="monetization-methods-icon-numb">
+                                <div class="icon-monetization-methods">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <circle cx="12" cy="12" r="6"></circle>
+                                        <circle cx="12" cy="12" r="2"></circle>
+                                    </svg>
+                                </div>
+                                <p class="text-monetization-methods">فروش بک‌لینک و فضای تبلیغاتی</p>
+                            </div>
+
+                            <div class="monetization-methods-icon-numb">
+                                <div class="icon-monetization-methods">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-monetization-methods">ارائه خدمات مشاوره و فریلنسری</p>
+                            </div>
+ -->
+                        </div>
                     </div>
                 </div>
             </div>
-            {% endif %}
 
-            {% if listing.analyst %}
-            <div id="section-analyst" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('3', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">مقایسه‌ها:</h3>
+
+
+
+            <div id="section-revenue-expenses" class="card card-body income-expense-card">
+                <div onclick="toggleHeight('10', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
+                    <h3 class="titel-card">درآمد و هزینه‌ها</h3>
                     <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-3" class="more-height-btn"></button>
+                        <button id="more-height-btn-10" class="more-height-btn"></button>
                     </div>
                 </div>
-                <div id="box-text-3" class="aboutplatform-text">
-                    <div class="aboutplatform-detail">
-                        <hr style="margin-bottom: -14px;">
-                        <p>{{ listing.analyst }}</p>
+                <div id="box-text-10" class="social-revenue-expenses">
+                    <div class="income-expense-detail">
+                        <hr>
+                        <div class="revenue-revenue-expenses">
+                            <h4>درامد ها</h4>
+
+                            <div class="specifications-income-expense">
+                                <div class="inf-first-card-income-expense">
+                                    <div class="inf-card-income-expense">
+                                        <strong class="strong-inf-income-expense">درآمد کل:</strong>
+                                        <p class="p-numb-item-revenue">234,455 تومان</p>
+                                    </div>
+
+                                    <div class="inf-card-income-expense">
+                                        <strong class="strong-inf-income-expense">سود کل:</strong>
+                                        <p class="p-numb-item-revenue">234,455 تومان</p>
+                                    </div>
+
+
+                                    <div class="inf-card-income-expense">
+                                        <strong class="strong-inf-income-expense">میانگین درآمد ماهانه:</strong>
+                                        <p class="p-numb-item-revenue">234,455 تومان</p>
+                                    </div>
+
+                                    <div class="inf-card-income-expense">
+                                        <strong class="strong-inf-income-expense">میانگین سود ماهانه:</strong>
+                                        <p class="p-numb-item-revenue">234,455 تومان</p>
+                                    </div>
+                                </div>
+
+                                <div class="inf-second-card-income-expense">
+                                    <div class="inf-card-income-expense">
+                                        <strong class="strong-inf-income-expense">حاشیه سود:</strong>
+                                        <p class="p-numb-item-revenue">23٪</p>
+                                    </div>
+
+                                    <div class="inf-card-income-expense">
+                                        <strong class="strong-inf-income-expense">ضریب سود:</strong>
+                                        <p class="p-numb-item-revenue">3.4 برابر</p>
+                                    </div>
+
+                                    <div class="inf-card-income-expense">
+                                        <strong class="strong-inf-income-expense">ضریب درآمد:</strong>
+                                        <p class="p-numb-item-revenue">2.1 برابر</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="expenses-revenue-expenses">
+                            <h4>هزینه ها</h4>
+                            <div class="list-revenue">
+                                <div class="revenue-item">
+                                    <p class="revenue-item-text">ثبت دامنه</p>
+                                    <div class="between-p-revenue"></div>
+                                    <p class="revenue-item-numb">2,000,000 سالانه</p>
+                                </div>
+                                <div class="revenue-item">
+                                    <p class="revenue-item-text">سرور</p>
+                                    <div class="between-p-revenue"></div>
+                                    <p class="revenue-item-numb">900,000 ماهانه</p>
+                                </div>
+                                <div class="revenue-item">
+                                    <p class="revenue-item-text">کارمند ها</p>
+                                    <div class="between-p-revenue"></div>
+                                    <p class="revenue-item-numb">21,000,000 ماهانه</p>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            {% endif %}
-
-            {% if listing.analyst %}
-            <div id="section-analyst" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('3', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">درآمد و هزینه‌ها:</h3>
-                    <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-3" class="more-height-btn"></button>
-                    </div>
-                </div>
-                <div id="box-text-3" class="aboutplatform-text">
-                    <div class="aboutplatform-detail">
-                        <hr style="margin-bottom: -14px;">
-                        <p>{{ listing.analyst }}</p>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-
-            {% if listing.analyst %}
-            <div id="section-analyst" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('3', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">بررسی اجمالی عملکرد:</h3>
-                    <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-3" class="more-height-btn"></button>
-                    </div>
-                </div>
-                <div id="box-text-3" class="aboutplatform-text">
-                    <div class="aboutplatform-detail">
-                        <hr style="margin-bottom: -14px;">
-                        <p>{{ listing.analyst }}</p>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
 
         </div>
 
