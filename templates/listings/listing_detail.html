@@ -104,13 +104,6 @@
             <div class="specifications-detail">
 
                 <div class="inf-card-detail">
-                    <strong class="strong-inf-detail">دسته‌بندی:</strong>
-                    <p>{{ listing.category.name }}</p>
-                    <!-- <p>({{ listing.category.get_platform_display }})</p> -->
-                </div>
-
-
-                <div class="inf-card-detail">
                     <strong class="strong-inf-detail">تعداد دنبال‌کننده:</strong>
                     <p>{{ listing.followers_count|split_number }}</p>
                 </div>
@@ -182,12 +175,30 @@
                 {% if income_proofs %}
                 <a href="#section-proofs" class="text-link-scroll">اثبات درآمد</a>
                 {% endif %}
+
+                <a href="#section-analyst" class="text-link-scroll">رسانه های اجتماعی</a>
+
+                <a href="#section-attachments" class="text-link-scroll">پیوست ها</a>
+
+                <a href="#section-sell-includes" class="text-link-scroll">فروش شامل</a>
+
+                <a href="#section-license" class="text-link-scroll">مجوز ها</a>
+
+                <a href="#section-services-used" class="text-link-scroll">خدمات مورد استفاده</a>
+
+                <a href="#section-monetization-methods" class="text-link-scroll">روش های کسب درآمد</a>
+
+                <a href="#section-revenue-expenses" class="text-link-scroll">درآمد و هزینه‌ها</a>
+
+                <a href="#section-consultant" class="text-link-scroll">تحلیلگر و مشاور</a>
+
+
             </div>
 
 
 
             {% if listing.analyst %}
-            <div class="card card-body analyst-card">
+            <div id="section-consultant" class="card card-body analyst-card">
                 <div class="analyst-card-h3 cursor-card">
                     <h3 class="titel-card">تحلیلگر و مشاور</h3>
                 </div>
@@ -234,21 +245,21 @@
 
             {% if listing.about_platform %}
             <div id="section-about" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('2', '1000px' , '300px')" class="aboutplatform-card-h3 cursor-card">
+                <div onclick="toggleHeight('2', 0)" class="aboutplatform-card-h3 cursor-card">
                     <h3 class="titel-card">درباره پلتفرم</h3>
                     <div class="btn-aboutplatform-card">
                         <button id="more-height-btn-2" class="more-height-btn"></button>
                     </div>
                 </div>
-                <hr>
-                <div id="box-text-2" class="aboutplatform-text">
+                <div id="box-text-2" class="aboutplatform-text  expanded">
                     <div class="aboutplatform-detail">
-                        <p>{{ listing.about_platform }}</p>
+                        <hr>
+                        <p class="aboutplatform-detail-p">{{ listing.about_platform }}</p>
                     </div>
                 </div>
-                <div id="bootstrap-2" class="bootstrap"></div>
-                <p id="text-more-card-2" class="text-aboutplatform-card"
-                    onclick="toggleHeight('2', '1000px' , '300px')">مشاهده بیشتر</p>
+                <!--                 <div id="bootstrap-2" class="bootstrap"></div>
+                <p id="text-more-card-2" class="text-aboutplatform-card" onclick="toggleHeight('2', 0)">
+                    مشاهده بیشتر</p> -->
             </div>
             {% endif %}
 
@@ -276,7 +287,7 @@
                                 <i class="bi bi-chevron-down faq-icon"></i>
                             </button>
                             <div class="btn-faq-card">
-                                <button class="faq-toggle-btn" type="button"></button>
+                                <button class="faq-toggle-btn" type="button open"></button>
                             </div>
                         </div>
 
@@ -391,13 +402,13 @@
 
 
             <div id="section-analyst" class="card card-body income-expense-card">
-                <div onclick="toggleHeight('4', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
+                <div onclick="toggleHeight('4', 0)" class="aboutplatform-card-h3 cursor-card">
                     <h3 class="titel-card">رسانه های اجتماعی</h3>
                     <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-4" class="more-height-btn"></button>
+                        <button id="more-height-btn-4" class="more-height-btn open"></button>
                     </div>
                 </div>
-                <div id="box-text-4" class="social-media-text">
+                <div id="box-text-4" class="social-media-text expanded">
                     <div class="income-expense-detail">
                         <hr>
                         <div class="list-social-media">
@@ -547,13 +558,13 @@
 
 
             <div id="section-attachments" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('5', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
+                <div onclick="toggleHeight('5', 0)" class="aboutplatform-card-h3 cursor-card">
                     <h3 class="titel-card">پیوست ها</h3>
                     <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-5" class="more-height-btn"></button>
+                        <button id="more-height-btn-5" class="more-height-btn open"></button>
                     </div>
                 </div>
-                <div id="box-text-5" class="social-media-text">
+                <div id="box-text-5" class="social-media-text expanded">
                     <div class="attachments-detail">
                         <hr>
 
@@ -601,13 +612,13 @@
 
 
             <div id="section-sell-includes" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('6', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
+                <div onclick="toggleHeight('6', 0)" class="aboutplatform-card-h3 cursor-card">
                     <h3 class="titel-card">فروش شامل</h3>
                     <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-6" class="more-height-btn"></button>
+                        <button id="more-height-btn-6" class="more-height-btn open"></button>
                     </div>
                 </div>
-                <div id="box-text-6" class="social-media-text">
+                <div id="box-text-6" class="social-media-text expanded">
                     <div class="attachments-detail">
                         <hr>
 
@@ -726,13 +737,14 @@
 
 
             <div id="section-license" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('7', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
+                <div onclick="toggleHeight('7', 0)" class="aboutplatform-card-h3 cursor-card">
                     <h3 class="titel-card">مجوز ها</h3>
                     <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-7" class="more-height-btn"></button>
+                        <button id="more-height-btn-7" class="more-height-btn open"></button>
                     </div>
                 </div>
-                <div id="box-text-7" class="social-media-text">
+                <div id="box-text-7" class="social-media-text expanded">
+
                     <div class="license-detail">
                         <hr>
 
@@ -770,13 +782,14 @@
 
 
             <div id="section-services-used" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('8', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
+                <div onclick="toggleHeight('8', 0)" class="aboutplatform-card-h3 cursor-card">
+
                     <h3 class="titel-card">خدمات مورد استفاده</h3>
                     <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-8" class="more-height-btn"></button>
+                        <button id="more-height-btn-8" class="more-height-btn open"></button>
                     </div>
                 </div>
-                <div id="box-text-8" class="social-media-text">
+                <div id="box-text-8" class="social-media-text expanded">
                     <div class="services-used-detail">
                         <hr>
 
@@ -825,13 +838,13 @@
 
 
             <div id="section-monetization-methods" class="card card-body income-expense-card">
-                <div onclick="toggleHeight('9', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
+                <div onclick="toggleHeight('9', 0)" class="aboutplatform-card-h3 cursor-card">
                     <h3 class="titel-card">روش های کسب درآمد</h3>
                     <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-9" class="more-height-btn"></button>
+                        <button id="more-height-btn-9" class="more-height-btn open"></button>
                     </div>
                 </div>
-                <div id="box-text-9" class="social-monetization-methods">
+                <div id="box-text-9" class="social-monetization-methods expanded">
                     <div class="income-expense-detail">
                         <hr>
                         <div class="list-monetization-methods">
@@ -967,13 +980,13 @@
 
 
             <div id="section-revenue-expenses" class="card card-body income-expense-card">
-                <div onclick="toggleHeight('10', '1000px' , '0')" class="aboutplatform-card-h3 cursor-card">
+                <div onclick="toggleHeight('10', 0)" class="aboutplatform-card-h3 cursor-card">
                     <h3 class="titel-card">درآمد و هزینه‌ها</h3>
                     <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-10" class="more-height-btn"></button>
+                        <button id="more-height-btn-10" class="more-height-btn open"></button>
                     </div>
                 </div>
-                <div id="box-text-10" class="social-revenue-expenses">
+                <div id="box-text-10" class="social-revenue-expenses expanded">
                     <div class="income-expense-detail">
                         <hr>
                         <div class="revenue-revenue-expenses">
@@ -1245,18 +1258,42 @@
 
 
         {% if listing.seller.is_verified %}
-        <div class="card mt-3">
+        <div class="card mt-3 information-confirmed">
             <div class="card-body pad-10">
                 <h5>اطلاعات تایید شده</h5>
                 <hr>
-                <p>
-                    این فهرست باکیفیت توسط تیم فلیپا یا کارگزار بررسی شده است تا از صحت اطلاعات ارائه شده اطمینان
-                    حاصل
-                    شود.
-
+                <p class="information-confirmed-text">
                     تیم بررسی ما این فهرست را بررسی و موارد زیر را تأیید کرده است:
-
                 </p>
+                <div class="information-confirmed-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" color="#22c55e" width="20" height="20" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8 12l3 3 6-6"></path>
+                    </svg>
+                    <p class="information-confirmed-item-p">دامین ها</p>
+                </div>
+
+                <div class="information-confirmed-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" color="#22c55e" width="20" height="20" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8 12l3 3 6-6"></path>
+                    </svg>
+                    <p class="information-confirmed-item-p">درامد ها</p>
+                </div>
+
+                <div class="information-confirmed-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" color="#22c55e" width="20" height="20" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8 12l3 3 6-6"></path>
+                    </svg>
+                    <p class="information-confirmed-item-p">حساب های رسانه های اجتماعی</p>
+                </div>
             </div>
         </div>
         {% endif %}
@@ -1780,7 +1817,7 @@
 
 
     // تابع باز و بسته کردن
-    function toggleHeight(cardId, openHeight, closeHeight) {
+    function toggleHeight(cardId, closeHeight) {
         const aboutplatformCard = document.getElementById(`box-text-${cardId}`);
         const moreBtn = document.getElementById(`more-height-btn-${cardId}`);
         const myTextElement = document.getElementById(`text-more-card-${cardId}`);
@@ -1790,21 +1827,40 @@
         moreBtn.classList.toggle('open');
 
         if (isExpanded) {
-            aboutplatformCard.style.maxHeight = openHeight;
+            // به جای 1000px، ارتفاع واقعی محتوا را محاسبه و اعمال می‌کنیم
+            aboutplatformCard.style.maxHeight = aboutplatformCard.scrollHeight + 'px';
+
             if (myTextElement) myTextElement.innerText = '';
             if (BootStrap) BootStrap.style.display = 'none';
         } else {
-            aboutplatformCard.style.maxHeight = closeHeight;
-            if (myTextElement) myTextElement.innerText = 'مشاهده بیشتر';
-            if (BootStrap) BootStrap.style.display = 'block';
+            // ابتدا ارتفاع فعلی را ست می‌کنیم تا مرورگر بداند از چه عددی باید انیمیشن را شروع کند
+            aboutplatformCard.style.maxHeight = aboutplatformCard.scrollHeight + 'px';
+
+            // یک ترفند برای اعمال تغییر بلافاصله (Reflow)
+            void aboutplatformCard.offsetHeight;
+
+            // سپس ارتفاع را به مقدار بسته شدن تغییر می‌دهیم
+            aboutplatformCard.style.maxHeight = closeHeight + 'px';
+
+            if (myTextElement) myTextElement.innerText = '';
+            if (BootStrap) BootStrap.style.display = 'none';
         }
     }
+
 
     // بررسی ارتفاع هنگام لود شدن صفحه
     document.addEventListener("DOMContentLoaded", function () {
         checkContentHeight('1', 0, '1000px', 'open');
-        checkContentHeight('2', 300, '1000px', 'closed');
+        checkContentHeight('2', 0, '1000px', 'closed');
+        checkContentHeight('3', 0, '1000px', 'open');
         checkContentHeight('4', 0, '1000px', 'open');
+        checkContentHeight('5', 0, '1000px', 'open');
+        checkContentHeight('6', 0, '1000px', 'open');
+        checkContentHeight('7', 0, '1000px', 'open');
+        checkContentHeight('8', 0, '1000px', 'open');
+        checkContentHeight('9', 0, '1000px', 'open');
+        checkContentHeight('10', 0, '1000px', 'open');
+
     });
 
     function checkContentHeight(cardId, closeHeightNumber, openHeight, defaultState = 'closed') {
@@ -1839,7 +1895,9 @@
                 if (defaultState === 'open') {
                     aboutplatformCard.classList.add('expanded');
                     if (moreBtn) moreBtn.classList.add('open');
-                    aboutplatformCard.style.maxHeight = openHeight;
+
+                    // استفاده از ارتفاع واقعی به جای openHeight ثابت
+                    aboutplatformCard.style.maxHeight = aboutplatformCard.scrollHeight + 'px';
 
                     if (myTextElement) myTextElement.innerText = '';
                     if (BootStrap) BootStrap.style.display = 'none';

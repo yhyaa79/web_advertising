@@ -168,7 +168,8 @@
                             <div class="in-card">
 
                                 <a href="{% url 'listings:listing_detail' listing.pk %}"
-                                    style="text-decoration: none; color: inherit;">
+
+                                    class="in-card-img">
                                     <div class="img-badge">
                                         <span class="badge bg-info">{{ listing.category.get_platform_display }}</span>
                                         {% if listing.main_image %}
