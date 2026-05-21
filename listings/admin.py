@@ -1,21 +1,85 @@
 # listings/admin.py
+
 from django.contrib import admin
-from .models import Category, Listing, IncomeProof, ListingImage, VisitRequest
+from .models import (
+    Category, Listing, ListingAnalyst, SocialMedia, Attachment,
+    SaleInclude, License, ServiceUsed, MonetizationMethod, Expense,
+    IncomeDataPoint, ViewsDataPoint, ListingImage, VisitRequest
+)
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'platform')
+    list_filter = ('platform',)
     search_fields = ('name',)
 
-class IncomeProofInline(admin.TabularInline):
-    model = IncomeProof
+
+class ListingAnalystInline(admin.StackedInline):
+    model = ListingAnalyst
+    extra = 0
+    fields = ('analyst_name', 'analyst_expertise', 'analyst_education', 'analyst_record', 'analyst_image', 'analyst_description')
+
+
+class SocialMediaInline(admin.TabularInline):
+    model = SocialMedia
     extra = 1
-    readonly_fields = ('uploaded_at',)
+    fields = ('platform', 'followers', 'url')
+
+
+class AttachmentInline(admin.TabularInline):
+    model = Attachment
+    extra = 1
+    fields = ('file', 'file_name')
+
+
+class SaleIncludeInline(admin.TabularInline):
+    model = SaleInclude
+    extra = 1
+    fields = ('asset_name',)
+
+
+class LicenseInline(admin.TabularInline):
+    model = License
+    extra = 1
+    fields = ('license_name',)
+
+
+class ServiceUsedInline(admin.TabularInline):
+    model = ServiceUsed
+    extra = 1
+    fields = ('service_name',)
+
+
+class MonetizationMethodInline(admin.TabularInline):
+    model = MonetizationMethod
+    extra = 1
+    fields = ('method',)
+
+
+class ExpenseInline(admin.TabularInline):
+    model = Expense
+    extra = 1
+    fields = ('expense_name', 'amount', 'period')
+
+
+class IncomeDataPointInline(admin.TabularInline):
+    model = IncomeDataPoint
+    extra = 1
+    fields = ('date', 'income')
+
+
+class ViewsDataPointInline(admin.TabularInline):
+    model = ViewsDataPoint
+    extra = 1
+    fields = ('date', 'views')
+
 
 class ListingImageInline(admin.TabularInline):
     model = ListingImage
     extra = 1
     fields = ('image',)
+
 
 class VisitRequestInline(admin.TabularInline):
     model = VisitRequest
@@ -27,48 +91,61 @@ class VisitRequestInline(admin.TabularInline):
     def has_add_permission(self, request, obj=None):
         return False
 
+
 @admin.register(Listing)
 class ListingAdmin(admin.ModelAdmin):
     list_display = (
         'title', 
         'seller', 
-        'location',
         'category', 
         'price', 
-        'discount_price', 
-        'platform_url',
-        'followers_count',
-        'monthly_income',
-        'platform_age',
-        'most_like',
-        'most_view',
-        'most_comment',
+        'discount_price',
         'boost',
         'premier',
-        'is_income',
-        'is_verified',
         'is_private',
         'status', 
-        'views_count', 
         'created_at'
     )
-    list_filter = ('status','boost', 'premier', 'is_private', 'category', 'created_at')
+    list_filter = ('status', 'boost', 'premier', 'is_private', 'is_verified', 'is_income', 'category', 'created_at')
     search_fields = ('title', 'description', 'seller__username')
     readonly_fields = ('views_count', 'created_at', 'updated_at')
-    inlines = [IncomeProofInline, ListingImageInline, VisitRequestInline]
+    
+    inlines = [
+        ListingAnalystInline,
+        SocialMediaInline,
+        AttachmentInline,
+        SaleIncludeInline,
+        LicenseInline,
+        ServiceUsedInline,
+        MonetizationMethodInline,
+        ExpenseInline,
+        IncomeDataPointInline,
+        ViewsDataPointInline,
+        ListingImageInline,
+        VisitRequestInline,
+    ]
     
     fieldsets = (
         ('اطلاعات اصلی', {
-            'fields': ('seller', 'title', 'category', 'description', 'location')
+            'fields': ('seller', 'title', 'category', 'description', 'location', 'about_platform')
         }),
         ('قیمت و تصویر', {
-            'fields': ('is_income', 'is_verified', 'price', 'discount_price', 'main_image')
+            'fields': ('price', 'discount_price', 'main_image')
         }),
         ('اطلاعات پلتفرم', {
-            'fields': ('platform_url', 'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment', 'about_platform', 'analyst')
+            'fields': ('platform_url', 'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment')
+        }),
+        ('درآمد و هزینه', {
+            'fields': (
+                'total_revenue', 'total_profit', 
+                'avg_monthly_revenue', 'avg_monthly_profit',
+                'profit_margin', 'profit_multiplier', 'revenue_multiplier',
+                'post_sale_support'
+            ),
+            'classes': ('collapse',)
         }),
         ('تنظیمات', {
-            'fields': ('boost', 'premier', 'is_private', 'status', 'rejection_reason')
+            'fields': ('boost', 'premier', 'is_income', 'is_verified', 'is_private', 'status', 'rejection_reason')
         }),
         ('آمار', {
             'fields': ('views_count', 'created_at', 'updated_at'),
@@ -80,70 +157,13 @@ class ListingAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         return qs.select_related('seller', 'category')
 
-@admin.register(IncomeProof)
-class IncomeProofAdmin(admin.ModelAdmin):
-    list_display = ('listing', 'description', 'uploaded_at')
-    list_filter = ('uploaded_at',)
-    search_fields = ('listing__title', 'description')
-    readonly_fields = ('uploaded_at',)
-    
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.select_related('listing')
-
-@admin.register(ListingImage)
-class ListingImageAdmin(admin.ModelAdmin):
-    list_display = ('listing', 'image')
-    search_fields = ('listing__title',)
-    
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.select_related('listing')
 
 @admin.register(VisitRequest)
 class VisitRequestAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'listing_title',
-        'listing_is_private',
-        'requester',
-        'status',
-        'created_at'
-    )
-    list_filter = ('status', 'created_at', 'listing__is_private')
-    search_fields = (
-        'listing__title', 
-        'requester__username', 
-        'message'
-    )
+    list_display = ('listing', 'requester', 'status', 'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('listing__title', 'requester__username', 'message')
     readonly_fields = ('created_at',)
-    
-    fieldsets = (
-        ('اطلاعات درخواست', {
-            'fields': ('listing', 'requester', 'status')
-        }),
-        ('پیام', {
-            'fields': ('message',)
-        }),
-        ('زمان', {
-            'fields': ('created_at',)
-        }),
-    )
-    
-    def listing_title(self, obj):
-        return obj.listing.title
-    listing_title.short_description = 'عنوان آگهی'
-    listing_title.admin_order_field = 'listing__title'
-    
-    def listing_is_private(self, obj):
-        return obj.listing.is_private
-    listing_is_private.short_description = 'خصوصی'
-    listing_is_private.boolean = True
-    listing_is_private.admin_order_field = 'listing__is_private'
-    
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.select_related('listing', 'requester')
     
     actions = ['approve_requests', 'reject_requests']
     
@@ -156,5 +176,3 @@ class VisitRequestAdmin(admin.ModelAdmin):
         updated = queryset.filter(status='pending').update(status='rejected')
         self.message_user(request, f'{updated} درخواست رد شد.')
     reject_requests.short_description = 'رد درخواست‌های انتخاب شده'
-
-
