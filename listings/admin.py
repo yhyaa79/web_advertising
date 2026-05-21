@@ -3,7 +3,7 @@
 from django.contrib import admin
 from .models import (
     Category, Listing, ListingAnalyst, SocialMedia, Attachment,
-    SaleInclude, License, ServiceUsed, MonetizationMethod, Expense,
+    SaleInclude, License, ConfirmedInformation, ServiceUsed, MonetizationMethod, Expense,
     IncomeDataPoint, ViewsDataPoint, ListingImage, VisitRequest
 )
 
@@ -43,6 +43,12 @@ class LicenseInline(admin.TabularInline):
     model = License
     extra = 1
     fields = ('license_name',)
+
+
+class ConfirmedInformationInline(admin.TabularInline):
+    model = ConfirmedInformation
+    extra = 1
+    fields = ('confirmed_name',)
 
 
 class ServiceUsedInline(admin.TabularInline):
@@ -116,6 +122,7 @@ class ListingAdmin(admin.ModelAdmin):
         AttachmentInline,
         SaleIncludeInline,
         LicenseInline,
+        ConfirmedInformationInline,
         ServiceUsedInline,
         MonetizationMethodInline,
         ExpenseInline,

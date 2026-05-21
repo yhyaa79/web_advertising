@@ -95,7 +95,27 @@ class Listing(models.Model):
     def __str__(self):
         return self.title
     
-    
+
+    def has_access(self, user):
+        """
+        Check if user can view full details of the listing
+        """
+        # اگر آگهی خصوصی نباشد همه دسترسی دارند
+        if not self.is_private:
+            return True
+
+        # اگر کاربر لاگین نکرده باشد
+        if not user.is_authenticated:
+            return False
+
+        # فروشنده همیشه دسترسی دارد
+        if user == self.seller:
+            return True
+
+        # بررسی درخواست بازدید تایید شده
+        return self.visit_requests.filter(requester=user, status='approved').exists()
+
+
     def get_income_chart_data(self):
         """Return income chart data as lists for labels and values"""
         income_points = self.income_data_points.all().order_by('date')
@@ -221,6 +241,19 @@ class License(models.Model):
     
     def __str__(self):
         return self.license_name
+    
+
+class ConfirmedInformation(models.Model):
+    """اطلاعات تایید شده"""
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='confirmed', verbose_name='آگهی')
+    confirmed_name = models.CharField(max_length=200, verbose_name='نام اطلاعات تایید شده')
+    
+    class Meta:
+        verbose_name = 'اطلاعات تایید'
+        verbose_name_plural = 'اطلاعاتات تایید'
+    
+    def __str__(self):
+        return self.confirmed_name
 
 
 class ServiceUsed(models.Model):

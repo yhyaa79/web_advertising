@@ -413,7 +413,7 @@
                 </div>
             </div>
             {% endif %}
-            {% endif %}
+
 
 
 
@@ -884,6 +884,7 @@
                 </div>
             </div>
             {% endif %}
+            {% endif %}
 
         </div>
 
@@ -1083,6 +1084,7 @@
 
 
         {% if listing.seller.is_verified %}
+        {% if listing.confirmed.exists %}
         <div class="card mt-3 information-confirmed">
             <div class="card-body pad-10">
                 <h5>اطلاعات تایید شده</h5>
@@ -1090,16 +1092,8 @@
                 <p class="information-confirmed-text">
                     تیم بررسی ما این فهرست را بررسی و موارد زیر را تأیید کرده است:
                 </p>
-                <div class="information-confirmed-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" color="#22c55e" width="20" height="20" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <path d="M8 12l3 3 6-6"></path>
-                    </svg>
-                    <p class="information-confirmed-item-p">دامین ها</p>
-                </div>
 
+                {% for item in listing.confirmed.all %}
                 <div class="information-confirmed-item">
                     <svg xmlns="http://www.w3.org/2000/svg" color="#22c55e" width="20" height="20" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -1107,20 +1101,13 @@
                         <circle cx="12" cy="12" r="10"></circle>
                         <path d="M8 12l3 3 6-6"></path>
                     </svg>
-                    <p class="information-confirmed-item-p">درامد ها</p>
+                    <p class="information-confirmed-item-p">{{ item.confirmed_name }}</p>
                 </div>
+                {% endfor %}
 
-                <div class="information-confirmed-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" color="#22c55e" width="20" height="20" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <path d="M8 12l3 3 6-6"></path>
-                    </svg>
-                    <p class="information-confirmed-item-p">حساب های رسانه های اجتماعی</p>
-                </div>
             </div>
         </div>
+        {% endif %}
         {% endif %}
 
 
