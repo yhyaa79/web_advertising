@@ -167,9 +167,7 @@
                         <div class="card h-100 {% if listing.is_private %}border-warning{% endif %}">
                             <div class="in-card">
 
-                                <a href="{% url 'listings:listing_detail' listing.pk %}"
-
-                                    class="in-card-img">
+                                <a href="{% url 'listings:listing_detail' listing.pk %}" class="in-card-img">
                                     <div class="img-badge">
                                         <span class="badge bg-info">{{ listing.category.get_platform_display }}</span>
                                         {% if listing.main_image %}
