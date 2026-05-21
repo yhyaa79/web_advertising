@@ -197,7 +197,7 @@
 
 
 
-            {% if ListingAnalyst.analyst %}
+            {% if listing.listing_analyst %}
             <div id="section-analyst" class="card card-body analyst-card">
                 <div class="analyst-card-h3 cursor-card">
                     <h3 class="titel-card">تحلیلگر و مشاور</h3>
@@ -205,38 +205,54 @@
                 <hr>
                 <div class="analyst-det">
                     <div class="img-specifications-analyst">
+
+                        {% if listing.listing_analyst.analyst_image %}
                         <div class="img-analyst">
-                            <img src="/media/admin/images.jpeg" alt="">
+                            <img src="{{ listing.listing_analyst.analyst_image.url }}"
+                                alt="{{ listing.listing_analyst.analyst_name }}">
                         </div>
+                        {% endif %}
+
 
                         <div class="specifications-analyst">
 
+                            {% if listing.listing_analyst.analyst_name %}
                             <div class="inf-card-analyst">
                                 <strong class="strong-inf-analyst">نام تحلیلگر:</strong>
-                                <p>{{ ListingAnalyst.analyst_name }}</p>
+                                <p>{{ listing.listing_analyst.analyst_name }}</p>
                             </div>
+                            {% endif %}
 
+                            {% if listing.listing_analyst.analyst_expertise %}
                             <div class="inf-card-analyst">
                                 <strong class="strong-inf-analyst">تخصص:</strong>
-                                <p>{{ ListingAnalyst.analyst_expertise }}</p>
+                                <p>{{ listing.listing_analyst.analyst_expertise }}</p>
                             </div>
+                            {% endif %}
 
+                            {% if listing.listing_analyst.analyst_education %}
                             <div class="inf-card-analyst">
                                 <strong class="strong-inf-analyst">تحصیلات:</strong>
-                                <p>{{ ListingAnalyst.analyst_education }}</p>
+                                <p>{{ listing.listing_analyst.analyst_education }}</p>
                             </div>
+                            {% endif %}
 
+                            {% if listing.listing_analyst.analyst_record %}
                             <div class="inf-card-analyst">
                                 <strong class="strong-inf-analyst">سابقه:</strong>
-                                <p>{{ ListingAnalyst.analyst_record }}</p>
+                                <p>{{ listing.listing_analyst.analyst_record }}</p>
                             </div>
+                            {% endif %}
 
                         </div>
                     </div>
 
+                    {% if listing.listing_analyst.analyst_description %}
                     <div class="analyst-detail">
-                        <p>{{ listing.analyst }}</p>
+                        <p>{{ listing.listing_analyst.analyst_description|linebreaks }}</p>
                     </div>
+                    {% endif %}
+
                 </div>
             </div>
             {% endif %}
@@ -400,6 +416,10 @@
             {% endif %}
 
 
+
+
+
+
             {% if listing.social_medias.exists %}
             <div id="section-social-media" class="card card-body income-expense-card">
                 <div onclick="toggleHeight('4', 0)" class="aboutplatform-card-h3 cursor-card">
@@ -408,156 +428,126 @@
                         <button id="more-height-btn-4" class="more-height-btn open"></button>
                     </div>
                 </div>
+
                 <div id="box-text-4" class="social-media-text expanded">
                     <div class="income-expense-detail">
                         <hr>
+
+                        {% for social in listing.social_medias.all %}
                         <div class="list-social-media">
+
                             <div class="social-media-icon-numb">
+
                                 <div class="icon-social-media">
+
+                                    {% if social.platform == "twitter" %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path
                                             d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932L18.901 1.153zm-1.653 19.57h2.608L6.027 2.54h-2.65l13.881 18.183z" />
                                     </svg>
-                                </div>
 
-                                <a href="" class="text-social-media">340,000 فالور</a>
-                            </div>
-
-                            <div class="social-media-icon-numb">
-                                <div class="icon-social-media">
+                                    {% elif social.platform == "instagram" %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path
                                             d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.069-4.85.069s-3.584-.011-4.85-.069c-3.25-.149-4.771-1.699-4.919-4.92-.058-1.265-.069-1.644-.069-4.849s.011-3.584.069-4.85c.149-3.227 1.664-4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163m0-2.163C8.74 0 8.333.012 7.053.072 2.695.272.273 2.69.073 7.052.012 8.333 0 8.74 0 12s.012 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98C8.333 23.988 8.74 24 12 24s3.667-.012 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.06-1.28.072-1.687.072-4.947s-.012-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98C15.667.012 15.26 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z" />
                                     </svg>
-                                </div>
-                                <a href="" class="text-social-media">23,000 فالور</a>
-                            </div>
 
-                            <div class="social-media-icon-numb">
-                                <div class="icon-social-media">
+                                    {% elif social.platform == "github" %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path
                                             d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.043c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
                                     </svg>
-                                </div>
-                                <a href="" class="text-social-media">2,000 فالور</a>
-                            </div>
 
-                            <div class="social-media-icon-numb">
-                                <div class="icon-social-media">
+                                    {% elif social.platform == "facebook" %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path
                                             d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                                     </svg>
-                                </div>
-                                <a href="" class="text-social-media">12,000 فالور</a>
-                            </div>
 
-                            <div class="social-media-icon-numb">
-                                <div class="icon-social-media">
+                                    {% elif social.platform == "linkedin" %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path
                                             d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z" />
                                     </svg>
-                                </div>
-                                <a href="" class="text-social-media">40,000 فالور</a>
-                            </div>
 
-                            <div class="social-media-icon-numb">
-                                <div class="icon-social-media">
+                                    {% elif social.platform == "telegram" %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                                     </svg>
-                                </div>
-                                <a href="" class="text-social-media">340,000 فالور</a>
-                            </div>
 
-
-                            <div class="social-media-icon-numb">
-                                <div class="icon-social-media">
+                                    <!--                                     
+                                    {% elif social.platform == "twitter" %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path
                                             d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-2.43.03-4.63-1.14-6.02-3.05-1.52-2.05-1.63-4.74-1.09-7.07.5-1.98 1.75-3.71 3.48-4.82.81-.5 1.7-.8 2.62-.94.09 1.49-.03 2.99-.02 4.48-.18.01-.36.01-.53.01-1.2 0-2.37.52-3.18 1.42-.51.56-.8 1.28-.86 2.04-.07.82.16 1.63.66 2.29.58.74 1.49 1.18 2.49 1.12 1.07-.06 2.02-.64 2.58-1.52.53-.82.76-1.8.76-2.79.01-2.93-.01-5.85.01-8.78z" />
                                     </svg>
-                                </div>
-                                <a href="" class="text-social-media">340,000 فالور</a>
-                            </div>
 
-                            <div class="social-media-icon-numb">
-                                <div class="icon-social-media">
+                                    {% elif social.platform == "twitter" %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path
                                             d="M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12 12-5.383 12-12S18.617 0 12 0zm5.435 13.323c-1.246 1.25-3.235 1.942-5.435 1.942s-4.189-.692-5.435-1.942a.5.5 0 0 1 .707-.707c1.012.981 2.73 1.649 4.728 1.649s3.716-.668 4.728-1.649a.5.5 0 0 1 .707.707zM9 10.5c.828 0 1.5.672 1.5 1.5s-.672 1.5-1.5 1.5-1.5-.672-1.5-1.5.672-1.5 1.5-1.5zm6 0c.828 0 1.5.672 1.5 1.5s-.672 1.5-1.5 1.5-1.5-.672-1.5-1.5.672-1.5 1.5-1.5zm-3.323-5.323c.311.002.61.128.819.351l1.83 1.83c.231.229.35.539.349.855 0 .317-.118.627-.349.856l-3.328 3.328c-.035.036-.073.068-.112.097-.279.181-.611.233-.936.143-.324-.09-.598-.31-.762-.593l-1.04-1.89c-.11-.2-.16-.42-.15-.65 0-.48.33-.89.79-.99l2.84-1.09c.14-.04.28-.06.42-.05z" />
                                     </svg>
-                                </div>
-                                <a href="" class="text-social-media">340,000 فالور</a>
-                            </div>
 
-                            <div class="social-media-icon-numb">
-                                <div class="icon-social-media">
+                                    {% elif social.platform == "twitter" %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path
                                             d="M21.576 6.848a2.988 2.988 0 0 0-2.1-2.112C17.653 4.2 12 4.2 12 4.2s-5.653 0-7.476.536a2.988 2.988 0 0 0-2.1 2.112C2 8.683 2 12 2 12s0 3.317.424 5.152a2.988 2.988 0 0 0 2.1 2.112C6.347 19.8 12 19.8 12 19.8s5.653 0 7.476-.536a2.988 2.988 0 0 0 2.1-2.112C22 15.317 22 12 22 12s0-3.317-.424-5.152zM9.823 15.424V8.576L15.65 12l-5.827 3.424z" />
                                     </svg>
-                                </div>
-                                <a href="" class="text-social-media">340,000 فالور</a>
-                            </div>
 
-                            <div class="social-media-icon-numb">
-                                <div class="icon-social-media">
+                                    {% elif social.platform == "twitter" %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path
                                             d="M19.29 4.71a1 1 0 0 0-1.42 0L12 10.59l-5.87-5.88a1 1 0 0 0-1.42 1.42L10.59 12l-5.88 5.87a1 1 0 1 0 1.42 1.42L12 13.41l5.87 5.88a1 1 0 0 0 1.42-1.42L13.41 12l5.88-5.87a1 1 0 0 0 0-1.42z"
-                                            opacity="0" /> 
+                                            opacity="0" />
                                         <path
                                             d="M20.2 5.3c-.2-.2-.5-.3-.7-.3H4.5c-.3 0-.5.1-.7.3s-.3.5-.3.7v10.5l-1.5 3.5h19l-1.5-3.5V6c0-.2-.1-.5-.3-.7zM12 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
                                     </svg>
-                                </div>
-                                <a href="" class="text-social-media">340,000 فالور</a>
-                            </div>
-
-                            <div class="social-media-icon-numb">
-                                <div class="icon-social-media">
+      
+                                    {% elif social.platform == "twitter" %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path
                                             d="M12.42 1.95c-2.03-.43-4.14.2-5.74 1.52-2.95 2.44-3.83 6.64-2.14 9.94.81 1.57 2.1 2.87 3.69 3.79.79.46 1.67.8 2.58 1.01v-3.79c-.77-.3-1.47-.8-2.04-1.44-1.3-1.46-1.74-3.48-1.1-5.32.74-2.13 2.8-3.47 5.01-3.32 1.92.13 3.53 1.48 3.98 3.36.43 1.77-.16 3.61-1.49 4.77-.52.46-1.13.8-1.79 1.02V20.1c4.54-.53 7.82-4.48 7.3-9.02-.45-3.98-3.66-7.05-7.66-7.15-.2 0-.39-.01-.58-.02z" />
                                     </svg>
-                                </div>
-                                <a href="" class="text-social-media">340,000 فالور</a>
-                            </div>
 
-                            <div class="social-media-icon-numb">
-                                <div class="icon-social-media">
+                                    {% elif social.platform == "twitter" %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path
                                             d="M21.72 5.56c-.5-.28-1.08-.2-1.5.2L9.56 16.22l-4.7-4.7c-.38-.38-.9-.52-1.42-.38-.52.14-.9.6-1.04 1.12s.06 1.08.44 1.46l6.36 6.36c.3.3.7.46 1.12.46.42 0 .82-.16 1.12-.46L21.92 8.5c.38-.4.44-.98.16-1.46-.28-.5-.78-.82-1.36-.82h-.02z" />
                                     </svg>
+ -->
+
+                                    {% endif %}
+
                                 </div>
-                                <a href="" class="text-social-media">340,000 فالور</a>
+
+                                <a href="{{ social.url }}" target="_blank" class="text-social-media">
+                                    {{ social.followers }} دنبال کننده
+                                </a>
+
                             </div>
 
-
-
                         </div>
+                        {% endfor %}
+
                     </div>
                 </div>
             </div>
             {% endif %}
 
 
-
+            {% if listing.attachments.exists %}
             <div id="section-attachments" class="card card-body aboutplatform-card">
                 <div onclick="toggleHeight('5', 0)" class="aboutplatform-card-h3 cursor-card">
                     <h3 class="titel-card">پیوست ها</h3>
@@ -569,47 +559,27 @@
                     <div class="attachments-detail">
                         <hr>
 
+                        {% for attachment in listing.attachments.all %}
                         <div class="list-file-attachments">
-                            <a href="" class="file-attachments">
+                            <a href="{{ attachment.file.url }}" class="file-attachments">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                     <polyline points="14 2 14 8 20 8"></polyline>
                                 </svg>
-                                <div class="name-file-attachments">
-                                    <p class="name-file-attachments-p">The_Let_Them_Theory.txt</p>
-                                </div>
-                            </a>
 
-                            <a href="" class="file-attachments">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                </svg>
                                 <div class="name-file-attachments">
-                                    <p class="name-file-attachments-p">TheLetThemTheory.txt</p>
-                                </div>
-                            </a>
-
-                            <a href="" class="file-attachments">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                </svg>
-                                <div class="name-file-attachments">
-                                    <p class="name-file-attachments-p">The_Theory.txt</p>
+                                    <p class="name-file-attachments-p">{{ attachment.file.name }}</p>
                                 </div>
                             </a>
                         </div>
+                        {% endfor %}
 
                     </div>
                 </div>
             </div>
+            {% endif %}
 
 
             {% if listing.sale_includes.exists or listing.post_sale_support %}
@@ -750,8 +720,10 @@
                                     {% elif method.method == 'cooperation_sales' %}
                                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71">
+                                        </path>
+                                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71">
+                                        </path>
                                     </svg>
                                     {% elif method.method == 'special_subscription_sale' %}
                                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
@@ -815,146 +787,6 @@
                 </div>
             </div>
             {% endif %}
-
-
-            <div id="section-monetization-methods" class="card card-body income-expense-card">
-                <div onclick="toggleHeight('9', 0)" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">روش های کسب درآمد</h3>
-                    <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-9" class="more-height-btn open"></button>
-                    </div>
-                </div>
-                <div id="box-text-9" class="social-monetization-methods expanded">
-                    <div class="income-expense-detail">
-                        <hr>
-                        <div class="list-monetization-methods">
-
-                            <div class="monetization-methods-icon-numb">
-                                <div class="icon-monetization-methods">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                                        <line x1="8" y1="21" x2="16" y2="21"></line>
-                                        <line x1="12" y1="17" x2="12" y2="21"></line>
-                                    </svg>
-                                </div>
-                                <p class="text-monetization-methods">تبلیغات بنری و کلیکی (PPC)</p>
-                            </div>
-
-                            <div class="monetization-methods-icon-numb">
-                                <div class="icon-monetization-methods">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                        <polyline points="14 2 14 8 20 8"></polyline>
-                                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                                        <polyline points="10 9 9 9 8 9"></polyline>
-                                    </svg>
-                                </div>
-                                <p class="text-monetization-methods">رپورتاژ آگهی و پست‌های حمایت‌شده</p>
-                            </div>
-
-                            <div class="monetization-methods-icon-numb">
-                                <div class="icon-monetization-methods">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                                    </svg>
-                                </div>
-                                <p class="text-monetization-methods">همکاری در فروش (افیلیت مارکتینگ)</p>
-                            </div>
-
-                            <div class="monetization-methods-icon-numb">
-                                <div class="icon-monetization-methods">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polygon
-                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </div>
-                                <p class="text-monetization-methods">فروش اشتراک ویژه (VIP)</p>
-                            </div>
-
-                            <div class="monetization-methods-icon-numb">
-                                <div class="icon-monetization-methods">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                                    </svg>
-                                </div>
-                                <p class="text-monetization-methods">فروش محصولات دیجیتال (دانلودی)</p>
-                            </div>
-
-                            <div class="monetization-methods-icon-numb">
-                                <div class="icon-monetization-methods">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="9" cy="21" r="1"></circle>
-                                        <circle cx="20" cy="21" r="1"></circle>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
-                                        </path>
-                                    </svg>
-                                </div>
-                                <p class="text-monetization-methods">فروش محصولات فیزیکی (فروشگاه)</p>
-                            </div>
-
-                            <div class="monetization-methods-icon-numb">
-                                <div class="icon-monetization-methods">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path
-                                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                                        </path>
-                                    </svg>
-                                </div>
-                                <p class="text-monetization-methods">دریافت حمایت مالی (دونیت)</p>
-                            </div>
-
-                            <div class="monetization-methods-icon-numb">
-                                <div class="icon-monetization-methods">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                                    </svg>
-                                </div>
-                                <p class="text-monetization-methods">برگزاری دوره‌های آموزشی و وبینار</p>
-                            </div>
-
-                            <div class="monetization-methods-icon-numb">
-                                <div class="icon-monetization-methods">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <circle cx="12" cy="12" r="6"></circle>
-                                        <circle cx="12" cy="12" r="2"></circle>
-                                    </svg>
-                                </div>
-                                <p class="text-monetization-methods">فروش بک‌لینک و فضای تبلیغاتی</p>
-                            </div>
-
-                            <div class="monetization-methods-icon-numb">
-                                <div class="icon-monetization-methods">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="9" cy="7" r="4"></circle>
-                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                    </svg>
-                                </div>
-                                <p class="text-monetization-methods">ارائه خدمات مشاوره و فریلنسری</p>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
 
 
 

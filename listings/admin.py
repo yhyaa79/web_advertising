@@ -30,7 +30,7 @@ class SocialMediaInline(admin.TabularInline):
 class AttachmentInline(admin.TabularInline):
     model = Attachment
     extra = 1
-    fields = ('file', 'file_name')
+    fields = ('file',)
 
 
 class SaleIncludeInline(admin.TabularInline):

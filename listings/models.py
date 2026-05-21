@@ -187,14 +187,14 @@ class Attachment(models.Model):
     """پیوست‌ها"""
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='attachments', verbose_name='آگهی')
     file = models.FileField(upload_to='attachments/', verbose_name='فایل')
-    file_name = models.CharField(max_length=200, verbose_name='نام فایل')
     
     class Meta:
         verbose_name = 'پیوست'
         verbose_name_plural = 'پیوست‌ها'
     
     def __str__(self):
-        return self.file_name
+        return self.file.name
+
 
 
 class SaleInclude(models.Model):

@@ -849,6 +849,8 @@ option {
 
 .inf-card-analyst {
     display: flex;
+    gap: 6px;
+    align-items: center;
     gap: 5px;
 }
 
@@ -1145,9 +1147,10 @@ option {
 }
 
 .inf-card-profile-detail {
-    /* کلید اصلی: کارت فقط به اندازه محتوای داخلش جا می‌گیرد و کش نمی‌آید */
-    flex: 0 0 auto;
     display: flex;
+    gap: 6px;
+    align-items: center;
+    flex: 0 0 auto;
     gap: 5px;
 }
 
@@ -1415,7 +1418,7 @@ option {
 }
 
 .information-confirmed-item {
-display: flex;
+    display: flex;
     gap: 6px;
     align-items: center;
     padding: 4px;
