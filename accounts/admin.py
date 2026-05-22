@@ -64,3 +64,8 @@ class UserProfileAdmin(admin.ModelAdmin):
     )
     
     readonly_fields = ['updated_at']
+
+
+
+
+

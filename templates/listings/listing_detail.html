@@ -1382,6 +1382,164 @@
 
 
 
+
+        <!-- در listing_detail.html -->
+
+        {% if user.is_authenticated %}
+        <div class="card mt-4" id="note-section">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="bi bi-journal-text"></i> یادداشت شخصی
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="note-form" method="post" action="{% url 'accounts:save_listing_note' listing.pk %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <textarea class="form-control" name="note" id="listing-note" rows="4"
+                            placeholder="یادداشت خود را اینجا بنویسید...">{% if user_note %}{{ user_note.note }}{% endif %}</textarea>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> ذخیره یادداشت
+                        </button>
+                        {% if user_note %}
+                        <button type="button" class="btn btn-outline-danger" id="delete-note-btn">
+                            <i class="bi bi-trash"></i> حذف یادداشت
+                        </button>
+                        {% endif %}
+                    </div>
+                </form>
+
+                <!-- نمایش زمان آخرین بروزرسانی -->
+                <div id="note-timestamp" class="mt-2">
+                    {% if user_note %}
+                    <small class="text-muted">
+                        آخرین بروزرسانی: {{ user_note.updated_at|date:"Y/m/d H:i" }}
+                    </small>
+                    {% endif %}
+                </div>
+
+                <!-- پیام موفقیت -->
+                <div id="note-message" class="alert alert-success mt-3" style="display: none;"></div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const noteForm = document.getElementById('note-form');
+                const noteTextarea = document.getElementById('listing-note');
+                const noteTimestamp = document.getElementById('note-timestamp');
+                const noteMessage = document.getElementById('note-message');
+                const deleteBtn = document.getElementById('delete-note-btn');
+
+                // ذخیره یادداشت
+                if (noteForm) {
+                    noteForm.addEventListener('submit', function (e) {
+                        e.preventDefault();
+
+                        const formData = new FormData(this);
+
+                        fetch(this.action, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    // نمایش پیام موفقیت
+                                    noteMessage.textContent = data.message;
+                                    noteMessage.style.display = 'block';
+
+                                    // بروزرسانی زمان
+                                    noteTimestamp.innerHTML =
+                                        `<small class="text-muted">آخرین بروزرسانی: ${data.updated_at}</small>`;
+
+                                    // اگر یادداشت جدید بود، دکمه حذف را نمایش بده
+                                    if (data.created && !deleteBtn) {
+                                        const deleteButton = document.createElement('button');
+                                        deleteButton.type = 'button';
+                                        deleteButton.className = 'btn btn-outline-danger';
+                                        deleteButton.id = 'delete-note-btn';
+                                        deleteButton.innerHTML =
+                                            '<i class="bi bi-trash"></i> حذف یادداشت';
+                                        noteForm.querySelector('.d-flex').appendChild(deleteButton);
+
+                                        // اضافه کردن event listener برای دکمه جدید
+                                        deleteButton.addEventListener('click', deleteNoteHandler);
+                                    }
+
+                                    // مخفی کردن پیام بعد از 3 ثانیه
+                                    setTimeout(() => {
+                                        noteMessage.style.display = 'none';
+                                    }, 3000);
+                                } else {
+                                    alert(data.message);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('خطا در ذخیره یادداشت');
+                            });
+                    });
+                }
+
+                // تابع حذف یادداشت
+                function deleteNoteHandler() {
+                    if (confirm('آیا از حذف یادداشت اطمینان دارید؟')) {
+                        fetch(`/accounts/delete-listing-note/{{ listing.pk }}/`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRFToken': '{{ csrf_token }}',
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    // پاک کردن textarea
+                                    noteTextarea.value = '';
+
+                                    // پاک کردن timestamp
+                                    noteTimestamp.innerHTML = '';
+
+                                    // حذف دکمه delete
+                                    if (deleteBtn) {
+                                        deleteBtn.remove();
+                                    }
+
+                                    // نمایش پیام
+                                    noteMessage.textContent = data.message;
+                                    noteMessage.style.display = 'block';
+
+                                    setTimeout(() => {
+                                        noteMessage.style.display = 'none';
+                                    }, 3000);
+                                } else {
+                                    alert(data.message);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('خطا در حذف یادداشت');
+                            });
+                    }
+                }
+
+                // اضافه کردن event listener به دکمه حذف
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', deleteNoteHandler);
+                }
+            });
+        </script>
+        {% endif %}
+
+
+
+
     </div>
 </div>
 

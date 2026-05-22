@@ -531,10 +531,20 @@
 
                     </div>
 
+                    <!-- در قسمت btn-primary-div -->
                     <div class="btn-primary-div">
 
-                        <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-primary w-100">مشاهده
-                        </a>
+                        {% if user.is_authenticated %}
+                        <button class="btn btn-outline-warning save-listing-btn" data-listing-id="{{ listing.pk }}"
+                            data-is-saved="{% if listing.pk in saved_listing_ids %}true{% else %}false{% endif %}">
+                            <i
+                                class="bi {% if listing.pk in saved_listing_ids %}bi-bookmark-fill{% else %}bi-bookmark{% endif %}"></i>
+                            <span>{% if listing.pk in saved_listing_ids %}ذخیره شده{% else %}ذخیره{% endif %}</span>
+                        </button>
+                        {% endif %}
+
+                        <a href="{% url 'listings:listing_detail' listing.pk %}"
+                            class="btn btn-primary w-100">مشاهده</a>
 
                         <a href="{{ listing.platform_url }}" class="btn btn-success w-100" target="_blank">بازدید
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -546,6 +556,8 @@
                         </a>
 
                     </div>
+
+
                 </div>
 
             </div>
@@ -612,6 +624,48 @@
         });
     });
 </script>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // دکمه ذخیره آگهی
+    document.querySelectorAll('.save-listing-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const listingId = this.dataset.listingId;
+            const isSaved = this.dataset.isSaved === 'true';
+            const icon = this.querySelector('i');
+            const text = this.querySelector('span');
+            
+            fetch(`/accounts/toggle-save-listing/${listingId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.is_saved) {
+                        icon.classList.remove('bi-bookmark');
+                        icon.classList.add('bi-bookmark-fill');
+                        text.textContent = 'ذخیره شده';
+                        this.dataset.isSaved = 'true';
+                    } else {
+                        icon.classList.remove('bi-bookmark-fill');
+                        icon.classList.add('bi-bookmark');
+                        text.textContent = 'ذخیره';
+                        this.dataset.isSaved = 'false';
+                    }
+                }
+            });
+        });
+    });
+});
+</script>
+
 
 
 {% endblock %}

@@ -11,21 +11,18 @@ from .forms import (ListingForm, IncomeProofFormSet, VisitRequestForm,
 import json
 from notifications.utils import create_notification
 from django.contrib.auth import get_user_model
-from django.db.models import Q, F, Case, When, DecimalField
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse
+from accounts.models import SavedListing, ListingNote
 
 
 User = get_user_model()
 
 
-
-
 def listing_list(request):
-    # ۱. تعریف متغیر پایه با نام listings (نام‌ها یکسان شد)
+    # تعریف متغیر پایه
     listings = Listing.objects.filter(status='active')
     
-    # ---------------------------------------------------------
     # فیلتر دسته‌بندی
     category_id = request.GET.get('category')
     if category_id:
@@ -56,7 +53,6 @@ def listing_list(request):
     if filter_preferment:
         listings = listings.filter(boost=True)
 
-    # نکته: در کد شما این قسمت تکراری بود، احتمالا منظور filter_premier بوده است
     filter_premier = request.GET.get('filter_premier') 
     if filter_premier:
         listings = listings.filter(premier=True)
@@ -104,15 +100,13 @@ def listing_list(request):
         listings = listings.filter(monthly_income__gte=min_income)
     if max_income:
         listings = listings.filter(monthly_income__lte=max_income)
-    # ---------------------------------------------------------
     
-    # ۱. دریافت آگهی‌های ویژه مرتبط با فیلترها
+    # دریافت آگهی‌های ویژه مرتبط با فیلترها
     boosted_listings = list(listings.filter(boost=True).order_by('?')[:3])
     
-    # ۲. اگر کمتر از ۳ آگهی ویژه در این فیلتر پیدا شد، بقیه را از کل آگهی‌های ویژه سیستم پر کن
+    # اگر کمتر از ۳ آگهی ویژه در این فیلتر پیدا شد، بقیه را از کل آگهی‌های ویژه سیستم پر کن
     if len(boosted_listings) < 3:
         needed = 3 - len(boosted_listings)
-        # آیدی‌هایی که تا الان پیدا شده را حذف کن تا تکراری نباشد
         current_boosted_ids = [item.id for item in boosted_listings]
         
         extra_boosted = Listing.objects.filter(
@@ -122,12 +116,11 @@ def listing_list(request):
         
         boosted_listings.extend(extra_boosted)
 
-    # گرفتن آیدی تمام آگهی‌های ویژه (چه مرتبط چه غیرمرتبط) برای حذف از لیست اصلی
+    # گرفتن آیدی تمام آگهی‌های ویژه برای حذف از لیست اصلی
     boosted_ids = [item.id for item in boosted_listings]
     
     # ایجاد لیست اصلی آگهی‌ها
     main_listings_queryset = listings.exclude(id__in=boosted_ids)
-
 
     # اعمال مرتب‌سازی
     sort_by = request.GET.get('sort_by')
@@ -172,15 +165,22 @@ def listing_list(request):
         request.GET.get(param) for param in ['search', 'category', 'sort_by', 'min_price', 'max_price']
     )
 
+    # لیست آگهی‌های ذخیره شده کاربر
+    saved_listing_ids = []
+    if request.user.is_authenticated:
+        saved_listing_ids = list(
+            SavedListing.objects.filter(user=request.user).values_list('listing_id', flat=True)
+        )
+
     context = {
         'boosted_listings': boosted_listings, 
         'listings': paginated_main_listings, 
         'categories': categories,
         'has_active_filters': has_active_filters,
+        'saved_listing_ids': saved_listing_ids,
     }
     
     return render(request, 'listings/listing_list.html', context)
-
 
 
 def listing_detail(request, pk):
@@ -223,6 +223,18 @@ def listing_detail(request, pk):
         status='active'
     ).exclude(pk=listing.pk)[:6]
     
+    # بررسی ذخیره‌شده بودن آگهی و یادداشت کاربر
+    is_saved = False
+    user_note = None
+    
+    if request.user.is_authenticated:
+        is_saved = SavedListing.objects.filter(user=request.user, listing=listing).exists()
+        
+        try:
+            user_note = ListingNote.objects.get(user=request.user, listing=listing)
+        except ListingNote.DoesNotExist:
+            user_note = None
+    
     context = {
         'listing': listing,
         'listings': similar_listings,
@@ -231,6 +243,8 @@ def listing_detail(request, pk):
         'visit_request': visit_request,
         'income_chart_data': income_chart_data,
         'views_chart_data': views_chart_data,
+        'is_saved': is_saved,
+        'user_note': user_note,
     }
     return render(request, 'listings/listing_detail.html', context)
 

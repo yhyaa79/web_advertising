@@ -33,7 +33,7 @@ class UserProfile(models.Model):
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='individual', verbose_name='نوع کاربر')
     bio = models.TextField(blank=True, verbose_name='بیو')
     address = models.TextField(blank=True, verbose_name='آدرس')
-    email_address = models.EmailField( max_length=150, blank=True, null=True, verbose_name="ایمیل عمومی")
+    email_address = models.EmailField(max_length=150, blank=True, null=True, verbose_name="ایمیل عمومی")
     city = models.CharField(max_length=100, blank=True, verbose_name='شهر')
     province = models.CharField(max_length=100, blank=True, verbose_name='استان')
     postal_code = models.CharField(max_length=20, blank=True, verbose_name='کد پستی')
@@ -133,3 +133,37 @@ class UserProfile(models.Model):
     def save(self, *args, **kwargs):
         self.calculate_kyc_level()
         super().save(*args, **kwargs)
+
+
+class SavedListing(models.Model):
+    """مدل برای ذخیره آگهی‌های مورد علاقه کاربر"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_listings', verbose_name='کاربر')
+    listing = models.ForeignKey('listings.Listing', on_delete=models.CASCADE, related_name='saved_by_users', verbose_name='آگهی')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ذخیره')
+
+    class Meta:
+        unique_together = ('user', 'listing')
+        ordering = ['-created_at']
+        verbose_name = 'آگهی ذخیره شده'
+        verbose_name_plural = 'آگهی‌های ذخیره شده'
+
+    def __str__(self):
+        return f'{self.user.username} - {self.listing.title}'
+
+
+class ListingNote(models.Model):
+    """مدل برای یادداشت‌های شخصی کاربر برای هر آگهی"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listing_notes', verbose_name='کاربر')
+    listing = models.ForeignKey('listings.Listing', on_delete=models.CASCADE, related_name='user_notes', verbose_name='آگهی')
+    note = models.TextField(verbose_name='یادداشت')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='تاریخ بروزرسانی')
+
+    class Meta:
+        unique_together = ('user', 'listing')
+        ordering = ['-updated_at']
+        verbose_name = 'یادداشت آگهی'
+        verbose_name_plural = 'یادداشت‌های آگهی'
+
+    def __str__(self):
+        return f'یادداشت {self.user.username} برای {self.listing.title}'

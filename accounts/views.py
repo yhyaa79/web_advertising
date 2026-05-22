@@ -164,3 +164,125 @@ def profile(request):
     }
 
     return render(request, 'accounts/profile.html', context)
+
+
+
+
+
+
+# accounts/views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.contrib import messages
+from listings.models import Listing
+from .models import SavedListing, ListingNote
+
+
+@login_required
+def saved_listings_view(request):
+    """نمایش لیست آگهی‌های ذخیره شده کاربر"""
+    saved_listings = SavedListing.objects.filter(user=request.user).select_related('listing', 'listing__category')
+    
+    context = {
+        'saved_listings': saved_listings,
+    }
+    return render(request, 'accounts/saved_listings.html', context)
+
+
+@login_required
+@require_POST
+def toggle_save_listing(request, listing_id):
+    """ذخیره یا حذف آگهی از لیست ذخیره‌شده‌ها"""
+    listing = get_object_or_404(Listing, pk=listing_id)
+    
+    saved_listing, created = SavedListing.objects.get_or_create(
+        user=request.user,
+        listing=listing
+    )
+    
+    if not created:
+        saved_listing.delete()
+        is_saved = False
+        message = 'آگهی از لیست ذخیره‌شده‌ها حذف شد'
+    else:
+        is_saved = True
+        message = 'آگهی به لیست ذخیره‌شده‌ها اضافه شد'
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': True,
+            'is_saved': is_saved,
+            'message': message
+        })
+    
+    messages.success(request, message)
+    return redirect('listings:listing_detail', pk=listing_id)
+
+
+@login_required
+@require_POST
+def save_listing_note(request, listing_id):
+    """ذخیره یا بروزرسانی یادداشت آگهی"""
+    listing = get_object_or_404(Listing, pk=listing_id)
+    note_text = request.POST.get('note', '').strip()
+    
+    if not note_text:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': False,
+                'message': 'متن یادداشت نمی‌تواند خالی باشد'
+            })
+        messages.error(request, 'متن یادداشت نمی‌تواند خالی باشد')
+        return redirect('listings:listing_detail', pk=listing_id)
+    
+    note, created = ListingNote.objects.update_or_create(
+        user=request.user,
+        listing=listing,
+        defaults={'note': note_text}
+    )
+    
+    message = 'یادداشت با موفقیت ذخیره شد' if created else 'یادداشت با موفقیت بروزرسانی شد'
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': True,
+            'message': message,
+            'note': note.note,
+            'updated_at': note.updated_at.strftime('%Y/%m/%d %H:%M'),
+            'created': created
+        })
+    
+    messages.success(request, message)
+    return redirect('listings:listing_detail', pk=listing_id)
+
+
+@login_required
+@require_POST
+def delete_listing_note(request, listing_id):
+    """حذف یادداشت آگهی"""
+    listing = get_object_or_404(Listing, pk=listing_id)
+    
+    try:
+        note = ListingNote.objects.get(user=request.user, listing=listing)
+        note.delete()
+        message = 'یادداشت با موفقیت حذف شد'
+        success = True
+    except ListingNote.DoesNotExist:
+        message = 'یادداشتی یافت نشد'
+        success = False
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': success,
+            'message': message
+        })
+    
+    if success:
+        messages.success(request, message)
+    else:
+        messages.error(request, message)
+    
+    return redirect('listings:listing_detail', pk=listing_id)

@@ -1,0 +1,100 @@
+<!-- templates/accounts/saved_listings.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% load date_filters %}
+
+{% block title %}آگهی‌های ذخیره شده{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">آگهی‌های ذخیره شده من</h2>
+    
+    {% if saved_listings %}
+    <div class="row">
+        {% for saved in saved_listings %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="in-card">
+                    <a href="{% url 'listings:listing_detail' saved.listing.pk %}" class="in-card-img">
+                        <div class="img-badge">
+                            <span class="badge bg-info">{{ saved.listing.category.get_platform_display }}</span>
+                            {% if saved.listing.main_image %}
+                            <div class="card-img">
+                                <img src="{{ saved.listing.main_image.url }}" class="card-img-top" alt="{{ saved.listing.title }}">
+                            </div>
+                            {% endif %}
+                        </div>
+                    </a>
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ saved.listing.title }}</h5>
+                        <p class="card-text">{{ saved.listing.description|truncatewords:20 }}</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                {% if saved.listing.discount_price %}
+                                <h6 class="text-success mb-0">{{ saved.listing.discount_price|split_number }} تومان</h6>
+                                <small class="text-muted"><s>{{ saved.listing.price|split_number }} تومان</s></small>
+                                {% else %}
+                                <h6 class="text-success mb-0">{{ saved.listing.price|split_number }} تومان</h6>
+                                {% endif %}
+                            </div>
+                            
+                            <button class="btn btn-sm btn-outline-danger remove-saved-btn" 
+                                    data-listing-id="{{ saved.listing.pk }}">
+                                <i class="bi bi-trash"></i> حذف
+                            </button>
+                        </div>
+                        
+                        <a href="{% url 'listings:listing_detail' saved.listing.pk %}" class="btn btn-primary w-100 mt-3">مشاهده جزئیات</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">
+        <i class="bi bi-bookmark fs-1 d-block mb-3"></i>
+        <p class="mb-0">شما هنوز هیچ آگهی‌ای را ذخیره نکرده‌اید.</p>
+        <a href="{% url 'listings:listing_list' %}" class="btn btn-primary mt-3">مشاهده آگهی‌ها</a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // حذف آگهی از لیست ذخیره‌شده‌ها
+    document.querySelectorAll('.remove-saved-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const listingId = this.dataset.listingId;
+            const card = this.closest('.col-md-6');
+            
+            if (confirm('آیا از حذف این آگهی از لیست ذخیره‌شده‌ها اطمینان دارید؟')) {
+                fetch(`/accounts/toggle-save-listing/${listingId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        card.remove();
+                        
+                        // اگر دیگر آگهی‌ای نمانده، پیام نمایش بده
+                        if (document.querySelectorAll('.col-md-6').length === 0) {
+                            location.reload();
+                        }
+                    }
+                });
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
