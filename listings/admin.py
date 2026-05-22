@@ -112,7 +112,7 @@ class ListingAdmin(admin.ModelAdmin):
         'status', 
         'created_at'
     )
-    list_filter = ('status', 'boost', 'premier', 'is_private', 'is_verified', 'is_income', 'category', 'created_at')
+    list_filter = ('status', 'boost', 'premier', 'is_private', 'is_verified', 'suggested_price', 'is_income', 'category', 'created_at')
     search_fields = ('title', 'description', 'seller__username')
     readonly_fields = ('views_count', 'created_at', 'updated_at')
     
@@ -152,7 +152,7 @@ class ListingAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
         ('تنظیمات', {
-            'fields': ('boost', 'premier', 'is_income', 'is_verified', 'is_private', 'status', 'rejection_reason')
+            'fields': ('boost', 'premier', 'suggested_price', 'is_income', 'is_verified', 'is_private', 'status', 'rejection_reason')
         }),
         ('آمار', {
             'fields': ('views_count', 'created_at', 'updated_at'),

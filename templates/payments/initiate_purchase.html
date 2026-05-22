@@ -40,40 +40,46 @@
                 <form method="post">
                     {% csrf_token %}
 
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="send_custom_price" name="send_custom_price"
-                            {% if existing_proposal %}checked{% endif %} onchange="togglePriceInput()">
-                        <label class="form-check-label" for="send_custom_price">
-                            ارسال قیمت پیشنهادی
-                        </label>
-                    </div>
+                    {% if listing.suggested_price %}
+                    <div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="send_custom_price"
+                                name="send_custom_price" {% if existing_proposal %}checked{% endif %}
+                                onchange="togglePriceInput()">
+                            <label class="form-check-label" for="send_custom_price">
+                                ارسال قیمت پیشنهادی
+                            </label>
+                        </div>
 
-                    <div class="mb-3" id="price_input_section"
-                        style="display: {% if existing_proposal %}block{% else %}none{% endif %};">
-                        <label for="proposed_price" class="form-label">قیمت پیشنهادی شما (تومان)</label>
-                        <input type="number" class="form-control" id="proposed_price" name="proposed_price"
-                            value="{% if existing_proposal %}{{ existing_proposal.proposed_price|floatformat:0 }}{% endif %}">
-                        <small class="text-muted">قیمت پیشنهادی خود را وارد کنید</small>
-                    </div>
+                        <div class="mb-3" id="price_input_section"
+                            style="display: {% if existing_proposal %}block{% else %}none{% endif %};">
+                            <label for="proposed_price" class="form-label">قیمت پیشنهادی شما (تومان)</label>
+                            <input type="number" class="form-control" id="proposed_price" name="proposed_price"
+                                value="{% if existing_proposal %}{{ existing_proposal.proposed_price|floatformat:0 }}{% endif %}">
+                            <small class="text-muted">قیمت پیشنهادی خود را وارد کنید</small>
+                        </div>
 
-                    <div class="mb-3" id="message_section"
-                        style="display: {% if existing_proposal %}block{% else %}none{% endif %};">
-                        <label for="message" class="form-label">پیام (اختیاری)</label>
-                        <textarea class="form-control" id="message" name="message" rows="3"
-                            placeholder="توضیحات اضافی در مورد پیشنهاد خود...">{% if existing_proposal %}{{ existing_proposal.message }}{% endif %}</textarea>
+                        <div class="mb-3" id="message_section"
+                            style="display: {% if existing_proposal %}block{% else %}none{% endif %};">
+                            <label for="message" class="form-label">پیام (اختیاری)</label>
+                            <textarea class="form-control" id="message" name="message" rows="3"
+                                placeholder="توضیحات اضافی در مورد پیشنهاد خود...">{% if existing_proposal %}{{ existing_proposal.message }}{% endif %}</textarea>
+                        </div>
                     </div>
+                    {% endif %}
 
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-success btn-lg">
                             {% if existing_proposal %}
-                            به‌روزرسانی پیشنهاد
+                            به‌روزرسانی ردخواست خرید
                             {% else %}
-                            ارسال پیشنهاد
+                            ارسال ردخواست خرید
                             {% endif %}
                         </button>
                         <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-secondary">انصراف</a>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>

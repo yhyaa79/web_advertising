@@ -60,6 +60,9 @@ class Listing(models.Model):
     boost = models.BooleanField(default=False, verbose_name='آگهی پیشرفته')
     premier = models.BooleanField(default=False, verbose_name='آگهی برتر')
     
+    # پیشنهاد قیمت 
+    suggested_price = models.BooleanField(default=False, verbose_name='امکان پیشنهاد قیمت')
+
     # درآمد آگهی
     is_income = models.BooleanField(default=True, verbose_name='آگهی به درآمد رسیده')
     

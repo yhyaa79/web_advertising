@@ -752,6 +752,163 @@ option {
     margin-top: -120px;
 }
 
+
+
+/* Guide Card Styles */
+.guide-list {
+    margin-top: 1rem;
+}
+
+.guide-item {
+    border-radius: 8px;
+    overflow: visible;
+    transition: all 0.3s ease;
+    margin-bottom: 12px;
+}
+
+.guide-item .d-flex {
+    gap: 10px;
+}
+
+.btn-guide-card {
+    flex-shrink: 0;
+    margin-right: auto;
+}
+
+.guide-toggle-btn {
+    background: none;
+    border: none;
+    width: 12px;
+    height: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.6s ease;
+    cursor: pointer;
+    padding: 0;
+}
+
+.guide-question,
+.align-items-center {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.guide-toggle-btn::before {
+    content: '';
+    border: solid var(--text-secondary);
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 4px;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease-in-out;
+}
+
+.guide-toggle-btn.open::before {
+    transform: rotate(-135deg);
+}
+
+.guide-question {
+    background: #fbfcfd !important;
+    border-radius: var(--border-radius-md);
+    border: 1px solid #dee2e6;
+    font-weight: 500;
+    color: #2c3e50;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    align-items: center;
+    padding: 7px 12px;
+}
+
+.filter-section .guide-question {
+    margin-bottom: 15px;
+}
+
+.guide-question:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.guide-question span {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.guide-icon {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    color: #6c757d;
+    margin-left: 0.5rem;
+}
+
+.guide-question[aria-expanded="true"] {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+    color: white;
+    border-color: #0056b3;
+}
+
+.guide-question[aria-expanded="true"] .guide-icon {
+    color: white;
+}
+
+/* Smooth Animation for Guide Answer */
+.guide-answer-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.guide-answer-wrapper.open {
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.guide-answer {
+    background: #fefeff !important;
+    border: 1px solid #dee2e6;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    margin-top: -25px;
+    padding: 15px !important;
+    font-size: 13px;
+    color: #495057;
+    white-space: pre-line;
+    opacity: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.guide-answer-wrapper:not(.open) .guide-answer {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .guide-question {
+        padding: 0.875rem 1rem;
+        font-size: 15px;
+    }
+
+    .guide-answer {
+        padding: 1rem !important;
+        font-size: 15px;
+    }
+
+    .guide-icon {
+        font-size: 1rem;
+    }
+
+    .guide-toggle-btn {
+        width: 35px;
+        height: 35px;
+    }
+
+    .guide-item .d-flex {
+        gap: 5px;
+    }
+}
+
+
 /* ========================================
    کارت‌ها (Cards)
    ======================================== */
@@ -803,6 +960,7 @@ option {
 
 .description-detail p {
     white-space: pre-line;
+    padding-left: 10px;
 }
 
 
@@ -810,6 +968,15 @@ option {
     border: 2px solid #f59e1c75 !important;
 }
 
+
+.card-inf {
+    border-radius: var(--border-radius-sm-md);
+    box-shadow: var(--card-shadow);
+    border: none;
+    overflow: hidden;
+    transition: var(--transition-base);
+    padding: 8px 12px;
+}
 
 /* ========================================
    کارد های listing_detail 
@@ -890,7 +1057,7 @@ option {
 }
 
 .inf-first-card-income-expense {
-    max-width: 310px;
+    max-width: 350px;
 }
 
 .inf-second-card-income-expense {
@@ -938,7 +1105,7 @@ option {
     margin: 0;
     color: var(--text-2c3e50);
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 
@@ -980,6 +1147,7 @@ option {
 .aboutplatform-detail-p {
     white-space: pre-line;
     padding: 10px;
+    margin-bottom: 20px;
 }
 
 .aboutplatform-text {
@@ -988,7 +1156,6 @@ option {
     transition: max-height 0.5s ease-in-out;
     overflow: hidden;
     transition: max-height 0.5s ease-in-out;
-    margin-bottom: 20px;
 }
 
 .aboutplatform-card-h3 {
@@ -1424,7 +1591,7 @@ option {
     gap: 6px;
     align-items: center;
     padding: 4px;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
 }
 
 .information-confirmed-item-p {
@@ -2306,6 +2473,32 @@ form textarea {
     margin-top: var(--spacing-md);
 }
 
+
+.premier-announcement {
+    color: #b08900;
+    background-color: #fdf0c8;
+}
+
+.boost-announcement {
+    color: #0560bc;
+    background-color: #d5eaff;
+}
+
+.premier-announcement-text,
+.boost-announcement-text {
+    font-size: 13px;
+    padding: 5px 5px;
+}
+
+.suggested-price {
+    color: #058d25;
+    background-color: #d0fedb;
+}
+
+.suggested-price-text {
+    font-size: 13px;
+}
+
 /* ========================================
    سیستم Grid
    ======================================== */
@@ -2746,27 +2939,47 @@ form textarea {
 }
 
 .steps-how-buy {
+    display: flex;
+    align-items: center;
+    background: #fbfcfd !important;
+    border: 1px solid #d1d4d7;
+    color: #495057;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     border-radius: var(--border-radius-999);
-    border: 2px solid var(--border-color);
     width: 30px;
     height: 30px;
-    color: var(--text-secondary);
     text-align: center;
     font-size: var(--font-size-md);
     padding: 0 10px
 }
 
 .card-body-text-how-buy {
-    padding: 5px;
-    margin-bottom: 7px;
-    /* border: 2px solid var(--border-color); */
-    border-radius: var(--border-radius-md);
-    color: var(--text-secondary);
-    background: #d6d6d645;
+    background: #fefeff !important;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 7px;
+    font-size: 13px;
+    color: #495057;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .ad-views {
     margin-top: 10px;
+}
+
+.card-body-text-purchase-advice {
+margin-bottom: 10px;
+    padding: 7px;
+    font-size: 13px;
+    color: #495057;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.card-body-text-purchase-advice strong {
+    font-size: 13px;
 }
 
 
@@ -3275,7 +3488,7 @@ nav .nav-cta .btn-ghost {
     display: flex;
     font-size: 1.4rem;
     font-weight: 800;
-    color: var(--white);
+    color: var(--black);
     text-decoration: none;
     letter-spacing: -.5px;
     align-items: center;
@@ -4070,6 +4283,7 @@ section {
 footer {
     background: var(--white);
     padding: 60px 5% 30px;
+    border-top: 1px solid #dee2e6 !important;
 }
 
 .footer-grid {
@@ -4080,7 +4294,7 @@ footer {
 }
 
 .footer-brand p {
-    color: var(--muted);
+    color: var(--black);
     font-size: .88rem;
     margin-top: .75rem;
     max-width: 260px;
@@ -4101,14 +4315,14 @@ footer {
 }
 
 .footer-col a {
-    color: var(--muted);
+    color: var(--black);
     text-decoration: none;
     font-size: .85rem;
     transition: color .2s;
 }
 
 .footer-col a:hover {
-    color: var(--white);
+    color: var(--primary);
 }
 
 .footer-bottom {
