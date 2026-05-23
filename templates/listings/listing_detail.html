@@ -8,437 +8,445 @@
 
 {% block title %}{{ listing.title }}{% endblock %}
 
+
+{% block nav_class %}navbar-scrolled navbar-absolute{% endblock %}
+
 {% block content %}
 
+<div class="navbar-listing-detail">
+    <p>navbar مربوط به اطلاعات آگهی</p>
+</div>
 
-<div class="row">
-    <div class="col-md-8">
-        <div class="">
-            <div class="d-flex justify-content-between align-items-center">
-                <h2 style="margin-bottom: 5px;">{{ listing.title }}</h2>
-                <span class="badge bg-info-detail">{{ listing.category.get_platform_display }}</span>
-            </div>
+<div class="container">
 
-            <div class="inf-created-views-username">
-                <p class="text-muted"> بازدید: {{ listing.views_count|split_number }}</p>
-                <p class="text-muted"> فروشنده: {{ listing.seller.username }}</p>
-                <p class="text-muted">تاریخ انتشار اگهی: {{ listing.created_at|jalali_date }}
-                </p>
-            </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 style="margin-bottom: 5px;">{{ listing.title }}</h2>
+                    <span class="badge bg-info-detail">{{ listing.category.get_platform_display }}</span>
+                </div>
 
-            <hr>
-            <div>
-                {% if not has_access %}
-                <div class="alert alert-warning">
-                    <h3><i class="bi bi-lock"></i> این آگهی خصوصی است</h3>
-                    <p>برای مشاهده جزئیات کامل این آگهی، باید درخواست بازدید ارسال کنید و فروشنده آن را تایید کند.
+                <div class="inf-created-views-username">
+                    <p class="text-muted"> بازدید: {{ listing.views_count|split_number }}</p>
+                    <p class="text-muted"> فروشنده: {{ listing.seller.username }}</p>
+                    <p class="text-muted">تاریخ انتشار اگهی: {{ listing.created_at|jalali_date }}
                     </p>
+                </div>
 
-                    {% if not user.is_authenticated %}
-                    <a href="{% url 'accounts:login' %}" class="btn btn-success"
-                        style="width: fit-content; margin: 20px auto;">ورود برای ارسال درخواست</a>
-                    {% elif visit_request %}
-                    {% if visit_request.status == 'pending' %}
-                    <div class="alert-info">
-                        <i class="bi bi-clock"></i> درخواست شما در انتظار تایید فروشنده است.
+                <hr>
+                <div>
+                    {% if not has_access %}
+                    <div class="alert alert-warning">
+                        <h3><i class="bi bi-lock"></i> این آگهی خصوصی است</h3>
+                        <p>برای مشاهده جزئیات کامل این آگهی، باید درخواست بازدید ارسال کنید و فروشنده آن را تایید کند.
+                        </p>
+
+                        {% if not user.is_authenticated %}
+                        <a href="{% url 'accounts:login' %}" class="btn btn-success"
+                            style="width: fit-content; margin: 20px auto;">ورود برای ارسال درخواست</a>
+                        {% elif visit_request %}
+                        {% if visit_request.status == 'pending' %}
+                        <div class="alert-info">
+                            <i class="bi bi-clock"></i> درخواست شما در انتظار تایید فروشنده است.
+                        </div>
+                        {% elif visit_request.status == 'rejected' %}
+                        <div class="alert alert-danger">
+                            <i class="bi bi-x-circle"></i> درخواست شما رد شده است.
+                        </div>
+                        {% endif %}
+                        {% else %}
+                        <a href="{% url 'listings:request_visit' listing.pk %}" class="btn btn-warning">
+                            <i class="bi bi-send"></i> ارسال درخواست بازدید
+                        </a>
+                        {% endif %}
                     </div>
-                    {% elif visit_request.status == 'rejected' %}
-                    <div class="alert alert-danger">
-                        <i class="bi bi-x-circle"></i> درخواست شما رد شده است.
+                    {% endif %}
+                </div>
+
+                {% if has_access %}
+                <div class="description-detail">
+                    <p>{{ listing.description }}</p>
+                </div>
+                <div class="all-badge">
+                    {% if listing.is_private %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge-detail bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> خصوصی
+                        </span>
                     </div>
                     {% endif %}
-                    {% else %}
-                    <a href="{% url 'listings:request_visit' listing.pk %}" class="btn btn-warning">
-                        <i class="bi bi-send"></i> ارسال درخواست بازدید
-                    </a>
+
+                    {% if listing.is_income %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge-detail bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> درامد اگهی
+                        </span>
+                    </div>
                     {% endif %}
-                </div>
-                {% endif %}
-            </div>
 
-            {% if has_access %}
-            <div class="description-detail">
-                <p>{{ listing.description }}</p>
-            </div>
-            <div class="all-badge">
-                {% if listing.is_private %}
-                <div class="position-absolute top-0 end-0 m-2">
-                    <span class="badge-detail bg-warning text-dark">
-                        <i class="bi bi-lock-fill"></i> خصوصی
-                    </span>
-                </div>
-                {% endif %}
+                    {% if listing.premier %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge badge-detail bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> اگهی برتر
 
-                {% if listing.is_income %}
-                <div class="position-absolute top-0 end-0 m-2">
-                    <span class="badge-detail bg-warning text-dark">
-                        <i class="bi bi-lock-fill"></i> درامد اگهی
-                    </span>
-                </div>
-                {% endif %}
+                            <svg class="premier-star" width="18" height="18" viewBox="0 0 24 24" fill="#FFD700"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                            </svg>
 
-                {% if listing.premier %}
-                <div class="position-absolute top-0 end-0 m-2">
-                    <span class="badge badge-detail bg-warning text-dark">
-                        <i class="bi bi-lock-fill"></i> اگهی برتر
-
-                        <svg class="premier-star" width="18" height="18" viewBox="0 0 24 24" fill="#FFD700"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                        </svg>
-
-                    </span>
-                </div>
-                {% elif listing.boost %}
-                <div class="position-absolute top-0 end-0 m-2">
-                    <span class="badge badge-detail bg-warning text-dark">
-                        <i class="bi bi-lock-fill"></i> اگهی پیشرفته
-                    </span>
-                </div>
-                {% endif %}
-
-            </div>
-
-
-
-            <div class="specifications-detail">
-
-                <div class="inf-card-detail">
-                    <strong class="strong-inf-detail">تعداد دنبال‌کننده:</strong>
-                    <p>{{ listing.followers_count|split_number }}</p>
-                </div>
-
-                <div class="inf-card-detail">
-                    <strong class="strong-inf-detail">درآمد ماهانه:</strong>
-                    <p>{{ listing.monthly_income|split_number }} تومان</p>
-                </div>
-
-                <div class="inf-card-detail">
-                    {% if listing.get_roi_display %}
-                    <strong class="strong-inf-detail">برگشت سرمایه:</strong>
-                    <p>{{ listing.get_roi_display }}</p>
+                        </span>
+                    </div>
+                    {% elif listing.boost %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge badge-detail bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> اگهی پیشرفته
+                        </span>
+                    </div>
                     {% endif %}
+
                 </div>
 
-                <div class="inf-card-detail">
-                    <strong class="strong-inf-detail">سن پلتفرم:</strong>
-                    <p>{{ listing.platform_age|floatformat:0 }} سال</p>
-                </div>
 
-                <div class="inf-card-detail">
-                    <strong class="strong-inf-detail">موقعیت مکانی:</strong>
-                    <p>{{ listing.location|default:"نامشخص" }}</p>
-                </div>
 
-                <div class="inf-card-detail">
-                    {% if listing.most_like %}
-                    <strong class="strong-inf-detail">بیشترین لایک:</strong>
-                    <p>{{ listing.most_like|split_number }}</p>
-                    {% endif %}
-                </div>
+                <div class="specifications-detail">
 
-                <div class="inf-card-detail">
-                    {% if listing.most_view %}
-                    <strong class="strong-inf-detail">بیشترین بازدید:</strong>
-                    <p>{{ listing.most_view|split_number }}</p>
-                    {% endif %}
-                </div>
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">تعداد دنبال‌کننده:</strong>
+                        <p>{{ listing.followers_count|split_number }}</p>
+                    </div>
 
-                <div class="inf-card-detail">
-                    {% if listing.most_comment %}
-                    <strong class="strong-inf-detail">بیشترین کامنت:</strong>
-                    <p>{{ listing.most_comment|split_number }}</p>
-                    {% endif %}
-                </div>
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">درآمد ماهانه:</strong>
+                        <p>{{ listing.monthly_income|split_number }} تومان</p>
+                    </div>
 
-                <!-- <div class="inf-card-detail">
+                    <div class="inf-card-detail">
+                        {% if listing.get_roi_display %}
+                        <strong class="strong-inf-detail">برگشت سرمایه:</strong>
+                        <p>{{ listing.get_roi_display }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">سن پلتفرم:</strong>
+                        <p>{{ listing.platform_age|floatformat:0 }} سال</p>
+                    </div>
+
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">موقعیت مکانی:</strong>
+                        <p>{{ listing.location|default:"نامشخص" }}</p>
+                    </div>
+
+                    <div class="inf-card-detail">
+                        {% if listing.most_like %}
+                        <strong class="strong-inf-detail">بیشترین لایک:</strong>
+                        <p>{{ listing.most_like|split_number }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="inf-card-detail">
+                        {% if listing.most_view %}
+                        <strong class="strong-inf-detail">بیشترین بازدید:</strong>
+                        <p>{{ listing.most_view|split_number }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="inf-card-detail">
+                        {% if listing.most_comment %}
+                        <strong class="strong-inf-detail">بیشترین کامنت:</strong>
+                        <p>{{ listing.most_comment|split_number }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- <div class="inf-card-detail">
                         <strong class="strong-inf-detail">آدرس پلتفرم:</strong>
                         <p><a href="{{ listing.platform_url }}" target="_blank">{{ listing.platform_url }}</a></p>
                     </div> -->
 
-            </div>
+                </div>
 
 
-            <div class="scroll-link">
+                <div class="scroll-link">
+                    {% if listing.about_platform %}
+                    <a href="#section-about" class="text-link-scroll">درباره پلتفرم</a>
+                    {% endif %}
+
+                    {% if listing.faqs.all %}
+                    <a href="#section-faq" class="text-link-scroll">پرسش و پاسخ</a>
+                    {% endif %}
+
+                    {% if listing.income_data_points.all or listing.views_data_points.all %}
+                    <a href="#section-charts" class="text-link-scroll">نمودار ها</a>
+                    {% endif %}
+
+                    {% if income_proofs %}
+                    <a href="#section-proofs" class="text-link-scroll">اثبات درآمد</a>
+                    {% endif %}
+
+                    <a href="#section-social-media" class="text-link-scroll">رسانه های اجتماعی</a>
+
+                    <a href="#section-attachments" class="text-link-scroll">پیوست ها</a>
+
+                    <a href="#section-sell-includes" class="text-link-scroll">دارایی‌های فروش</a>
+
+                    <a href="#section-license" class="text-link-scroll">مجوز ها</a>
+
+                    <a href="#section-services-used" class="text-link-scroll">خدمات مورد استفاده</a>
+
+                    <a href="#section-monetization-methods" class="text-link-scroll">روش های کسب درآمد</a>
+
+                    <a href="#section-revenue-expenses" class="text-link-scroll">درآمد و هزینه‌ها</a>
+
+                    <a href="#section-analyst" class="text-link-scroll">تحلیلگر و مشاور</a>
+
+
+                </div>
+
+
+
+                {% if listing.listing_analyst %}
+                <div id="section-analyst" class="card card-body analyst-card">
+                    <div class="analyst-card-h3 cursor-card">
+                        <h3 class="titel-card">تحلیلگر و مشاور</h3>
+                    </div>
+                    <hr>
+                    <div class="analyst-det">
+                        <div class="img-specifications-analyst">
+
+                            {% if listing.listing_analyst.analyst_image %}
+                            <div class="img-analyst">
+                                <img src="{{ listing.listing_analyst.analyst_image.url }}"
+                                    alt="{{ listing.listing_analyst.analyst_name }}">
+                            </div>
+                            {% endif %}
+
+
+                            <div class="specifications-analyst">
+
+                                {% if listing.listing_analyst.analyst_name %}
+                                <div class="inf-card-analyst">
+                                    <strong class="strong-inf-analyst">نام تحلیلگر:</strong>
+                                    <p>{{ listing.listing_analyst.analyst_name }}</p>
+                                </div>
+                                {% endif %}
+
+                                {% if listing.listing_analyst.analyst_expertise %}
+                                <div class="inf-card-analyst">
+                                    <strong class="strong-inf-analyst">تخصص:</strong>
+                                    <p>{{ listing.listing_analyst.analyst_expertise }}</p>
+                                </div>
+                                {% endif %}
+
+                                {% if listing.listing_analyst.analyst_education %}
+                                <div class="inf-card-analyst">
+                                    <strong class="strong-inf-analyst">تحصیلات:</strong>
+                                    <p>{{ listing.listing_analyst.analyst_education }}</p>
+                                </div>
+                                {% endif %}
+
+                                {% if listing.listing_analyst.analyst_record %}
+                                <div class="inf-card-analyst">
+                                    <strong class="strong-inf-analyst">سابقه:</strong>
+                                    <p>{{ listing.listing_analyst.analyst_record }}</p>
+                                </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+                        {% if listing.listing_analyst.analyst_description %}
+                        <div class="analyst-detail">
+                            <p>{{ listing.listing_analyst.analyst_description|linebreaks }}</p>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+                {% endif %}
+
+
+
                 {% if listing.about_platform %}
-                <a href="#section-about" class="text-link-scroll">درباره پلتفرم</a>
+                <div id="section-about" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('2', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">درباره پلتفرم</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-2" class="more-height-btn"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-2" class="aboutplatform-text  expanded">
+                        <div class="aboutplatform-detail">
+                            <hr>
+                            <p class="aboutplatform-detail-p">{{ listing.about_platform }}</p>
+                        </div>
+                    </div>
+                    <!--                 <div id="bootstrap-2" class="bootstrap"></div>
+                <p id="text-more-card-2" class="text-aboutplatform-card" onclick="toggleHeight('2', 0)">
+                    مشاهده بیشتر</p> -->
+                </div>
                 {% endif %}
 
-                {% if listing.faqs.all %}
-                <a href="#section-faq" class="text-link-scroll">پرسش و پاسخ</a>
+
+
+                {% for faq in listing.faqs.all %}
+                {% if faq.question and faq.answer %}
+                {% if forloop.first %}
+                <div id="section-faq" class="card card-body mt-3">
+                    <div class="aboutplatform-card-h3">
+                        <h3 class="titel-card">پرسش و پاسخ</h3>
+                    </div>
+                    <hr>
+                    <div class="faq-list">
+                        {% endif %}
+
+                        <div class="faq-item">
+                            <!-- کل این ردیف حالا قابل کلیک است -->
+                            <div class="d-flex justify-content-between align-items-center faq-question"
+                                data-faq-id="{{ faq.id }}" style="cursor: pointer;">
+                                <button
+                                    class="btn-light text-end flex-grow-1 d-flex justify-content-between align-items-center faq-question-div"
+                                    type="button" aria-expanded="false" aria-controls="faq-answer-{{ faq.id }}">
+                                    <span>{{ faq.question }}</span>
+                                    <i class="bi bi-chevron-down faq-icon"></i>
+                                </button>
+                                <div class="btn-faq-card">
+                                    <button class="faq-toggle-btn" type="button open"></button>
+                                </div>
+                            </div>
+
+                            <div class="faq-answer-wrapper" id="faq-answer-wrapper-{{ faq.id }}">
+                                <div class="faq-answer p-3 bg-light rounded mt-1" id="faq-answer-{{ faq.id }}">
+                                    {{ faq.answer }}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if forloop.last %}
+                    </div>
+                </div>
                 {% endif %}
+                {% endif %}
+                {% endfor %}
+
+
 
                 {% if listing.income_data_points.all or listing.views_data_points.all %}
-                <a href="#section-charts" class="text-link-scroll">نمودار ها</a>
+                <div id="section-charts" class="card card-body">
+                    <div class="aboutplatform-card-h3">
+                        <h3 class="titel-card">نمودار ها</h3>
+                    </div>
+                    <hr>
+                    <!-- نمودارها -->
+                    <div id="income-chart-container" class="mt-4" style="display: none;">
+                        <h5>نمودار درآمد</h5>
+                        <div class="chart-card">
+                            <canvas id="incomeChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="views-chart-container" class="mt-4" style="display: none;">
+                        <h5>نمودار بازدید</h5>
+                        <div class="chart-card">
+                            <canvas id="viewsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
                 {% endif %}
 
                 {% if income_proofs %}
-                <a href="#section-proofs" class="text-link-scroll">اثبات درآمد</a>
+                <div id="section-proofs" class="card card-body">
+                    <div class="aboutplatform-card-h3">
+                        <h3 class="titel-card">اثبات درآمد</h3>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        {% for proof in income_proofs %}
+                        <div class="mb-3">
+                            <div class="div-card-img-proof">
+                                {% if proof.image %}
+                                <img src="{{ proof.image.url }}" class="card-img-proof" alt="اثبات درآمد">
+                                {% endif %}
+                            </div>
+
+                            {% if proof.description %}
+                            <p class="card-text-income-proofs">{{ proof.description }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
                 {% endif %}
 
-                <a href="#section-social-media" class="text-link-scroll">رسانه های اجتماعی</a>
-
-                <a href="#section-attachments" class="text-link-scroll">پیوست ها</a>
-
-                <a href="#section-sell-includes" class="text-link-scroll">دارایی‌های فروش</a>
-
-                <a href="#section-license" class="text-link-scroll">مجوز ها</a>
-
-                <a href="#section-services-used" class="text-link-scroll">خدمات مورد استفاده</a>
-
-                <a href="#section-monetization-methods" class="text-link-scroll">روش های کسب درآمد</a>
-
-                <a href="#section-revenue-expenses" class="text-link-scroll">درآمد و هزینه‌ها</a>
-
-                <a href="#section-analyst" class="text-link-scroll">تحلیلگر و مشاور</a>
-
-
-            </div>
 
 
 
-            {% if listing.listing_analyst %}
-            <div id="section-analyst" class="card card-body analyst-card">
-                <div class="analyst-card-h3 cursor-card">
-                    <h3 class="titel-card">تحلیلگر و مشاور</h3>
-                </div>
-                <hr>
-                <div class="analyst-det">
-                    <div class="img-specifications-analyst">
-
-                        {% if listing.listing_analyst.analyst_image %}
-                        <div class="img-analyst">
-                            <img src="{{ listing.listing_analyst.analyst_image.url }}"
-                                alt="{{ listing.listing_analyst.analyst_name }}">
-                        </div>
-                        {% endif %}
 
 
-                        <div class="specifications-analyst">
 
-                            {% if listing.listing_analyst.analyst_name %}
-                            <div class="inf-card-analyst">
-                                <strong class="strong-inf-analyst">نام تحلیلگر:</strong>
-                                <p>{{ listing.listing_analyst.analyst_name }}</p>
-                            </div>
-                            {% endif %}
-
-                            {% if listing.listing_analyst.analyst_expertise %}
-                            <div class="inf-card-analyst">
-                                <strong class="strong-inf-analyst">تخصص:</strong>
-                                <p>{{ listing.listing_analyst.analyst_expertise }}</p>
-                            </div>
-                            {% endif %}
-
-                            {% if listing.listing_analyst.analyst_education %}
-                            <div class="inf-card-analyst">
-                                <strong class="strong-inf-analyst">تحصیلات:</strong>
-                                <p>{{ listing.listing_analyst.analyst_education }}</p>
-                            </div>
-                            {% endif %}
-
-                            {% if listing.listing_analyst.analyst_record %}
-                            <div class="inf-card-analyst">
-                                <strong class="strong-inf-analyst">سابقه:</strong>
-                                <p>{{ listing.listing_analyst.analyst_record }}</p>
-                            </div>
-                            {% endif %}
-
+                {% if listing.social_medias.exists %}
+                <div id="section-social-media" class="card card-body income-expense-card">
+                    <div onclick="toggleHeight('4', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">رسانه های اجتماعی</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-4" class="more-height-btn open"></button>
                         </div>
                     </div>
 
-                    {% if listing.listing_analyst.analyst_description %}
-                    <div class="analyst-detail">
-                        <p>{{ listing.listing_analyst.analyst_description|linebreaks }}</p>
-                    </div>
-                    {% endif %}
+                    <div id="box-text-4" class="social-media-text expanded">
+                        <div class="income-expense-detail">
+                            <hr>
 
-                </div>
-            </div>
-            {% endif %}
+                            {% for social in listing.social_medias.all %}
+                            <div class="list-social-media">
 
+                                <div class="social-media-icon-numb">
 
+                                    <div class="icon-social-media">
 
-            {% if listing.about_platform %}
-            <div id="section-about" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('2', 0)" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">درباره پلتفرم</h3>
-                    <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-2" class="more-height-btn"></button>
-                    </div>
-                </div>
-                <div id="box-text-2" class="aboutplatform-text  expanded">
-                    <div class="aboutplatform-detail">
-                        <hr>
-                        <p class="aboutplatform-detail-p">{{ listing.about_platform }}</p>
-                    </div>
-                </div>
-                <!--                 <div id="bootstrap-2" class="bootstrap"></div>
-                <p id="text-more-card-2" class="text-aboutplatform-card" onclick="toggleHeight('2', 0)">
-                    مشاهده بیشتر</p> -->
-            </div>
-            {% endif %}
+                                        {% if social.platform == "twitter" %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="currentColor">
+                                            <path
+                                                d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932L18.901 1.153zm-1.653 19.57h2.608L6.027 2.54h-2.65l13.881 18.183z" />
+                                        </svg>
 
+                                        {% elif social.platform == "instagram" %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="currentColor">
+                                            <path
+                                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.069-4.85.069s-3.584-.011-4.85-.069c-3.25-.149-4.771-1.699-4.919-4.92-.058-1.265-.069-1.644-.069-4.849s.011-3.584.069-4.85c.149-3.227 1.664-4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163m0-2.163C8.74 0 8.333.012 7.053.072 2.695.272.273 2.69.073 7.052.012 8.333 0 8.74 0 12s.012 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98C8.333 23.988 8.74 24 12 24s3.667-.012 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.06-1.28.072-1.687.072-4.947s-.012-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98C15.667.012 15.26 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z" />
+                                        </svg>
 
+                                        {% elif social.platform == "github" %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="currentColor">
+                                            <path
+                                                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.043c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                                        </svg>
 
-            {% for faq in listing.faqs.all %}
-            {% if faq.question and faq.answer %}
-            {% if forloop.first %}
-            <div id="section-faq" class="card card-body mt-3">
-                <div class="aboutplatform-card-h3">
-                    <h3 class="titel-card">پرسش و پاسخ</h3>
-                </div>
-                <hr>
-                <div class="faq-list">
-                    {% endif %}
+                                        {% elif social.platform == "facebook" %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="currentColor">
+                                            <path
+                                                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                        </svg>
 
-                    <div class="faq-item">
-                        <!-- کل این ردیف حالا قابل کلیک است -->
-                        <div class="d-flex justify-content-between align-items-center faq-question"
-                            data-faq-id="{{ faq.id }}" style="cursor: pointer;">
-                            <button
-                                class="btn-light text-end flex-grow-1 d-flex justify-content-between align-items-center faq-question-div"
-                                type="button" aria-expanded="false" aria-controls="faq-answer-{{ faq.id }}">
-                                <span>{{ faq.question }}</span>
-                                <i class="bi bi-chevron-down faq-icon"></i>
-                            </button>
-                            <div class="btn-faq-card">
-                                <button class="faq-toggle-btn" type="button open"></button>
-                            </div>
-                        </div>
+                                        {% elif social.platform == "linkedin" %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="currentColor">
+                                            <path
+                                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z" />
+                                        </svg>
 
-                        <div class="faq-answer-wrapper" id="faq-answer-wrapper-{{ faq.id }}">
-                            <div class="faq-answer p-3 bg-light rounded mt-1" id="faq-answer-{{ faq.id }}">
-                                {{ faq.answer }}
-                            </div>
-                        </div>
-                    </div>
+                                        {% elif social.platform == "telegram" %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                                        </svg>
 
-                    {% if forloop.last %}
-                </div>
-            </div>
-            {% endif %}
-            {% endif %}
-            {% endfor %}
-
-
-
-            {% if listing.income_data_points.all or listing.views_data_points.all %}
-            <div id="section-charts" class="card card-body">
-                <div class="aboutplatform-card-h3">
-                    <h3 class="titel-card">نمودار ها</h3>
-                </div>
-                <hr>
-                <!-- نمودارها -->
-                <div id="income-chart-container" class="mt-4" style="display: none;">
-                    <h5>نمودار درآمد</h5>
-                    <div class="chart-card">
-                        <canvas id="incomeChart"></canvas>
-                    </div>
-                </div>
-
-                <div id="views-chart-container" class="mt-4" style="display: none;">
-                    <h5>نمودار بازدید</h5>
-                    <div class="chart-card">
-                        <canvas id="viewsChart"></canvas>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-
-            {% if income_proofs %}
-            <div id="section-proofs" class="card card-body">
-                <div class="aboutplatform-card-h3">
-                    <h3 class="titel-card">اثبات درآمد</h3>
-                </div>
-                <hr>
-                <div class="row">
-                    {% for proof in income_proofs %}
-                    <div class="mb-3">
-                        <div class="div-card-img-proof">
-                            {% if proof.image %}
-                            <img src="{{ proof.image.url }}" class="card-img-proof" alt="اثبات درآمد">
-                            {% endif %}
-                        </div>
-
-                        {% if proof.description %}
-                        <p class="card-text-income-proofs">{{ proof.description }}</p>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
-
-
-
-
-
-
-
-            {% if listing.social_medias.exists %}
-            <div id="section-social-media" class="card card-body income-expense-card">
-                <div onclick="toggleHeight('4', 0)" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">رسانه های اجتماعی</h3>
-                    <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-4" class="more-height-btn open"></button>
-                    </div>
-                </div>
-
-                <div id="box-text-4" class="social-media-text expanded">
-                    <div class="income-expense-detail">
-                        <hr>
-
-                        {% for social in listing.social_medias.all %}
-                        <div class="list-social-media">
-
-                            <div class="social-media-icon-numb">
-
-                                <div class="icon-social-media">
-
-                                    {% if social.platform == "twitter" %}
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="currentColor">
-                                        <path
-                                            d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932L18.901 1.153zm-1.653 19.57h2.608L6.027 2.54h-2.65l13.881 18.183z" />
-                                    </svg>
-
-                                    {% elif social.platform == "instagram" %}
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="currentColor">
-                                        <path
-                                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.069-4.85.069s-3.584-.011-4.85-.069c-3.25-.149-4.771-1.699-4.919-4.92-.058-1.265-.069-1.644-.069-4.849s.011-3.584.069-4.85c.149-3.227 1.664-4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163m0-2.163C8.74 0 8.333.012 7.053.072 2.695.272.273 2.69.073 7.052.012 8.333 0 8.74 0 12s.012 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98C8.333 23.988 8.74 24 12 24s3.667-.012 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.06-1.28.072-1.687.072-4.947s-.012-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98C15.667.012 15.26 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z" />
-                                    </svg>
-
-                                    {% elif social.platform == "github" %}
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="currentColor">
-                                        <path
-                                            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.043c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                                    </svg>
-
-                                    {% elif social.platform == "facebook" %}
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="currentColor">
-                                        <path
-                                            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                                    </svg>
-
-                                    {% elif social.platform == "linkedin" %}
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="currentColor">
-                                        <path
-                                            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z" />
-                                    </svg>
-
-                                    {% elif social.platform == "telegram" %}
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="currentColor">
-                                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                                    </svg>
-
-                                    <!--                                     
+                                        <!--                                     
                                     {% elif social.platform == "twitter" %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="currentColor">
@@ -485,1061 +493,1094 @@
                                     </svg>
  -->
 
-                                    {% endif %}
+                                        {% endif %}
 
-                                </div>
-
-                                <a href="{{ social.url }}" target="_blank" class="text-social-media">
-                                    {{ social.followers|split_number  }} دنبال کننده
-                                </a>
-
-                            </div>
-
-                        </div>
-                        {% endfor %}
-
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-
-
-            {% if listing.attachments.exists %}
-            <div id="section-attachments" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('5', 0)" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">پیوست ها</h3>
-                    <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-5" class="more-height-btn open"></button>
-                    </div>
-                </div>
-                <div id="box-text-5" class="social-media-text expanded">
-                    <div class="attachments-detail">
-                        <hr>
-
-                        {% for attachment in listing.attachments.all %}
-                        <div class="list-file-attachments">
-                            <a href="{{ attachment.file.url }}" class="file-attachments">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                </svg>
-
-                                <div class="name-file-attachments">
-                                    <p class="name-file-attachments-p">{{ attachment.file.name }}</p>
-                                </div>
-                            </a>
-                        </div>
-                        {% endfor %}
-
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-
-
-            {% if listing.sale_includes.exists or listing.post_sale_support %}
-            <div id="section-sell-includes" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('6', 0)" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">دارایی‌های فروش</h3>
-                    <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-6" class="more-height-btn open"></button>
-                    </div>
-                </div>
-                <div id="box-text-6" class="social-media-text expanded">
-                    <div class="attachments-detail">
-                        <hr>
-
-                        <div class="list-sell-includes">
-                            {% if listing.sale_includes.all %}
-                            <div class="h4-assets-sell-includes">
-                                <h4>دارایی ها</h4>
-                                <div class="list-assets-sell-includes">
-                                    {% for includes in listing.sale_includes.all %}
-                                    <div class="assets-sell-includes">
-                                        <svg xmlns="http://www.w3.org/2000/svg" color="#2196f3" width="22" height="22"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <path d="M8 12l3 3 6-6"></path>
-                                        </svg>
-                                        <p class="assets-sell-includes-p">{{ includes.asset_name }}</p>
                                     </div>
-                                    {% endfor %}
+
+                                    <a href="{{ social.url }}" target="_blank" class="text-social-media">
+                                        {{ social.followers|split_number  }} دنبال کننده
+                                    </a>
+
                                 </div>
-                            </div>
-                            {% endif %}
 
-                            {% if listing.post_sale_support %}
-                            <div class="post-sale-support">
-                                <h4>پشتیبانی پس از فروش</h4>
-                                <div class="text-post-sale-support">
-                                    {{ listing.post_sale_support|linebreaks }}
-                                </div>
-                            </div>
-                            {% endif %}
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-
-
-            {% if listing.licenses.exists %}
-            <div id="section-license" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('7', 0)" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">مجوز ها</h3>
-                    <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-7" class="more-height-btn open"></button>
-                    </div>
-                </div>
-                <div id="box-text-7" class="social-media-text expanded">
-                    <div class="license-detail">
-                        <hr>
-                        <div class="list-license">
-                            {% for license in listing.licenses.all %}
-                            <div class="item-license">
-                                <p>●</p>
-                                <p class="item-license-p">{{ license.license_name }}</p>
                             </div>
                             {% endfor %}
 
                         </div>
                     </div>
                 </div>
-            </div>
-            {% endif %}
+                {% endif %}
 
 
-            {% if listing.services_used.exists %}
-            <div id="section-services-used" class="card card-body aboutplatform-card">
-                <div onclick="toggleHeight('8', 0)" class="aboutplatform-card-h3 cursor-card">
-
-                    <h3 class="titel-card">خدمات مورد استفاده</h3>
-                    <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-8" class="more-height-btn open"></button>
-                    </div>
-                </div>
-                <div id="box-text-8" class="social-media-text expanded">
-                    <div class="services-used-detail">
-                        <hr>
-
-                        <div class="list-services-used">
-
-                            {% for service in listing.services_used.all %}
-                            <div class="item-services-used">
-                                <p class="item-services-used-p">{{ service.service_name }}</p>
-                            </div>
-                            {% endfor %}
-
+                {% if listing.attachments.exists %}
+                <div id="section-attachments" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('5', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">پیوست ها</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-5" class="more-height-btn open"></button>
                         </div>
-
                     </div>
-                </div>
-            </div>
-            {% endif %}
+                    <div id="box-text-5" class="social-media-text expanded">
+                        <div class="attachments-detail">
+                            <hr>
 
-
-            {% if listing.monetization_methods.exists %}
-            <div id="section-monetization-methods" class="card card-body income-expense-card">
-                <div onclick="toggleHeight('9', 0)" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">روش های کسب درآمد</h3>
-                    <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-9" class="more-height-btn open"></button>
-                    </div>
-                </div>
-                <div id="box-text-9" class="social-monetization-methods expanded">
-                    <div class="income-expense-detail">
-                        <hr>
-                        <div class="list-monetization-methods">
-                            {% for method in listing.monetization_methods.all %}
-                            <div class="monetization-methods-icon-numb">
-                                <div class="icon-monetization-methods">
-                                    {% if method.method == 'banner_click_advertising' %}
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                                        <line x1="8" y1="21" x2="16" y2="21"></line>
-                                        <line x1="12" y1="17" x2="12" y2="21"></line>
-                                    </svg>
-                                    {% elif method.method == 'sponsored_posts' %}
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            {% for attachment in listing.attachments.all %}
+                            <div class="list-file-attachments">
+                                <a href="{{ attachment.file.url }}" class="file-attachments">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
                                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                         <polyline points="14 2 14 8 20 8"></polyline>
-                                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                                        <polyline points="10 9 9 9 8 9"></polyline>
                                     </svg>
-                                    {% elif method.method == 'cooperation_sales' %}
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71">
-                                        </path>
-                                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71">
-                                        </path>
-                                    </svg>
-                                    {% elif method.method == 'special_subscription_sale' %}
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polygon
-                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                    {% elif method.method == 'selling_digital_products' %}
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                                    </svg>
-                                    {% elif method.method == 'selling_physical_products' %}
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="9" cy="21" r="1"></circle>
-                                        <circle cx="20" cy="21" r="1"></circle>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
-                                        </path>
-                                    </svg>
-                                    {% elif method.method == 'receive_financial_support' %}
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path
-                                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                                        </path>
-                                    </svg>
-                                    {% elif method.method == 'holding_training_courses' %}
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z">
-                                        </path>
-                                    </svg>
-                                    {% elif method.method == 'sell_​​backlinks' %}
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <circle cx="12" cy="12" r="6"></circle>
-                                        <circle cx="12" cy="12" r="2"></circle>
-                                    </svg>
-                                    {% elif method.method == 'providing_consulting_services' %}
-                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="9" cy="7" r="4"></circle>
-                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                    </svg>
-                                    {% endif %}
-                                </div>
-                                <p class="text-monetization-methods">{{ method.get_method_display }}</p>
+
+                                    <div class="name-file-attachments">
+                                        <p class="name-file-attachments-p">{{ attachment.file.name }}</p>
+                                    </div>
+                                </a>
                             </div>
                             {% endfor %}
 
                         </div>
                     </div>
                 </div>
-            </div>
-            {% endif %}
+                {% endif %}
 
 
+                {% if listing.sale_includes.exists or listing.post_sale_support %}
+                <div id="section-sell-includes" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('6', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">دارایی‌های فروش</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-6" class="more-height-btn open"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-6" class="social-media-text expanded">
+                        <div class="attachments-detail">
+                            <hr>
 
-            {% if listing.total_revenue or listing.total_profit or listing.avg_monthly_revenue or listing.avg_monthly_profit or listing.profit_margin or listing.profit_multiplier or listing.revenue_multiplier %}
-            <div id="section-revenue-expenses" class="card card-body income-expense-card">
-                <div onclick="toggleHeight('10', 0)" class="aboutplatform-card-h3 cursor-card">
-                    <h3 class="titel-card">درآمد و هزینه‌ها</h3>
-                    <div class="btn-aboutplatform-card">
-                        <button id="more-height-btn-10" class="more-height-btn open"></button>
+                            <div class="list-sell-includes">
+                                {% if listing.sale_includes.all %}
+                                <div class="h4-assets-sell-includes">
+                                    <h4>دارایی ها</h4>
+                                    <div class="list-assets-sell-includes">
+                                        {% for includes in listing.sale_includes.all %}
+                                        <div class="assets-sell-includes">
+                                            <svg xmlns="http://www.w3.org/2000/svg" color="#2196f3" width="22"
+                                                height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <path d="M8 12l3 3 6-6"></path>
+                                            </svg>
+                                            <p class="assets-sell-includes-p">{{ includes.asset_name }}</p>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if listing.post_sale_support %}
+                                <div class="post-sale-support">
+                                    <h4>پشتیبانی پس از فروش</h4>
+                                    <div class="text-post-sale-support">
+                                        {{ listing.post_sale_support|linebreaks }}
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-                <div id="box-text-10" class="social-revenue-expenses expanded">
-                    <div class="income-expense-detail">
-                        <hr>
-                        <div class="revenue-revenue-expenses">
-                            <h4>درامد ها</h4>
-
-                            <div class="specifications-income-expense">
-                                <div class="inf-first-card-income-expense">
-
-                                    {% if listing.total_revenue %}
-                                    <div class="inf-card-income-expense">
-                                        <strong class="strong-inf-income-expense">درآمد کل:</strong>
-                                        <p class="p-numb-item-revenue">{{ listing.total_revenue|split_number  }} تومان
-                                        </p>
-                                    </div>
-                                    {% endif %}
-
-                                    {% if listing.total_profit %}
-                                    <div class="inf-card-income-expense">
-                                        <strong class="strong-inf-income-expense">سود کل:</strong>
-                                        <p class="p-numb-item-revenue">{{ listing.total_profit|split_number  }} تومان
-                                        </p>
-                                    </div>
-                                    {% endif %}
-
-                                    {% if listing.avg_monthly_revenue %}
-                                    <div class="inf-card-income-expense">
-                                        <strong class="strong-inf-income-expense">میانگین درآمد ماهانه:</strong>
-                                        <p class="p-numb-item-revenue">{{ listing.avg_monthly_revenue|split_number  }}
-                                            تومان</p>
-                                    </div>
-                                    {% endif %}
-
-                                    {% if listing.avg_monthly_profit %}
-                                    <div class="inf-card-income-expense">
-                                        <strong class="strong-inf-income-expense">میانگین سود ماهانه:</strong>
-                                        <p class="p-numb-item-revenue">{{ listing.avg_monthly_profit|split_number  }}
-                                            تومان</p>
-                                    </div>
-                                    {% endif %}
-                                </div>
+                {% endif %}
 
 
-                                <div class="inf-second-card-income-expense">
-                                    {% if listing.profit_margin %}
-                                    <div class="inf-card-income-expense">
-                                        <strong class="strong-inf-income-expense">حاشیه سود:</strong>
-                                        <p class="p-numb-item-revenue">{{ listing.profit_margin }}</p>
-                                    </div>
-                                    {% endif %}
-
-                                    {% if listing.profit_multiplier %}
-                                    <div class="inf-card-income-expense">
-                                        <strong class="strong-inf-income-expense">ضریب سود:</strong>
-                                        <p class="p-numb-item-revenue">{{ listing.profit_multiplier }}</p>
-                                    </div>
-                                    {% endif %}
-
-                                    {% if listing.revenue_multiplier %}
-                                    <div class="inf-card-income-expense">
-                                        <strong class="strong-inf-income-expense">ضریب درآمد:</strong>
-                                        <p class="p-numb-item-revenue">{{ listing.revenue_multiplier }}</p>
-                                    </div>
-                                    {% endif %}
-                                </div>
-                            </div>
+                {% if listing.licenses.exists %}
+                <div id="section-license" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('7', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">مجوز ها</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-7" class="more-height-btn open"></button>
                         </div>
-
-                        {% if listing.expenses.exists %}
-                        <div class="expenses-revenue-expenses">
-                            <h4>هزینه ها</h4>
-                            <div class="list-revenue">
-
-                                {% for expense in listing.expenses.all %}
-                                <div class="revenue-item">
-                                    <p class="revenue-item-text">{{ expense.expense_name }}</p>
-                                    <div class="between-p-revenue"></div>
-                                    <p class="revenue-item-numb">{{ expense.amount|split_number  }} تومان
-                                        {{ expense.get_period_display }}</p>
+                    </div>
+                    <div id="box-text-7" class="social-media-text expanded">
+                        <div class="license-detail">
+                            <hr>
+                            <div class="list-license">
+                                {% for license in listing.licenses.all %}
+                                <div class="item-license">
+                                    <p>●</p>
+                                    <p class="item-license-p">{{ license.license_name }}</p>
                                 </div>
                                 {% endfor %}
 
                             </div>
                         </div>
-                        {% endif %}
-
                     </div>
                 </div>
-            </div>
-            {% endif %}
-            {% endif %}
-
-        </div>
-
-    </div>
+                {% endif %}
 
 
+                {% if listing.services_used.exists %}
+                <div id="section-services-used" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('8', 0)" class="aboutplatform-card-h3 cursor-card">
 
-
-    <div class="col-md-4">
-        <div class="card">
-
-            <div class="card-body text-center pad-10">
-
-                <div class="image-card">
-                    {% if listing.main_image %}
-                    <img src="{{ listing.main_image.url }}" class="card-img-top-detail">
-                    {% endif %}
-                </div>
-
-                <div class="bottom-img-card">
-
-                    {% if listing.suggested_price %}
-                    <div class="card-inf suggested-price">
-                        <p class="suggested-price-text">امکان ارسال پیشنهاد قیمت</p>
+                        <h3 class="titel-card">خدمات مورد استفاده</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-8" class="more-height-btn open"></button>
+                        </div>
                     </div>
+                    <div id="box-text-8" class="social-media-text expanded">
+                        <div class="services-used-detail">
+                            <hr>
 
-                    <hr class="hr-between">
+                            <div class="list-services-used">
 
-                    {% endif %}
+                                {% for service in listing.services_used.all %}
+                                <div class="item-services-used">
+                                    <p class="item-services-used-p">{{ service.service_name }}</p>
+                                </div>
+                                {% endfor %}
 
-                    <div class="price-card">
-                        {% if listing.discount_price %}
-                        <h3 class="text-success">{{ listing.discount_price|split_number }} تومان</h3>
-                        <h3 class="text-muted"><s>{{ listing.price|split_number }} تومان</s></h3>
-                        {% else %}
-                        <h3 class="text-success">{{ listing.price|split_number }} تومان</h3>
-                        {% endif %}
-                    </div>
-
-                    <hr class="hr-between" style="margin-top: 7px;">
-
-                    <div class="btn-buy-edit-login-card">
-
-                        {% if user.is_authenticated and user != listing.seller %}
-
-                        {% if listing.status == 'active' %}
-
-                        {% if has_access %}
-                        <div class="btn-buy-card">
-                            <a href="{% url 'payments:initiate_purchase' listing.pk %}"
-                                class="btn btn-success w-100">خرید</a>
-                        </div>
-                        {% else %}
-                        <div class="btn-buy-access-card">
-                            <p class="text-muted">برای خرید ابتدا باید دسترسی بازدید داشته باشید</p>
-                        </div>
-                        {% endif %}
-
-                        {% else %}
-                        <div class="btn-status-card">
-                            <p class="text-muted">وضعیت: {{ listing.get_status_display }}</p>
-                        </div>
-                        {% endif %}
-
-                        {% elif user == listing.seller %}
-                        <div class="btn-edit-card">
-                            <a href="{% url 'listings:listing_edit' listing.pk %}" class="btn btn-success w-100">ویرایش
-                                آگهی</a>
-                        </div>
-
-                        {% else %}
-                        <div class="btn-login-card">
-                            <a href="{% url 'accounts:login' %}" class="btn btn-success w-100">ورود برای خرید</a>
-                        </div>
-                        {% endif %}
-
-                    </div>
-
-
-                    <div class="ad-views">
-                        <a href="{{ listing.platform_url }}" class="btn btn-primary w-100" target="_blank">بازدید
-                            پلتفرم</a>
-                    </div>
-
-                    <hr class="hr-between">
-
-                    <div>
-                        <a href="{% url 'coming_soon' %}" class="text-link" target="_blank">شما میتواند از این قسمت
-                            نظرات خودتان را در مورد این اگهی به اشتراک بگذارید.</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mt-3">
-            <div class="card-body pad-10">
-
-                <div class="seller-information">
-                    <h5>اطلاعات فروشنده</h5>
-
-                    {% if listing.seller.profile.premium %}
-                    <div class="inf-card-profile-detail">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#F59E0B"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5ZM19 19C19 19.5523 18.5523 20 18 20H6C5.44772 20 5 19.5523 5 19V18H19V19Z" />
-                        </svg>
-                    </div>
-                    {% elif listing.seller.profile.pro %}
-                    <div class="inf-card-profile-detail">
-                        <svg style="margin: 0 4px;" width="40" height="20" viewBox="0 0 40 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <rect width="40" height="20" rx="6" fill="#6366F1" />
-                            <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" fill="#FFFFFF"
-                                font-family="Arial, sans-serif" font-weight="bold" font-size="12"
-                                letter-spacing="1">PRO</text>
-                        </svg>
-                    </div>
-                    {% endif %}
-
-
-                    <div class="seller-information-success">
-                        {% if listing.seller.is_verified %}
-                        <span class="badge-detail bg-success">تایید شده ✓</span>
-                        {% else %}
-                        <span class="badge-detail bg-warning">تایید نشده</span>
-                        {% endif %}
-                    </div>
-                </div>
-                <hr>
-                <div class="img-profile-detail">
-                    {% if listing.seller.profile.user_type == 'individual' %}
-                    {% if listing.seller.profile_image %}
-                    <img src="{{ listing.seller.profile_image.url }}" alt="پروفایل" class="rounded-circle mb-3">
-                    {% endif %}
-                    {% else %}
-                    <div class="profile-img-detail">
-                        {% if listing.seller.profile.company_logo %}
-                        <img src="{{ listing.seller.profile.company_logo.url }}" alt="پروفایل" class="rounded-circle">
-                        {% else %}
-                        <div
-                            class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center">
-                            <i class="fas fa-user fa-3x text-white"></i>
-                        </div>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-
-                    <div class="profile-detail">
-
-                        <div class="inf-card-profile-detail">
-                            <strong class="strong-inf-detail">نام کاربری:</strong>
-                            <p>{{ listing.seller.username }}</p>
-                        </div>
-
-
-                        {% if listing.seller.profile.user_type == 'individual' %}
-                        <div class="inf-card-profile-detail">
-                            <strong class="strong-inf-detail">نوع کاربر:</strong>
-                            <p>شخص حقیقی</p>
-                        </div>
-                        {% else %}
-                        <div class="inf-card-profile-detail">
-                            <strong class="strong-inf-detail">نوع کاربر:</strong>
-                            <p>شخص حقوقی</p>
-                        </div>
-                        {% endif %}
-
-                        {% if listing.seller.profile.first_name and listing.seller.profile.last_name %}
-                        <div class="inf-card-profile-detail">
-                            <strong class="strong-inf-detail">نام:</strong>
-                            <p>{{ listing.seller.profile.first_name }} {{ listing.seller.profile.last_name }}</p>
-                        </div>
-                        {% elif listing.seller.profile.first_name %}
-                        <div class="inf-card-profile-detail">
-                            <strong class="strong-inf-detail">نام:</strong>
-                            <p>{{ listing.seller.profile.first_name }}</p>
-                        </div>
-                        {% elif listing.seller.profile.last_name %}
-                        <div class="inf-card-profile-detail">
-                            <strong class="strong-inf-detail">نام خانوادگی:</strong>
-                            <p>{{ listing.seller.profile.last_name }}</p>
-                        </div>
-                        {% endif %}
-
-
-                        {% if listing.seller.profile.company_name %}
-                        <div class="inf-card-profile-detail">
-                            <strong class="strong-inf-detail">نام شرکت:</strong>
-                            <p>{{ listing.seller.profile.company_name }}</p>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-
-
-                <div>
-                    <a href="{% url 'listings:user_profile' listing.seller.username %}" class="btn btn-sm text-link">
-                        مشاهده پروفایل
-                    </a>
-                </div>
-            </div>
-        </div>
-
-
-
-
-        {% if listing.seller.is_verified %}
-        {% if listing.confirmed.exists %}
-        <div class="card mt-3 information-confirmed">
-            <div class="card-body pad-10">
-                <h5>اطلاعات تایید شده</h5>
-                <hr>
-                <p class="information-confirmed-text">
-                    تیم بررسی ما این فهرست را بررسی و موارد زیر را تأیید کرده است:
-                </p>
-
-                {% for item in listing.confirmed.all %}
-                <div class="information-confirmed-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" color="#22c55e" width="20" height="20" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <path d="M8 12l3 3 6-6"></path>
-                    </svg>
-                    <p class="information-confirmed-item-p">{{ item.confirmed_name }}</p>
-                </div>
-                {% endfor %}
-
-            </div>
-        </div>
-        {% endif %}
-        {% endif %}
-
-
-        {% if listing.premier %}
-        <div class="card-inf premier-announcement">
-            <h5>اگهی برتر</h5>
-
-            <p class="premier-announcement-text">
-                این اگهی اگهی برتر است و ۲ برابر بازدید بیشتر و تحلیل کر اختصاصی و تضمین فروش سریع و منصفانه رو
-                دارد.
-            </p>
-        </div>
-        {% elif listing.boost %}
-        <div class="card-inf boost-announcement">
-            <h5>اگهی پیشرفته</h5>
-            <p class="boost-announcement-text">
-                این اگهی اگهی پیرفته هست و اگهی های پیشرفته ۲۰ ٪ بازدید بیشتر نسبت به اگهی های معمولی دارند.
-            </p>
-        </div>
-        {% endif %}
-
-
-        <div class="card mt-3">
-            <div class="card-body pad-10">
-                <h5>چگونه خرید کنم؟</h5>
-                <hr>
-                <div class="card-body-how-buy">
-                    <p class="steps-how-buy">
-                        1
-                    </p>
-                    <p class="card-body-text-how-buy">
-                        با انتخواب گزینه "خرید" وارد صفحه پیشنهاد قیمت میشوید.
-                    </p>
-                </div>
-
-                <div class="card-body-how-buy">
-                    <p class="steps-how-buy">
-                        2
-                    </p>
-                    <p class="card-body-text-how-buy">
-                        درصورت تمایل به پیشنهاد قیمت خودتان تیک این گزینه را فعال کنید قیمت خود را وارد کنید و در
-                        انتها
-                        گزینه "ارسال درخواست" را انتخاب کنید.
-                    </p>
-                </div>
-
-                <div class="card-body-how-buy">
-                    <p class="steps-how-buy">
-                        3
-                    </p>
-                    <p class="card-body-text-how-buy">
-                        صبر کنید تا فروشنده درخواست شما را تایید کند و از قسمت "پیشنهادات ارسالی" در "تراکنش‌ها"
-                        میتوانید
-                        وضعیت درخواست خود را چک کنید.
-                    </p>
-                </div>
-
-                <div class="card-body-how-buy">
-                    <p class="steps-how-buy">
-                        4
-                    </p>
-                    <p class="card-body-text-how-buy">
-                        با تایید درخواست شما از طرف فروشنده میتوانید اگهی مورد نظر را در قسمت "پیشنهادات تایید شده"
-                        پیدا
-                        کنید و با فروشنده تعامل داشته باشد.
-                    </p>
-                </div>
-
-                <div class="card-body-how-buy">
-                    <p class="steps-how-buy">
-                        5
-                    </p>
-                    <p class="card-body-text-how-buy">
-                        در مرحله اخر در صورت موافقط هر دو طرفین و با انتخاب "توافق" مراحل خرید تکمیل میشود و اگهی به
-                        لیست
-                        خرید ها اضافه میشود.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-
-
-        <div class="card mt-3">
-            <div class="card-body pad-10">
-                <h5>مشاغل مشابه</h5>
-
-                <hr>
-
-                <div class="ad-list-container">
-                    {% for listing in listings %}
-
-                    <!-- تگ div به a تغییر یافت و href اضافه شد -->
-                    <a href="{% url 'listings:listing_detail' listing.pk %}"
-                        class="ad-item {% if listing.is_verified %}ad-item--private{% endif %}"
-                        style="text-decoration: none; color: inherit;">
-
-                        <!-- راست: بخش تصویر و نشان پلتفرم -->
-                        <div class="ad-item__media">
-                            <span class="ad-badge ad-badge--platform">{{ listing.category.get_platform_display }}</span>
-                            {% if listing.main_image %}
-                            <div class="ad-item__image-wrap">
-                                <img src="{{ listing.main_image.url }}" class="ad-item__image"
-                                    alt="{{ listing.title }}">
                             </div>
+
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+
+                {% if listing.monetization_methods.exists %}
+                <div id="section-monetization-methods" class="card card-body income-expense-card">
+                    <div onclick="toggleHeight('9', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">روش های کسب درآمد</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-9" class="more-height-btn open"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-9" class="social-monetization-methods expanded">
+                        <div class="income-expense-detail">
+                            <hr>
+                            <div class="list-monetization-methods">
+                                {% for method in listing.monetization_methods.all %}
+                                <div class="monetization-methods-icon-numb">
+                                    <div class="icon-monetization-methods">
+                                        {% if method.method == 'banner_click_advertising' %}
+                                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                                        </svg>
+                                        {% elif method.method == 'sponsored_posts' %}
+                                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                            <polyline points="14 2 14 8 20 8"></polyline>
+                                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                                            <polyline points="10 9 9 9 8 9"></polyline>
+                                        </svg>
+                                        {% elif method.method == 'cooperation_sales' %}
+                                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71">
+                                            </path>
+                                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71">
+                                            </path>
+                                        </svg>
+                                        {% elif method.method == 'special_subscription_sale' %}
+                                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <polygon
+                                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                            </polygon>
+                                        </svg>
+                                        {% elif method.method == 'selling_digital_products' %}
+                                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                        {% elif method.method == 'selling_physical_products' %}
+                                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <circle cx="9" cy="21" r="1"></circle>
+                                            <circle cx="20" cy="21" r="1"></circle>
+                                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
+                                            </path>
+                                        </svg>
+                                        {% elif method.method == 'receive_financial_support' %}
+                                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path
+                                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                            </path>
+                                        </svg>
+                                        {% elif method.method == 'holding_training_courses' %}
+                                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z">
+                                            </path>
+                                        </svg>
+                                        {% elif method.method == 'sell_​​backlinks' %}
+                                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <circle cx="12" cy="12" r="6"></circle>
+                                            <circle cx="12" cy="12" r="2"></circle>
+                                        </svg>
+                                        {% elif method.method == 'providing_consulting_services' %}
+                                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="9" cy="7" r="4"></circle>
+                                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                        </svg>
+                                        {% endif %}
+                                    </div>
+                                    <p class="text-monetization-methods">{{ method.get_method_display }}</p>
+                                </div>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+
+
+                {% if listing.total_revenue or listing.total_profit or listing.avg_monthly_revenue or listing.avg_monthly_profit or listing.profit_margin or listing.profit_multiplier or listing.revenue_multiplier %}
+                <div id="section-revenue-expenses" class="card card-body income-expense-card">
+                    <div onclick="toggleHeight('10', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">درآمد و هزینه‌ها</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-10" class="more-height-btn open"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-10" class="social-revenue-expenses expanded">
+                        <div class="income-expense-detail">
+                            <hr>
+                            <div class="revenue-revenue-expenses">
+                                <h4>درامد ها</h4>
+
+                                <div class="specifications-income-expense">
+                                    <div class="inf-first-card-income-expense">
+
+                                        {% if listing.total_revenue %}
+                                        <div class="inf-card-income-expense">
+                                            <strong class="strong-inf-income-expense">درآمد کل:</strong>
+                                            <p class="p-numb-item-revenue">{{ listing.total_revenue|split_number  }}
+                                                تومان
+                                            </p>
+                                        </div>
+                                        {% endif %}
+
+                                        {% if listing.total_profit %}
+                                        <div class="inf-card-income-expense">
+                                            <strong class="strong-inf-income-expense">سود کل:</strong>
+                                            <p class="p-numb-item-revenue">{{ listing.total_profit|split_number  }}
+                                                تومان
+                                            </p>
+                                        </div>
+                                        {% endif %}
+
+                                        {% if listing.avg_monthly_revenue %}
+                                        <div class="inf-card-income-expense">
+                                            <strong class="strong-inf-income-expense">میانگین درآمد ماهانه:</strong>
+                                            <p class="p-numb-item-revenue">
+                                                {{ listing.avg_monthly_revenue|split_number  }}
+                                                تومان</p>
+                                        </div>
+                                        {% endif %}
+
+                                        {% if listing.avg_monthly_profit %}
+                                        <div class="inf-card-income-expense">
+                                            <strong class="strong-inf-income-expense">میانگین سود ماهانه:</strong>
+                                            <p class="p-numb-item-revenue">
+                                                {{ listing.avg_monthly_profit|split_number  }}
+                                                تومان</p>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+
+                                    <div class="inf-second-card-income-expense">
+                                        {% if listing.profit_margin %}
+                                        <div class="inf-card-income-expense">
+                                            <strong class="strong-inf-income-expense">حاشیه سود:</strong>
+                                            <p class="p-numb-item-revenue">{{ listing.profit_margin }}</p>
+                                        </div>
+                                        {% endif %}
+
+                                        {% if listing.profit_multiplier %}
+                                        <div class="inf-card-income-expense">
+                                            <strong class="strong-inf-income-expense">ضریب سود:</strong>
+                                            <p class="p-numb-item-revenue">{{ listing.profit_multiplier }}</p>
+                                        </div>
+                                        {% endif %}
+
+                                        {% if listing.revenue_multiplier %}
+                                        <div class="inf-card-income-expense">
+                                            <strong class="strong-inf-income-expense">ضریب درآمد:</strong>
+                                            <p class="p-numb-item-revenue">{{ listing.revenue_multiplier }}</p>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if listing.expenses.exists %}
+                            <div class="expenses-revenue-expenses">
+                                <h4>هزینه ها</h4>
+                                <div class="list-revenue">
+
+                                    {% for expense in listing.expenses.all %}
+                                    <div class="revenue-item">
+                                        <p class="revenue-item-text">{{ expense.expense_name }}</p>
+                                        <div class="between-p-revenue"></div>
+                                        <p class="revenue-item-numb">{{ expense.amount|split_number  }} تومان
+                                            {{ expense.get_period_display }}</p>
+                                    </div>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+
+
+        <div class="col-md-4">
+            <div class="card">
+
+                <div class="card-body text-center pad-10">
+
+                    <div class="image-card">
+                        {% if listing.main_image %}
+                        <img src="{{ listing.main_image.url }}" class="card-img-top-detail">
+                        {% endif %}
+                    </div>
+
+                    <div class="bottom-img-card">
+
+                        {% if listing.suggested_price %}
+                        <div class="card-inf suggested-price">
+                            <p class="suggested-price-text">امکان ارسال پیشنهاد قیمت</p>
+                        </div>
+
+                        <hr class="hr-between">
+
+                        {% endif %}
+
+                        <div class="price-card">
+                            {% if listing.discount_price %}
+                            <h3 class="text-success">{{ listing.discount_price|split_number }} تومان</h3>
+                            <h3 class="text-muted"><s>{{ listing.price|split_number }} تومان</s></h3>
+                            {% else %}
+                            <h3 class="text-success">{{ listing.price|split_number }} تومان</h3>
                             {% endif %}
                         </div>
 
-                        <!-- وسط: بخش اطلاعات اصلی -->
-                        <div class="ad-item__content">
-                            <h5 class="ad-item__title">{{ listing.title|truncatewords:5 }}</h5>
+                        <hr class="hr-between" style="margin-top: 7px;">
 
-                            <div class="ad-item__stats">
-                                <div class="ad-stat">
-                                    <span class="ad-stat__value">{{ listing.followers_count|split_number }}
-                                        دنبال‌کننده</span>
-                                </div>
-                                <div class="ad-stat">
-                                    <span class="ad-stat__value">{{ listing.created_at|time_ago }}</span>
-                                </div>
-                                <div class="ad-stat">
-                                    <span class="ad-stat__value">{{ listing.platform_age|floatformat:0 }} سال</span>
-                                </div>
-                            </div>
+                        <div class="btn-buy-edit-login-card">
 
-                            {% if listing.discount_price %}
-                            <div class="ad-price ad-price--discount">
-                                <span class="ad-price__current">{{ listing.discount_price|split_number }}
-                                    تومان</span>
+                            {% if user.is_authenticated and user != listing.seller %}
+
+                            {% if listing.status == 'active' %}
+
+                            {% if has_access %}
+                            <div class="btn-buy-card">
+                                <a href="{% url 'payments:initiate_purchase' listing.pk %}"
+                                    class="btn btn-success w-100">خرید</a>
                             </div>
                             {% else %}
-                            <div class="ad-price">
-                                <span class="ad-price__current">{{ listing.price|split_number }} تومان</span>
+                            <div class="btn-buy-access-card">
+                                <p class="text-muted">برای خرید ابتدا باید دسترسی بازدید داشته باشید</p>
+                            </div>
+                            {% endif %}
+
+                            {% else %}
+                            <div class="btn-status-card">
+                                <p class="text-muted">وضعیت: {{ listing.get_status_display }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% elif user == listing.seller %}
+                            <div class="btn-edit-card">
+                                <a href="{% url 'listings:listing_edit' listing.pk %}"
+                                    class="btn btn-success w-100">ویرایش
+                                    آگهی</a>
+                            </div>
+
+                            {% else %}
+                            <div class="btn-login-card">
+                                <a href="{% url 'accounts:login' %}" class="btn btn-success w-100">ورود برای خرید</a>
                             </div>
                             {% endif %}
 
                         </div>
 
-                    </a> <!-- پایان تگ a -->
 
-                    {% empty %}
-                    <div class="ad-empty-state">آگهی فعالی یافت نشد.</div>
+                        <div class="ad-views">
+                            <a href="{{ listing.platform_url }}" class="btn btn-primary w-100" target="_blank">بازدید
+                                پلتفرم</a>
+                        </div>
+
+                        <hr class="hr-between">
+
+                        <div>
+                            <a href="{% url 'coming_soon' %}" class="text-link" target="_blank">شما میتواند از این قسمت
+                                نظرات خودتان را در مورد این اگهی به اشتراک بگذارید.</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body pad-10">
+
+                    <div class="seller-information">
+                        <h5>اطلاعات فروشنده</h5>
+
+                        {% if listing.seller.profile.premium %}
+                        <div class="inf-card-profile-detail">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="#F59E0B"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5ZM19 19C19 19.5523 18.5523 20 18 20H6C5.44772 20 5 19.5523 5 19V18H19V19Z" />
+                            </svg>
+                        </div>
+                        {% elif listing.seller.profile.pro %}
+                        <div class="inf-card-profile-detail">
+                            <svg style="margin: 0 4px;" width="40" height="20" viewBox="0 0 40 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect width="40" height="20" rx="6" fill="#6366F1" />
+                                <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" fill="#FFFFFF"
+                                    font-family="Arial, sans-serif" font-weight="bold" font-size="12"
+                                    letter-spacing="1">PRO</text>
+                            </svg>
+                        </div>
+                        {% endif %}
+
+
+                        <div class="seller-information-success">
+                            {% if listing.seller.is_verified %}
+                            <span class="badge-detail bg-success">تایید شده ✓</span>
+                            {% else %}
+                            <span class="badge-detail bg-warning">تایید نشده</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="img-profile-detail">
+                        {% if listing.seller.profile.user_type == 'individual' %}
+                        {% if listing.seller.profile_image %}
+                        <img src="{{ listing.seller.profile_image.url }}" alt="پروفایل" class="rounded-circle mb-3">
+                        {% endif %}
+                        {% else %}
+                        <div class="profile-img-detail">
+                            {% if listing.seller.profile.company_logo %}
+                            <img src="{{ listing.seller.profile.company_logo.url }}" alt="پروفایل"
+                                class="rounded-circle">
+                            {% else %}
+                            <div
+                                class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center">
+                                <i class="fas fa-user fa-3x text-white"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        <div class="profile-detail">
+
+                            <div class="inf-card-profile-detail">
+                                <strong class="strong-inf-detail">نام کاربری:</strong>
+                                <p>{{ listing.seller.username }}</p>
+                            </div>
+
+
+                            {% if listing.seller.profile.user_type == 'individual' %}
+                            <div class="inf-card-profile-detail">
+                                <strong class="strong-inf-detail">نوع کاربر:</strong>
+                                <p>شخص حقیقی</p>
+                            </div>
+                            {% else %}
+                            <div class="inf-card-profile-detail">
+                                <strong class="strong-inf-detail">نوع کاربر:</strong>
+                                <p>شخص حقوقی</p>
+                            </div>
+                            {% endif %}
+
+                            {% if listing.seller.profile.first_name and listing.seller.profile.last_name %}
+                            <div class="inf-card-profile-detail">
+                                <strong class="strong-inf-detail">نام:</strong>
+                                <p>{{ listing.seller.profile.first_name }} {{ listing.seller.profile.last_name }}</p>
+                            </div>
+                            {% elif listing.seller.profile.first_name %}
+                            <div class="inf-card-profile-detail">
+                                <strong class="strong-inf-detail">نام:</strong>
+                                <p>{{ listing.seller.profile.first_name }}</p>
+                            </div>
+                            {% elif listing.seller.profile.last_name %}
+                            <div class="inf-card-profile-detail">
+                                <strong class="strong-inf-detail">نام خانوادگی:</strong>
+                                <p>{{ listing.seller.profile.last_name }}</p>
+                            </div>
+                            {% endif %}
+
+
+                            {% if listing.seller.profile.company_name %}
+                            <div class="inf-card-profile-detail">
+                                <strong class="strong-inf-detail">نام شرکت:</strong>
+                                <p>{{ listing.seller.profile.company_name }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                    <div>
+                        <a href="{% url 'listings:user_profile' listing.seller.username %}"
+                            class="btn btn-sm text-link">
+                            مشاهده پروفایل
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            {% if listing.seller.is_verified %}
+            {% if listing.confirmed.exists %}
+            <div class="card mt-3 information-confirmed">
+                <div class="card-body pad-10">
+                    <h5>اطلاعات تایید شده</h5>
+                    <hr>
+                    <p class="information-confirmed-text">
+                        تیم بررسی ما این فهرست را بررسی و موارد زیر را تأیید کرده است:
+                    </p>
+
+                    {% for item in listing.confirmed.all %}
+                    <div class="information-confirmed-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" color="#22c55e" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M8 12l3 3 6-6"></path>
+                        </svg>
+                        <p class="information-confirmed-item-p">{{ item.confirmed_name }}</p>
+                    </div>
                     {% endfor %}
+
                 </div>
-
-
             </div>
-        </div>
+            {% endif %}
+            {% endif %}
 
 
-        <!-- نمونه کامل -->
+            {% if listing.premier %}
+            <div class="card-inf premier-announcement">
+                <h5>اگهی برتر</h5>
 
-        <div class="card mt-3">
-            <div class="card-body pad-10">
-                <h5>گزارش تخلف</h5>
-
-                <hr>
-
-                <p>
-                    دیده‌بان جامعه
-                    آیا این آگهی، شرایط و ضوابط Flippa را نقض می‌کند؟
+                <p class="premier-announcement-text">
+                    این اگهی اگهی برتر است و ۲ برابر بازدید بیشتر و تحلیل کر اختصاصی و تضمین فروش سریع و منصفانه رو
+                    دارد.
                 </p>
+            </div>
+            {% elif listing.boost %}
+            <div class="card-inf boost-announcement">
+                <h5>اگهی پیشرفته</h5>
+                <p class="boost-announcement-text">
+                    این اگهی اگهی پیرفته هست و اگهی های پیشرفته ۲۰ ٪ بازدید بیشتر نسبت به اگهی های معمولی دارند.
+                </p>
+            </div>
+            {% endif %}
 
-                <p>
-                    در این صورت، آن را
-                    <a href="{% url 'tickets:ticket_create' %}?category={{ 1 }}&subject={{ 'تخلف%20اگهی' }}"
-                        class="text-link" target="_blank">
-                        <!-- href="{% url 'tickets:ticket_create' %}?category={{ category.id }}&subject={{ subject }}" -->
+
+            <div class="card mt-3">
+                <div class="card-body pad-10">
+                    <h5>چگونه خرید کنم؟</h5>
+                    <hr>
+                    <div class="card-body-how-buy">
+                        <p class="steps-how-buy">
+                            1
+                        </p>
+                        <p class="card-body-text-how-buy">
+                            با انتخواب گزینه "خرید" وارد صفحه پیشنهاد قیمت میشوید.
+                        </p>
+                    </div>
+
+                    <div class="card-body-how-buy">
+                        <p class="steps-how-buy">
+                            2
+                        </p>
+                        <p class="card-body-text-how-buy">
+                            درصورت تمایل به پیشنهاد قیمت خودتان تیک این گزینه را فعال کنید قیمت خود را وارد کنید و در
+                            انتها
+                            گزینه "ارسال درخواست" را انتخاب کنید.
+                        </p>
+                    </div>
+
+                    <div class="card-body-how-buy">
+                        <p class="steps-how-buy">
+                            3
+                        </p>
+                        <p class="card-body-text-how-buy">
+                            صبر کنید تا فروشنده درخواست شما را تایید کند و از قسمت "پیشنهادات ارسالی" در "تراکنش‌ها"
+                            میتوانید
+                            وضعیت درخواست خود را چک کنید.
+                        </p>
+                    </div>
+
+                    <div class="card-body-how-buy">
+                        <p class="steps-how-buy">
+                            4
+                        </p>
+                        <p class="card-body-text-how-buy">
+                            با تایید درخواست شما از طرف فروشنده میتوانید اگهی مورد نظر را در قسمت "پیشنهادات تایید شده"
+                            پیدا
+                            کنید و با فروشنده تعامل داشته باشد.
+                        </p>
+                    </div>
+
+                    <div class="card-body-how-buy">
+                        <p class="steps-how-buy">
+                            5
+                        </p>
+                        <p class="card-body-text-how-buy">
+                            در مرحله اخر در صورت موافقط هر دو طرفین و با انتخاب "توافق" مراحل خرید تکمیل میشود و اگهی به
+                            لیست
+                            خرید ها اضافه میشود.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="card mt-3">
+                <div class="card-body pad-10">
+                    <h5>مشاغل مشابه</h5>
+
+                    <hr>
+
+                    <div class="ad-list-container">
+                        {% for listing in listings %}
+
+                        <!-- تگ div به a تغییر یافت و href اضافه شد -->
+                        <a href="{% url 'listings:listing_detail' listing.pk %}"
+                            class="ad-item {% if listing.is_verified %}ad-item--private{% endif %}"
+                            style="text-decoration: none; color: inherit;">
+
+                            <!-- راست: بخش تصویر و نشان پلتفرم -->
+                            <div class="ad-item__media">
+                                <span
+                                    class="ad-badge ad-badge--platform">{{ listing.category.get_platform_display }}</span>
+                                {% if listing.main_image %}
+                                <div class="ad-item__image-wrap">
+                                    <img src="{{ listing.main_image.url }}" class="ad-item__image"
+                                        alt="{{ listing.title }}">
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- وسط: بخش اطلاعات اصلی -->
+                            <div class="ad-item__content">
+                                <h5 class="ad-item__title">{{ listing.title|truncatewords:5 }}</h5>
+
+                                <div class="ad-item__stats">
+                                    <div class="ad-stat">
+                                        <span class="ad-stat__value">{{ listing.followers_count|split_number }}
+                                            دنبال‌کننده</span>
+                                    </div>
+                                    <div class="ad-stat">
+                                        <span class="ad-stat__value">{{ listing.created_at|time_ago }}</span>
+                                    </div>
+                                    <div class="ad-stat">
+                                        <span class="ad-stat__value">{{ listing.platform_age|floatformat:0 }} سال</span>
+                                    </div>
+                                </div>
+
+                                {% if listing.discount_price %}
+                                <div class="ad-price ad-price--discount">
+                                    <span class="ad-price__current">{{ listing.discount_price|split_number }}
+                                        تومان</span>
+                                </div>
+                                {% else %}
+                                <div class="ad-price">
+                                    <span class="ad-price__current">{{ listing.price|split_number }} تومان</span>
+                                </div>
+                                {% endif %}
+
+                            </div>
+
+                        </a> <!-- پایان تگ a -->
+
+                        {% empty %}
+                        <div class="ad-empty-state">آگهی فعالی یافت نشد.</div>
+                        {% endfor %}
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <!-- نمونه کامل -->
+
+            <div class="card mt-3">
+                <div class="card-body pad-10">
+                    <h5>گزارش تخلف</h5>
+
+                    <hr>
+
+                    <p>
+                        دیده‌بان جامعه
+                        آیا این آگهی، شرایط و ضوابط Flippa را نقض می‌کند؟
+                    </p>
+
+                    <p>
+                        در این صورت، آن را
+                        <a href="{% url 'tickets:ticket_create' %}?category={{ 1 }}&subject={{ 'تخلف%20اگهی' }}"
+                            class="text-link" target="_blank">
+                            <!-- href="{% url 'tickets:ticket_create' %}?category={{ category.id }}&subject={{ subject }}" -->
+                            اینجا
+                        </a>
+                        گزارش دهید.
+                    </p>
+                </div>
+            </div>
+
+
+
+            <div class="card mt-3">
+                <div class="card-body pad-10">
+                    <h5>مشاوره خرید</h5>
+
+                    <hr>
+
+                    <h5>قبل از ارائه پیشنهاد</h5>
+
+                    <p class="card-body-text-purchase-advice"><strong>۱. به دنبال فروشندگان تأیید شده باشید.</strong>
+                        فروشندگان باید
+                        ایمیل، تلفن و کارت شناسایی دولتی خود را تأیید کنند. وقتی فروشنده‌ای تمام تأییدها را انجام داد
+                    </p>
+
+                    <p class="card-body-text-purchase-advice"><strong>۲. بررسی مالی.</strong> اطلاعات مالی، ورودی‌هایی
+                        هستند
+                        که فروشنده ارائه می‌دهد. همیشه اطلاعات مالی تأیید شده را درخواست کنید. درخواست اظهارنامه مالیاتی
+                        یا
+                        دسترسی به داشبورد آنها را داشته باشید. اگر فروشگاه آنلاین است، گزارش تراکنش‌ها را دریافت کنید.
+                    </p>
+
+                    <p class="card-body-text-purchase-advice"><strong>۳. بررسی ترافیک.</strong> فروشندگان می‌توانند به
+                        شما
+                        دسترسی به گوگل آنالیتیکس را بدهند. برای تأیید ترافیک سایت، درخواست دسترسی فقط خواندنی کنید.</p>
+
+                    <p class="card-body-text-purchase-advice"><strong>۴. برای تماس برنامه‌ریزی کنید.</strong> ارتباط
+                        کلید
+                        اصلی است. بهترین راه برای کسب اطلاعات بیشتر، صحبت مستقیم با فروشنده است. برای محافظت از خود،
+                        تمام
+                        ارتباطات را در Flippa نگه دارید.</p>
+
+                    <p class="card-body-text-purchase-advice"><strong>۵. پیشنهاد را در Flippa مطرح کنید.</strong> ما
                         اینجا
-                    </a>
-                    گزارش دهید.
-                </p>
+                        هستیم تا به شما کمک کنیم. فلیپا از خریداران هزینه‌ای دریافت نمی‌کند و با ارائه پیشنهاد در فلیپا،
+                        به
+                        تیم پشتیبانی پس از فروش ما دسترسی خواهید داشت.</p>
+
+                    <h5>بعد از ارائه پیشنهاد</h5>
+
+                    <p class="card-body-text-purchase-advice"><strong>۱. توافق‌نامه‌ها و قراردادها.</strong> با یک وکیل
+                        مستقر در ایالات متحده ارتباط برقرار کنید یا از طریق Flippa Legal، الگوهای اسناد حقوقی مخصوص
+                        دارایی‌ها را خریداری کنید.</p>
+
+                    <p class="card-body-text-purchase-advice"><strong>۲. انجام بررسی‌های لازم.</strong> می‌توانید خودتان
+                        این
+                        کار را انجام دهید یا از سرویس جدید تأیید و ارزیابی رسمی ما استفاده کنید. ما تجزیه و تحلیل عمیقی
+                        ارائه می‌دهیم، خطرات پنهان را شناسایی می‌کنیم و به طور مستقل ارزش کسب و کار را ارزیابی می‌کنیم.
+                        قیمت
+                        بسته‌ها از ۱۰۰۰ دلار شروع می‌شود.</p>
+
+                    <!-- <p class="card-body-text-purchase-advice"><strong>بب</strong> بب</p> -->
+                </div>
             </div>
-        </div>
 
 
+            <div class="card mt-3">
+                <div class="card-body pad-10">
 
-        <div class="card mt-3">
-            <div class="card-body pad-10">
-                <h5>مشاوره خرید</h5>
+                    <h5 class="titel-card">راهنما</h5>
 
-                <hr>
+                    <hr>
+                    <div class="guide-list">
 
-                <h5>قبل از ارائه پیشنهاد</h5>
+                        <div class="guide-item">
+                            <div class="d-flex justify-content-between align-items-center guide-question"
+                                data-guide-id="1" style="cursor: pointer;">
+                                <button
+                                    class="btn-light text-end flex-grow-1 d-flex justify-content-between align-items-center guide-question-div"
+                                    type="button" aria-expanded="false" aria-controls="guide-answer-1">
+                                    <span>عنوان راهنمای اول</span>
+                                    <i class="bi bi-chevron-down guide-icon"></i>
+                                </button>
+                                <div class="btn-guide-card">
+                                    <button class="guide-toggle-btn" type="button"></button>
+                                </div>
+                            </div>
 
-                <p class="card-body-text-purchase-advice"><strong>۱. به دنبال فروشندگان تأیید شده باشید.</strong>
-                    فروشندگان باید
-                    ایمیل، تلفن و کارت شناسایی دولتی خود را تأیید کنند. وقتی فروشنده‌ای تمام تأییدها را انجام داد</p>
-
-                <p class="card-body-text-purchase-advice"><strong>۲. بررسی مالی.</strong> اطلاعات مالی، ورودی‌هایی هستند
-                    که فروشنده ارائه می‌دهد. همیشه اطلاعات مالی تأیید شده را درخواست کنید. درخواست اظهارنامه مالیاتی یا
-                    دسترسی به داشبورد آنها را داشته باشید. اگر فروشگاه آنلاین است، گزارش تراکنش‌ها را دریافت کنید.</p>
-
-                <p class="card-body-text-purchase-advice"><strong>۳. بررسی ترافیک.</strong> فروشندگان می‌توانند به شما
-                    دسترسی به گوگل آنالیتیکس را بدهند. برای تأیید ترافیک سایت، درخواست دسترسی فقط خواندنی کنید.</p>
-
-                <p class="card-body-text-purchase-advice"><strong>۴. برای تماس برنامه‌ریزی کنید.</strong> ارتباط کلید
-                    اصلی است. بهترین راه برای کسب اطلاعات بیشتر، صحبت مستقیم با فروشنده است. برای محافظت از خود، تمام
-                    ارتباطات را در Flippa نگه دارید.</p>
-
-                <p class="card-body-text-purchase-advice"><strong>۵. پیشنهاد را در Flippa مطرح کنید.</strong> ما اینجا
-                    هستیم تا به شما کمک کنیم. فلیپا از خریداران هزینه‌ای دریافت نمی‌کند و با ارائه پیشنهاد در فلیپا، به
-                    تیم پشتیبانی پس از فروش ما دسترسی خواهید داشت.</p>
-
-                <h5>بعد از ارائه پیشنهاد</h5>
-
-                <p class="card-body-text-purchase-advice"><strong>۱. توافق‌نامه‌ها و قراردادها.</strong> با یک وکیل
-                    مستقر در ایالات متحده ارتباط برقرار کنید یا از طریق Flippa Legal، الگوهای اسناد حقوقی مخصوص
-                    دارایی‌ها را خریداری کنید.</p>
-
-                <p class="card-body-text-purchase-advice"><strong>۲. انجام بررسی‌های لازم.</strong> می‌توانید خودتان این
-                    کار را انجام دهید یا از سرویس جدید تأیید و ارزیابی رسمی ما استفاده کنید. ما تجزیه و تحلیل عمیقی
-                    ارائه می‌دهیم، خطرات پنهان را شناسایی می‌کنیم و به طور مستقل ارزش کسب و کار را ارزیابی می‌کنیم. قیمت
-                    بسته‌ها از ۱۰۰۰ دلار شروع می‌شود.</p>
-
-                <!-- <p class="card-body-text-purchase-advice"><strong>بب</strong> بب</p> -->
-            </div>
-        </div>
-
-
-        <div class="card mt-3">
-            <div class="card-body pad-10">
-
-                <h5 class="titel-card">راهنما</h5>
-
-                <hr>
-                <div class="guide-list">
-
-                    <div class="guide-item">
-                        <div class="d-flex justify-content-between align-items-center guide-question" data-guide-id="1"
-                            style="cursor: pointer;">
-                            <button
-                                class="btn-light text-end flex-grow-1 d-flex justify-content-between align-items-center guide-question-div"
-                                type="button" aria-expanded="false" aria-controls="guide-answer-1">
-                                <span>عنوان راهنمای اول</span>
-                                <i class="bi bi-chevron-down guide-icon"></i>
-                            </button>
-                            <div class="btn-guide-card">
-                                <button class="guide-toggle-btn" type="button"></button>
+                            <div class="guide-answer-wrapper" id="guide-answer-wrapper-1">
+                                <div class="guide-answer p-3 bg-light rounded mt-1" id="guide-answer-1">
+                                    می‌توانید خودتان این کار را انجام دهید یا از سرویس جدید تأیید و ارزیابی رسمی ما
+                                    استفاده
+                                    کنید. ما تجزیه و تحلیل عمیقی ارائه می‌دهیم، خطرات پنهان را شناسایی می‌کنیم و به طور
+                                    مستقل ارزش کسب و کار را ارزیابی می‌کنیم. قیمت بسته‌ها از ۱۰۰۰ دلار شروع می‌شود.
+                                </div>
                             </div>
                         </div>
 
-                        <div class="guide-answer-wrapper" id="guide-answer-wrapper-1">
-                            <div class="guide-answer p-3 bg-light rounded mt-1" id="guide-answer-1">
-                                می‌توانید خودتان این کار را انجام دهید یا از سرویس جدید تأیید و ارزیابی رسمی ما استفاده
-                                کنید. ما تجزیه و تحلیل عمیقی ارائه می‌دهیم، خطرات پنهان را شناسایی می‌کنیم و به طور
-                                مستقل ارزش کسب و کار را ارزیابی می‌کنیم. قیمت بسته‌ها از ۱۰۰۰ دلار شروع می‌شود.
+                        <div class="guide-item">
+                            <div class="d-flex justify-content-between align-items-center guide-question"
+                                data-guide-id="2" style="cursor: pointer;">
+                                <button
+                                    class="btn-light text-end flex-grow-1 d-flex justify-content-between align-items-center guide-question-div"
+                                    type="button" aria-expanded="false" aria-controls="guide-answer-2">
+                                    <span>عنوان راهنمای دوم</span>
+                                    <i class="bi bi-chevron-down guide-icon"></i>
+                                </button>
+                                <div class="btn-guide-card">
+                                    <button class="guide-toggle-btn" type="button"></button>
+                                </div>
+                            </div>
+
+                            <div class="guide-answer-wrapper" id="guide-answer-wrapper-2">
+                                <div class="guide-answer p-3 bg-light rounded mt-1" id="guide-answer-2">
+                                    متن پاسخ راهنمای دوم را اینجا وارد کنید
+                                </div>
                             </div>
                         </div>
+
+                        <div class="guide-item">
+                            <div class="d-flex justify-content-between align-items-center guide-question"
+                                data-guide-id="3" style="cursor: pointer;">
+                                <button
+                                    class="btn-light text-end flex-grow-1 d-flex justify-content-between align-items-center guide-question-div"
+                                    type="button" aria-expanded="false" aria-controls="guide-answer-3">
+                                    <span>عنوان راهنمای سوم</span>
+                                    <i class="bi bi-chevron-down guide-icon"></i>
+                                </button>
+                                <div class="btn-guide-card">
+                                    <button class="guide-toggle-btn" type="button"></button>
+                                </div>
+                            </div>
+
+                            <div class="guide-answer-wrapper" id="guide-answer-wrapper-3">
+                                <div class="guide-answer p-3 bg-light rounded mt-1" id="guide-answer-3">
+                                    متن پاسخ راهنمای سوم را اینجا وارد کنید
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div class="guide-item">
-                        <div class="d-flex justify-content-between align-items-center guide-question" data-guide-id="2"
-                            style="cursor: pointer;">
-                            <button
-                                class="btn-light text-end flex-grow-1 d-flex justify-content-between align-items-center guide-question-div"
-                                type="button" aria-expanded="false" aria-controls="guide-answer-2">
-                                <span>عنوان راهنمای دوم</span>
-                                <i class="bi bi-chevron-down guide-icon"></i>
-                            </button>
-                            <div class="btn-guide-card">
-                                <button class="guide-toggle-btn" type="button"></button>
-                            </div>
-                        </div>
 
-                        <div class="guide-answer-wrapper" id="guide-answer-wrapper-2">
-                            <div class="guide-answer p-3 bg-light rounded mt-1" id="guide-answer-2">
-                                متن پاسخ راهنمای دوم را اینجا وارد کنید
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="guide-item">
-                        <div class="d-flex justify-content-between align-items-center guide-question" data-guide-id="3"
-                            style="cursor: pointer;">
-                            <button
-                                class="btn-light text-end flex-grow-1 d-flex justify-content-between align-items-center guide-question-div"
-                                type="button" aria-expanded="false" aria-controls="guide-answer-3">
-                                <span>عنوان راهنمای سوم</span>
-                                <i class="bi bi-chevron-down guide-icon"></i>
-                            </button>
-                            <div class="btn-guide-card">
-                                <button class="guide-toggle-btn" type="button"></button>
-                            </div>
-                        </div>
 
-                        <div class="guide-answer-wrapper" id="guide-answer-wrapper-3">
-                            <div class="guide-answer p-3 bg-light rounded mt-1" id="guide-answer-3">
-                                متن پاسخ راهنمای سوم را اینجا وارد کنید
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
-
-
-
-
-
             </div>
-        </div>
 
 
 
 
-        <!-- در listing_detail.html -->
+            <!-- در listing_detail.html -->
 
-        {% if user.is_authenticated %}
-        <div class="card mt-4" id="note-section">
-            <div class="card-header bg-light">
-                <h5 class="mb-0">
-                    <i class="bi bi-journal-text"></i> یادداشت شخصی
-                </h5>
-            </div>
-            <div class="card-body">
-                <form id="note-form" method="post" action="{% url 'accounts:save_listing_note' listing.pk %}">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <textarea class="form-control" name="note" id="listing-note" rows="4"
-                            placeholder="یادداشت خود را اینجا بنویسید...">{% if user_note %}{{ user_note.note }}{% endif %}</textarea>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-save"></i> ذخیره یادداشت
-                        </button>
+            {% if user.is_authenticated %}
+            <div class="card mt-4" id="note-section">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="bi bi-journal-text"></i> یادداشت شخصی
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="note-form" method="post" action="{% url 'accounts:save_listing_note' listing.pk %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <textarea class="form-control" name="note" id="listing-note" rows="4"
+                                placeholder="یادداشت خود را اینجا بنویسید...">{% if user_note %}{{ user_note.note }}{% endif %}</textarea>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> ذخیره یادداشت
+                            </button>
+                            {% if user_note %}
+                            <button type="button" class="btn btn-outline-danger" id="delete-note-btn">
+                                <i class="bi bi-trash"></i> حذف یادداشت
+                            </button>
+                            {% endif %}
+                        </div>
+                    </form>
+
+                    <!-- نمایش زمان آخرین بروزرسانی -->
+                    <div id="note-timestamp" class="mt-2">
                         {% if user_note %}
-                        <button type="button" class="btn btn-outline-danger" id="delete-note-btn">
-                            <i class="bi bi-trash"></i> حذف یادداشت
-                        </button>
+                        <small class="text-muted">
+                            آخرین بروزرسانی: {{ user_note.updated_at|date:"Y/m/d H:i" }}
+                        </small>
                         {% endif %}
                     </div>
-                </form>
 
-                <!-- نمایش زمان آخرین بروزرسانی -->
-                <div id="note-timestamp" class="mt-2">
-                    {% if user_note %}
-                    <small class="text-muted">
-                        آخرین بروزرسانی: {{ user_note.updated_at|date:"Y/m/d H:i" }}
-                    </small>
-                    {% endif %}
+                    <!-- پیام موفقیت -->
+                    <div id="note-message" class="alert alert-success mt-3" style="display: none;"></div>
                 </div>
-
-                <!-- پیام موفقیت -->
-                <div id="note-message" class="alert alert-success mt-3" style="display: none;"></div>
             </div>
-        </div>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const noteForm = document.getElementById('note-form');
-                const noteTextarea = document.getElementById('listing-note');
-                const noteTimestamp = document.getElementById('note-timestamp');
-                const noteMessage = document.getElementById('note-message');
-                const deleteBtn = document.getElementById('delete-note-btn');
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const noteForm = document.getElementById('note-form');
+                    const noteTextarea = document.getElementById('listing-note');
+                    const noteTimestamp = document.getElementById('note-timestamp');
+                    const noteMessage = document.getElementById('note-message');
+                    const deleteBtn = document.getElementById('delete-note-btn');
 
-                // ذخیره یادداشت
-                if (noteForm) {
-                    noteForm.addEventListener('submit', function (e) {
-                        e.preventDefault();
+                    // ذخیره یادداشت
+                    if (noteForm) {
+                        noteForm.addEventListener('submit', function (e) {
+                            e.preventDefault();
 
-                        const formData = new FormData(this);
+                            const formData = new FormData(this);
 
-                        fetch(this.action, {
-                                method: 'POST',
-                                body: formData,
-                                headers: {
-                                    'X-Requested-With': 'XMLHttpRequest'
-                                }
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    // نمایش پیام موفقیت
-                                    noteMessage.textContent = data.message;
-                                    noteMessage.style.display = 'block';
-
-                                    // بروزرسانی زمان
-                                    noteTimestamp.innerHTML =
-                                        `<small class="text-muted">آخرین بروزرسانی: ${data.updated_at}</small>`;
-
-                                    // اگر یادداشت جدید بود، دکمه حذف را نمایش بده
-                                    if (data.created && !deleteBtn) {
-                                        const deleteButton = document.createElement('button');
-                                        deleteButton.type = 'button';
-                                        deleteButton.className = 'btn btn-outline-danger';
-                                        deleteButton.id = 'delete-note-btn';
-                                        deleteButton.innerHTML =
-                                            '<i class="bi bi-trash"></i> حذف یادداشت';
-                                        noteForm.querySelector('.d-flex').appendChild(deleteButton);
-
-                                        // اضافه کردن event listener برای دکمه جدید
-                                        deleteButton.addEventListener('click', deleteNoteHandler);
+                            fetch(this.action, {
+                                    method: 'POST',
+                                    body: formData,
+                                    headers: {
+                                        'X-Requested-With': 'XMLHttpRequest'
                                     }
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        // نمایش پیام موفقیت
+                                        noteMessage.textContent = data.message;
+                                        noteMessage.style.display = 'block';
 
-                                    // مخفی کردن پیام بعد از 3 ثانیه
-                                    setTimeout(() => {
-                                        noteMessage.style.display = 'none';
-                                    }, 3000);
-                                } else {
-                                    alert(data.message);
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('خطا در ذخیره یادداشت');
-                            });
-                    });
-                }
+                                        // بروزرسانی زمان
+                                        noteTimestamp.innerHTML =
+                                            `<small class="text-muted">آخرین بروزرسانی: ${data.updated_at}</small>`;
 
-                // تابع حذف یادداشت
-                function deleteNoteHandler() {
-                    if (confirm('آیا از حذف یادداشت اطمینان دارید؟')) {
-                        fetch(`/accounts/delete-listing-note/{{ listing.pk }}/`, {
-                                method: 'POST',
-                                headers: {
-                                    'X-CSRFToken': '{{ csrf_token }}',
-                                    'X-Requested-With': 'XMLHttpRequest'
-                                }
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    // پاک کردن textarea
-                                    noteTextarea.value = '';
+                                        // اگر یادداشت جدید بود، دکمه حذف را نمایش بده
+                                        if (data.created && !deleteBtn) {
+                                            const deleteButton = document.createElement('button');
+                                            deleteButton.type = 'button';
+                                            deleteButton.className = 'btn btn-outline-danger';
+                                            deleteButton.id = 'delete-note-btn';
+                                            deleteButton.innerHTML =
+                                                '<i class="bi bi-trash"></i> حذف یادداشت';
+                                            noteForm.querySelector('.d-flex').appendChild(
+                                                deleteButton);
 
-                                    // پاک کردن timestamp
-                                    noteTimestamp.innerHTML = '';
+                                            // اضافه کردن event listener برای دکمه جدید
+                                            deleteButton.addEventListener('click',
+                                                deleteNoteHandler);
+                                        }
 
-                                    // حذف دکمه delete
-                                    if (deleteBtn) {
-                                        deleteBtn.remove();
+                                        // مخفی کردن پیام بعد از 3 ثانیه
+                                        setTimeout(() => {
+                                            noteMessage.style.display = 'none';
+                                        }, 3000);
+                                    } else {
+                                        alert(data.message);
                                     }
-
-                                    // نمایش پیام
-                                    noteMessage.textContent = data.message;
-                                    noteMessage.style.display = 'block';
-
-                                    setTimeout(() => {
-                                        noteMessage.style.display = 'none';
-                                    }, 3000);
-                                } else {
-                                    alert(data.message);
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('خطا در حذف یادداشت');
-                            });
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    alert('خطا در ذخیره یادداشت');
+                                });
+                        });
                     }
-                }
 
-                // اضافه کردن event listener به دکمه حذف
-                if (deleteBtn) {
-                    deleteBtn.addEventListener('click', deleteNoteHandler);
-                }
-            });
-        </script>
-        {% endif %}
+                    // تابع حذف یادداشت
+                    function deleteNoteHandler() {
+                        if (confirm('آیا از حذف یادداشت اطمینان دارید؟')) {
+                            fetch(`/accounts/delete-listing-note/{{ listing.pk }}/`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRFToken': '{{ csrf_token }}',
+                                        'X-Requested-With': 'XMLHttpRequest'
+                                    }
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        // پاک کردن textarea
+                                        noteTextarea.value = '';
+
+                                        // پاک کردن timestamp
+                                        noteTimestamp.innerHTML = '';
+
+                                        // حذف دکمه delete
+                                        if (deleteBtn) {
+                                            deleteBtn.remove();
+                                        }
+
+                                        // نمایش پیام
+                                        noteMessage.textContent = data.message;
+                                        noteMessage.style.display = 'block';
+
+                                        setTimeout(() => {
+                                            noteMessage.style.display = 'none';
+                                        }, 3000);
+                                    } else {
+                                        alert(data.message);
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    alert('خطا در حذف یادداشت');
+                                });
+                        }
+                    }
+
+                    // اضافه کردن event listener به دکمه حذف
+                    if (deleteBtn) {
+                        deleteBtn.addEventListener('click', deleteNoteHandler);
+                    }
+                });
+            </script>
+            {% endif %}
 
 
 
 
+        </div>
     </div>
 </div>
 
@@ -2058,55 +2099,32 @@
 </script>
 
 
-<!-- <style>
-    .chart-card {
-        border: none;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        border-radius: 12px;
-        overflow: hidden;
-    }
+{% block extra_js %}
+<script>
+    const listingDetailNav = document.querySelector('.navbar-listing-detail');
+    const mainNavbar = document.getElementById('navbar');
 
-    .chart-card .card-body {
-        padding: 30px 20px;
-        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-    }
+    if (listingDetailNav && mainNavbar) {
+        function updatePosition() {
+            const navbarBottom = mainNavbar.getBoundingClientRect().bottom;
 
-    canvas {
-        display: block;
-        width: 100%;
-    }
+            if (navbarBottom <= 0) {
+                // navbar کاملاً از viewport خارج شده
+                listingDetailNav.classList.add('sticky');
+                listingDetailNav.style.top = '0px';
+            } else {
+                // navbar هنوز در viewport هست — بچسب به پایینش
+                listingDetailNav.classList.remove('sticky');
+                listingDetailNav.style.top = navbarBottom + 'px';
+            }
+        }
 
-    .chart-tooltip {
-        position: fixed;
-        left: 100px;
-        background: rgba(0, 0, 0, 0.694);
-        color: white;
-        padding: 12px 16px;
-        border-radius: 8px;
-        font-size: 13px;
-        pointer-events: none;
-        z-index: 10000;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(10px);
-        display: none;
+        window.addEventListener('scroll', updatePosition);
+        updatePosition(); // اجرای اولیه
     }
+</script>
+{% endblock %}
 
-    .tooltip-label {
-        font-size: 11px;
-        opacity: 0.8;
-        margin-bottom: 4px;
-    }
 
-    .tooltip-value {
-        font-size: 16px;
-        font-weight: bold;
-    }
 
-    #income-chart-container h5,
-    #views-chart-container h5 {
-        font-weight: 600;
-        color: #1f2937;
-        margin-bottom: 15px;
-    }
-</style> -->
 {% endblock %}
