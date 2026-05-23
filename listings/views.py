@@ -18,6 +18,21 @@ from accounts.models import SavedListing, ListingNote
 
 User = get_user_model()
 
+@property
+def get_roi_display(self):
+    if not self.monthly_income:
+        return None
+    
+    price = self.discount_price if self.discount_price else self.price
+    
+    if not price:
+        return None
+    
+    roi_months = price / self.monthly_income
+    roi_years = roi_months / 12
+    
+    return f"{roi_months:.0f} ماه ({roi_years:.1f} سال)"
+
 
 def listing_list(request):
     # تعریف متغیر پایه

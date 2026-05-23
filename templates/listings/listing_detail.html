@@ -14,7 +14,101 @@
 {% block content %}
 
 <div class="navbar-listing-detail">
-    <p>navbar مربوط به اطلاعات آگهی</p>
+
+    <div class="rigt-navba-listing-detailr">
+
+        <div class="ad-views-navbar">
+            <a href="{{ listing.platform_url }}" class="btn-view-navbar" target="_blank">بازدید
+                پلتفرم</a>
+        </div>
+
+        <div class="price-card-navbar">
+            {% if listing.discount_price %}
+            <h3 class="text-success">{{ listing.discount_price|split_number }} <p class="text-success-navbar">قیمت کل</p>
+            </h3>
+            {% else %}
+            <h3 class="text-success">{{ listing.price|split_number }} <p class="text-success-navbar">قیمت کل</p>
+            </h3>
+            {% endif %}
+        </div>
+
+        <div class="price-card-navbar">
+            {% if listing.followers_count %}
+            <h3 class="text-success">{{ listing.followers_count|split_number }} <p class="text-success-navbar">دنبال
+                    کننده</p>
+            </h3>
+            {% endif %}
+        </div>
+
+
+
+        <div class="price-card-navbar">
+            {% if listing.monthly_income and listing.monthly_income > 0 %}
+            {% with total_price=listing.discount_price|default:listing.price %}
+            {% if total_price %}
+            <h3 class="text-success">{% widthratio total_price listing.monthly_income 1 %} ماه تا <p class="text-success-navbar"> برگشت سرمایه</p>
+            </h3>
+            {% endif %}
+            {% endwith %}
+            {% endif %}
+        </div>
+
+    </div>
+
+
+
+    <div class="scroll-link-navbar">
+        {% if listing.about_platform %}
+        <a href="#section-about" class="text-link-scroll">درباره پلتفرم</a>
+        {% endif %}
+
+        {% if listing.faqs.all %}
+        <a href="#section-faq" class="text-link-scroll">پرسش و پاسخ</a>
+        {% endif %}
+
+        {% if listing.income_data_points.all or listing.views_data_points.all %}
+        <a href="#section-charts" class="text-link-scroll">نمودار ها</a>
+        {% endif %}
+
+        {% if income_proofs %}
+        <a href="#section-proofs" class="text-link-scroll">اثبات درآمد</a>
+        {% endif %}
+
+        {% if listing.social_medias.exists %}
+        <a href="#section-social-media" class="text-link-scroll">رسانه های اجتماعی</a>
+        {% endif %}
+
+        {% if listing.attachments.exists %}
+        <a href="#section-attachments" class="text-link-scroll">پیوست ها</a>
+        {% endif %}
+
+        {% if listing.sale_includes.exists or listing.post_sale_support %}
+        <a href="#section-sell-includes" class="text-link-scroll">دارایی‌های فروش</a>
+        {% endif %}
+
+        {% if listing.licenses.exists %}
+        <a href="#section-license" class="text-link-scroll">مجوز ها</a>
+        {% endif %}
+
+        {% if listing.services_used.exists %}
+        <a href="#section-services-used" class="text-link-scroll">خدمات مورد استفاده</a>
+        {% endif %}
+
+        {% if listing.monetization_methods.exists %}
+        <a href="#section-monetization-methods" class="text-link-scroll">روش های کسب درآمد</a>
+        {% endif %}
+
+        {% if listing.total_revenue or listing.total_profit or listing.avg_monthly_revenue or listing.avg_monthly_profit or listing.profit_margin or listing.profit_multiplier or listing.revenue_multiplier or listing.expenses.exists %}
+        <a href="#section-revenue-expenses" class="text-link-scroll">درآمد و هزینه‌ها</a>
+        {% endif %}
+
+        {% if listing.listing_analyst %}
+        <a href="#section-analyst" class="text-link-scroll">تحلیلگر و مشاور</a>
+        {% endif %}
+
+    </div>
+
+
 </div>
 
 <div class="container">
@@ -123,11 +217,18 @@
                     </div>
 
                     <div class="inf-card-detail">
-                        {% if listing.get_roi_display %}
+                        {% if listing.monthly_income and listing.monthly_income > 0 %}
+                        {% with total_price=listing.discount_price|default:listing.price %}
+                        {% if total_price %}
                         <strong class="strong-inf-detail">برگشت سرمایه:</strong>
-                        <p>{{ listing.get_roi_display }}</p>
+                        <p>
+                            {% widthratio total_price listing.monthly_income 1 %} ماه
+                        </p>
+                        {% endif %}
+                        {% endwith %}
                         {% endif %}
                     </div>
+
 
                     <div class="inf-card-detail">
                         <strong class="strong-inf-detail">سن پلتفرم:</strong>
@@ -166,44 +267,7 @@
                     </div> -->
 
                 </div>
-
-
-                <div class="scroll-link">
-                    {% if listing.about_platform %}
-                    <a href="#section-about" class="text-link-scroll">درباره پلتفرم</a>
-                    {% endif %}
-
-                    {% if listing.faqs.all %}
-                    <a href="#section-faq" class="text-link-scroll">پرسش و پاسخ</a>
-                    {% endif %}
-
-                    {% if listing.income_data_points.all or listing.views_data_points.all %}
-                    <a href="#section-charts" class="text-link-scroll">نمودار ها</a>
-                    {% endif %}
-
-                    {% if income_proofs %}
-                    <a href="#section-proofs" class="text-link-scroll">اثبات درآمد</a>
-                    {% endif %}
-
-                    <a href="#section-social-media" class="text-link-scroll">رسانه های اجتماعی</a>
-
-                    <a href="#section-attachments" class="text-link-scroll">پیوست ها</a>
-
-                    <a href="#section-sell-includes" class="text-link-scroll">دارایی‌های فروش</a>
-
-                    <a href="#section-license" class="text-link-scroll">مجوز ها</a>
-
-                    <a href="#section-services-used" class="text-link-scroll">خدمات مورد استفاده</a>
-
-                    <a href="#section-monetization-methods" class="text-link-scroll">روش های کسب درآمد</a>
-
-                    <a href="#section-revenue-expenses" class="text-link-scroll">درآمد و هزینه‌ها</a>
-
-                    <a href="#section-analyst" class="text-link-scroll">تحلیلگر و مشاور</a>
-
-
-                </div>
-
+                {% endif %}
 
 
                 {% if listing.listing_analyst %}
@@ -765,7 +829,7 @@
 
 
 
-                {% if listing.total_revenue or listing.total_profit or listing.avg_monthly_revenue or listing.avg_monthly_profit or listing.profit_margin or listing.profit_multiplier or listing.revenue_multiplier %}
+                {% if listing.total_revenue or listing.total_profit or listing.avg_monthly_revenue or listing.avg_monthly_profit or listing.profit_margin or listing.profit_multiplier or listing.revenue_multiplier or listing.expenses.exists %}
                 <div id="section-revenue-expenses" class="card card-body income-expense-card">
                     <div onclick="toggleHeight('10', 0)" class="aboutplatform-card-h3 cursor-card">
                         <h3 class="titel-card">درآمد و هزینه‌ها</h3>
@@ -776,6 +840,7 @@
                     <div id="box-text-10" class="social-revenue-expenses expanded">
                         <div class="income-expense-detail">
                             <hr>
+                            {% if listing.total_revenue or listing.total_profit or listing.avg_monthly_revenue or listing.avg_monthly_profit or listing.profit_margin or listing.profit_multiplier or listing.revenue_multiplier  %}
                             <div class="revenue-revenue-expenses">
                                 <h4>درامد ها</h4>
 
@@ -844,6 +909,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {% endif %}
 
                             {% if listing.expenses.exists %}
                             <div class="expenses-revenue-expenses">
@@ -866,7 +932,6 @@
                         </div>
                     </div>
                 </div>
-                {% endif %}
                 {% endif %}
 
             </div>
@@ -2122,6 +2187,18 @@
         window.addEventListener('scroll', updatePosition);
         updatePosition(); // اجرای اولیه
     }
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const links = document.querySelectorAll('.scroll-link-navbar .text-link-scroll');
+        const maxVisible = 4;
+
+        links.forEach((link, index) => {
+            if (index >= maxVisible) {
+                link.style.display = 'none';
+            }
+        });
+    });
 </script>
 {% endblock %}
 

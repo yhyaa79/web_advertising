@@ -6,307 +6,312 @@
 {% block title %}پروفایل {{ profile_user.username }}{% endblock %}
 
 {% block content %}
-<div class="mt-4">
-    <div>
-        <!-- ستون اطلاعات کاربر -->
-        <div class="col-lg-4 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <!-- تصویر پروفایل -->
-                    {% if profile_user.profile.user_type == 'individual' %}
-                    {% if profile_user.profile_image %}
-                    <img src="{{ profile_user.profile_image.url }}" alt="پروفایل" class="rounded-circle mb-3"
-                        style="width: 150px; height: 150px; object-fit: cover; border: 4px solid #f0f0f0;">
-                    {% else %}
-                    <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
-                        style="width: 150px; height: 150px; border: 4px solid #f0f0f0;">
-                        <i class="fas fa-user fa-4x text-white"></i>
-                    </div>
-                    {% endif %}
-                    {% else %}
-                    {% if profile_user.profile.company_logo %}
-                    <img src="{{ profile_user.profile.company_logo.url }}" alt="لوگو شرکت" class="rounded-circle mb-3"
-                        style="width: 150px; height: 150px; object-fit: cover; border: 4px solid #f0f0f0;">
-                    {% else %}
-                    <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
-                        style="width: 150px; height: 150px; border: 4px solid #f0f0f0;">
-                        <i class="fas fa-building fa-4x text-white"></i>
-                    </div>
-                    {% endif %}
-                    {% endif %}
 
-                    <!-- نام کاربری -->
-                    <h4 class="mb-2">{{ profile_user.username }}</h4>
-
-                    <!-- وضعیت تایید -->
-                    <div class="mb-3">
-                        {% if profile_user.is_verified %}
-                        <span class="badge bg-success">
-                            <i class="fas fa-check-circle"></i> تایید شده
-                        </span>
-                        {% else %}
-                        <span class="badge bg-warning">
-                            <i class="fas fa-clock"></i> تایید نشده
-                        </span>
-                        {% endif %}
-                    </div>
-
-                    <hr>
-
-                    <!-- اطلاعات پایه -->
-                    <div class="text-start">
+<div class="container">
+    <div class="mt-4">
+        <div>
+            <!-- ستون اطلاعات کاربر -->
+            <div class="col-lg-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <!-- تصویر پروفایل -->
                         {% if profile_user.profile.user_type == 'individual' %}
-                        <p class="mb-2">
-                            <i class="fas fa-user text-muted ms-2"></i>
-                            <strong>نوع کاربر:</strong> شخص حقیقی
-                        </p>
-
-                        {% if profile_user.profile.first_name or profile_user.profile.last_name %}
-                        <p class="mb-2">
-                            <i class="fas fa-id-card text-muted ms-2"></i>
-                            <strong>نام:</strong>
-                            {{ profile_user.profile.first_name }} {{ profile_user.profile.last_name }}
-                        </p>
+                        {% if profile_user.profile_image %}
+                        <img src="{{ profile_user.profile_image.url }}" alt="پروفایل" class="rounded-circle mb-3"
+                            style="width: 150px; height: 150px; object-fit: cover; border: 4px solid #f0f0f0;">
+                        {% else %}
+                        <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
+                            style="width: 150px; height: 150px; border: 4px solid #f0f0f0;">
+                            <i class="fas fa-user fa-4x text-white"></i>
+                        </div>
                         {% endif %}
                         {% else %}
-                        <p class="mb-2">
-                            <i class="fas fa-building text-muted ms-2"></i>
-                            <strong>نوع کاربر:</strong> شخص حقوقی
-                        </p>
-
-                        {% if profile_user.profile.company_name %}
-                        <p class="mb-2">
-                            <i class="fas fa-briefcase text-muted ms-2"></i>
-                            <strong>نام شرکت:</strong> {{ profile_user.profile.company_name }}
-                        </p>
-                        {% endif %}
-
-                        {% if profile_user.profile.company_type %}
-                        <p class="mb-2">
-                            <i class="fas fa-industry text-muted ms-2"></i>
-                            <strong>نوع شرکت:</strong> {{ profile_user.profile.company_type }}
-                        </p>
-                        {% endif %}
-                        {% endif %}
-
-                        {% if profile_user.profile.email_address %}
-                        <p class="mb-2">
-                            <i class="fas fa-envelope text-muted ms-2"></i>
-                            <strong>ایمیل:</strong> {{ profile_user.profile.email_address }}
-                        </p>
-                        {% endif %}
-
-                        {% if profile_user.profile.address %}
-                        <p class="mb-2">
-                            <i class="fas fa-map-marker-alt text-muted ms-2"></i>
-                            <strong>آدرس:</strong> {{ profile_user.profile.address }}
-                        </p>
-                        {% endif %}
-
-                        <p class="mb-2">
-                            <i class="fas fa-calendar text-muted ms-2"></i>
-                            <strong>عضویت:</strong> {{ profile_user.date_joined|date:"Y/m/d" }}
-                        </p>
-                    </div>
-
-                    {% if profile_user.profile.bio %}
-                    <hr>
-                    <div class="text-start">
-                        <h6 class="mb-2"><i class="fas fa-info-circle text-muted ms-2"></i>بیوگرافی</h6>
-                        <p class="text-muted small">{{ profile_user.profile.bio }}</p>
-                    </div>
-                    {% endif %}
-
-                    <!-- آمار -->
-                    <hr>
-                    <div class="row text-center">
-                        <div class="col-6">
-                            <h5 class="mb-0 text-primary">{{ total_listings }}</h5>
-                            <small class="text-muted">آگهی فعال</small>
+                        {% if profile_user.profile.company_logo %}
+                        <img src="{{ profile_user.profile.company_logo.url }}" alt="لوگو شرکت"
+                            class="rounded-circle mb-3"
+                            style="width: 150px; height: 150px; object-fit: cover; border: 4px solid #f0f0f0;">
+                        {% else %}
+                        <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
+                            style="width: 150px; height: 150px; border: 4px solid #f0f0f0;">
+                            <i class="fas fa-building fa-4x text-white"></i>
                         </div>
-                        <div class="col-6">
-                            <h5 class="mb-0 text-success">{{ total_views }}</h5>
-                            <small class="text-muted">کل بازدید</small>
+                        {% endif %}
+                        {% endif %}
+
+                        <!-- نام کاربری -->
+                        <h4 class="mb-2">{{ profile_user.username }}</h4>
+
+                        <!-- وضعیت تایید -->
+                        <div class="mb-3">
+                            {% if profile_user.is_verified %}
+                            <span class="badge bg-success">
+                                <i class="fas fa-check-circle"></i> تایید شده
+                            </span>
+                            {% else %}
+                            <span class="badge bg-warning">
+                                <i class="fas fa-clock"></i> تایید نشده
+                            </span>
+                            {% endif %}
                         </div>
-                    </div>
-                </div>
 
-
-                {% if profile_user.is_verified %}
-                <div class=" mt-3">
-                    <div class="card-body pad-10">
-                        <h5>اطلاعات تایید شده</h5>
                         <hr>
-                        <p>
-                            این فهرست باکیفیت توسط تیم فلیپا یا کارگزار بررسی شده است تا از صحت اطلاعات ارائه شده
-                            اطمینان حاصل
-                            شود.
 
-                            تیم بررسی ما این فهرست را بررسی و موارد زیر را تأیید کرده است:
+                        <!-- اطلاعات پایه -->
+                        <div class="text-start">
+                            {% if profile_user.profile.user_type == 'individual' %}
+                            <p class="mb-2">
+                                <i class="fas fa-user text-muted ms-2"></i>
+                                <strong>نوع کاربر:</strong> شخص حقیقی
+                            </p>
 
-                        </p>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-        </div>
+                            {% if profile_user.profile.first_name or profile_user.profile.last_name %}
+                            <p class="mb-2">
+                                <i class="fas fa-id-card text-muted ms-2"></i>
+                                <strong>نام:</strong>
+                                {{ profile_user.profile.first_name }} {{ profile_user.profile.last_name }}
+                            </p>
+                            {% endif %}
+                            {% else %}
+                            <p class="mb-2">
+                                <i class="fas fa-building text-muted ms-2"></i>
+                                <strong>نوع کاربر:</strong> شخص حقوقی
+                            </p>
 
-        <!-- ستون آگهی‌های کاربر -->
-        <div class="col-lg-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-list text-primary ms-2"></i>
-                        آگهی‌های {{ profile_user.username }}
-                    </h5>
-                </div>
-                <div class="card-body">
-                    {% if user_listings %}
-                    {% for listing in user_listings %}
-                    <div class="mb-4">
-                        <div class="card h-100 {% if listing.is_private %}border-warning{% endif %}">
-                            <div class="in-card">
+                            {% if profile_user.profile.company_name %}
+                            <p class="mb-2">
+                                <i class="fas fa-briefcase text-muted ms-2"></i>
+                                <strong>نام شرکت:</strong> {{ profile_user.profile.company_name }}
+                            </p>
+                            {% endif %}
 
-                                <a href="{% url 'listings:listing_detail' listing.pk %}" class="in-card-img">
-                                    <div class="img-badge">
-                                        <span class="badge bg-info">{{ listing.category.get_platform_display }}</span>
-                                        {% if listing.main_image %}
-                                        <div class="card-img">
-                                            <img src="{{ listing.main_image.url }}" class="card-img-top">
-                                        </div>
-                                        {% endif %}
+                            {% if profile_user.profile.company_type %}
+                            <p class="mb-2">
+                                <i class="fas fa-industry text-muted ms-2"></i>
+                                <strong>نوع شرکت:</strong> {{ profile_user.profile.company_type }}
+                            </p>
+                            {% endif %}
+                            {% endif %}
 
-                                    </div>
-                                </a>
+                            {% if profile_user.profile.email_address %}
+                            <p class="mb-2">
+                                <i class="fas fa-envelope text-muted ms-2"></i>
+                                <strong>ایمیل:</strong> {{ profile_user.profile.email_address }}
+                            </p>
+                            {% endif %}
 
-                                <a href="{% url 'listings:listing_detail' listing.pk %}"
-                                    style="text-decoration: none; color: inherit;">
-                                    <div class="card-body">
+                            {% if profile_user.profile.address %}
+                            <p class="mb-2">
+                                <i class="fas fa-map-marker-alt text-muted ms-2"></i>
+                                <strong>آدرس:</strong> {{ profile_user.profile.address }}
+                            </p>
+                            {% endif %}
 
-                                        <h5 class="card-title">{{ listing.title }}</h5>
+                            <p class="mb-2">
+                                <i class="fas fa-calendar text-muted ms-2"></i>
+                                <strong>عضویت:</strong> {{ profile_user.date_joined|date:"Y/m/d" }}
+                            </p>
+                        </div>
 
-                                        <div class="all-badge">
-                                            {% if listing.is_private %}
-                                            <div class="position-absolute top-0 end-0 m-2">
-                                                <span class="badge bg-warning text-dark">
-                                                    <i class="bi bi-lock-fill"></i> خصوصی
-                                                </span>
-                                            </div>
-                                            {% endif %}
+                        {% if profile_user.profile.bio %}
+                        <hr>
+                        <div class="text-start">
+                            <h6 class="mb-2"><i class="fas fa-info-circle text-muted ms-2"></i>بیوگرافی</h6>
+                            <p class="text-muted small">{{ profile_user.profile.bio }}</p>
+                        </div>
+                        {% endif %}
 
-                                            {% if listing.is_income %}
-                                            <div class="position-absolute top-0 end-0 m-2">
-                                                <span class="badge bg-warning text-dark">
-                                                    <i class="bi bi-lock-fill"></i> درامد اگهی
-                                                </span>
-                                            </div>
-                                            {% endif %}
-
-
-                                            {% if listing.is_verified %}
-                                            <div class="position-absolute top-0 end-0 m-2">
-                                                <span class="badge bg-warning text-dark">
-                                                    <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
-                                                </span>
-                                            </div>
-                                            {% endif %}
-
-                                            {% if listing.is_preferment %}
-                                            <div class="position-absolute top-0 end-0 m-2">
-                                                <span class="badge bg-warning text-dark">
-                                                    <i class="bi bi-lock-fill"></i> ارتقا اگهی
-                                                </span>
-                                            </div>
-                                            {% endif %}
-
-                                        </div>
-
-
-                                        <p class="card-text">{{ listing.description|truncatewords:30 }}</p>
-
-                                        <div class="inf-all-card">
-                                            <div class="inf-card">
-                                                <strong class="strong-inf">دنبال‌کننده:</strong>
-                                                <p> {{ listing.followers_count|split_number }} نفر</p>
-                                            </div>
-
-                                            <div class="inf-card">
-                                                <strong class="strong-inf">تاریخ انتشار اگهی:</strong>
-                                                <p>{{ listing.created_at|time_ago }}</p>
-                                            </div>
-
-                                            <div class="inf-card">
-                                                <strong class="strong-inf">سن پلتفرم:</strong>
-                                                <p> {{ listing.platform_age|floatformat:0 }} سال</p>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <div class="all-btn">
-
-                                    <div class="price-btn">
-                                        <div class="price-div">
-
-
-                                            {% if listing.discount_price %}
-                                            <h3 class="text-success fw-bold fs-5">
-                                                {{ listing.discount_price|split_number }} تومان</h3>
-                                            <h3 class="text-muted fw-bold fs-5"><s>{{ listing.price|split_number }}
-                                                    تومان</s></h3>
-                                            {% else %}
-                                            <h3 class="text-success">{{ listing.price|split_number }} تومان</h3>
-                                            {% endif %}
-
-                                            <div class="income-display">
-                                                <div class="monthly-income">
-                                                    {% if not listing.is_private or user == listing.seller %}
-                                                    {% if listing.monthly_income %}
-
-                                                    <p> {{ listing.monthly_income|split_number }}</p>
-                                                    <p> تومان درآمد ماهانه</p>
-
-                                                    {% else %}
-                                                    <p>این اگهی به درامد نرسیده است</p>
-                                                    {% endif %}
-                                                    {% endif %}
-                                                </div>
-
-                                                {% if listing.get_roi_display %}
-                                                <p>برگشت سرمایه در {{ listing.get_roi_display }}</p>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-
-                                        <div class="between-price-btn">
-
-                                        </div>
-
-                                        <div class="btn-primary-div">
-
-                                            <a href="{% url 'listings:listing_detail' listing.pk %}"
-                                                class="btn btn-primary w-100">مشاهده</a>
-
-                                            <a href="{{ listing.platform_url }}" class="btn btn-success w-100"
-                                                target="_blank">بازدید</a>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-
+                        <!-- آمار -->
+                        <hr>
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <h5 class="mb-0 text-primary">{{ total_listings }}</h5>
+                                <small class="text-muted">آگهی فعال</small>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="mb-0 text-success">{{ total_views }}</h5>
+                                <small class="text-muted">کل بازدید</small>
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
 
-                    {% else %}
-                    <div class="text-center py-5">
-                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                        <p class="text-muted">این کاربر هنوز آگهی فعالی ندارد.</p>
+
+                    {% if profile_user.is_verified %}
+                    <div class=" mt-3">
+                        <div class="card-body pad-10">
+                            <h5>اطلاعات تایید شده</h5>
+                            <hr>
+                            <p>
+                                این فهرست باکیفیت توسط تیم فلیپا یا کارگزار بررسی شده است تا از صحت اطلاعات ارائه شده
+                                اطمینان حاصل
+                                شود.
+
+                                تیم بررسی ما این فهرست را بررسی و موارد زیر را تأیید کرده است:
+
+                            </p>
+                        </div>
                     </div>
                     {% endif %}
+                </div>
+            </div>
+
+            <!-- ستون آگهی‌های کاربر -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-list text-primary ms-2"></i>
+                            آگهی‌های {{ profile_user.username }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% if user_listings %}
+                        {% for listing in user_listings %}
+                        <div class="mb-4">
+                            <div class="card h-100 {% if listing.is_private %}border-warning{% endif %}">
+                                <div class="in-card">
+
+                                    <a href="{% url 'listings:listing_detail' listing.pk %}" class="in-card-img">
+                                        <div class="img-badge">
+                                            <span
+                                                class="badge bg-info">{{ listing.category.get_platform_display }}</span>
+                                            {% if listing.main_image %}
+                                            <div class="card-img">
+                                                <img src="{{ listing.main_image.url }}" class="card-img-top">
+                                            </div>
+                                            {% endif %}
+
+                                        </div>
+                                    </a>
+
+                                    <a href="{% url 'listings:listing_detail' listing.pk %}"
+                                        style="text-decoration: none; color: inherit;">
+                                        <div class="card-body">
+
+                                            <h5 class="card-title">{{ listing.title }}</h5>
+
+                                            <div class="all-badge">
+                                                {% if listing.is_private %}
+                                                <div class="position-absolute top-0 end-0 m-2">
+                                                    <span class="badge bg-warning text-dark">
+                                                        <i class="bi bi-lock-fill"></i> خصوصی
+                                                    </span>
+                                                </div>
+                                                {% endif %}
+
+                                                {% if listing.is_income %}
+                                                <div class="position-absolute top-0 end-0 m-2">
+                                                    <span class="badge bg-warning text-dark">
+                                                        <i class="bi bi-lock-fill"></i> درامد اگهی
+                                                    </span>
+                                                </div>
+                                                {% endif %}
+
+
+                                                {% if listing.is_verified %}
+                                                <div class="position-absolute top-0 end-0 m-2">
+                                                    <span class="badge bg-warning text-dark">
+                                                        <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
+                                                    </span>
+                                                </div>
+                                                {% endif %}
+
+                                                {% if listing.is_preferment %}
+                                                <div class="position-absolute top-0 end-0 m-2">
+                                                    <span class="badge bg-warning text-dark">
+                                                        <i class="bi bi-lock-fill"></i> ارتقا اگهی
+                                                    </span>
+                                                </div>
+                                                {% endif %}
+
+                                            </div>
+
+
+                                            <p class="card-text">{{ listing.description|truncatewords:30 }}</p>
+
+                                            <div class="inf-all-card">
+                                                <div class="inf-card">
+                                                    <strong class="strong-inf">دنبال‌کننده:</strong>
+                                                    <p> {{ listing.followers_count|split_number }} نفر</p>
+                                                </div>
+
+                                                <div class="inf-card">
+                                                    <strong class="strong-inf">تاریخ انتشار اگهی:</strong>
+                                                    <p>{{ listing.created_at|time_ago }}</p>
+                                                </div>
+
+                                                <div class="inf-card">
+                                                    <strong class="strong-inf">سن پلتفرم:</strong>
+                                                    <p> {{ listing.platform_age|floatformat:0 }} سال</p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <div class="all-btn">
+
+                                        <div class="price-btn">
+                                            <div class="price-div">
+
+
+                                                {% if listing.discount_price %}
+                                                <h3 class="text-success fw-bold fs-5">
+                                                    {{ listing.discount_price|split_number }} تومان</h3>
+                                                <h3 class="text-muted fw-bold fs-5"><s>{{ listing.price|split_number }}
+                                                        تومان</s></h3>
+                                                {% else %}
+                                                <h3 class="text-success">{{ listing.price|split_number }} تومان</h3>
+                                                {% endif %}
+
+                                                <div class="income-display">
+                                                    <div class="monthly-income">
+                                                        {% if not listing.is_private or user == listing.seller %}
+                                                        {% if listing.monthly_income %}
+
+                                                        <p> {{ listing.monthly_income|split_number }}</p>
+                                                        <p> تومان درآمد ماهانه</p>
+
+                                                        {% else %}
+                                                        <p>این اگهی به درامد نرسیده است</p>
+                                                        {% endif %}
+                                                        {% endif %}
+                                                    </div>
+
+                                                    {% if listing.get_roi_display %}
+                                                    <p>برگشت سرمایه در {{ listing.get_roi_display }}</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+
+                                            <div class="between-price-btn">
+
+                                            </div>
+
+                                            <div class="btn-primary-div">
+
+                                                <a href="{% url 'listings:listing_detail' listing.pk %}"
+                                                    class="btn btn-primary w-100">مشاهده</a>
+
+                                                <a href="{{ listing.platform_url }}" class="btn btn-success w-100"
+                                                    target="_blank">بازدید</a>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">این کاربر هنوز آگهی فعالی ندارد.</p>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

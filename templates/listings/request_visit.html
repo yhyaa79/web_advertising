@@ -4,73 +4,78 @@
 {% block title %}درخواست بازدید{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-10 ">
-        <div class="card">
-            <div class="card-header bg-warning text-dark">
-                <h4 class="mb-0">
-                    <i class="bi bi-lock-fill"></i> درخواست بازدید آگهی خصوصی
-                </h4>
-            </div>
-            <div class="card-body">
-                <div class="alert alert-info">
-                    <h5 class="mb-2">{{ listing.title }}</h5>
-                    <p class="mb-1"><strong>فروشنده:</strong> {{ listing.seller.username }}</p>
-                    <p class="mb-0"><strong>قیمت:</strong> {{ listing.price|floatformat:0 }} تومان</p>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10 ">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="bi bi-lock-fill"></i> درخواست بازدید آگهی خصوصی
+                    </h4>
                 </div>
-                
-                <div class="alert alert-warning">
-                    <i class="bi bi-info-circle"></i>
-                    <strong>توجه:</strong>
-                    <p class="mb-0 mt-2">
-                        این آگهی خصوصی است. با ارسال درخواست بازدید، فروشنده می‌تواند درخواست شما را بررسی کند. 
-                        در صورت تایید، به تمام جزئیات آگهی شامل اطلاعات پلتفرم، آدرس، تعداد دنبال‌کنندگان و اثبات درآمد دسترسی خواهید داشت.
-                    </p>
-                </div>
-                
-                <form method="post">
-                    {% csrf_token %}
-                    
-                    <div class="mb-3">
-                        <label for="{{ form.message.id_for_label }}" class="form-label">
-                            {{ form.message.label }}
-                        </label>
-                        {{ form.message }}
-                        <small class="form-text text-muted">
-                            می‌توانید دلیل یا توضیحات خود را برای فروشنده بنویسید (اختیاری)
-                        </small>
-                        {% if form.message.errors %}
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h5 class="mb-2">{{ listing.title }}</h5>
+                        <p class="mb-1"><strong>فروشنده:</strong> {{ listing.seller.username }}</p>
+                        <p class="mb-0"><strong>قیمت:</strong> {{ listing.price|floatformat:0 }} تومان</p>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>توجه:</strong>
+                        <p class="mb-0 mt-2">
+                            این آگهی خصوصی است. با ارسال درخواست بازدید، فروشنده می‌تواند درخواست شما را بررسی کند.
+                            در صورت تایید، به تمام جزئیات آگهی شامل اطلاعات پلتفرم، آدرس، تعداد دنبال‌کنندگان و اثبات
+                            درآمد دسترسی خواهید داشت.
+                        </p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="{{ form.message.id_for_label }}" class="form-label">
+                                {{ form.message.label }}
+                            </label>
+                            {{ form.message }}
+                            <small class="form-text text-muted">
+                                می‌توانید دلیل یا توضیحات خود را برای فروشنده بنویسید (اختیاری)
+                            </small>
+                            {% if form.message.errors %}
                             <div class="text-danger mt-1">
                                 {{ form.message.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <hr>
-                    
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-warning btn-lg">
-                            <i class="bi bi-send"></i> ارسال درخواست بازدید
-                        </button>
-                        <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-secondary">
-                            <i class="bi bi-arrow-right"></i> انصراف
-                        </a>
-                    </div>
-                </form>
+                            {% endif %}
+                        </div>
+
+                        <hr>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning btn-lg">
+                                <i class="bi bi-send"></i> ارسال درخواست بازدید
+                            </button>
+                            <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-right"></i> انصراف
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
-        
-        <div class="card mt-3">
-            <div class="card-body">
-                <h6><i class="bi bi-shield-check"></i> نکات مهم:</h6>
-                <ul class="mb-0">
-                    <li>درخواست شما برای فروشنده ارسال می‌شود</li>
-                    <li>فروشنده می‌تواند درخواست را تایید یا رد کند</li>
-                    <li>در صورت تایید، به جزئیات کامل آگهی دسترسی خواهید داشت</li>
-                    <li>می‌توانید وضعیت درخواست خود را در صفحه آگهی مشاهده کنید</li>
-                </ul>
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h6><i class="bi bi-shield-check"></i> نکات مهم:</h6>
+                    <ul class="mb-0">
+                        <li>درخواست شما برای فروشنده ارسال می‌شود</li>
+                        <li>فروشنده می‌تواند درخواست را تایید یا رد کند</li>
+                        <li>در صورت تایید، به جزئیات کامل آگهی دسترسی خواهید داشت</li>
+                        <li>می‌توانید وضعیت درخواست خود را در صفحه آگهی مشاهده کنید</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

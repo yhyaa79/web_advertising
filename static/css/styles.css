@@ -417,18 +417,26 @@ option {
 .navbar-listing-detail {
     display: flex;
     position: sticky;
+    padding: 0 30px;
     width: 100%;
-    height: 50px;
+    height: 60px;
     z-index: 999;
     background-color: #ffffff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    /* top رو JS مدیریت می‌کنه، transition حذف بشه */
+    justify-content: space-between;
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
 }
 
 
 /* وقتی navbar اصلی از دید خارج شد */
 .navbar-listing-detail.sticky {
     top: 0;
+}
+
+.rigt-navba-listing-detailr {
+    display: flex;
+    gap: 20px;
 }
 
 
@@ -456,6 +464,18 @@ option {
     margin: 10px 10px 30px 10px;
 }
 
+.scroll-link-navbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap:20px;
+    direction: rtl;
+    align-items: flex-start;
+    margin: 10px 10px 30px 10px;
+    margin: auto 0;
+}
+
+
+
 #section-about,
 #section-faq,
 #section-charts,
@@ -468,9 +488,28 @@ option {
 #section-monetization-methods,
 #section-revenue-expenses,
 #section-consultant {
-    scroll-margin-top: 90px;
+    scroll-margin-top: 80px;
     /* اگر هدر دارید این عدد را بیشتر کنید، مثلا 80px یا 100px */
 }
+
+
+
+.price-card-navbar {
+    margin: auto 0;
+    font-size: 14px;
+    text-align: center;
+    line-height: 16px;
+}
+
+.price-card-navbar .text-success {
+    color: #000000ca !important;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.text-success-navbar {
+}
+
 
 /* ========================================
    نشان اعلان (Notification Badge)
@@ -1704,7 +1743,7 @@ option {
 .text-link-scroll {
     color: var(--blu-durk-color);
     font-weight: 500;
-    font-size: var(--font-size-base);
+    font-size: 13px;
 }
 
 
@@ -3045,6 +3084,24 @@ form textarea {
 
 .card-body-text-purchase-advice strong {
     font-size: 13px;
+}
+
+.ad-views-navbar {
+    margin: auto 0;
+}
+
+.btn-view-navbar {
+
+    font-size: 14px;
+    color: var(--blu-color);
+    border: 1.7px solid var(--blu-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 22px;
+    border-radius: var(--border-radius-999);
+    border-color: rgb(0 88 255);
+    text-decoration: none;
 }
 
 

@@ -8,101 +8,103 @@
 
 {% block content %}
 
+<div class="container">
 
-<div class="btn-listing-create">
-    <h2 class="mb-4">آگهی‌های من</h2>
-    <a href="{% url 'listings:listing_create' %}" class="btn btn-success mb-3">ثبت آگهی جدید</a>
-</div>
 
-<!-- درخواست‌های بازدید در انتظار -->
-{% if pending_requests %}
-<div class="card mb-4">
-    <div class="card-header">
-        <h5 class="mb-0">درخواست‌های بازدید در انتظار ({{ pending_requests.count }})</h5>
-        <hr>
+    <div class="btn-listing-create">
+        <h2 class="mb-4">آگهی‌های من</h2>
+        <a href="{% url 'listings:listing_create' %}" class="btn btn-success mb-3">ثبت آگهی جدید</a>
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>آگهی</th>
-                        <th>درخواست‌کننده</th>
-                        <th>پیام</th>
-                        <th>تاریخ درخواست</th>
-                        <th>عملیات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for request in pending_requests %}
-                    <tr>
 
-                        <td>
-                            <a href="{% url 'listings:listing_detail' request.listing.pk %}"
-                                class="btn btn-sm btn-link">
-                                {{ request.listing.title }}
-                            </a>
-                        </td>
+    <!-- درخواست‌های بازدید در انتظار -->
+    {% if pending_requests %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">درخواست‌های بازدید در انتظار ({{ pending_requests.count }})</h5>
+            <hr>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>آگهی</th>
+                            <th>درخواست‌کننده</th>
+                            <th>پیام</th>
+                            <th>تاریخ درخواست</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in pending_requests %}
+                        <tr>
 
-                        <td>
-                            <a href="{% url 'listings:user_profile' request.requester.username %}"
-                                class="btn btn-sm btn-link">
-                                {{ request.requester.username }}
-                            </a>
-                        </td>
+                            <td>
+                                <a href="{% url 'listings:listing_detail' request.listing.pk %}"
+                                    class="btn btn-sm btn-link">
+                                    {{ request.listing.title }}
+                                </a>
+                            </td>
+
+                            <td>
+                                <a href="{% url 'listings:user_profile' request.requester.username %}"
+                                    class="btn btn-sm btn-link">
+                                    {{ request.requester.username }}
+                                </a>
+                            </td>
 
 
-                        <td>
-                            {% if request.message %}
-                            <!-- متن خلاصه شده با قابلیت کلیک -->
-                            <a href="javascript:void(0);" onclick="openModal('messageModal{{ request.pk }}')"
-                                class="text-decoration-none">
-                                {{ request.message|truncatewords:5 }}
-                            </a>
+                            <td>
+                                {% if request.message %}
+                                <!-- متن خلاصه شده با قابلیت کلیک -->
+                                <a href="javascript:void(0);" onclick="openModal('messageModal{{ request.pk }}')"
+                                    class="text-decoration-none">
+                                    {{ request.message|truncatewords:5 }}
+                                </a>
 
-                            <!-- مینی مودال برای نمایش کل پیام -->
-                            <div id="messageModal{{ request.pk }}" class="custom-modal">
-                                <div class="custom-modal-content">
-                                    <div
-                                        class="custom-modal-header d-flex justify-content-between align-items-center mb-3">
-                                        <h4 class="mb-0 fw-bold">متن کامل پیام</h4>
-                                        <button type="button" class="close"
-                                            onclick="closeModal('messageModal{{ request.pk }}')">&times;</button>
-                                    </div>
-                                    <div class="custom-modal-body text-wrap text-break" >
-                                        <textarea class="text-request-message">{{ request.message }}</textarea>
+                                <!-- مینی مودال برای نمایش کل پیام -->
+                                <div id="messageModal{{ request.pk }}" class="custom-modal">
+                                    <div class="custom-modal-content">
+                                        <div
+                                            class="custom-modal-header d-flex justify-content-between align-items-center mb-3">
+                                            <h4 class="mb-0 fw-bold">متن کامل پیام</h4>
+                                            <button type="button" class="close"
+                                                onclick="closeModal('messageModal{{ request.pk }}')">&times;</button>
+                                        </div>
+                                        <div class="custom-modal-body text-wrap text-break">
+                                            <textarea class="text-request-message">{{ request.message }}</textarea>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            {% else %}
-                            <em class="text-muted">بدون پیام</em>
-                            {% endif %}
-                        </td>
+                                {% else %}
+                                <em class="text-muted">بدون پیام</em>
+                                {% endif %}
+                            </td>
 
 
-                        <td>{{ request.created_at|to_jalali }}</td>
-                        <td>
-                            <a href="{% url 'listings:manage_visit_request' request.pk 'approve' %}"
-                                class="btn btn-sm btn-success"
-                                onclick="return confirm('آیا از تایید این درخواست اطمینان دارید؟')">
-                                تایید
-                            </a>
-                            <a href="{% url 'listings:manage_visit_request' request.pk 'reject' %}"
-                                class="btn btn-sm btn-danger"
-                                onclick="return confirm('آیا از رد این درخواست اطمینان دارید؟')">
-                                رد
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                            <td>{{ request.created_at|to_jalali }}</td>
+                            <td>
+                                <a href="{% url 'listings:manage_visit_request' request.pk 'approve' %}"
+                                    class="btn btn-sm btn-success"
+                                    onclick="return confirm('آیا از تایید این درخواست اطمینان دارید؟')">
+                                    تایید
+                                </a>
+                                <a href="{% url 'listings:manage_visit_request' request.pk 'reject' %}"
+                                    class="btn btn-sm btn-danger"
+                                    onclick="return confirm('آیا از رد این درخواست اطمینان دارید؟')">
+                                    رد
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Modal برای نمایش پروفایل -->
-<!--  
+    <!-- Modal برای نمایش پروفایل -->
+    <!--  
 {% for request in pending_requests %}
 <div id="profileModal{{ request.pk }}" class="custom-modal">
     <div class="custom-modal-content">
@@ -197,87 +199,87 @@
 </div>
 {% endfor %}
  -->
-{% endif %}
+    {% endif %}
 
-<!-- لیست آگهی‌ها -->
-<div class="card">
-    <div class="card-header">
-        <h5 class="mb-0">لیست آگهی‌ها</h5>
-        <hr>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>عنوان</th>
-                        <th>دسته‌بندی</th>
-                        <th>نوع</th>
-                        <th>قیمت</th>
-                        <th>وضعیت</th>
-                        <th>بازدید</th>
-                        <th>تاریخ ثبت</th>
-                        <th>عملیات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for listing in listings %}
-                    <tr>
+    <!-- لیست آگهی‌ها -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">لیست آگهی‌ها</h5>
+            <hr>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>عنوان</th>
+                            <th>دسته‌بندی</th>
+                            <th>نوع</th>
+                            <th>قیمت</th>
+                            <th>وضعیت</th>
+                            <th>بازدید</th>
+                            <th>تاریخ ثبت</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for listing in listings %}
+                        <tr>
 
-                        <td>
-                            <!-- تغییر listing.title به listing.pk و اضافه کردن stopPropagation -->
-                            <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-sm btn-link"
-                                onclick="event.stopPropagation();">
-                                {{ listing.title }}
-                            </a>
-                        </td>
+                            <td>
+                                <!-- تغییر listing.title به listing.pk و اضافه کردن stopPropagation -->
+                                <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-sm btn-link"
+                                    onclick="event.stopPropagation();">
+                                    {{ listing.title }}
+                                </a>
+                            </td>
 
-                        <td>{{ listing.category.name }}</td>
-                        <td>
-                            {% if listing.is_private %}
-                            <span class="badge tag-private">خصوصی</span>
-                            {% else %}
-                            <span class="badge tag-general">عمومی</span>
-                            {% endif %}
-                        </td>
-                        <td>{{ listing.price|split_number }} تومان</td>
-                        <td>
-                            <span
-                                class="badge tag-{% if listing.status == 'active' %}active{% elif listing.status == 'sold' %}sold{% elif listing.status == 'rejected' %}not-accepted{% elif listing.status == 'deleted' %}deleted{% else %}waiting{% endif %}">
-                                {{ listing.get_status_display }}
-                            </span>
-                            {% if listing.status == 'rejected' and listing.rejection_reason %}
-                            <br>
-                            <small class="text-danger">دلیل: {{ listing.rejection_reason }}</small>
-                            {% endif %}
-                        </td>
-                        <td>{{ listing.views_count|split_number }}</td>
-                        <td>{{ listing.created_at|jalali_date_numeric }}</td>
-                        <td onclick="event.stopPropagation();">
-                            {% if listing.status != 'deleted' and listing.status != 'sold' %}
-                            <a href="{% url 'listings:listing_edit' listing.pk %}"
-                                class="btn btn-sm btn-edit">ویرایش</a>
-                            <a href="{% url 'listings:listing_delete' listing.pk %}"
-                                class="btn btn-sm btn-remove">حذف</a>
-                            {% endif %}
+                            <td>{{ listing.category.name }}</td>
+                            <td>
+                                {% if listing.is_private %}
+                                <span class="badge tag-private">خصوصی</span>
+                                {% else %}
+                                <span class="badge tag-general">عمومی</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ listing.price|split_number }} تومان</td>
+                            <td>
+                                <span
+                                    class="badge tag-{% if listing.status == 'active' %}active{% elif listing.status == 'sold' %}sold{% elif listing.status == 'rejected' %}not-accepted{% elif listing.status == 'deleted' %}deleted{% else %}waiting{% endif %}">
+                                    {{ listing.get_status_display }}
+                                </span>
+                                {% if listing.status == 'rejected' and listing.rejection_reason %}
+                                <br>
+                                <small class="text-danger">دلیل: {{ listing.rejection_reason }}</small>
+                                {% endif %}
+                            </td>
+                            <td>{{ listing.views_count|split_number }}</td>
+                            <td>{{ listing.created_at|jalali_date_numeric }}</td>
+                            <td onclick="event.stopPropagation();">
+                                {% if listing.status != 'deleted' and listing.status != 'sold' %}
+                                <a href="{% url 'listings:listing_edit' listing.pk %}"
+                                    class="btn btn-sm btn-edit">ویرایش</a>
+                                <a href="{% url 'listings:listing_delete' listing.pk %}"
+                                    class="btn btn-sm btn-remove">حذف</a>
+                                {% endif %}
 
-                            {% if listing.status == 'deleted' %}
-                            <a href="{% url 'listings:listing_activate' listing.pk %}"
-                                class="btn btn-sm btn-activation">فعال‌سازی</a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="8" class="text-center">شما هنوز آگهی ثبت نکرده‌اید.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                                {% if listing.status == 'deleted' %}
+                                <a href="{% url 'listings:listing_activate' listing.pk %}"
+                                    class="btn btn-sm btn-activation">فعال‌سازی</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center">شما هنوز آگهی ثبت نکرده‌اید.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
-
 
 <script>
     function openModal(modalId) {

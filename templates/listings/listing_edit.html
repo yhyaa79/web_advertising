@@ -4,90 +4,97 @@
 {% block title %}ویرایش آگهی{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h4>ویرایش آگهی</h4>
-            </div>
-            <div class="card-body">
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
 
-                    <h5>اطلاعات آگهی</h5>
-                    {{ form.as_p }}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>ویرایش آگهی</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-                    <hr class="my-4">
+                        <h5>اطلاعات آگهی</h5>
+                        {{ form.as_p }}
 
-                    <h5 class="mb-3">نمودار درآمد (قابل ویرایش)</h5>
-                    {{ income_data_formset.management_form }}
-                    {% for form in income_data_formset %}
-                    <div class="border p-3 mb-3 rounded bg-light">
-                        {{ form.date.label_tag }} {{ form.date }}<br>
-                        {{ form.income.label_tag }} {{ form.income }}
-                        {{ form.id }}
-                    </div>
-                    {% endfor %}
-                    <button type="button" class="btn btn-success mb-3" id="add-income-data">افزودن نقطه درآمد</button>
+                        <hr class="my-4">
 
-                    <hr class="my-4">
-
-                    <h5 class="mb-3">نمودار بازدید (قابل ویرایش)</h5>
-                    {{ views_data_formset.management_form }}
-                    {% for form in views_data_formset %}
-                    <div class="border p-3 mb-3 rounded bg-light">
-                        {{ form.date.label_tag }} {{ form.date }}<br>
-                        {{ form.views.label_tag }} {{ form.views }}
-                        {{ form.id }}
-                    </div>
-                    {% endfor %}
-                    <button type="button" class="btn btn-info mb-3" id="add-views-data">افزودن نقطه بازدید</button>
-
-
-
-
-                    <h5>اثبات درآمد</h5>
-                    <p class="text-muted">می‌توانید اثبات درآمد خود را ویرایش یا اضافه کنید</p>
-
-                    {{ formset.management_form }}
-
-                    <div id="income-proofs">
-                        {% for form in formset %}
-                        <div class="income-proof-form border p-3 mb-3 rounded" data-proof-id="{{ form.instance.id }}">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h6>اثبات درآمد {{ forloop.counter }}</h6>
-                                <button type="button" class="btn btn-sm btn-danger remove-existing-form">حذف</button>
-                            </div>
-
-                            {% if form.instance.image %}
-                            <div class="mb-2">
-                                <img src="{{ form.instance.image.url }}" class="img-thumbnail"
-                                    style="max-width: 200px;">
-                            </div>
-                            {% endif %}
-
-                            <p>
-                                <label for="id_income_proofs-{{ forloop.counter0 }}-image">تصویر اثبات درآمد:</label>
-                                {{ form.image }}
-                            </p>
-                            <p>
-                                <label for="id_income_proofs-{{ forloop.counter0 }}-description">توضیحات:</label>
-                                {{ form.description }}
-                            </p>
+                        <h5 class="mb-3">نمودار درآمد (قابل ویرایش)</h5>
+                        {{ income_data_formset.management_form }}
+                        {% for form in income_data_formset %}
+                        <div class="border p-3 mb-3 rounded bg-light">
+                            {{ form.date.label_tag }} {{ form.date }}<br>
+                            {{ form.income.label_tag }} {{ form.income }}
                             {{ form.id }}
                         </div>
                         {% endfor %}
-                    </div>
+                        <button type="button" class="btn btn-success mb-3" id="add-income-data">افزودن نقطه
+                            درآمد</button>
 
-                    <button type="button" class="btn btn-primary mb-3" id="add-income-proof">
-                        <i class="bi bi-plus-circle"></i> افزودن اثبات درآمد
-                    </button>
+                        <hr class="my-4">
 
-                    <hr>
+                        <h5 class="mb-3">نمودار بازدید (قابل ویرایش)</h5>
+                        {{ views_data_formset.management_form }}
+                        {% for form in views_data_formset %}
+                        <div class="border p-3 mb-3 rounded bg-light">
+                            {{ form.date.label_tag }} {{ form.date }}<br>
+                            {{ form.views.label_tag }} {{ form.views }}
+                            {{ form.id }}
+                        </div>
+                        {% endfor %}
+                        <button type="button" class="btn btn-info mb-3" id="add-views-data">افزودن نقطه بازدید</button>
 
-                    <button type="submit" class="btn btn-success">ذخیره تغییرات</button>
-                    <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-secondary">انصراف</a>
-                </form>
+
+
+
+                        <h5>اثبات درآمد</h5>
+                        <p class="text-muted">می‌توانید اثبات درآمد خود را ویرایش یا اضافه کنید</p>
+
+                        {{ formset.management_form }}
+
+                        <div id="income-proofs">
+                            {% for form in formset %}
+                            <div class="income-proof-form border p-3 mb-3 rounded"
+                                data-proof-id="{{ form.instance.id }}">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6>اثبات درآمد {{ forloop.counter }}</h6>
+                                    <button type="button"
+                                        class="btn btn-sm btn-danger remove-existing-form">حذف</button>
+                                </div>
+
+                                {% if form.instance.image %}
+                                <div class="mb-2">
+                                    <img src="{{ form.instance.image.url }}" class="img-thumbnail"
+                                        style="max-width: 200px;">
+                                </div>
+                                {% endif %}
+
+                                <p>
+                                    <label for="id_income_proofs-{{ forloop.counter0 }}-image">تصویر اثبات
+                                        درآمد:</label>
+                                    {{ form.image }}
+                                </p>
+                                <p>
+                                    <label for="id_income_proofs-{{ forloop.counter0 }}-description">توضیحات:</label>
+                                    {{ form.description }}
+                                </p>
+                                {{ form.id }}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <button type="button" class="btn btn-primary mb-3" id="add-income-proof">
+                            <i class="bi bi-plus-circle"></i> افزودن اثبات درآمد
+                        </button>
+
+                        <hr>
+
+                        <button type="submit" class="btn btn-success">ذخیره تغییرات</button>
+                        <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-secondary">انصراف</a>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

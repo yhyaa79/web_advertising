@@ -4,59 +4,73 @@
 {% block title %}ثبت آگهی جدید{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-10">
-        <div class="card">
-            <div class="card-header">
-                <h4>ثبت آگهی جدید</h4>
-            </div>
-            <div class="card-body">
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
 
-                    <!-- نمایش خطاهای کلی فرم -->
-                    {% if form.errors %}
-                    <div class="alert alert-danger">
-                        <h5>خطاهای فرم اصلی:</h5>
-                        {{ form.errors }}
-                    </div>
-                    {% endif %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <h4>ثبت آگهی جدید</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-                    {% if income_proof_formset.errors %}
-                    <div class="alert alert-danger">
-                        <h5>خطاهای اثبات درآمد:</h5>
-                        {{ income_proof_formset.errors }}
-                    </div>
-                    {% endif %}
+                        <!-- نمایش خطاهای کلی فرم -->
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <h5>خطاهای فرم اصلی:</h5>
+                            {{ form.errors }}
+                        </div>
+                        {% endif %}
 
-                    {% if income_data_formset.errors %}
-                    <div class="alert alert-danger">
-                        <h5>خطاهای نقاط درآمد:</h5>
-                        {{ income_data_formset.errors }}
-                    </div>
-                    {% endif %}
+                        {% if income_proof_formset.errors %}
+                        <div class="alert alert-danger">
+                            <h5>خطاهای اثبات درآمد:</h5>
+                            {{ income_proof_formset.errors }}
+                        </div>
+                        {% endif %}
 
-                    {% if views_data_formset.errors %}
-                    <div class="alert alert-danger">
-                        <h5>خطاهای نقاط بازدید:</h5>
-                        {{ views_data_formset.errors }}
-                    </div>
-                    {% endif %}
+                        {% if income_data_formset.errors %}
+                        <div class="alert alert-danger">
+                            <h5>خطاهای نقاط درآمد:</h5>
+                            {{ income_data_formset.errors }}
+                        </div>
+                        {% endif %}
 
-                    {% if faq_formset.errors %}
-                    <div class="alert alert-danger">
-                        <h5>خطاهای FAQ:</h5>
-                        {{ faq_formset.errors }}
-                    </div>
-                    {% endif %}
+                        {% if views_data_formset.errors %}
+                        <div class="alert alert-danger">
+                            <h5>خطاهای نقاط بازدید:</h5>
+                            {{ views_data_formset.errors }}
+                        </div>
+                        {% endif %}
 
-                    {% csrf_token %}
+                        {% if faq_formset.errors %}
+                        <div class="alert alert-danger">
+                            <h5>خطاهای FAQ:</h5>
+                            {{ faq_formset.errors }}
+                        </div>
+                        {% endif %}
 
-                    <h5 class="mb-3">اطلاعات آگهی</h5>
+                        {% csrf_token %}
 
-                    {% for field in form %}
-                    {% if field.name == 'monthly_income' %}
-                    <div id="monthly-income-field" style="display: none;">
+                        <h5 class="mb-3">اطلاعات آگهی</h5>
+
+                        {% for field in form %}
+                        {% if field.name == 'monthly_income' %}
+                        <div id="monthly-income-field" style="display: none;">
+                            <p>
+                                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                                {% endif %}
+                                {% if field.errors %}
+                                <div class="text-danger">{{ field.errors }}</div>
+                                {% endif %}
+                            </p>
+                        </div>
+                        {% else %}
                         <p>
                             <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
                             {{ field }}
@@ -67,44 +81,32 @@
                             <div class="text-danger">{{ field.errors }}</div>
                             {% endif %}
                         </p>
-                    </div>
-                    {% else %}
-                    <p>
-                        <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                        {{ field }}
-                        {% if field.help_text %}
-                        <small class="form-text text-muted">{{ field.help_text }}</small>
                         {% endif %}
-                        {% if field.errors %}
-                        <div class="text-danger">{{ field.errors }}</div>
-                        {% endif %}
-                    </p>
-                    {% endif %}
-                    {% endfor %}
+                        {% endfor %}
 
 
-                    <hr class="my-4">
-                    <h5 class="mb-3">پرسش و پاسخ (اختیاری)</h5>
+                        <hr class="my-4">
+                        <h5 class="mb-3">پرسش و پاسخ (اختیاری)</h5>
 
-                    {{ faq_formset.management_form }}
+                        {{ faq_formset.management_form }}
 
-                    <div id="faq-forms"></div>
+                        <div id="faq-forms"></div>
 
-                    <button type="button" class="btn btn-secondary mb-3" id="add-faq">
-                        <i class="bi bi-plus-circle"></i> افزودن پرسش و پاسخ
-                    </button>
+                        <button type="button" class="btn btn-secondary mb-3" id="add-faq">
+                            <i class="bi bi-plus-circle"></i> افزودن پرسش و پاسخ
+                        </button>
 
-                    <hr class="my-4">
+                        <hr class="my-4">
 
-                    <script>
-                        (function () {
-                            const container = document.getElementById('faq-forms');
-                            const totalForms = document.getElementById('id_faqs-TOTAL_FORMS');
+                        <script>
+                            (function () {
+                                const container = document.getElementById('faq-forms');
+                                const totalForms = document.getElementById('id_faqs-TOTAL_FORMS');
 
-                            function createFaqForm(index) {
-                                const div = document.createElement('div');
-                                div.className = 'faq-form border p-3 mb-3 rounded bg-light position-relative';
-                                div.innerHTML = `
+                                function createFaqForm(index) {
+                                    const div = document.createElement('div');
+                                    div.className = 'faq-form border p-3 mb-3 rounded bg-light position-relative';
+                                    div.innerHTML = `
                                         <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 remove-faq">
                                             <i class="bi bi-trash"></i> حذف
                                         </button>
@@ -122,79 +124,115 @@
                                         <input type="hidden" name="faqs-${index}-DELETE" value="">
                                     `;
 
-                                div.querySelector('.remove-faq').addEventListener('click', function () {
-                                    div.remove();
-                                    reindex();
-                                });
-
-                                return div;
-                            }
-
-                            function reindex() {
-                                const forms = container.querySelectorAll('.faq-form');
-                                forms.forEach((form, i) => {
-                                    form.querySelectorAll('[name]').forEach(el => {
-                                        const name = el.name;
-                                        const fieldName = name.split('-').pop();
-                                        el.name = `faqs-${i}-${fieldName}`;
-
-                                        // به‌روزرسانی order
-                                        if (fieldName === 'order') {
-                                            el.value = i;
-                                        }
+                                    div.querySelector('.remove-faq').addEventListener('click', function () {
+                                        div.remove();
+                                        reindex();
                                     });
+
+                                    return div;
+                                }
+
+                                function reindex() {
+                                    const forms = container.querySelectorAll('.faq-form');
+                                    forms.forEach((form, i) => {
+                                        form.querySelectorAll('[name]').forEach(el => {
+                                            const name = el.name;
+                                            const fieldName = name.split('-').pop();
+                                            el.name = `faqs-${i}-${fieldName}`;
+
+                                            // به‌روزرسانی order
+                                            if (fieldName === 'order') {
+                                                el.value = i;
+                                            }
+                                        });
+                                    });
+                                    totalForms.value = forms.length;
+                                }
+
+                                document.getElementById('add-faq').addEventListener('click', function () {
+                                    const index = container.querySelectorAll('.faq-form').length;
+                                    container.appendChild(createFaqForm(index));
+                                    totalForms.value = index + 1;
                                 });
-                                totalForms.value = forms.length;
-                            }
-
-                            document.getElementById('add-faq').addEventListener('click', function () {
-                                const index = container.querySelectorAll('.faq-form').length;
-                                container.appendChild(createFaqForm(index));
-                                totalForms.value = index + 1;
-                            });
-                        })();
-                    </script>
+                            })();
+                        </script>
 
 
-
-                    <hr class="my-4">
-
-                    <div id="income-sections" style="display: none;">
-                        <h5 class="mb-3">اثبات درآمد</h5>
-                        <p class="text-muted">می‌توانید چند تصویر برای اثبات درآمد خود آپلود کنید</p>
-
-                        {{ income_proof_formset.management_form }}
-
-                        <div id="income-proofs">
-                            {% for form in income_proof_formset %}
-                            <div class="income-proof-form border p-3 mb-3 rounded bg-light">
-                                {% for field in form %}
-                                <div class="mb-3">
-                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}:</label>
-                                    {{ field }}
-                                    {% if field.errors %}
-                                    <div class="text-danger">{{ field.errors }}</div>
-                                    {% endif %}
-                                </div>
-                                {% endfor %}
-                            </div>
-                            {% endfor %}
-                        </div>
-
-                        <button type="button" class="btn btn-primary mb-3" id="add-income-proof">
-                            <i class="bi bi-plus-circle"></i> افزودن اثبات درآمد
-                        </button>
 
                         <hr class="my-4">
 
-                        <h5 class="mb-3">نمودار درآمد (اختیاری)</h5>
-                        <p class="text-muted">برای نمایش نمودار درآمد، نقاط داده را وارد کنید</p>
+                        <div id="income-sections" style="display: none;">
+                            <h5 class="mb-3">اثبات درآمد</h5>
+                            <p class="text-muted">می‌توانید چند تصویر برای اثبات درآمد خود آپلود کنید</p>
 
-                        {{ income_data_formset.management_form }}
+                            {{ income_proof_formset.management_form }}
 
-                        <div id="income-data-points">
-                            {% for form in income_data_formset %}
-                            <div class="income-data-form border p-3 mb-3 rounded bg-light">
+                            <div id="income-proofs">
+                                {% for form in income_proof_formset %}
+                                <div class="income-proof-form border p-3 mb-3 rounded bg-light">
+                                    {% for field in form %}
+                                    <div class="mb-3">
+                                        <label for="{{ field.id_for_label }}"
+                                            class="form-label">{{ field.label }}:</label>
+                                        {{ field }}
+                                        {% if field.errors %}
+                                        <div class="text-danger">{{ field.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <button type="button" class="btn btn-primary mb-3" id="add-income-proof">
+                                <i class="bi bi-plus-circle"></i> افزودن اثبات درآمد
+                            </button>
+
+                            <hr class="my-4">
+
+                            <h5 class="mb-3">نمودار درآمد (اختیاری)</h5>
+                            <p class="text-muted">برای نمایش نمودار درآمد، نقاط داده را وارد کنید</p>
+
+                            {{ income_data_formset.management_form }}
+
+                            <div id="income-data-points">
+                                {% for form in income_data_formset %}
+                                <div class="income-data-form border p-3 mb-3 rounded bg-light">
+                                    <div class="row">
+                                        {% for field in form %}
+                                        {% if field.name != 'id' and field.name != 'DELETE' %}
+                                        <div class="col-md-6 mb-3">
+                                            <label for="{{ field.id_for_label }}"
+                                                class="form-label">{{ field.label }}:</label>
+                                            {{ field }}
+                                            {% if field.errors %}
+                                            <div class="text-danger">{{ field.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                        {% else %}
+                                        {{ field }}
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <button type="button" class="btn btn-success mb-3" id="add-income-data">
+                                <i class="bi bi-plus-circle"></i> افزودن نقطه داده درآمد
+                            </button>
+
+                            <hr class="my-4">
+                        </div>
+
+                        <h5 class="mb-3">نمودار بازدید (اختیاری)</h5>
+                        <p class="text-muted">برای نمایش نمودار بازدید، نقاط داده را وارد کنید</p>
+
+                        {{ views_data_formset.management_form }}
+
+                        <div id="views-data-points">
+                            {% for form in views_data_formset %}
+                            <div class="views-data-form border p-3 mb-3 rounded bg-light">
                                 <div class="row">
                                     {% for field in form %}
                                     {% if field.name != 'id' and field.name != 'DELETE' %}
@@ -215,54 +253,20 @@
                             {% endfor %}
                         </div>
 
-                        <button type="button" class="btn btn-success mb-3" id="add-income-data">
-                            <i class="bi bi-plus-circle"></i> افزودن نقطه داده درآمد
+                        <button type="button" class="btn btn-info mb-3" id="add-views-data">
+                            <i class="bi bi-plus-circle"></i> افزودن نقطه داده بازدید
                         </button>
 
                         <hr class="my-4">
-                    </div>
 
-                    <h5 class="mb-3">نمودار بازدید (اختیاری)</h5>
-                    <p class="text-muted">برای نمایش نمودار بازدید، نقاط داده را وارد کنید</p>
-
-                    {{ views_data_formset.management_form }}
-
-                    <div id="views-data-points">
-                        {% for form in views_data_formset %}
-                        <div class="views-data-form border p-3 mb-3 rounded bg-light">
-                            <div class="row">
-                                {% for field in form %}
-                                {% if field.name != 'id' and field.name != 'DELETE' %}
-                                <div class="col-md-6 mb-3">
-                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}:</label>
-                                    {{ field }}
-                                    {% if field.errors %}
-                                    <div class="text-danger">{{ field.errors }}</div>
-                                    {% endif %}
-                                </div>
-                                {% else %}
-                                {{ field }}
-                                {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-
-                    <button type="button" class="btn btn-info mb-3" id="add-views-data">
-                        <i class="bi bi-plus-circle"></i> افزودن نقطه داده بازدید
-                    </button>
-
-                    <hr class="my-4">
-
-                    <button type="submit" class="btn btn-success btn-lg">ثبت آگهی</button>
-                    <a href="{% url 'listings:listing_list' %}" class="btn btn-secondary btn-lg">انصراف</a>
-                </form>
+                        <button type="submit" class="btn btn-success btn-lg">ثبت آگهی</button>
+                        <a href="{% url 'listings:listing_list' %}" class="btn btn-secondary btn-lg">انصراف</a>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 
 
 <script>

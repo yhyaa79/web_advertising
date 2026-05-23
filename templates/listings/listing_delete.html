@@ -4,34 +4,37 @@
 {% block title %}حذف آگهی{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header bg-danger text-white">
-                <h4>حذف آگهی</h4>
-            </div>
-            <div class="card-body">
-                <h5>{{ listing.title }}</h5>
-                <p class="text-muted">لطفاً یکی از گزینه‌های زیر را انتخاب کنید:</p>
-                
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="d-grid gap-2">
-                        <button type="submit" name="action" value="delete" class="btn btn-danger btn-lg">
-                            حذف آگهی
-                            <br>
-                            <small>(آگهی حذف می‌شود و می‌توانید بعداً آن را فعال کنید)</small>
-                        </button>
-                        
-                        <button type="submit" name="action" value="sold" class="btn btn-success btn-lg">
-                            فروخته شده
-                            <br>
-                            <small>(آگهی به عنوان فروخته شده علامت‌گذاری می‌شود)</small>
-                        </button>
-                        
-                        <a href="{% url 'listings:my_listings' %}" class="btn btn-secondary btn-lg">انصراف</a>
-                    </div>
-                </form>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4>حذف آگهی</h4>
+                </div>
+                <div class="card-body">
+                    <h5>{{ listing.title }}</h5>
+                    <p class="text-muted">لطفاً یکی از گزینه‌های زیر را انتخاب کنید:</p>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2">
+                            <button type="submit" name="action" value="delete" class="btn btn-danger btn-lg">
+                                حذف آگهی
+                                <br>
+                                <small>(آگهی حذف می‌شود و می‌توانید بعداً آن را فعال کنید)</small>
+                            </button>
+
+                            <button type="submit" name="action" value="sold" class="btn btn-success btn-lg">
+                                فروخته شده
+                                <br>
+                                <small>(آگهی به عنوان فروخته شده علامت‌گذاری می‌شود)</small>
+                            </button>
+
+                            <a href="{% url 'listings:my_listings' %}" class="btn btn-secondary btn-lg">انصراف</a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
