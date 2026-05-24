@@ -8,6 +8,9 @@
 
 {% block title %}لیست آگهی‌ها{% endblock %}
 
+{% block nav_class %}navbar-top-dark{% endblock %}
+
+
 {% block content %}
 
 <div class="container">
@@ -84,7 +87,7 @@
 
             <!-- کلاس collapse باعث می‌شود به صورت پیش‌فرض بسته باشد -->
             <div class="custom-collapse" id="filterCollapse">
-                <div class="mt-2 compact-filter-card">
+                <div class="mt-2 card compact-filter-card">
                     <form method="get" id="filterForm">
                         {% if request.GET.search %}<input type="hidden" name="search"
                             value="{{ request.GET.search }}">{% endif %}
@@ -232,7 +235,7 @@
         <div class="boosted-section">
             {% for listing in boosted_listings %}
 
-            <div class="card h-100 mb-4 {% if listing.boost %}card-premier{% endif %}">
+            <div class="card-listing h-100 mb-4 {% if listing.boost %}card-premier{% endif %}">
                 <div class="in-card">
 
                     <a href="{% url 'listings:listing_detail' listing.pk %}" class="in-card-img">
@@ -401,7 +404,7 @@
     <div class="list-notice">
         {% for listing in listings %}
 
-        <div class="card h-100 mb-4 {% if listing.premier %}card-premier{% endif %}">
+        <div class="card-listing h-100 mb-4 {% if listing.premier %}card-premier{% endif %}">
             <div class="in-card">
 
                 <a href="{% url 'listings:listing_detail' listing.pk %}" class="in-card-img">
@@ -542,15 +545,13 @@
                                     {% endwith %}
                                     {% endif %}
                                 </div>
-
-                                <a href="{% url 'listings:similar_listings' listing.pk %}" class="link-similar">
-                                    آیا به دنبال استارت آپ های مشابه این آگهی می‌گردید؟
-                                </a>
                             </div>
                         </div>
 
                         <div class="between-price-btn">
-
+                            <a href="{% url 'listings:similar_listings' listing.pk %}" class="link-similar">
+                                آیا به دنبال استارت آپ های مشابه این آگهی می‌گردید؟
+                            </a>
                         </div>
 
                         <!-- در قسمت btn-primary-div -->

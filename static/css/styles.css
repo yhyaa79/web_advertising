@@ -312,21 +312,30 @@ option {
     position: fixed;
     top: 0;
     width: 100%;
-    height: 70px;
+    height: 80px;
     z-index: 1000;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* حالت بالای صفحه (رنگ تیره) */
-.navbar-top {
-    background-color: #1a1a1a;
-    box-shadow: none;
+.navbar-top-dark {
+    background-color: #1c1666;
+    box-shadow: 0 1px 11px 0 #00000069;
 }
 
-/* حالت اسکرول شده (رنگ روشن) */
+
+/* حالت پیش‌فرض (بالای صفحه) */
+.navbar-top {
+    background-color: #22203bc4;
+    transition: background-color 0.3s ease;
+
+}
+
+/* حالتی که اسکرول شده */
 .navbar-scrolled {
     background-color: #ffffff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 10px 0 #0000007a;
 }
 
 /* تغییر رنگ لینک‌ها در حالت روشن (اختیاری) */
@@ -347,9 +356,9 @@ option {
 }
 
 .navbar-a {
-    color: var(--muted);
+    color: #bfbfc9;
     text-decoration: none;
-    font-size: .9rem;
+    font-size: 16px;
     font-weight: 500;
     transition: color .2s;
 }
@@ -467,12 +476,17 @@ option {
 .scroll-link-navbar {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 6px 20px;
     direction: rtl;
     align-items: flex-start;
-    margin: 10px 10px 30px 10px;
     margin: auto 0;
+    max-width: 56%;
+    max-height: 44px; /* دو خط */
+    overflow: hidden;
+    align-content: flex-start;
+    justify-content: flex-end; /* از سمت چپ در RTL یعنی flex-end */
 }
+
 
 
 
@@ -502,9 +516,9 @@ option {
 }
 
 .price-card-navbar .text-success {
-    color: #000000ca !important;
-    font-size: 15px;
-    font-weight: 800;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
 }
 
 .text-success-navbar {}
@@ -987,6 +1001,19 @@ option {
     transition: var(--transition-base);
 }
 
+
+.card-listing {
+    background: var(--white-bg);
+    border-radius: var(--border-radius-sm-md);
+    border: 1.3px solid #dee2e6 !important;
+    box-shadow: var(--card-shadow);
+    margin-bottom: var(--spacing-xl);
+    border: none;
+    overflow: hidden;
+    transition: var(--transition-base);
+}
+
+
 /* .card:hover {
     box-shadow: var(--hover-shadow);
     transform: translateY(-2px);
@@ -1294,7 +1321,7 @@ option {
 }
 
 .card-text {
-color: var(--text-primary);
+    color: var(--text-primary);
     font-size: 13px;
     margin-bottom: 5px;
     margin-top: 5px;
@@ -1428,7 +1455,7 @@ color: var(--text-primary);
     color: var(--text-2c3e50);
     font-size: 16px;
     font-weight: 600;
-} 
+}
 
 
 
@@ -1440,6 +1467,7 @@ color: var(--text-primary);
     color: var(--text-secondary);
     font-size: 11px;
     font-weight: 400;
+    white-space: nowrap;
 }
 
 .inf-card p {
@@ -1469,7 +1497,8 @@ color: var(--text-primary);
 }
 
 .card-img {
-    padding: 10px;
+    padding: 5px;
+    max-height: 210px;
     display: inline-block;
 }
 
@@ -2241,7 +2270,7 @@ hr {
 }
 
 .btn-secondary {
-    background-color: #9ca3a3;
+    background-color: #9ca3a3b5;
     color: var(--white-bg);
     border: 1.5px solid var(--border-color);
 }
@@ -2264,8 +2293,7 @@ hr {
 }
 
 .btn-outline-secondary:hover {
-    background-color: #7f898a9b;
-    color: var(--white-bg);
+    background-color: #7f898a38;
     border: 1.5px solid var(--border-color);
 }
 
@@ -2861,6 +2889,12 @@ form textarea {
     display: flex;
     gap: 20px;
     overflow: auto;
+}
+
+.list-notice {
+    max-width: 1100px;
+    line-height: 18px;
+    margin: 0 auto;
 }
 
 
@@ -3639,19 +3673,7 @@ nav .nav-cta .btn-ghost {
     color: var(--text) !important;
 }
 
-/* حالت پیش‌فرض (بالای صفحه) */
-.navbar-top {
-    background-color: #22203bc4;
-    transition: background-color 0.3s ease;
 
-}
-
-/* حالتی که اسکرول شده */
-.navbar-scrolled {
-    background-color: #ffffff;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 1px 11px 0 #00000069;
-}
 
 
 .logo {

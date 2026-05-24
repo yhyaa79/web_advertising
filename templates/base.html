@@ -47,10 +47,12 @@
             <li><a href="{% url 'listings:listing_list' %}" class="navbar-a">اگهی ها</a></li>
             <li><a href="{% url 'listings:my_listings' %}" class="navbar-a">آگهی‌های من</a></li>
             <li><a href="{% url 'payments:my_transactions' %}" class="navbar-a">تراکنش‌ها</a></li>
-            <li><a href="{% url 'tickets:ticket_list' %}" class="navbar-a">پشتیبانی</a></li>
+             <li><a href="{% url 'accounts:saved_listings' %}" class="navbar-a">اگهی های ذخیره شده</a></li>
+
+<!--             <li><a href="{% url 'tickets:ticket_list' %}" class="navbar-a">پشتیبانی</a></li>
             <li><a href="{% url 'accounts:profile' %}" class="navbar-a">پروفایل</a></li>
             <li><a href="{% url 'accounts:saved_listings' %}" class="navbar-a">آگهی‌های ذخیره شده</a></li>
-
+ -->
 
 
         </ul>
@@ -67,6 +69,39 @@
             {% endif %}
 
             <a></a>
+
+<!--             <a class="nav-link notification-link" href="{% url 'accounts:saved_listings' %}">
+                <span class="notification-badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v4"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                        <line x1="21" y1="16" x2="21" y2="22"></line>
+                        <line x1="18" y1="19" x2="24" y2="19"></line>
+                    </svg>
+                </span>
+            </a> -->
+
+            <a class="nav-link notification-link" href="{% url 'accounts:profile' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                </svg>
+                </span>
+            </a>
+
+            <a class="nav-link notification-link" href="{% url 'tickets:ticket_list' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M12 3a9 9 0 0 0-9 9v1h3a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a2 2 0 0 1-2-2v-4a10 10 0 0 1 20 0v4a2 2 0 0 1-2 2h-2a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h3v-1a9 9 0 0 0-9-9z" />
+                </svg>
+                </span>
+            </a>
+
+
 
             <a class="nav-link notification-link" href="{% url 'notifications:notification_list' %}">
                 <span class="notification-badge">
@@ -107,16 +142,16 @@
 
 
 
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        {% endfor %}
-        {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
 
-        {% block content %}{% endblock %}
+    {% block content %}{% endblock %}
 
     <!-- FOOTER -->
     <footer>

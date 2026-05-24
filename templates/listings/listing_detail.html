@@ -9,7 +9,7 @@
 {% block title %}{{ listing.title }}{% endblock %}
 
 
-{% block nav_class %}navbar-scrolled navbar-absolute{% endblock %}
+{% block nav_class %}navbar-top-dark navbar-absolute{% endblock %}
 
 {% block content %}
 
@@ -24,7 +24,8 @@
 
         <div class="price-card-navbar">
             {% if listing.discount_price %}
-            <h3 class="text-success">{{ listing.discount_price|split_number }} <p class="text-success-navbar">قیمت کل</p>
+            <h3 class="text-success">{{ listing.discount_price|split_number }} <p class="text-success-navbar">قیمت کل
+                </p>
             </h3>
             {% else %}
             <h3 class="text-success">{{ listing.price|split_number }} <p class="text-success-navbar">قیمت کل</p>
@@ -46,7 +47,8 @@
             {% if listing.monthly_income and listing.monthly_income > 0 %}
             {% with total_price=listing.discount_price|default:listing.price %}
             {% if total_price %}
-            <h3 class="text-success">{% widthratio total_price listing.monthly_income 1 %} ماه تا <p class="text-success-navbar"> برگشت سرمایه</p>
+            <h3 class="text-success">{% widthratio total_price listing.monthly_income 1 %} ماه تا <p
+                    class="text-success-navbar"> برگشت سرمایه</p>
             </h3>
             {% endif %}
             {% endwith %}
@@ -1021,7 +1023,8 @@
                         <hr class="hr-between">
 
                         <div>
-                            <a href="{% url 'coming_soon' %}" class="text-link-scroll" target="_blank">شما میتواند از این قسمت
+                            <a href="{% url 'coming_soon' %}" class="text-link-scroll" target="_blank">شما میتواند از
+                                این قسمت
                                 نظرات خودتان را در مورد این اگهی به اشتراک بگذارید.</a>
                         </div>
                     </div>
@@ -2161,9 +2164,62 @@
             }
         }
     }
+
+
+
+    /* نمایش فقط ۴ تا از لینک در نوار دوم  */
+    /*     document.addEventListener('DOMContentLoaded', function () {
+            const links = document.querySelectorAll('.scroll-link-navbar .text-link-scroll');
+            const maxVisible = 4;
+
+            links.forEach((link, index) => {
+                if (index >= maxVisible) {
+                    link.style.display = 'none';
+                }
+            });
+        }); */
+
+
+    /* دو ردیفه شدن text-link-scroll در نوار دوم */
+    function balanceNavbarLinks() {
+        const navbar = document.querySelector('.scroll-link-navbar');
+        const links = navbar.querySelectorAll('.text-link-scroll');
+        const count = links.length;
+        const gap = 20; // gap بین لینک‌ها
+        const maxSingleRowWidth = 800; // کمترین عرضی که بعدش دو ردیف می‌شه
+
+        // عرض کل همه لینک‌ها
+        let totalWidth = 0;
+        for (let i = 0; i < count; i++) {
+            totalWidth += links[i].offsetWidth;
+        }
+        totalWidth += gap * (count - 1);
+
+        if (totalWidth <= maxSingleRowWidth) {
+            // یک ردیف — max-width رو برمی‌داریم
+            navbar.style.maxWidth = '';
+            navbar.style.flexWrap = 'nowrap';
+        } else {
+            // دو ردیف — max-width رو برابر نصف تنظیم می‌کنیم
+            navbar.style.flexWrap = 'wrap';
+
+            const half = Math.ceil(count / 2);
+            let halfWidth = 0;
+            for (let i = 0; i < half; i++) {
+                halfWidth += links[i].offsetWidth;
+            }
+            halfWidth += gap * (half - 1);
+
+            navbar.style.maxWidth = halfWidth + 'px';
+        }
+    }
+
+    balanceNavbarLinks();
 </script>
 
 
+
+<!-- تغییر کلاس نوار -->
 {% block extra_js %}
 <script>
     const listingDetailNav = document.querySelector('.navbar-listing-detail');
@@ -2187,18 +2243,6 @@
         window.addEventListener('scroll', updatePosition);
         updatePosition(); // اجرای اولیه
     }
-
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const links = document.querySelectorAll('.scroll-link-navbar .text-link-scroll');
-        const maxVisible = 4;
-
-        links.forEach((link, index) => {
-            if (index >= maxVisible) {
-                link.style.display = 'none';
-            }
-        });
-    });
 </script>
 {% endblock %}
 
