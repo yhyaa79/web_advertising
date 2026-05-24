@@ -1505,14 +1505,10 @@
                             <textarea class="form-control-textarea" name="note" id="listing-note" rows="4"
                                 placeholder="یادداشت خود را اینجا بنویسید...">{% if user_note %}{{ user_note.note }}{% endif %}</textarea>
                         </div>
-                        <div class="d-flex justify-content-between">
-                            <button type="submit" class="btn-primary-textarea">
-                                <i class="bi bi-save"></i> ذخیره یادداشت
-                            </button>
+                        <div class="d-flex justify-content-between-note">
+                            <button class="btn-primary-textarea" type="submit">ذخیره یادداشت</button>
                             {% if user_note %}
-                            <button type="button" class="btn btn-outline-danger" id="delete-note-btn">
-                                <i class="bi bi-trash"></i> حذف یادداشت
-                            </button>
+                            <button class="btn-delet" type="button" id="delete-note-btn">حذف یادداشت</button>
                             {% endif %}
                         </div>
                     </form>
