@@ -4,23 +4,26 @@
 {% block title %}درگاه پرداخت{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4>درگاه پرداخت امن</h4>
-            </div>
-            <div class="card-body">
-                <p><strong>کد پیگیری:</strong> {{ transaction.tracking_code }}</p>
-                <p><strong>مبلغ قابل پرداخت:</strong> {{ total_amount|floatformat:0 }} تومان</p>
-                <hr>
-                <div class="alert alert-info">
-                    <strong>توجه:</strong> پس از پرداخت، مبلغ در حساب امن نگهداری می‌شود تا تحویل را تایید کنید.
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>درگاه پرداخت امن</h4>
                 </div>
-                <form method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success btn-lg w-100">پرداخت</button>
-                </form>
+                <div class="card-body">
+                    <p><strong>کد پیگیری:</strong> {{ transaction.tracking_code }}</p>
+                    <p><strong>مبلغ قابل پرداخت:</strong> {{ total_amount|floatformat:0 }} تومان</p>
+                    <hr>
+                    <div class="alert alert-info">
+                        <strong>توجه:</strong> پس از پرداخت، مبلغ در حساب امن نگهداری می‌شود تا تحویل را تایید کنید.
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success btn-lg w-100">پرداخت</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

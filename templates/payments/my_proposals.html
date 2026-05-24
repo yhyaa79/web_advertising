@@ -4,34 +4,36 @@
 {% block title %}پیشنهادهای من{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">پیشنهادهای قیمت</h2>
 
-<ul class="nav nav-tabs mb-3">
-    <li class="nav-item">
-        <a class="nav-link active" data-bs-toggle="tab" href="#sent">پیشنهادهای ارسالی</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="tab" href="#received">پیشنهادهای دریافتی</a>
-    </li>
-</ul>
+<div class="container">
+    <h2 class="mb-4">پیشنهادهای قیمت</h2>
 
-<div class="tab-content">
-    <!-- پیشنهادهای ارسالی -->
-    <div class="tab-pane fade show active" id="sent">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>آگهی</th>
-                        <th>قیمت اصلی</th>
-                        <th>قیمت پیشنهادی</th>
-                        <th>وضعیت</th>
-                        <th>تاریخ</th>
-                        <th>عملیات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for proposal in sent_proposals %}
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" href="#sent">پیشنهادهای ارسالی</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#received">پیشنهادهای دریافتی</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- پیشنهادهای ارسالی -->
+        <div class="tab-pane fade show active" id="sent">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>آگهی</th>
+                            <th>قیمت اصلی</th>
+                            <th>قیمت پیشنهادی</th>
+                            <th>وضعیت</th>
+                            <th>تاریخ</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for proposal in sent_proposals %}
                         <tr>
                             <td>
                                 <a href="{% url 'listings:listing_detail' proposal.listing.pk %}">
@@ -42,48 +44,48 @@
                             <td><strong>{{ proposal.proposed_price|floatformat:0 }} تومان</strong></td>
                             <td>
                                 {% if proposal.status == 'pending' %}
-                                    <span class="badge bg-warning">{{ proposal.get_status_display }}</span>
+                                <span class="badge bg-warning">{{ proposal.get_status_display }}</span>
                                 {% elif proposal.status == 'accepted' %}
-                                    <span class="badge bg-success">{{ proposal.get_status_display }}</span>
+                                <span class="badge bg-success">{{ proposal.get_status_display }}</span>
                                 {% elif proposal.status == 'rejected' %}
-                                    <span class="badge bg-danger">{{ proposal.get_status_display }}</span>
+                                <span class="badge bg-danger">{{ proposal.get_status_display }}</span>
                                 {% else %}
-                                    <span class="badge bg-secondary">{{ proposal.get_status_display }}</span>
+                                <span class="badge bg-secondary">{{ proposal.get_status_display }}</span>
                                 {% endif %}
                             </td>
                             <td>{{ proposal.created_at|date:"Y/m/d H:i" }}</td>
                             <td>
-                                <a href="{% url 'payments:proposal_detail' proposal.id %}" 
-                                   class="btn btn-sm btn-primary">جزئیات</a>
+                                <a href="{% url 'payments:proposal_detail' proposal.id %}"
+                                    class="btn btn-sm btn-primary">جزئیات</a>
                             </td>
                         </tr>
-                    {% empty %}
+                        {% empty %}
                         <tr>
                             <td colspan="6" class="text-center">پیشنهادی ارسال نکرده‌اید.</td>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-    <!-- پیشنهادهای دریافتی -->
-    <div class="tab-pane fade" id="received">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>آگهی</th>
-                        <th>خریدار</th>
-                        <th>قیمت اصلی</th>
-                        <th>قیمت پیشنهادی</th>
-                        <th>وضعیت</th>
-                        <th>تاریخ</th>
-                        <th>عملیات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for proposal in received_proposals %}
+        <!-- پیشنهادهای دریافتی -->
+        <div class="tab-pane fade" id="received">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>آگهی</th>
+                            <th>خریدار</th>
+                            <th>قیمت اصلی</th>
+                            <th>قیمت پیشنهادی</th>
+                            <th>وضعیت</th>
+                            <th>تاریخ</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for proposal in received_proposals %}
                         <tr>
                             <td>{{ proposal.listing.title }}</td>
                             <td>{{ proposal.buyer.username }}</td>
@@ -91,34 +93,36 @@
                             <td><strong>{{ proposal.proposed_price|floatformat:0 }} تومان</strong></td>
                             <td>
                                 {% if proposal.status == 'pending' %}
-                                    <span class="badge bg-warning">{{ proposal.get_status_display }}</span>
+                                <span class="badge bg-warning">{{ proposal.get_status_display }}</span>
                                 {% elif proposal.status == 'accepted' %}
-                                    <span class="badge bg-success">{{ proposal.get_status_display }}</span>
+                                <span class="badge bg-success">{{ proposal.get_status_display }}</span>
                                 {% elif proposal.status == 'rejected' %}
-                                    <span class="badge bg-danger">{{ proposal.get_status_display }}</span>
+                                <span class="badge bg-danger">{{ proposal.get_status_display }}</span>
                                 {% else %}
-                                    <span class="badge bg-secondary">{{ proposal.get_status_display }}</span>
+                                <span class="badge bg-secondary">{{ proposal.get_status_display }}</span>
                                 {% endif %}
                             </td>
                             <td>{{ proposal.created_at|date:"Y/m/d H:i" }}</td>
                             <td>
                                 {% if proposal.status == 'pending' %}
-                                    <a href="{% url 'payments:respond_to_proposal' proposal.id %}" 
-                                       class="btn btn-sm btn-success">پاسخ</a>
+                                <a href="{% url 'payments:respond_to_proposal' proposal.id %}"
+                                    class="btn btn-sm btn-success">پاسخ</a>
                                 {% else %}
-                                    <a href="{% url 'payments:proposal_detail' proposal.id %}" 
-                                       class="btn btn-sm btn-primary">جزئیات</a>
+                                <a href="{% url 'payments:proposal_detail' proposal.id %}"
+                                    class="btn btn-sm btn-primary">جزئیات</a>
                                 {% endif %}
                             </td>
                         </tr>
-                    {% empty %}
+                        {% empty %}
                         <tr>
                             <td colspan="7" class="text-center">پیشنهادی دریافت نکرده‌اید.</td>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

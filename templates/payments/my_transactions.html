@@ -4,244 +4,247 @@
 {% block title %}تراکنش‌های من{% endblock %}
 
 {% block content %}
-<h2 style="margin-bottom: 1.5rem;">تراکنش‌ها و گفت‌وگوها</h2>
 
-<div class="tabs-container">
-    <div class="tabs-nav">
-        <button class="tab-button active" data-tab="conversations">گفت‌وگوها</button>
-        <button class="tab-button" data-tab="purchases">خریدهای من</button>
-        <button class="tab-button" data-tab="sales">فروش‌های من</button>
-    </div>
+<div class="container">
+    <h2 style="margin-bottom: 1.5rem;">تراکنش‌ها و گفت‌وگوها</h2>
 
-    <div class="tabs-content">
-        <!-- گفت‌وگوها -->
-        <div class="tab-pane active" id="conversations">
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>آگهی</th>
-                            <th>نوع</th>
-                            <th>طرف مقابل</th>
-                            <th>وضعیت</th>
-                            <th>قیمت آگهی</th>
-                            <th>قیمت پیشنهادی</th>
-                            <th>موافقت خریدار</th>
-                            <th>موافقت فروشنده</th>
-                            <th>عملیات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for proposal in conversations %}
-                        <tr id="conversation-row-{{ proposal.id }}">
-                            <td>{{ proposal.listing.title }}</td>
+    <div class="tabs-container">
+        <div class="tabs-nav">
+            <button class="tab-button active" data-tab="conversations">گفت‌وگوها</button>
+            <button class="tab-button" data-tab="purchases">خریدهای من</button>
+            <button class="tab-button" data-tab="sales">فروش‌های من</button>
+        </div>
 
-                            <td>
-                                {% if proposal.buyer == request.user %}
-                                <span class="badge badge-primary">خرید</span>
-                                {% else %}
-                                <span class="badge badge-success">فروش</span>
-                                {% endif %}
-                            </td>
+        <div class="tabs-content">
+            <!-- گفت‌وگوها -->
+            <div class="tab-pane active" id="conversations">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>آگهی</th>
+                                <th>نوع</th>
+                                <th>طرف مقابل</th>
+                                <th>وضعیت</th>
+                                <th>قیمت آگهی</th>
+                                <th>قیمت پیشنهادی</th>
+                                <th>موافقت خریدار</th>
+                                <th>موافقت فروشنده</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for proposal in conversations %}
+                            <tr id="conversation-row-{{ proposal.id }}">
+                                <td>{{ proposal.listing.title }}</td>
 
-                            <td>
-                                {% if proposal.buyer == request.user %}
-                                {{ proposal.seller.username }}
-                                {% else %}
-                                {{ proposal.buyer.username }}
-                                {% endif %}
-                            </td>
-
-                            <td>
-                                <!-- اضافه کن -->
-                                {% if proposal.status == 'negotiating' %}
-                                <span class="badge bg-warning">در حال گفتگو</span>
-                                {% elif proposal.status == 'deal_confirmed' %}
-                                <span class="badge bg-success">تایید شده</span>
-                                {% elif proposal.status == 'rejected' %}
-                                <span class="badge bg-danger">رد شده</span>
-                                {% endif %}
-                            </td>
-
-                            <td>{{ proposal.listing.price|floatformat:0 }} تومان</td> <!-- قیمت اصلی آگهی -->
-
-                            <td>{{ proposal.proposed_price|floatformat:0 }} تومان</td> <!-- قیمت پیشنهادی -->
-
-                            <td>
-                                <span id="buyer-status-{{ proposal.id }}">
-                                    {% if proposal.status == 'rejected' and proposal.buyer_rejected %}
-                                    <span class="badge badge-danger">✗ رد کرده</span>
-                                    {% elif proposal.buyer_agreed %}
-                                    <span class="badge badge-success">✓ موافق</span>
+                                <td>
+                                    {% if proposal.buyer == request.user %}
+                                    <span class="badge badge-primary">خرید</span>
                                     {% else %}
-                                    <span class="badge badge-secondary">در انتظار</span>
+                                    <span class="badge badge-success">فروش</span>
                                     {% endif %}
-                                </span>
-                            </td>
-                            <td>
-                                <span id="seller-status-{{ proposal.id }}">
-                                    {% if proposal.status == 'rejected' and proposal.seller_rejected %}
-                                    <span class="badge badge-danger">✗ رد کرده</span>
-                                    {% elif proposal.seller_agreed %}
-                                    <span class="badge badge-success">✓ موافق</span>
+                                </td>
+
+                                <td>
+                                    {% if proposal.buyer == request.user %}
+                                    {{ proposal.seller.username }}
                                     {% else %}
-                                    <span class="badge badge-secondary">در انتظار</span>
+                                    {{ proposal.buyer.username }}
                                     {% endif %}
-                                </span>
-                            </td>
-                            <!-- templates/payments/my_transactions.html -->
+                                </td>
 
-                            <!-- در قسمت عملیات، دکمه چت را اینگونه تغییر دهید: -->
+                                <td>
+                                    <!-- اضافه کن -->
+                                    {% if proposal.status == 'negotiating' %}
+                                    <span class="badge bg-warning">در حال گفتگو</span>
+                                    {% elif proposal.status == 'deal_confirmed' %}
+                                    <span class="badge bg-success">تایید شده</span>
+                                    {% elif proposal.status == 'rejected' %}
+                                    <span class="badge bg-danger">رد شده</span>
+                                    {% endif %}
+                                </td>
 
-                            <td>
-                                <div class="action-buttons" id="actions-{{ proposal.id }}">
-                                    <button
-                                        onclick="openChat('{{ proposal.id }}', '{{ proposal.listing.title|escapejs }}', '{{ proposal.status }}')"
-                                        class="btn btn-primary btn-sm chat-btn-with-badge">
-                                        چت
-                                        {% if proposal.unread_count > 0 %}
-                                        <span class="chat-badge"
-                                            id="chat-badge-{{ proposal.id }}">{{ proposal.unread_count }}</span>
+                                <td>{{ proposal.listing.price|floatformat:0 }} تومان</td> <!-- قیمت اصلی آگهی -->
+
+                                <td>{{ proposal.proposed_price|floatformat:0 }} تومان</td> <!-- قیمت پیشنهادی -->
+
+                                <td>
+                                    <span id="buyer-status-{{ proposal.id }}">
+                                        {% if proposal.status == 'rejected' and proposal.buyer_rejected %}
+                                        <span class="badge badge-danger">✗ رد کرده</span>
+                                        {% elif proposal.buyer_agreed %}
+                                        <span class="badge badge-success">✓ موافق</span>
+                                        {% else %}
+                                        <span class="badge badge-secondary">در انتظار</span>
                                         {% endif %}
-                                    </button>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span id="seller-status-{{ proposal.id }}">
+                                        {% if proposal.status == 'rejected' and proposal.seller_rejected %}
+                                        <span class="badge badge-danger">✗ رد کرده</span>
+                                        {% elif proposal.seller_agreed %}
+                                        <span class="badge badge-success">✓ موافق</span>
+                                        {% else %}
+                                        <span class="badge badge-secondary">در انتظار</span>
+                                        {% endif %}
+                                    </span>
+                                </td>
+                                <!-- templates/payments/my_transactions.html -->
 
-                                    {% if proposal.status == 'rejected' %}
-                                    {% if proposal.buyer == request.user and proposal.buyer_rejected %}
-                                    <button onclick="undoRejection('{{ proposal.id }}')"
-                                        class="btn btn-warning btn-sm">برگرداندن</button>
-                                    {% elif proposal.seller == request.user and proposal.seller_rejected %}
-                                    <button onclick="undoRejection('{{ proposal.id }}')"
-                                        class="btn btn-warning btn-sm">برگرداندن</button>
-                                    {% endif %}
-                                    {% elif proposal.status == 'negotiating' %}
-                                    {% if proposal.buyer == request.user and not proposal.buyer_agreed %}
-                                    <button onclick="confirmDeal('{{ proposal.id }}')"
-                                        class="btn btn-success btn-sm">تایید</button>
-                                    {% elif proposal.seller == request.user and not proposal.seller_agreed %}
-                                    <button onclick="confirmDeal('{{ proposal.id }}')"
-                                        class="btn btn-success btn-sm">تایید</button>
-                                    {% endif %}
+                                <!-- در قسمت عملیات، دکمه چت را اینگونه تغییر دهید: -->
 
-                                    <button onclick="rejectDeal('{{ proposal.id }}')"
-                                        class="btn btn-danger btn-sm">رد</button>
-                                    {% endif %}
-                                </div>
-                            </td>
+                                <td>
+                                    <div class="action-buttons" id="actions-{{ proposal.id }}">
+                                        <button
+                                            onclick="openChat('{{ proposal.id }}', '{{ proposal.listing.title|escapejs }}', '{{ proposal.status }}')"
+                                            class="btn btn-primary btn-sm chat-btn-with-badge">
+                                            چت
+                                            {% if proposal.unread_count > 0 %}
+                                            <span class="chat-badge"
+                                                id="chat-badge-{{ proposal.id }}">{{ proposal.unread_count }}</span>
+                                            {% endif %}
+                                        </button>
 
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="7" style="text-align:center;">گفت‌وگوی فعالی وجود ندارد.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
+                                        {% if proposal.status == 'rejected' %}
+                                        {% if proposal.buyer == request.user and proposal.buyer_rejected %}
+                                        <button onclick="undoRejection('{{ proposal.id }}')"
+                                            class="btn btn-warning btn-sm">برگرداندن</button>
+                                        {% elif proposal.seller == request.user and proposal.seller_rejected %}
+                                        <button onclick="undoRejection('{{ proposal.id }}')"
+                                            class="btn btn-warning btn-sm">برگرداندن</button>
+                                        {% endif %}
+                                        {% elif proposal.status == 'negotiating' %}
+                                        {% if proposal.buyer == request.user and not proposal.buyer_agreed %}
+                                        <button onclick="confirmDeal('{{ proposal.id }}')"
+                                            class="btn btn-success btn-sm">تایید</button>
+                                        {% elif proposal.seller == request.user and not proposal.seller_agreed %}
+                                        <button onclick="confirmDeal('{{ proposal.id }}')"
+                                            class="btn btn-success btn-sm">تایید</button>
+                                        {% endif %}
 
-                </table>
+                                        <button onclick="rejectDeal('{{ proposal.id }}')"
+                                            class="btn btn-danger btn-sm">رد</button>
+                                        {% endif %}
+                                    </div>
+                                </td>
+
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" style="text-align:center;">گفت‌وگوی فعالی وجود ندارد.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <!-- خریدهای من -->
-        <div class="tab-pane" id="purchases">
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>کد پیگیری</th>
-                            <th>آگهی</th>
-                            <th>مبلغ</th>
-                            <th>وضعیت</th>
-                            <th>تاریخ</th>
-                            <th>عملیات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for transaction in purchases %}
-                        <tr>
-                            <td>{{ transaction.tracking_code }}</td>
-                            <td>{{ transaction.listing.title }}</td>
-                            <td>{{ transaction.amount|floatformat:0 }} تومان</td>
-                            <td>
-                                <span
-                                    class="badge {% if transaction.status == 'completed' %}badge-success{% else %}badge-danger{% endif %}">
-                                    {{ transaction.get_status_display }}
-                                </span>
-                            </td>
-                            <td>{{ transaction.created_at|date:"Y/m/d" }}</td>
-                            <td>
-                                <a href="{% url 'payments:transaction_detail' transaction.id %}"
-                                    class="btn btn-primary btn-sm">جزئیات</a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="6" style="text-align:center;">تراکنشی وجود ندارد.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <!-- خریدهای من -->
+            <div class="tab-pane" id="purchases">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>کد پیگیری</th>
+                                <th>آگهی</th>
+                                <th>مبلغ</th>
+                                <th>وضعیت</th>
+                                <th>تاریخ</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in purchases %}
+                            <tr>
+                                <td>{{ transaction.tracking_code }}</td>
+                                <td>{{ transaction.listing.title }}</td>
+                                <td>{{ transaction.amount|floatformat:0 }} تومان</td>
+                                <td>
+                                    <span
+                                        class="badge {% if transaction.status == 'completed' %}badge-success{% else %}badge-danger{% endif %}">
+                                        {{ transaction.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>{{ transaction.created_at|date:"Y/m/d" }}</td>
+                                <td>
+                                    <a href="{% url 'payments:transaction_detail' transaction.id %}"
+                                        class="btn btn-primary btn-sm">جزئیات</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" style="text-align:center;">تراکنشی وجود ندارد.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <!-- فروش‌های من -->
-        <div class="tab-pane" id="sales">
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>کد پیگیری</th>
-                            <th>آگهی</th>
-                            <th>مبلغ</th>
-                            <th>وضعیت</th>
-                            <th>تاریخ</th>
-                            <th>عملیات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for transaction in sales %}
-                        <tr>
-                            <td>{{ transaction.tracking_code }}</td>
-                            <td>{{ transaction.listing.title }}</td>
-                            <td>{{ transaction.amount|floatformat:0 }} تومان</td>
-                            <td>
-                                <span
-                                    class="badge {% if transaction.status == 'completed' %}badge-success{% else %}badge-danger{% endif %}">
-                                    {{ transaction.get_status_display }}
-                                </span>
-                            </td>
-                            <td>{{ transaction.created_at|date:"Y/m/d" }}</td>
-                            <td>
-                                <a href="{% url 'payments:transaction_detail' transaction.id %}"
-                                    class="btn btn-primary btn-sm">جزئیات</a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="6" style="text-align:center;">تراکنشی وجود ندارد.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <!-- فروش‌های من -->
+            <div class="tab-pane" id="sales">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>کد پیگیری</th>
+                                <th>آگهی</th>
+                                <th>مبلغ</th>
+                                <th>وضعیت</th>
+                                <th>تاریخ</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in sales %}
+                            <tr>
+                                <td>{{ transaction.tracking_code }}</td>
+                                <td>{{ transaction.listing.title }}</td>
+                                <td>{{ transaction.amount|floatformat:0 }} تومان</td>
+                                <td>
+                                    <span
+                                        class="badge {% if transaction.status == 'completed' %}badge-success{% else %}badge-danger{% endif %}">
+                                        {{ transaction.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>{{ transaction.created_at|date:"Y/m/d" }}</td>
+                                <td>
+                                    <a href="{% url 'payments:transaction_detail' transaction.id %}"
+                                        class="btn btn-primary btn-sm">جزئیات</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" style="text-align:center;">تراکنشی وجود ندارد.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- مودال چت -->
-<div id="chatModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 id="chatTitle">چت</h3>
-            <span class="close" onclick="closeChat()">&times;</span>
-        </div>
-        <div class="modal-body">
-            <div id="chatMessages" class="chat-messages"></div>
-            <div class="chat-input-container" id="chatInputContainer">
-                <textarea id="chatInput" placeholder="پیام خود را بنویسید... (Shift+Enter برای خط جدید)"
-                    onkeydown="handleChatKeydown(event)" rows="1"></textarea>
-                <button onclick="sendMessage()" class="btn btn-primary send-message-btn">ارسال</button>
+    <!-- مودال چت -->
+    <div id="chatModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="chatTitle">چت</h3>
+                <span class="close" onclick="closeChat()">&times;</span>
             </div>
-            <div id="chatDisabledMessage" class="chat-disabled-message" style="display: none;">
-                <p>امکان ارسال پیام در این وضعیت وجود ندارد.</p>
+            <div class="modal-body">
+                <div id="chatMessages" class="chat-messages"></div>
+                <div class="chat-input-container" id="chatInputContainer">
+                    <textarea id="chatInput" placeholder="پیام خود را بنویسید... (Shift+Enter برای خط جدید)"
+                        onkeydown="handleChatKeydown(event)" rows="1"></textarea>
+                    <button onclick="sendMessage()" class="btn btn-primary send-message-btn">ارسال</button>
+                </div>
+                <div id="chatDisabledMessage" class="chat-disabled-message" style="display: none;">
+                    <p>امکان ارسال پیام در این وضعیت وجود ندارد.</p>
+                </div>
             </div>
         </div>
     </div>

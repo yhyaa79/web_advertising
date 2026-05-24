@@ -4,22 +4,26 @@
 {% block title %}تایید تحویل{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h4>تایید تحویل</h4>
-            </div>
-            <div class="card-body">
-                <p>آیا دسترسی به پلتفرم را دریافت کردید و همه چیز مطابق توضیحات است؟</p>
-                <div class="alert alert-warning">
-                    <strong>توجه:</strong> پس از تایید، مبلغ به فروشنده واریز می‌شود و قابل بازگشت نیست.
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>تایید تحویل</h4>
                 </div>
-                <form method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success w-100">بله، تایید می‌کنم</button>
-                </form>
-                <a href="{% url 'payments:transaction_detail' transaction.id %}" class="btn btn-secondary w-100 mt-2">انصراف</a>
+                <div class="card-body">
+                    <p>آیا دسترسی به پلتفرم را دریافت کردید و همه چیز مطابق توضیحات است؟</p>
+                    <div class="alert alert-warning">
+                        <strong>توجه:</strong> پس از تایید، مبلغ به فروشنده واریز می‌شود و قابل بازگشت نیست.
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success w-100">بله، تایید می‌کنم</button>
+                    </form>
+                    <a href="{% url 'payments:transaction_detail' transaction.id %}"
+                        class="btn btn-secondary w-100 mt-2">انصراف</a>
+                </div>
             </div>
         </div>
     </div>

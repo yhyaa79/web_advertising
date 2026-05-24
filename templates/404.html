@@ -4,10 +4,13 @@
 {% block title %}صفحه یافت نشد{% endblock %}
 
 {% block content %}
-<div class="text-center py-5">
-    <h1 class="display-1">404</h1>
-    <h2>صفحه مورد نظر یافت نشد</h2>
-    <p class="lead">متاسفانه صفحه‌ای که دنبال آن هستید وجود ندارد.</p>
-    <a href="{% url 'core:home' %}" class="btn btn-primary btn-lg">بازگشت به صفحه اصلی</a>
+
+<div class="container">
+    <div class="text-center py-5">
+        <h1 class="display-1">404</h1>
+        <h2>صفحه مورد نظر یافت نشد</h2>
+        <p class="lead">متاسفانه صفحه‌ای که دنبال آن هستید وجود ندارد.</p>
+        <a href="{% url 'core:home' %}" class="btn btn-primary btn-lg">بازگشت به صفحه اصلی</a>
+    </div>
 </div>
 {% endblock %}

@@ -4,27 +4,32 @@
 {% block title %}گزارش مشکل{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header bg-danger text-white">
-                <h4>گزارش مشکل</h4>
-            </div>
-            <div class="card-body">
-                <p><strong>کد پیگیری:</strong> {{ transaction.tracking_code }}</p>
-                <p><strong>آگهی:</strong> {{ transaction.listing.title }}</p>
-                <hr>
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label class="form-label">شرح مشکل:</label>
-                        <textarea name="dispute_reason" class="form-control" rows="5" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-danger w-100">ثبت گزارش</button>
-                </form>
-                <a href="{% url 'payments:transaction_detail' transaction.id %}" class="btn btn-secondary w-100 mt-2">انصراف</a>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4>گزارش مشکل</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>کد پیگیری:</strong> {{ transaction.tracking_code }}</p>
+                    <p><strong>آگهی:</strong> {{ transaction.listing.title }}</p>
+                    <hr>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">شرح مشکل:</label>
+                            <textarea name="dispute_reason" class="form-control" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-danger w-100">ثبت گزارش</button>
+                    </form>
+                    <a href="{% url 'payments:transaction_detail' transaction.id %}"
+                        class="btn btn-secondary w-100 mt-2">انصراف</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

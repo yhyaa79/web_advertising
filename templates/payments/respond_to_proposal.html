@@ -5,61 +5,64 @@
 {% block title %}پاسخ به پیشنهاد{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-7">
-        <div class="card">
-            <div class="card-header">
-                <h4>پاسخ به پیشنهاد قیمت</h4>
-            </div>
-            <div class="card-body">
 
-                <h5>{{ proposal.listing.title }}</h5>
-
-                <p>
-                    <strong>قیمت اصلی:</strong>
-                    {{ proposal.listing.price|floatformat:0 }} تومان
-                </p>
-
-                <p>
-                    <strong>قیمت پیشنهادی خریدار:</strong>
-                    <span class="text-success">
-                        {{ proposal.proposed_price|floatformat:0 }} تومان
-                    </span>
-                </p>
-
-                {% if proposal.message %}
-                <div class="alert alert-light">
-                    <strong>پیام خریدار:</strong>
-                    <p class="mb-0 mt-2">{{ proposal.message }}</p>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-header">
+                    <h4>پاسخ به پیشنهاد قیمت</h4>
                 </div>
-                {% endif %}
+                <div class="card-body">
 
-                <form method="post">
-                    {% csrf_token %}
+                    <h5>{{ proposal.listing.title }}</h5>
 
-                    <div class="mb-3">
-                        <label class="form-label">پیام پاسخ (اختیاری)</label>
-                        <textarea name="response_message" class="form-control" rows="3"
-                            placeholder="پاسخ شما به خریدار..."></textarea>
+                    <p>
+                        <strong>قیمت اصلی:</strong>
+                        {{ proposal.listing.price|floatformat:0 }} تومان
+                    </p>
+
+                    <p>
+                        <strong>قیمت پیشنهادی خریدار:</strong>
+                        <span class="text-success">
+                            {{ proposal.proposed_price|floatformat:0 }} تومان
+                        </span>
+                    </p>
+
+                    {% if proposal.message %}
+                    <div class="alert alert-light">
+                        <strong>پیام خریدار:</strong>
+                        <p class="mb-0 mt-2">{{ proposal.message }}</p>
                     </div>
+                    {% endif %}
 
-                    <div class="d-flex gap-2">
-                        <button type="submit" name="action" value="accept" class="btn btn-success">
-                            پذیرش پیشنهاد
-                        </button>
+                    <form method="post">
+                        {% csrf_token %}
 
-                        <button type="submit" name="action" value="reject" class="btn btn-danger">
-                            رد پیشنهاد
-                        </button>
+                        <div class="mb-3">
+                            <label class="form-label">پیام پاسخ (اختیاری)</label>
+                            <textarea name="response_message" class="form-control" rows="3"
+                                placeholder="پاسخ شما به خریدار..."></textarea>
+                        </div>
 
-                        <a href="{% url 'payments:my_transactions' %}" class="btn btn-secondary">
-                            انصراف
-                        </a>
+                        <div class="d-flex gap-2">
+                            <button type="submit" name="action" value="accept" class="btn btn-success">
+                                پذیرش پیشنهاد
+                            </button>
 
-                    </div>
+                            <button type="submit" name="action" value="reject" class="btn btn-danger">
+                                رد پیشنهاد
+                            </button>
 
-                </form>
+                            <a href="{% url 'payments:my_transactions' %}" class="btn btn-secondary">
+                                انصراف
+                            </a>
 
+                        </div>
+
+                    </form>
+
+                </div>
             </div>
         </div>
     </div>
