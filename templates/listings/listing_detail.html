@@ -18,7 +18,7 @@
     <div class="rigt-navba-listing-detailr">
 
         <div class="ad-views-navbar">
-            <a href="{{ listing.platform_url }}" class="btn-view-navbar" target="_blank">بازدید
+            <a href="{{ listing.platform_url }}" class="btn-primary-textarea" target="_blank">بازدید
                 پلتفرم</a>
         </div>
 
@@ -116,7 +116,7 @@
     <div class="row">
         <div class="col-md-8">
             <div class="">
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex">
                     <h2 style="margin-bottom: 5px;">{{ listing.title }}</h2>
                     <span class="badge bg-info-detail">{{ listing.category.get_platform_display }}</span>
                 </div>
@@ -1021,7 +1021,7 @@
                         <hr class="hr-between">
 
                         <div>
-                            <a href="{% url 'coming_soon' %}" class="text-link" target="_blank">شما میتواند از این قسمت
+                            <a href="{% url 'coming_soon' %}" class="text-link-scroll" target="_blank">شما میتواند از این قسمت
                                 نظرات خودتان را در مورد این اگهی به اشتراک بگذارید.</a>
                         </div>
                     </div>
@@ -1133,7 +1133,7 @@
 
                     <div>
                         <a href="{% url 'listings:user_profile' listing.seller.username %}"
-                            class="btn btn-sm text-link">
+                            class="btn btn-sm text-link-scroll">
                             مشاهده پروفایل
                         </a>
                     </div>
@@ -1335,7 +1335,7 @@
                     <p>
                         در این صورت، آن را
                         <a href="{% url 'tickets:ticket_create' %}?category={{ 1 }}&subject={{ 'تخلف%20اگهی' }}"
-                            class="text-link" target="_blank">
+                            class="text-link-scroll" target="_blank">
                             <!-- href="{% url 'tickets:ticket_create' %}?category={{ category.id }}&subject={{ subject }}" -->
                             اینجا
                         </a>
@@ -1499,11 +1499,11 @@
                     <form id="note-form" method="post" action="{% url 'accounts:save_listing_note' listing.pk %}">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <textarea class="form-control" name="note" id="listing-note" rows="4"
+                            <textarea class="form-control-textarea" name="note" id="listing-note" rows="4"
                                 placeholder="یادداشت خود را اینجا بنویسید...">{% if user_note %}{{ user_note.note }}{% endif %}</textarea>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn-primary-textarea">
                                 <i class="bi bi-save"></i> ذخیره یادداشت
                             </button>
                             {% if user_note %}

@@ -472,44 +472,40 @@
                         </div>
 
 
-                        <p class="card-text">{{ listing.description|truncatewords:30 }}</p>
+                        <p class="card-text description-clamp">{{ listing.description }}</p>
+
 
                         <div class="inf-all-card">
-                            <div class="inf-card">
+                            <div class="inf-card-decoration">
                                 <strong class="strong-inf">دنبال‌کننده:</strong>
-                                <p> {{ listing.followers_count|split_number }} نفر</p>
+                                <p class="p-card-decoration"> {{ listing.followers_count|split_number }} نفر</p>
                             </div>
 
-                            <div class="inf-card">
+                            {% if not listing.is_private or user == listing.seller %}
+                            {% if listing.total_revenue %}
+                            <div class="inf-card-decoration">
+                                <strong class="strong-inf">درامد کل:</strong>
+                                <p class="p-card-decoration"> {{ listing.total_revenue|split_number  }} تومان</p>
+                            </div>
+                            {% endif %}
+                            {% endif %}
+
+                            <div class="inf-card-decoration">
                                 <strong class="strong-inf">تاریخ انتشار اگهی:</strong>
-                                <p>{{ listing.created_at|time_ago }}</p>
+                                <p class="p-card-decoration">{{ listing.created_at|time_ago }}</p>
                             </div>
 
-                            <div class="inf-card">
+                            <div class="inf-card-decoration">
                                 <strong class="strong-inf">سن پلتفرم:</strong>
-                                <p> {{ listing.platform_age|floatformat:0 }} سال</p>
+                                <p class="p-card-decoration"> {{ listing.platform_age|floatformat:0 }} سال</p>
                             </div>
 
                         </div>
-
-                        <a href="{% url 'listings:similar_listings' listing.pk %}" class="link-similar">
-                            آیا به دنبال استارت آپ های مشابه این آگهی می‌گردید؟
-                        </a>
 
                     </div>
                 </a>
 
                 <div class="all-btn">
-                    {% if user.is_authenticated %}
-                    <button class="save-listing-btn" data-listing-id="{{ listing.pk }}"
-                        data-is-saved="{% if listing.pk in saved_listing_ids %}true{% else %}false{% endif %}">
-                        <svg class="bookmark-icon {% if listing.pk in saved_listing_ids %}saved{% endif %}"
-                            xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
-                            stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                    </button>
-                    {% endif %}
 
                     <div class="price-btn">
                         <div class="price-div">
@@ -536,9 +532,20 @@
                                     {% endif %}
                                 </div>
 
-                                {% if listing.get_roi_display %}
-                                <p>برگشت سرمایه در {{ listing.get_roi_display }}</p>
-                                {% endif %}
+                                <div class="inf-card-detail">
+                                    {% if listing.monthly_income and listing.monthly_income > 0 %}
+                                    {% with total_price=listing.discount_price|default:listing.price %}
+                                    {% if total_price %}
+                                    <strong class="strong-info-detail">برگشت سرمایه تا <p>
+                                            {% widthratio total_price listing.monthly_income 1 %} ماه</p></strong>
+                                    {% endif %}
+                                    {% endwith %}
+                                    {% endif %}
+                                </div>
+
+                                <a href="{% url 'listings:similar_listings' listing.pk %}" class="link-similar">
+                                    آیا به دنبال استارت آپ های مشابه این آگهی می‌گردید؟
+                                </a>
                             </div>
                         </div>
 
@@ -567,8 +574,18 @@
                     </div>
 
                 </div>
-
+                {% if user.is_authenticated %}
+                <button class="save-listing-btn" data-listing-id="{{ listing.pk }}"
+                    data-is-saved="{% if listing.pk in saved_listing_ids %}true{% else %}false{% endif %}">
+                    <svg class="bookmark-icon {% if listing.pk in saved_listing_ids %}saved{% endif %}"
+                        xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </button>
+                {% endif %}
             </div>
+
         </div>
         {% empty %}
         <p class="text-center">آگهی فعالی یافت نشد.</p>

@@ -467,7 +467,7 @@ option {
 .scroll-link-navbar {
     display: flex;
     flex-wrap: wrap;
-    gap:20px;
+    gap: 20px;
     direction: rtl;
     align-items: flex-start;
     margin: 10px 10px 30px 10px;
@@ -507,8 +507,7 @@ option {
     font-weight: 800;
 }
 
-.text-success-navbar {
-}
+.text-success-navbar {}
 
 
 /* ========================================
@@ -551,7 +550,7 @@ option {
     padding: 120px 5% 20px 5%;
 }
 
-.hero,
+/* .hero,
 .marquee-section,
 .section-serch,
 #testimonials,
@@ -568,7 +567,7 @@ option {
 
 .cta-section {
     margin-bottom: -20px !important;
-}
+} */
 
 /* ========================================
    پیام‌های هشدار (Alerts)
@@ -1012,7 +1011,7 @@ option {
 }
 
 .card-body {
-    padding: 10px 30px 10px 30px;
+    padding: 10px 15px;
     width: 100%;
 }
 
@@ -1235,7 +1234,6 @@ option {
 
 .btn-aboutplatform-card {
     margin-right: auto;
-    margin-left: -17px;
 }
 
 .more-height-btn {
@@ -1296,21 +1294,43 @@ option {
 }
 
 .card-text {
-    color: var(--text-primary);
-    font-size: var(--font-size-base);
+color: var(--text-primary);
+    font-size: 13px;
     margin-bottom: 5px;
     margin-top: 5px;
-    font-weight: 500;
+    font-weight: 400;
 }
+
+.description-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-height: 65px;
+}
+
 
 .inf-all-card {
     display: flex;
+    gap: 25px;
+}
+
+.p-card-decoration {
+    color: var(--text-2c3e50);
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .link-similar {
     font-size: 12px;
     padding: 10px;
-    color: #4d4d4dcc;
+    font-weight: 500;
+    color: var(--blu-durk-color);
+    text-decoration: underline;
+}
+
+.link-similar:hover {
+    color: #00369a;
 }
 
 .profile-img-detail {
@@ -1386,6 +1406,14 @@ option {
     gap: 5px;
 }
 
+.strong-info-detail {
+    display: inline-flex;
+    gap: 5px;
+    color: var(--text-2c3e50);
+    font-size: 15px;
+    font-weight: 500;
+}
+
 .strong-inf-detail {
     display: inline-block;
 
@@ -1394,12 +1422,14 @@ option {
     font-weight: 400;
 }
 
+
 .inf-card-detail p {
     margin: 0;
     color: var(--text-2c3e50);
     font-size: 16px;
     font-weight: 600;
-}
+} 
+
 
 
 .inf-card {
@@ -1408,14 +1438,14 @@ option {
 
 .strong-inf {
     color: var(--text-secondary);
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 400;
 }
 
 .inf-card p {
     color: var(--text-2c3e50);
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 
@@ -1425,7 +1455,7 @@ option {
 }
 
 .in-card {
-    padding: 10px;
+    /*     padding: 10px; */
     display: inline-flex;
     width: 100%;
 }
@@ -1721,6 +1751,7 @@ option {
 
 .income-display {
     margin-top: 10px;
+    margin-bottom: 10px;
     font-size: 14px;
     font-weight: 700;
     color: var(--text-secondary);
@@ -1744,6 +1775,13 @@ option {
     color: var(--blu-durk-color);
     font-weight: 500;
     font-size: 13px;
+    text-decoration: none;
+    line-height: 16px;
+}
+
+.text-link-scroll:hover {
+    color: #00369a;
+    text-decoration: underline;
 }
 
 
@@ -1758,8 +1796,11 @@ option {
 .bookmark-icon {
     transition: fill 0.3s ease, transform 0.3s ease;
     fill: transparent;
-    /* حالت پیش‌فرض (توخالی) */
     vertical-align: middle;
+    position: absolute;
+    left: 80px;
+    margin-top: 15px;
+
 }
 
 .bookmark-icon.saved {
@@ -1773,8 +1814,7 @@ option {
     background: #00000000;
     height: fit-content;
     width: 24px;
-    position: absolute;
-    left: 70px;
+
 }
 
 /* انیمیشن پرش هنگام لایک/ذخیره */
@@ -2317,12 +2357,35 @@ form textarea {
     min-height: 120px;
 }
 
-.form-control {
+.form-control-textarea {
     width: 100%;
+    height: 140px;
     padding: 0.75rem;
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius-md);
+    border: 1.14px solid var(--border-color);
+    border-radius: var(--border-radius-sm-md);
     font-size: var(--font-size-base);
+}
+
+.btn-primary-textarea {
+    color: var(--blu-color);
+    border: 1.7px solid var(--blu-color);
+    border-radius: var(--border-radius-999);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 25px;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    transition: var(--transition-base);
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-primary-textarea:hover {
+    background: #5151511d;
+    /* transform: translateY(-2px); */
+    box-shadow: 0 3px 8px #0049cf81;
 }
 
 .form-label {
@@ -2342,10 +2405,7 @@ form textarea {
     font-weight: 400;
     border-radius: var(--border-radius-999);
     white-space: nowrap;
-
-
     display: flex;
-    gap: 5px;
     align-items: center;
     justify-content: center;
 }
@@ -3090,19 +3150,7 @@ form textarea {
     margin: auto 0;
 }
 
-.btn-view-navbar {
 
-    font-size: 14px;
-    color: var(--blu-color);
-    border: 1.7px solid var(--blu-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px 22px;
-    border-radius: var(--border-radius-999);
-    border-color: rgb(0 88 255);
-    text-decoration: none;
-}
 
 
 /* ========================================
