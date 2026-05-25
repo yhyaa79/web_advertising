@@ -1304,6 +1304,7 @@ option {
 .description-detail p {
     white-space: pre-line;
     padding-left: 10px;
+    line-height: 23px;
 }
 
 
@@ -1628,24 +1629,14 @@ option {
 .specifications-detail {
     display: flex;
     flex-wrap: wrap;
-    /* رفتن به سطر بعد در صورت کمبود جا */
-    gap: 12px;
+    line-height: 23px;
+    gap: 5px 12px;
     /* فاصله نامنظم بین آیتم‌ها */
     direction: rtl;
     align-items: flex-start;
     margin: 20px 0;
 }
 
-.specifications-detail {
-    display: flex;
-    flex-wrap: wrap;
-    /* رفتن به سطر بعد در صورت کمبود جا */
-    gap: 12px;
-    /* فاصله نامنظم بین آیتم‌ها */
-    direction: rtl;
-    align-items: flex-start;
-    margin: 20px 0;
-}
 
 .inf-card-detail {
     /* کلید اصلی: کارت فقط به اندازه محتوای داخلش جا می‌گیرد و کش نمی‌آید */
@@ -1756,7 +1747,7 @@ option {
 
 .card-img-top {
     height: 200px;
-    width: 350px;
+    width: 320px;
     object-fit: cover;
     border-radius: var(--border-radius-sm);
 }
@@ -2107,7 +2098,7 @@ option {
     gap: 6px;
 
     position: relative;
-/*     right: 265px;
+    /*     right: 265px;
     top: 8px; */
 }
 
@@ -2534,7 +2525,7 @@ hr {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6px 20px;
+    padding: 3px 20px;
     font-size: var(--font-size-sm);
     font-weight: 600;
     transition: var(--transition-base);
@@ -2666,7 +2657,7 @@ form label {
 }
 
 .form-control {
-    border-radius: var(--border-radius-lg) !important;
+    /* border-radius: var(--border-radius-lg) !important; */
 }
 
 form input[type="text"],
@@ -2678,8 +2669,8 @@ form input[type="file"],
 form select,
 form textarea {
     width: 100%;
-    padding: 0.75rem;
-    border: 2px solid var(--border-color);
+    padding: 8px 12px;
+    border: 1.5px solid var(--border-color);
     border-radius: var(--border-radius-md);
     font-size: var(--font-size-base);
     transition: var(--transition-base);
@@ -2713,7 +2704,7 @@ form textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6px 20px;
+    padding: 3px 20px;
     font-size: var(--font-size-sm);
     font-weight: 600;
     transition: var(--transition-base);
@@ -3069,6 +3060,11 @@ form textarea {
     max-width: 70%;
 }
 
+.col-md-11 {
+    flex: 0 0 75%;
+    max-width: 75%;
+}
+
 .col-md-12 {
     flex: 0 0 100%;
     max-width: 100%;
@@ -3226,6 +3222,16 @@ form textarea {
     padding: 8px;
 }
 
+
+.filter-list-dav {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -0.75rem;
+}
+
+.all-list-notice {
+    padding: 0 20px;
+}
 
 .dic-list-notice {
     margin-bottom: 20px;
@@ -3771,12 +3777,12 @@ form textarea {
 
 .inf-created-views-username {
     display: flex;
-    gap: 50px;
+    gap: 60px;
 }
 
 .inf-created-views-username p {
     color: var(--text-secondary);
-    font-size: var(--font-size-base) !important;
+    font-size: var(--font-size-sm) !important;
 }
 
 .text-success {
@@ -3912,6 +3918,7 @@ form textarea {
 
 /* تنظیمات کارت فیلتر */
 .custom-collapse {
+    padding: 0 10px;
     background: #f8f9fa !important;
     border-top: none;
     border-radius: 0 0 8px 8px;
@@ -3933,20 +3940,6 @@ form textarea {
     gap: 15px;
 }
 
-@media (min-width: 768px) {
-    .filter-grid {
-        grid-template-columns: repeat(2, 1fr);
-        /* دو ستونه در تبلت */
-    }
-}
-
-@media (min-width: 992px) {
-    .filter-grid {
-        grid-template-columns: repeat(4, 1fr);
-        /* سه ستونه در دسکتاپ */
-    }
-}
-
 /* کوچکتر کردن لیبل‌ها */
 .filter-group .form-label {
     margin-bottom: 5px;
@@ -3954,14 +3947,34 @@ form textarea {
     color: #495057;
 }
 
+.form-all-label {
+    display: grid;
+}
+
 .compact-filter-card {
     padding: 30px;
+    margin-top: 0 !important;
+
+}
+
+.card-filter-btn-delet {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-filter {
+    display: flex;
+    gap: 2px;
+}
+
+.div-btn-delet {
 
 }
 
 .filter-label {
-    display: flex;
+    display: grid;
     margin-bottom: 15px;
+    gap: 10px;
 }
 
 
@@ -3973,38 +3986,23 @@ form textarea {
 /* مدیریت چک‌باکس‌ها */
 .checkbox-group {
     grid-column: 1 / -1;
-    /* تمام عرض را بگیرد */
-    padding: 10px;
     width: fit-content;
-    margin-right: auto;
-    margin-left: 5%;
 }
 
 .form-check-inline {
     margin-right: 0;
     margin-left: 15px;
     display: ruby;
-    padding: 10px;
     align-items: center;
-    text-align: center;
 }
 
-/* انیمیشن باز و بسته شدن (Collapse) */
-.custom-collapse {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease-out;
-}
 
 .input-group-sm {
     display: grid;
-    gap: 5px;
+    gap: 8px;
 }
 
-.custom-collapse.open {
-    max-height: 1000px;
-    /* یک عدد بزرگ برای باز شدن کامل */
-}
+
 
 /* چرخش آیکون فلش هنگام باز شدن */
 .filter-toggle .toggle-icon {

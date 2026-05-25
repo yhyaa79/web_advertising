@@ -177,7 +177,14 @@ def listing_list(request):
     categories = Category.objects.all()
     
     has_active_filters = any(
-        request.GET.get(param) for param in ['search', 'category', 'sort_by', 'min_price', 'max_price']
+        request.GET.get(param) for param in [
+            'search', 'category', 'sort_by',
+            'min_price', 'max_price',
+            'min_age', 'max_age',
+            'min_followers', 'max_followers',
+            'min_income', 'max_income',
+            'filter_private', 'filter_income', 'filter_verified'
+        ]
     )
 
     # لیست آگهی‌های ذخیره شده کاربر
