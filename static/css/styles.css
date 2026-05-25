@@ -498,6 +498,7 @@ option {
 #section-proofs,
 #section-analyst,
 #section-attachments,
+#section-social-media,
 #section-sell-includes,
 #section-license,
 #section-services-used,
@@ -1127,7 +1128,7 @@ option {
 .guide-toggle-btn::before {
     content: '';
     border: solid var(--text-secondary);
-    border-width: 0 2px 3px 0;
+    border-width: 0 2px 2px 0;
     display: inline-block;
     padding: 4px;
     transform: rotate(45deg);
@@ -1734,7 +1735,7 @@ option {
 }
 
 .in-card {
-    /*     padding: 10px; */
+    padding: 10px;
     display: inline-flex;
     width: 100%;
 }
@@ -1785,9 +1786,10 @@ option {
 /* دکمه‌های قیمت */
 .price-btn {
     display: grid;
-    padding: 10px;
+    padding: 3px 10px;
     width: 300px;
     height: 100%;
+    margin-top: -23px;
 }
 
 
@@ -1974,6 +1976,34 @@ option {
     font-size: 14px;
 }
 
+
+
+
+.profile-card {
+    display: flex;
+    gap: 10px;
+}
+
+.info-profile-user {
+    display: grid;
+    padding: 10px 20px;
+    width: 380px;
+    gap: inherit;
+}
+
+.strong-info-profile {
+    display: inline-block;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.p-info-profile {
+    display: grid;
+}
+
+.bio-addres-profile {}
+
 /* ========================================
    proofs
    ======================================== */
@@ -2070,6 +2100,16 @@ option {
 }
 
 
+.save-share-card {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 6px;
+
+    position: relative;
+/*     right: 265px;
+    top: 8px; */
+}
 
 
 /* استایل و انیمیشن برای آیکون بوکمارک */
@@ -2077,10 +2117,6 @@ option {
     transition: fill 0.3s ease, transform 0.3s ease;
     fill: transparent;
     vertical-align: middle;
-    position: absolute;
-    left: 80px;
-    margin-top: 15px;
-
 }
 
 .bookmark-icon.saved {
@@ -2093,8 +2129,15 @@ option {
     border: none;
     background: #00000000;
     height: fit-content;
-    width: 24px;
+    margin-bottom: 3px;
+    cursor: pointer;
+}
 
+.share-listing-btn {
+    border: none;
+    background: #00000000;
+    height: fit-content;
+    cursor: pointer;
 }
 
 /* انیمیشن پرش هنگام لایک/ذخیره */
@@ -2357,7 +2400,8 @@ option {
 
 .justify-content-between-note {
     justify-content: space-between;
-    padding: 0 10px;
+    padding-left: 40px;
+    width: 280px;
 }
 
 /* ========================================
@@ -2490,7 +2534,7 @@ hr {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6px 25px;
+    padding: 6px 20px;
     font-size: var(--font-size-sm);
     font-weight: 600;
     transition: var(--transition-base);
@@ -2669,7 +2713,7 @@ form textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6px 25px;
+    padding: 6px 20px;
     font-size: var(--font-size-sm);
     font-weight: 600;
     transition: var(--transition-base);
@@ -2976,7 +3020,7 @@ form textarea {
 
 .suggested-price {
     color: #058d25;
-    background-color: #d0fedb;
+    background-color: #d3f7c9;
 }
 
 .suggested-price-text {
@@ -4179,6 +4223,7 @@ nav .nav-cta .btn-ghost {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    padding-bottom: 10px;
 }
 
 .hero p {

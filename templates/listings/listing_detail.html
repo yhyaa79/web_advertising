@@ -60,10 +60,10 @@
 
 
     <div class="scroll-link-navbar">
-        {% if listing.about_platform %}
+<!--         {% if listing.about_platform %}
         <a href="#section-about" class="text-link-scroll">درباره پلتفرم</a>
         {% endif %}
-
+ -->
         {% if listing.faqs.all %}
         <a href="#section-faq" class="text-link-scroll">پرسش و پاسخ</a>
         {% endif %}
@@ -104,10 +104,10 @@
         <a href="#section-revenue-expenses" class="text-link-scroll">درآمد و هزینه‌ها</a>
         {% endif %}
 
-        {% if listing.listing_analyst %}
+        <!--         {% if listing.listing_analyst %}
         <a href="#section-analyst" class="text-link-scroll">تحلیلگر و مشاور</a>
         {% endif %}
-
+ -->
     </div>
 
 
@@ -2179,8 +2179,12 @@
     /* دو ردیفه شدن text-link-scroll در نوار دوم */
     function balanceNavbarLinks() {
         const navbar = document.querySelector('.scroll-link-navbar');
+        if (!navbar) return; // جلوگیری از خطا در صورت پیدا نشدن عنصر
+
         const links = navbar.querySelectorAll('.text-link-scroll');
         const count = links.length;
+        if (count === 0) return;
+
         const gap = 20; // gap بین لینک‌ها
         const maxSingleRowWidth = 800; // کمترین عرضی که بعدش دو ردیف می‌شه
 
@@ -2193,20 +2197,36 @@
 
         if (totalWidth <= maxSingleRowWidth) {
             // یک ردیف — max-width رو برمی‌داریم
-            navbar.style.maxWidth = '';
+            navbar.style.maxWidth = '100%'; // یا ''
             navbar.style.flexWrap = 'nowrap';
         } else {
-            // دو ردیف — max-width رو برابر نصف تنظیم می‌کنیم
+            // دو ردیف 
             navbar.style.flexWrap = 'wrap';
 
             const half = Math.ceil(count / 2);
-            let halfWidth = 0;
-            for (let i = 0; i < half; i++) {
-                halfWidth += links[i].offsetWidth;
-            }
-            halfWidth += gap * (half - 1);
+            let firstHalfWidth = 0;
+            let secondHalfWidth = 0;
 
-            navbar.style.maxWidth = halfWidth + 'px';
+            // محاسبه عرض نیمه اول و دوم به صورت جداگانه
+            for (let i = 0; i < count; i++) {
+                if (i < half) {
+                    firstHalfWidth += links[i].offsetWidth;
+                } else {
+                    secondHalfWidth += links[i].offsetWidth;
+                }
+            }
+
+            // اضافه کردن گپ‌ها به هر ردیف
+            firstHalfWidth += gap * (half - 1);
+            const secondHalfCount = count - half;
+            if (secondHalfCount > 0) {
+                secondHalfWidth += gap * (secondHalfCount - 1);
+            }
+
+            // max-width برابر با بزرگترین ردیف + 2 پیکسل حاشیه اطمینان
+            const maxRowWidth = Math.max(firstHalfWidth, secondHalfWidth) + 2;
+
+            navbar.style.maxWidth = maxRowWidth + 'px';
         }
     }
 
