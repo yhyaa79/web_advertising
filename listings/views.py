@@ -14,6 +14,8 @@ from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse
 from accounts.models import SavedListing, ListingNote
+from django.db.models import FloatField, ExpressionWrapper
+
 
 
 User = get_user_model()
@@ -35,159 +37,243 @@ def get_roi_display(self):
 
 
 def listing_list(request):
-    # تعریف متغیر پایه
     listings = Listing.objects.filter(status='active')
-    
+
     # فیلتر دسته‌بندی
     category_id = request.GET.get('category')
     if category_id:
         listings = listings.filter(category_id=category_id)
-    
+
+    # فیلتر نوع پلتفرم
+    platform_type = request.GET.get('platform_type')
+    if platform_type:
+        listings = listings.filter(category__platform=platform_type)
+
     # جستجوی متنی
     search_query = request.GET.get('search')
     if search_query:
         listings = listings.filter(
-            Q(title__icontains=search_query) | 
+            Q(title__icontains=search_query) |
             Q(description__icontains=search_query)
         )
-    
-    # فیلترهای چک‌باکسی
-    filter_private = request.GET.get('filter_private')
-    if filter_private:
-        listings = listings.filter(is_private=True)
-    
-    filter_income = request.GET.get('filter_income')
-    if filter_income:
-        listings = listings.filter(is_income=True)
-    
-    filter_verified = request.GET.get('filter_verified')
-    if filter_verified:
-        listings = listings.filter(is_verified=True)
-    
-    filter_preferment = request.GET.get('filter_preferment')
-    if filter_preferment:
-        listings = listings.filter(boost=True)
 
-    filter_premier = request.GET.get('filter_premier') 
-    if filter_premier:
+    # فیلترهای چک‌باکسی
+    if request.GET.get('filter_private'):
+        listings = listings.filter(is_private=True)
+    if request.GET.get('filter_income'):
+        listings = listings.filter(is_income=True)
+    if request.GET.get('filter_verified'):
+        listings = listings.filter(is_verified=True)
+    if request.GET.get('filter_preferment'):
+        listings = listings.filter(boost=True)
+    if request.GET.get('filter_premier'):
         listings = listings.filter(premier=True)
-    
-    # جستجوی پیشرفته - بازه قیمت
+    if request.GET.get('filter_suggested_price'):
+        listings = listings.filter(suggested_price=True)
+
+    # annotation قیمت نهایی (یک بار تعریف میشه)
+    final_price_annotation = Case(
+        When(discount_price__isnull=False, then=F('discount_price')),
+        default=F('price'),
+        output_field=DecimalField()
+    )
+
+    # بازه قیمت - فقط وقتی واقعاً فیلتر شده
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
-    if min_price:
-        listings = listings.annotate(
-            final_price=Case(
-                When(discount_price__isnull=False, then=F('discount_price')),
-                default=F('price'),
-                output_field=DecimalField()
-            )
-        ).filter(final_price__gte=min_price)
-    if max_price:
-        listings = listings.annotate(
-            final_price=Case(
-                When(discount_price__isnull=False, then=F('discount_price')),
-                default=F('price'),
-                output_field=DecimalField()
-            )
-        ).filter(final_price__lte=max_price)
-    
-    # جستجوی پیشرفته - بازه سن پلتفرم
+    price_min_val = int(min_price) if min_price else 0
+    price_max_val = int(max_price) if max_price else 10000000000
+
+    if price_min_val > 0 or price_max_val < 10000000000:
+        listings = listings.annotate(final_price=final_price_annotation)
+        if price_min_val > 0:
+            listings = listings.filter(final_price__gte=price_min_val)
+        if price_max_val < 10000000000:
+            listings = listings.filter(final_price__lte=price_max_val)
+
+    # بازه سن پلتفرم
     min_age = request.GET.get('min_age')
     max_age = request.GET.get('max_age')
-    if min_age:
-        listings = listings.filter(platform_age__gte=min_age)
-    if max_age:
-        listings = listings.filter(platform_age__lte=max_age)
-    
-    # جستجوی پیشرفته - بازه دنبال‌کننده
+    min_age_val = int(min_age) if min_age else 0
+    max_age_val = int(max_age) if max_age else 20
+
+    if min_age_val > 0:
+        listings = listings.filter(platform_age__gte=min_age_val * 12)
+    if max_age_val < 20:
+        listings = listings.filter(platform_age__lte=max_age_val * 12)
+
+    # بازه دنبال‌کننده
     min_followers = request.GET.get('min_followers')
     max_followers = request.GET.get('max_followers')
-    if min_followers:
-        listings = listings.filter(followers_count__gte=min_followers)
-    if max_followers:
-        listings = listings.filter(followers_count__lte=max_followers)
-    
-    # جستجوی پیشرفته - بازه درآمد ماهیانه
+    min_fol_val = int(min_followers) if min_followers else 0
+    max_fol_val = int(max_followers) if max_followers else 10000000
+
+    if min_fol_val > 0:
+        listings = listings.filter(followers_count__gte=min_fol_val)
+    if max_fol_val < 10000000:
+        listings = listings.filter(followers_count__lte=max_fol_val)
+
+    # بازه درآمد ماهیانه
     min_income = request.GET.get('min_income')
     max_income = request.GET.get('max_income')
-    if min_income:
-        listings = listings.filter(monthly_income__gte=min_income)
-    if max_income:
-        listings = listings.filter(monthly_income__lte=max_income)
-    
-    # دریافت آگهی‌های ویژه مرتبط با فیلترها
+    min_inc_val = int(min_income) if min_income else 0
+    max_inc_val = int(max_income) if max_income else 1000000000
+
+    if min_inc_val > 0:
+        listings = listings.filter(monthly_income__gte=min_inc_val)
+    if max_inc_val < 1000000000:
+        listings = listings.filter(monthly_income__lte=max_inc_val)
+
+    # بازه حاشیه سود
+    min_profit_margin = request.GET.get('min_profit_margin')
+    max_profit_margin = request.GET.get('max_profit_margin')
+    min_pm_val = int(min_profit_margin) if min_profit_margin else 0
+    max_pm_val = int(max_profit_margin) if max_profit_margin else 100
+
+    if min_pm_val > 0:
+        listings = listings.filter(profit_margin__gte=min_pm_val)
+    if max_pm_val < 100:
+        listings = listings.filter(profit_margin__lte=max_pm_val)
+
+    # بازه بازدید
+    min_views = request.GET.get('min_views')
+    max_views = request.GET.get('max_views')
+    min_views_val = int(min_views) if min_views else 0
+    max_views_val = int(max_views) if max_views else 10000000
+
+    if min_views_val > 0:
+        listings = listings.filter(most_view__gte=min_views_val)
+    if max_views_val < 10000000:
+        listings = listings.filter(most_view__lte=max_views_val)
+
+    # بازه برگشت سرمایه
+    min_roi = request.GET.get('min_roi_months')
+    max_roi = request.GET.get('max_roi_months')
+    min_roi_val = int(min_roi) if min_roi else 0
+    max_roi_val = int(max_roi) if max_roi else 120
+
+    needs_roi_annotation = (min_roi_val > 0 or max_roi_val < 120)
+    if needs_roi_annotation:
+        listings = listings.annotate(
+            roi_months=ExpressionWrapper(
+                Case(
+                    When(
+                        avg_monthly_profit__isnull=False,
+                        avg_monthly_profit__gt=0,
+                        then=F('price') / F('avg_monthly_profit')
+                    ),
+                    default=None,
+                    output_field=FloatField()
+                ),
+                output_field=FloatField()
+            )
+        )
+        if min_roi_val > 0:
+            listings = listings.filter(roi_months__gte=float(min_roi_val))
+        if max_roi_val < 120:
+            listings = listings.filter(roi_months__lte=float(max_roi_val))
+
+    # آگهی‌های ویژه
     boosted_listings = list(listings.filter(boost=True).order_by('?')[:3])
-    
-    # اگر کمتر از ۳ آگهی ویژه در این فیلتر پیدا شد، بقیه را از کل آگهی‌های ویژه سیستم پر کن
     if len(boosted_listings) < 3:
         needed = 3 - len(boosted_listings)
         current_boosted_ids = [item.id for item in boosted_listings]
-        
         extra_boosted = Listing.objects.filter(
-            status='active', 
-            boost=True
+            status='active', boost=True
         ).exclude(id__in=current_boosted_ids).order_by('?')[:needed]
-        
         boosted_listings.extend(extra_boosted)
 
-    # گرفتن آیدی تمام آگهی‌های ویژه برای حذف از لیست اصلی
     boosted_ids = [item.id for item in boosted_listings]
-    
-    # ایجاد لیست اصلی آگهی‌ها
     main_listings_queryset = listings.exclude(id__in=boosted_ids)
 
-    # اعمال مرتب‌سازی
+    # مرتب‌سازی
     sort_by = request.GET.get('sort_by')
-    
     if sort_by == 'newest':
         main_listings_queryset = main_listings_queryset.order_by('-created_at')
     elif sort_by == 'oldest':
         main_listings_queryset = main_listings_queryset.order_by('created_at')
+    elif sort_by == 'newest_platform':
+        main_listings_queryset = main_listings_queryset.order_by('-platform_age')
+    elif sort_by == 'oldest_platform':
+        main_listings_queryset = main_listings_queryset.order_by('platform_age')
+    elif sort_by == 'most_followers':
+        main_listings_queryset = main_listings_queryset.order_by('-followers_count')
+    elif sort_by == 'least_followers':
+        main_listings_queryset = main_listings_queryset.order_by('followers_count')
+    elif sort_by == 'most_views':
+        main_listings_queryset = main_listings_queryset.order_by('-views_count')
     elif sort_by == 'cheapest':
-        main_listings_queryset = main_listings_queryset.annotate(
-            final_price=Case(
-                When(discount_price__isnull=False, then=F('discount_price')),
-                default=F('price'),
-                output_field=DecimalField()
+        # اگر قبلاً annotate نشده، الان annotate کن
+        if 'final_price' not in [a.alias for a in main_listings_queryset.query.annotations]:
+            main_listings_queryset = main_listings_queryset.annotate(
+                final_price=final_price_annotation
             )
-        ).order_by('final_price')
-    elif sort_by == 'expensive':
-        main_listings_queryset = main_listings_queryset.annotate(
-            final_price=Case(
-                When(discount_price__isnull=False, then=F('discount_price')),
-                default=F('price'),
-                output_field=DecimalField()
+        main_listings_queryset = main_listings_queryset.order_by('final_price')
+    elif sort_by == 'most_expensive':
+        if 'final_price' not in [a.alias for a in main_listings_queryset.query.annotations]:
+            main_listings_queryset = main_listings_queryset.annotate(
+                final_price=final_price_annotation
             )
-        ).order_by('-final_price')
+        main_listings_queryset = main_listings_queryset.order_by('-final_price')
+    elif sort_by == 'highest_income':
+        main_listings_queryset = main_listings_queryset.order_by('-monthly_income')
+    elif sort_by == 'lowest_income':
+        main_listings_queryset = main_listings_queryset.order_by('monthly_income')
+    elif sort_by == 'fastest_roi':
+        if not needs_roi_annotation:
+            main_listings_queryset = main_listings_queryset.annotate(
+                roi_months=ExpressionWrapper(
+                    Case(
+                        When(
+                            avg_monthly_profit__isnull=False,
+                            avg_monthly_profit__gt=0,
+                            then=F('price') / F('avg_monthly_profit')
+                        ),
+                        default=None,
+                        output_field=FloatField()
+                    ),
+                    output_field=FloatField()
+                )
+            )
+        main_listings_queryset = main_listings_queryset.order_by('roi_months')
+    elif sort_by == 'highest_profit_margin':
+        main_listings_queryset = main_listings_queryset.order_by('-profit_margin')
     else:
         main_listings_queryset = main_listings_queryset.order_by('-created_at')
 
     # صفحه‌بندی
     paginator = Paginator(main_listings_queryset, 20)
     page = request.GET.get('page')
-    
     try:
         paginated_main_listings = paginator.page(page)
     except PageNotAnInteger:
         paginated_main_listings = paginator.page(1)
     except EmptyPage:
         paginated_main_listings = paginator.page(paginator.num_pages)
-        
-    categories = Category.objects.all()
-    
-    has_active_filters = any(
-        request.GET.get(param) for param in [
-            'search', 'category', 'sort_by',
-            'min_price', 'max_price',
-            'min_age', 'max_age',
-            'min_followers', 'max_followers',
-            'min_income', 'max_income',
-            'filter_private', 'filter_income', 'filter_verified'
-        ]
-    )
 
-    # لیست آگهی‌های ذخیره شده کاربر
+    categories = Category.objects.all()
+
+    # بررسی فیلترهای فعال - range فقط وقتی از مقدار default خارج شده
+    has_active_filters = any([
+        request.GET.get('search'),
+        request.GET.get('category'),
+        request.GET.get('sort_by'),
+        request.GET.get('platform_type'),
+        price_min_val > 0 or price_max_val < 10000000000,
+        min_age_val > 0 or max_age_val < 20,
+        min_fol_val > 0 or max_fol_val < 10000000,
+        min_inc_val > 0 or max_inc_val < 1000000000,
+        min_pm_val > 0 or max_pm_val < 100,
+        min_views_val > 0 or max_views_val < 10000000,
+        min_roi_val > 0 or max_roi_val < 120,
+        request.GET.get('filter_private'),
+        request.GET.get('filter_income'),
+        request.GET.get('filter_verified'),
+        request.GET.get('filter_preferment'),
+        request.GET.get('filter_premier'),
+        request.GET.get('filter_suggested_price'),
+    ])
+
     saved_listing_ids = []
     if request.user.is_authenticated:
         saved_listing_ids = list(
@@ -195,14 +281,15 @@ def listing_list(request):
         )
 
     context = {
-        'boosted_listings': boosted_listings, 
-        'listings': paginated_main_listings, 
+        'boosted_listings': boosted_listings,
+        'listings': paginated_main_listings,
         'categories': categories,
         'has_active_filters': has_active_filters,
         'saved_listing_ids': saved_listing_ids,
     }
-    
+
     return render(request, 'listings/listing_list.html', context)
+
 
 
 def listing_detail(request, pk):

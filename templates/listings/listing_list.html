@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <div class="row mb-3">
+        <div class="row mb-5">
             <div class="col-md-12">
                 <strong>دسته‌بندی:</strong>
 
@@ -89,21 +89,22 @@
                                 <i class="bi bi-x-circle"></i> حذف
                             </a>
                             {% endif %}
-
                             <i class="bi bi-chevron-down ms-2 toggle-icon"></i>
                         </div>
-
                     </div>
 
                     <hr>
 
                     <form method="get" id="filterForm">
-                        {% if request.GET.search %}<input type="hidden" name="search"
-                            value="{{ request.GET.search }}">{% endif %}
-                        {% if request.GET.category %}<input type="hidden" name="category"
-                            value="{{ request.GET.category }}">{% endif %}
+                        {% if request.GET.search %}
+                        <input type="hidden" name="search" value="{{ request.GET.search }}">
+                        {% endif %}
+                        {% if request.GET.category %}
+                        <input type="hidden" name="category" value="{{ request.GET.category }}">
+                        {% endif %}
 
                         <div class="filter-label">
+
                             <!-- مرتب‌سازی -->
                             <div class="filter-group">
                                 <label class="form-label fw-bold">مرتب‌سازی:</label>
@@ -111,16 +112,11 @@
                                     <option value="">انتخاب کنید</option>
                                     <option value="newest" {% if request.GET.sort_by == 'newest' %}selected{% endif %}>
                                         جدیدترین آگهی</option>
-                                    <!-- سایر آپشن‌ها... -->
-                                    <option value="fastest_roi" <option value="">انتخاب کنید</option>
-                                    <option value="newest" {% if request.GET.sort_by == 'newest' %}selected{% endif %}>
-                                        جدیدترین آگهی</option>
                                     <option value="oldest" {% if request.GET.sort_by == 'oldest' %}selected{% endif %}>
                                         قدیمی‌ترین آگهی</option>
                                     <option value="newest_platform"
                                         {% if request.GET.sort_by == 'newest_platform' %}selected{% endif %}>جدیدترین
-                                        پلتفرم
-                                    </option>
+                                        پلتفرم</option>
                                     <option value="oldest_platform"
                                         {% if request.GET.sort_by == 'oldest_platform' %}selected{% endif %}>قدیمی‌ترین
                                         پلتفرم</option>
@@ -134,22 +130,48 @@
                                         {% if request.GET.sort_by == 'most_views' %}selected{% endif %}>پربازدیدترین
                                     </option>
                                     <option value="cheapest"
-                                        {% if request.GET.sort_by == 'cheapest' %}selected{% endif %}>
-                                        ارزان‌ترین</option>
+                                        {% if request.GET.sort_by == 'cheapest' %}selected{% endif %}>ارزان‌ترین
+                                    </option>
                                     <option value="most_expensive"
                                         {% if request.GET.sort_by == 'most_expensive' %}selected{% endif %}>گران‌ترین
                                     </option>
                                     <option value="highest_income"
                                         {% if request.GET.sort_by == 'highest_income' %}selected{% endif %}>بیشترین
-                                        درآمد
-                                    </option>
+                                        درآمد</option>
                                     <option value="lowest_income"
                                         {% if request.GET.sort_by == 'lowest_income' %}selected{% endif %}>کمترین درآمد
                                     </option>
                                     <option value="fastest_roi"
                                         {% if request.GET.sort_by == 'fastest_roi' %}selected{% endif %}>سریع‌ترین برگشت
                                         سرمایه</option>
-                                    سرمایه</option>
+                                    <option value="highest_profit_margin"
+                                        {% if request.GET.sort_by == 'highest_profit_margin' %}selected{% endif %}>
+                                        بیشترین حاشیه سود</option>
+                                </select>
+                            </div>
+
+                            <!-- نوع پلتفرم -->
+                            <div class="filter-group">
+                                <label class="form-label fw-bold">نوع پلتفرم:</label>
+                                <select name="platform_type" class="form-select form-select-sm">
+                                    <option value="">همه پلتفرم‌ها</option>
+                                    <option value="website"
+                                        {% if request.GET.platform_type == 'website' %}selected{% endif %}>وبسایت
+                                    </option>
+                                    <option value="instagram"
+                                        {% if request.GET.platform_type == 'instagram' %}selected{% endif %}>اینستاگرام
+                                    </option>
+                                    <option value="telegram"
+                                        {% if request.GET.platform_type == 'telegram' %}selected{% endif %}>تلگرام
+                                    </option>
+                                    <option value="youtube"
+                                        {% if request.GET.platform_type == 'youtube' %}selected{% endif %}>یوتیوب
+                                    </option>
+                                    <option value="aparat"
+                                        {% if request.GET.platform_type == 'aparat' %}selected{% endif %}>آپارات
+                                    </option>
+                                    <option value="other"
+                                        {% if request.GET.platform_type == 'other' %}selected{% endif %}>سایر</option>
                                 </select>
                             </div>
 
@@ -172,52 +194,158 @@
                                             id="filter_verified" {% if request.GET.filter_verified %}checked{% endif %}>
                                         <label class="form-check-label" for="filter_verified">تایید شده</label>
                                     </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="filter_preferment"
+                                            id="filter_preferment"
+                                            {% if request.GET.filter_preferment %}checked{% endif %}>
+                                        <label class="form-check-label" for="filter_preferment">آگهی ویژه</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="filter_premier"
+                                            id="filter_premier" {% if request.GET.filter_premier %}checked{% endif %}>
+                                        <label class="form-check-label" for="filter_premier">آگهی برتر</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="filter_suggested_price"
+                                            id="filter_suggested_price"
+                                            {% if request.GET.filter_suggested_price %}checked{% endif %}>
+                                        <label class="form-check-label" for="filter_suggested_price">قابل مذاکره</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-
                         <div class="filter-grid">
-                            <!-- بازه‌های عددی -->
+                            <!-- مقدار های دیفالت در listings/views.py باید مقدار دیفالت html یکی باشه -->
+                            <!-- قیمت -->
                             <div class="filter-group">
                                 <label class="form-label fw-bold">قیمت (تومان):</label>
-                                <div class="input-group input-group-sm">
-                                    <input type="number" name="min_price" class="form-control" placeholder="حداقل"
-                                        value="{{ request.GET.min_price }}">
-                                    <input type="number" name="max_price" class="form-control" placeholder="حداکثر"
-                                        value="{{ request.GET.max_price }}">
+                                <div class="range-slider" data-min="0" data-max="10000000000">
+                                    <div class="range-track">
+                                        <div class="range-fill"></div>
+                                    </div>
+                                    <input type="range" class="range-input range-min" name="min_price" min="0"
+                                        max="10000000000" step="1000000" value="{{ request.GET.min_price|default:0 }}">
+                                    <input type="range" class="range-input range-max" name="max_price" min="0"
+                                        max="10000000000" step="1000000"
+                                        value="{{ request.GET.max_price|default:10000000000 }}">
+                                    <div class="range-labels">
+                                        <span class="range-val-max"></span>
+                                        <span class="range-val-min"></span>
+                                    </div>
                                 </div>
                             </div>
 
+                            <!-- سن پلتفرم -->
                             <div class="filter-group">
                                 <label class="form-label fw-bold">سن پلتفرم (سال):</label>
-                                <div class="input-group input-group-sm">
-                                    <input type="number" name="min_age" class="form-control" placeholder="حداقل"
-                                        value="{{ request.GET.min_age }}">
-                                    <input type="number" name="max_age" class="form-control" placeholder="حداکثر"
-                                        value="{{ request.GET.max_age }}">
+                                <div class="range-slider" data-min="0" data-max="20">
+                                    <div class="range-track">
+                                        <div class="range-fill"></div>
+                                    </div>
+                                    <input type="range" class="range-input range-min" name="min_age" min="0" max="20"
+                                        step="1" value="{{ request.GET.min_age|default:0 }}">
+                                    <input type="range" class="range-input range-max" name="max_age" min="0" max="20"
+                                        step="1" value="{{ request.GET.max_age|default:20 }}">
+                                    <div class="range-labels">
+                                        <span class="range-val-max"></span>
+                                        <span class="range-val-min"></span>
+                                    </div>
                                 </div>
                             </div>
 
+                            <!-- دنبال‌کننده -->
                             <div class="filter-group">
                                 <label class="form-label fw-bold">دنبال‌کننده:</label>
-                                <div class="input-group input-group-sm">
-                                    <input type="number" name="min_followers" class="form-control" placeholder="حداقل"
-                                        value="{{ request.GET.min_followers }}">
-                                    <input type="number" name="max_followers" class="form-control" placeholder="حداکثر"
-                                        value="{{ request.GET.max_followers }}">
+                                <div class="range-slider" data-min="0" data-max="10000000">
+                                    <div class="range-track">
+                                        <div class="range-fill"></div>
+                                    </div>
+                                    <input type="range" class="range-input range-min" name="min_followers" min="0"
+                                        max="10000000" step="1000" value="{{ request.GET.min_followers|default:0 }}">
+                                    <input type="range" class="range-input range-max" name="max_followers" min="0"
+                                        max="10000000" step="1000"
+                                        value="{{ request.GET.max_followers|default:10000000 }}">
+                                    <div class="range-labels">
+                                        <span class="range-val-max"></span>
+                                        <span class="range-val-min"></span>
+                                    </div>
                                 </div>
                             </div>
 
+                            <!-- درآمد ماهیانه -->
                             <div class="filter-group">
-                                <label class="form-label fw-bold">درآمد ماهیانه:</label>
-                                <div class="input-group input-group-sm">
-                                    <input type="number" name="min_income" class="form-control" placeholder="حداقل"
-                                        value="{{ request.GET.min_income }}">
-                                    <input type="number" name="max_income" class="form-control" placeholder="حداکثر"
-                                        value="{{ request.GET.max_income }}">
+                                <label class="form-label fw-bold">درآمد ماهیانه (تومان):</label>
+                                <div class="range-slider" data-min="0" data-max="1000000000">
+                                    <div class="range-track">
+                                        <div class="range-fill"></div>
+                                    </div>
+                                    <input type="range" class="range-input range-min" name="min_income" min="0"
+                                        max="1000000000" step="100000" value="{{ request.GET.min_income|default:0 }}">
+                                    <input type="range" class="range-input range-max" name="max_income" min="0"
+                                        max="1000000000" step="100000"
+                                        value="{{ request.GET.max_income|default:1000000000 }}">
+                                    <div class="range-labels">
+                                        <span class="range-val-max"></span>
+                                        <span class="range-val-min"></span>
+                                    </div>
                                 </div>
                             </div>
+
+                            <!-- برگشت سرمایه -->
+                            <div class="filter-group">
+                                <label class="form-label fw-bold">برگشت سرمایه (ماه):</label>
+                                <div class="range-slider" data-min="0" data-max="120">
+                                    <div class="range-track">
+                                        <div class="range-fill"></div>
+                                    </div>
+                                    <input type="range" class="range-input range-min" name="min_roi_months" min="0"
+                                        max="120" step="1" value="{{ request.GET.min_roi_months|default:0 }}">
+                                    <input type="range" class="range-input range-max" name="max_roi_months" min="0"
+                                        max="120" step="1" value="{{ request.GET.max_roi_months|default:120 }}">
+                                    <div class="range-labels">
+                                        <span class="range-val-max"></span>
+                                        <span class="range-val-min"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- حاشیه سود -->
+                            <div class="filter-group">
+                                <label class="form-label fw-bold">حاشیه سود (%):</label>
+                                <div class="range-slider" data-min="0" data-max="100">
+                                    <div class="range-track">
+                                        <div class="range-fill"></div>
+                                    </div>
+                                    <input type="range" class="range-input range-min" name="min_profit_margin" min="0"
+                                        max="100" step="1" value="{{ request.GET.min_profit_margin|default:0 }}">
+                                    <input type="range" class="range-input range-max" name="max_profit_margin" min="0"
+                                        max="100" step="1" value="{{ request.GET.max_profit_margin|default:100 }}">
+                                    <div class="range-labels">
+                                        <span class="range-val-max"></span>
+                                        <span class="range-val-min"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- بازدید -->
+                            <div class="filter-group">
+                                <label class="form-label fw-bold">بیشترین بازدید:</label>
+                                <div class="range-slider" data-min="0" data-max="10000000">
+                                    <div class="range-track">
+                                        <div class="range-fill"></div>
+                                    </div>
+                                    <input type="range" class="range-input range-min" name="min_views" min="0"
+                                        max="10000000" step="1000" value="{{ request.GET.min_views|default:0 }}">
+                                    <input type="range" class="range-input range-max" name="max_views" min="0"
+                                        max="10000000" step="1000" value="{{ request.GET.max_views|default:10000000 }}">
+                                    <div class="range-labels">
+                                        <span class="range-val-max"></span>
+                                        <span class="range-val-min"></span>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </form>
                 </div>
@@ -335,7 +463,7 @@
                                         <div class="all-badge">
                                             {% if listing.is_private %}
                                             <div class="position-absolute top-0 end-0 m-2">
-                                                <span class="badge bg-warning text-dark">
+                                                <span class="badge-card bg-warning text-dark">
                                                     <i class="bi bi-lock-fill"></i> خصوصی
                                                 </span>
                                             </div>
@@ -343,7 +471,7 @@
 
                                             {% if listing.is_income %}
                                             <div class="position-absolute top-0 end-0 m-2">
-                                                <span class="badge bg-warning text-dark">
+                                                <span class="badge-card bg-warning text-dark">
                                                     <i class="bi bi-lock-fill"></i> درامد اگهی
                                                 </span>
                                             </div>
@@ -352,7 +480,7 @@
 
                                             {% if listing.is_verified %}
                                             <div class="position-absolute top-0 end-0 m-2">
-                                                <span class="badge bg-warning text-dark">
+                                                <span class="badge-card bg-warning text-dark">
                                                     <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
                                                 </span>
                                             </div>
@@ -361,7 +489,7 @@
 
                                             {% if listing.premier %}
                                             <div class="position-absolute top-0 end-0 m-2">
-                                                <span class="badge bg-warning text-dark">
+                                                <span class="badge-card bg-warning text-dark">
                                                     <i class="bi bi-lock-fill"></i> اگهی برتر
 
                                                     <svg class="premier-star" width="18" height="18" viewBox="0 0 24 24"
@@ -374,7 +502,7 @@
                                             </div>
                                             {% elif listing.boost %}
                                             <div class="position-absolute top-0 end-0 m-2">
-                                                <span class="badge bg-warning text-dark">
+                                                <span class="badge-card bg-warning text-dark">
                                                     <i class="bi bi-lock-fill"></i> اگهی پیشرفته
                                                 </span>
                                             </div>
@@ -504,10 +632,10 @@
 
                                     <h5 class="card-title">{{ listing.title }}</h5>
 
-                                    <div class="all-badge">
+                                    <div class="all-badge-card">
                                         {% if listing.is_private %}
                                         <div class="position-absolute top-0 end-0 m-2">
-                                            <span class="badge bg-warning text-dark">
+                                            <span class="badge-card bg-warning text-dark">
                                                 <i class="bi bi-lock-fill"></i> خصوصی
                                             </span>
                                         </div>
@@ -515,7 +643,7 @@
 
                                         {% if listing.is_income %}
                                         <div class="position-absolute top-0 end-0 m-2">
-                                            <span class="badge bg-warning text-dark">
+                                            <span class="badge-card bg-warning text-dark">
                                                 <i class="bi bi-lock-fill"></i> درامد اگهی
                                             </span>
                                         </div>
@@ -524,16 +652,23 @@
 
                                         {% if listing.is_verified %}
                                         <div class="position-absolute top-0 end-0 m-2">
-                                            <span class="badge bg-warning text-dark">
+                                            <span class="badge-card bg-warning text-dark">
                                                 <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
                                             </span>
                                         </div>
                                         {% endif %}
 
+                                        {% if listing.suggested_price %}
+                                        <div class="position-absolute top-0 end-0 m-2">
+                                            <span class="badge-card bg-warning text-dark">
+                                                <i class="bi bi-lock-fill"></i> پیشنهاد قیمت
+                                            </span>
+                                        </div>
+                                        {% endif %}
 
                                         {% if listing.premier %}
                                         <div class="position-absolute top-0 end-0 m-2">
-                                            <span class="badge bg-warning text-dark">
+                                            <span class="badge-card bg-warning text-dark">
                                                 <i class="bi bi-lock-fill"></i> اگهی برتر
 
                                                 <svg class="premier-star" width="18" height="18" viewBox="0 0 24 24"
@@ -546,7 +681,7 @@
                                         </div>
                                         {% elif listing.boost %}
                                         <div class="position-absolute top-0 end-0 m-2">
-                                            <span class="badge bg-warning text-dark">
+                                            <span class="badge-card bg-warning text-dark">
                                                 <i class="bi bi-lock-fill"></i> اگهی پیشرفته
                                             </span>
                                         </div>
@@ -565,15 +700,13 @@
                                             </p>
                                         </div>
 
-                                        {% if not listing.is_private or user == listing.seller %}
-                                        {% if listing.total_revenue %}
+                                        {% if listing.profit_margin %}
                                         <div class="inf-card-decoration">
-                                            <strong class="strong-inf">درامد کل:</strong>
-                                            <p class="p-card-decoration"> {{ listing.total_revenue|split_number  }}
-                                                تومان
+                                            <strong class="strong-inf">حاشیه سود:</strong>
+                                            <p class="p-card-decoration"> {{ listing.profit_margin|floatformat:0  }}
+                                                ٪
                                             </p>
                                         </div>
-                                        {% endif %}
                                         {% endif %}
 
                                         <div class="inf-card-decoration">
@@ -729,23 +862,55 @@
         /*  اعمال فیلتر به صورت انی روی لیست اگهی ها */
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.getElementById("filterForm");
+            let debounceTimer;
 
-            // auto-submit روی تمام input و select های فرم
             form.querySelectorAll("input, select").forEach(function (el) {
                 const eventType = (el.type === "checkbox" || el.tagName === "SELECT") ? "change" :
                     "input";
 
-                let debounceTimer;
                 el.addEventListener(eventType, function () {
-                    // برای input های عددی کمی تاخیر بده تا کاربر تایپ کنه
-                    if (el.type === "number") {
+                    if (el.type === "number" || el.type === "range") {
                         clearTimeout(debounceTimer);
-                        debounceTimer = setTimeout(() => form.submit(), 600);
+                        debounceTimer = setTimeout(() => form.submit(), 2000);
                     } else {
                         form.submit();
                     }
                 });
             });
+        });
+
+
+
+
+
+        /*  نمایش رنج فیلتر ها */
+        document.querySelectorAll('.range-slider').forEach(slider => {
+            const minInput = slider.querySelector('.range-min');
+            const maxInput = slider.querySelector('.range-max');
+            const fill = slider.querySelector('.range-fill');
+            const minLabel = slider.querySelector('.range-val-min');
+            const maxLabel = slider.querySelector('.range-val-max');
+            const min = +slider.dataset.min;
+            const max = +slider.dataset.max;
+
+            function fmt(val) {
+                return +val === max ? '∞' : Number(val).toLocaleString('en-us');
+            }
+
+            function update() {
+                let lo = Math.min(+minInput.value, +maxInput.value);
+                let hi = Math.max(+minInput.value, +maxInput.value);
+                const pLo = (lo - min) / (max - min) * 100;
+                const pHi = (hi - min) / (max - min) * 100;
+                fill.style.left = pLo + '%';
+                fill.style.width = (pHi - pLo) + '%';
+                minLabel.textContent = fmt(lo);
+                maxLabel.textContent = fmt(hi);
+            }
+
+            minInput.addEventListener('input', update);
+            maxInput.addEventListener('input', update);
+            update();
         });
     </script>
 

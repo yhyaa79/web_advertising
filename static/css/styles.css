@@ -1296,7 +1296,7 @@ option {
 
 .description-detail {
     margin: 12px 0;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 400;
 
 }
@@ -1337,8 +1337,12 @@ option {
     gap: 20px;
 }
 
+.img-analyst {
+    height: 100px;
+}
+
 .img-analyst img {
-    width: 110px;
+    width: 100px;
     object-fit: cover;
     border-radius: 7px;
 }
@@ -1348,14 +1352,14 @@ option {
 }
 
 .analyst-detail {
-    padding: 10px;
-    margin-bottom: 20px;
+    padding: 5px;
+    margin-bottom: 10px;
 
 }
 
 .analyst-detail p {
     white-space: pre-line;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .inf-card-analyst {
@@ -1363,6 +1367,10 @@ option {
     gap: 6px;
     align-items: center;
     gap: 5px;
+}
+
+.inf-card-analyst p {
+    font-size: 14px;
 }
 
 .strong-inf-analyst {
@@ -1484,7 +1492,7 @@ option {
 
 
 .aboutplatform-detail {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 400;
 }
 
@@ -1746,8 +1754,8 @@ option {
 }
 
 .card-img-top {
-    height: 200px;
-    width: 320px;
+    height: 185px;
+    width: 285px;
     object-fit: cover;
     border-radius: var(--border-radius-sm);
 }
@@ -2652,7 +2660,7 @@ form label {
     display: block;
     margin-bottom: var(--spacing-sm);
     color: var(--text-primary);
-    font-weight: 500;
+    font-weight: 400;
     font-size: var(--font-size-base);
 }
 
@@ -2757,6 +2765,17 @@ form textarea {
     display: inline-block;
     padding: 3px 10px;
     font-size: var(--font-size-sm);
+    font-weight: 400;
+    border-radius: var(--border-radius-999);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.badge-card {
+    padding: 2px 6px;
+    font-size: 11px;
     font-weight: 400;
     border-radius: var(--border-radius-999);
     white-space: nowrap;
@@ -2918,6 +2937,12 @@ form textarea {
     margin: auto 0;
 }
 
+.all-badge-card {
+    display: flex;
+    gap: 3px;
+    margin: auto 0;
+}
+
 .badge-detail {
     display: inline-block;
     padding: 2px 11px;
@@ -3036,8 +3061,8 @@ form textarea {
 }
 
 .col-md-3 {
-    flex: 0 0 25%;
-    max-width: 25%;
+    flex: 0 0 20%;
+    max-width: 20%;
 }
 
 .col-md-4 {
@@ -3061,8 +3086,8 @@ form textarea {
 }
 
 .col-md-11 {
-    flex: 0 0 75%;
-    max-width: 75%;
+    flex: 0 0 80%;
+    max-width: 80%;
 }
 
 .col-md-12 {
@@ -3230,7 +3255,7 @@ form textarea {
 }
 
 .all-list-notice {
-    padding: 0 20px;
+    padding: 0;
 }
 
 .dic-list-notice {
@@ -3918,7 +3943,8 @@ form textarea {
 
 /* تنظیمات کارت فیلتر */
 .custom-collapse {
-    padding: 0 10px;
+    padding-left: 25px !important;
+    padding-right: 0 !important;
     background: #f8f9fa !important;
     border-top: none;
     border-radius: 0 0 8px 8px;
@@ -3943,7 +3969,7 @@ form textarea {
 /* کوچکتر کردن لیبل‌ها */
 .filter-group .form-label {
     margin-bottom: 5px;
-    font-size: 0.8rem;
+    font-size: 14px;
     color: #495057;
 }
 
@@ -3967,9 +3993,7 @@ form textarea {
     gap: 2px;
 }
 
-.div-btn-delet {
-
-}
+.div-btn-delet {}
 
 .filter-label {
     display: grid;
@@ -4025,6 +4049,88 @@ form textarea {
     display: flex;
     gap: 15px;
 }
+
+
+
+
+
+.range-slider {
+    position: relative;
+    direction: ltr;
+    /* مهم: slider باید ltr باشه */
+}
+
+.range-track {
+    position: relative;
+    height: 6px;
+    background: #dee2e6;
+    border-radius: 6px;
+    margin: 12px 0;
+}
+
+.range-fill {
+    position: absolute;
+    height: 100%;
+    background: #0d6efd;
+    border-radius: 6px;
+    pointer-events: none;
+}
+
+.range-input {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    top: 0;
+    left: 0;
+    background: transparent;
+    pointer-events: none;
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+    padding: 0;
+}
+
+.range-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #0d6efd;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.range-input::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #0d6efd;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.range-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: #495057;
+    direction: rtl;
+    /* برچسب‌ها RTL */
+}
+
+.range-labels .range-val-min::before {
+    content: "از: ";
+}
+
+.range-labels .range-val-max::before {
+    content: "تا: ";
+}
+
 
 
 /* ========================================
@@ -4670,68 +4776,127 @@ section {
     background: radial-gradient(circle, rgba(108, 71, 255, .2), transparent 70%);
 }
 
-.visual-chart {
-    position: relative;
-    z-index: 1;
-}
+/* ===== Chart Section ===== */
 
-.chart-bars {
+
+.charts-section .section-header {
     display: flex;
-    align-items: flex-end;
-    gap: .5rem;
-    height: 140px;
-    margin-bottom: 1rem;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
 }
 
-.bar {
-    flex: 1;
-    border-radius: 6px 6px 0 0;
-    background: linear-gradient(to top, var(--primary), #a78bfa);
-    transition: height .6s ease;
-}
-
-.chart-label {
-    font-size: .8rem;
-    color: var(--muted);
-    text-align: center;
-}
-
-.visual-change {
-    display: flex;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-    flex-wrap: wrap
-}
-
-.visual-box-text {
-    background: #d7dcf5;
-    border-radius: 10px;
-    padding: .75rem 1.25rem
-}
-
-.visual-text {
-    font-size: .75rem;
-    color: var(--muted)
-}
-
-.visual-numb {
+.charts-section .section-header h3 {
+    color: #1e293b;
     font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--black)
+    font-weight: 700;
+    margin: 0;
 }
 
-.chart-value {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--black);
-    margin-bottom: .3rem;
+.charts-section .section-divider {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(100, 116, 139, 0.3) 0%, transparent 100%);
 }
 
-.chart-change {
-    color: var(--green);
-    font-size: .85rem;
+.chart-card {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 25px;
+
+}
+
+.chart-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 8px 8px 0 0;
+}
+
+.chart-card.income-card::before {
+    background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.chart-card.views-card::before {
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+.chart-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.chart-card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #1e293b;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.chart-card-title .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.income-card .dot {
+    background: #10b981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+.views-card .dot {
+    background: #3b82f6;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+}
+
+.chart-stat-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
     font-weight: 600;
+    font-family: Vazir, IRANSans, sans-serif;
 }
+
+.income-card .chart-stat-badge {
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.views-card .chart-stat-badge {
+    background: rgba(59, 130, 246, 0.1);
+    color: #2563eb;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 240px;
+}
+
+.chart-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: #94a3b8;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
 
 /* ── TESTIMONIALS ── */
 
