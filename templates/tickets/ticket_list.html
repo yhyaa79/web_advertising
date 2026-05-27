@@ -35,27 +35,27 @@
                             <td>{{ ticket.subject }}</td>
                             <td>
                                 {% if ticket.category %}
-                                <span class="badge bg-info">{{ ticket.category.name }}</span>
+                                <span class="badge-normal">{{ ticket.category.name }}</span>
                                 {% else %}
                                 -
                                 {% endif %}
                             </td>
                             <td>
                                 {% if ticket.priority == 'low' %}
-                                <span class="badge bg-info">کم</span>
+                                <span class="badge-normal">کم</span>
                                 {% elif ticket.priority == 'medium' %}
-                                <span class="badge bg-warning">متوسط</span>
+                                <span class="badge-normal">متوسط</span>
                                 {% else %}
-                                <span class="badge bg-danger">بالا</span>
+                                <span class="badge-normal">بالا</span>
                                 {% endif %}
                             </td>
                             <td>
                                 {% if ticket.status == 'open' %}
-                                <span class="badge bg-success">باز</span>
+                                <span class="badge-normal">باز</span>
                                 {% elif ticket.status == 'answered' %}
-                                <span class="badge bg-primary">پاسخ داده شده</span>
+                                <span class="badge-normal">پاسخ داده شده</span>
                                 {% else %}
-                                <span class="badge bg-secondary">بسته شده</span>
+                                <span class="badge-normal">بسته شده</span>
                                 {% endif %}
                             </td>
                             <td>{{ ticket.created_at|date:"Y/m/d H:i" }}</td>

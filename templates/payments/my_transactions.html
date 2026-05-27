@@ -40,9 +40,9 @@
 
                                 <td>
                                     {% if proposal.buyer == request.user %}
-                                    <span class="badge badge-primary">خرید</span>
+                                    <span class="badge-normal">خرید</span>
                                     {% else %}
-                                    <span class="badge badge-success">فروش</span>
+                                    <span class="badge-normal">فروش</span>
                                     {% endif %}
                                 </td>
 
@@ -57,11 +57,11 @@
                                 <td>
                                     <!-- اضافه کن -->
                                     {% if proposal.status == 'negotiating' %}
-                                    <span class="badge bg-warning">در حال گفتگو</span>
+                                    <span class="badge-normal">در حال گفتگو</span>
                                     {% elif proposal.status == 'deal_confirmed' %}
-                                    <span class="badge bg-success">تایید شده</span>
+                                    <span class="badge-normal">تایید شده</span>
                                     {% elif proposal.status == 'rejected' %}
-                                    <span class="badge bg-danger">رد شده</span>
+                                    <span class="badge-normal">رد شده</span>
                                     {% endif %}
                                 </td>
 
@@ -72,22 +72,22 @@
                                 <td>
                                     <span id="buyer-status-{{ proposal.id }}">
                                         {% if proposal.status == 'rejected' and proposal.buyer_rejected %}
-                                        <span class="badge badge-danger">✗ رد کرده</span>
+                                        <span class="badge-normal">✗ رد کرده</span>
                                         {% elif proposal.buyer_agreed %}
-                                        <span class="badge badge-success">✓ موافق</span>
+                                        <span class="badge-normal">✓ موافق</span>
                                         {% else %}
-                                        <span class="badge badge-secondary">در انتظار</span>
+                                        <span class="badge-normal">در انتظار</span>
                                         {% endif %}
                                     </span>
                                 </td>
                                 <td>
                                     <span id="seller-status-{{ proposal.id }}">
                                         {% if proposal.status == 'rejected' and proposal.seller_rejected %}
-                                        <span class="badge badge-danger">✗ رد کرده</span>
+                                        <span class="badge-normal">✗ رد کرده</span>
                                         {% elif proposal.seller_agreed %}
-                                        <span class="badge badge-success">✓ موافق</span>
+                                        <span class="badge-normal">✓ موافق</span>
                                         {% else %}
-                                        <span class="badge badge-secondary">در انتظار</span>
+                                        <span class="badge-normal">در انتظار</span>
                                         {% endif %}
                                     </span>
                                 </td>
@@ -164,7 +164,7 @@
                                 <td>{{ transaction.amount|floatformat:0 }} تومان</td>
                                 <td>
                                     <span
-                                        class="badge {% if transaction.status == 'completed' %}badge-success{% else %}badge-danger{% endif %}">
+                                        class="badge-normal {% if transaction.status == 'completed' %}badge-success{% else %}badge-danger{% endif %}">
                                         {{ transaction.get_status_display }}
                                     </span>
                                 </td>

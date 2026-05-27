@@ -230,8 +230,8 @@
                                         max="10000000000" step="1000000"
                                         value="{{ request.GET.max_price|default:10000000000 }}">
                                     <div class="range-labels">
-                                        <span class="range-val-max"></span>
                                         <span class="range-val-min"></span>
+                                        <span class="range-val-max"></span>
                                     </div>
                                 </div>
                             </div>
@@ -248,8 +248,8 @@
                                     <input type="range" class="range-input range-max" name="max_age" min="0" max="20"
                                         step="1" value="{{ request.GET.max_age|default:20 }}">
                                     <div class="range-labels">
-                                        <span class="range-val-max"></span>
                                         <span class="range-val-min"></span>
+                                        <span class="range-val-max"></span>
                                     </div>
                                 </div>
                             </div>
@@ -267,8 +267,8 @@
                                         max="10000000" step="1000"
                                         value="{{ request.GET.max_followers|default:10000000 }}">
                                     <div class="range-labels">
-                                        <span class="range-val-max"></span>
                                         <span class="range-val-min"></span>
+                                        <span class="range-val-max"></span>
                                     </div>
                                 </div>
                             </div>
@@ -286,8 +286,8 @@
                                         max="1000000000" step="100000"
                                         value="{{ request.GET.max_income|default:1000000000 }}">
                                     <div class="range-labels">
-                                        <span class="range-val-max"></span>
                                         <span class="range-val-min"></span>
+                                        <span class="range-val-max"></span>
                                     </div>
                                 </div>
                             </div>
@@ -304,8 +304,8 @@
                                     <input type="range" class="range-input range-max" name="max_roi_months" min="0"
                                         max="120" step="1" value="{{ request.GET.max_roi_months|default:120 }}">
                                     <div class="range-labels">
-                                        <span class="range-val-max"></span>
                                         <span class="range-val-min"></span>
+                                        <span class="range-val-max"></span>
                                     </div>
                                 </div>
                             </div>
@@ -322,8 +322,8 @@
                                     <input type="range" class="range-input range-max" name="max_profit_margin" min="0"
                                         max="100" step="1" value="{{ request.GET.max_profit_margin|default:100 }}">
                                     <div class="range-labels">
-                                        <span class="range-val-max"></span>
                                         <span class="range-val-min"></span>
+                                        <span class="range-val-max"></span>
                                     </div>
                                 </div>
                             </div>
@@ -340,8 +340,8 @@
                                     <input type="range" class="range-input range-max" name="max_views" min="0"
                                         max="10000000" step="1000" value="{{ request.GET.max_views|default:10000000 }}">
                                     <div class="range-labels">
-                                        <span class="range-val-max"></span>
                                         <span class="range-val-min"></span>
+                                        <span class="range-val-max"></span>
                                     </div>
                                 </div>
                             </div>
@@ -729,7 +729,8 @@
 
                                 <div class="save-share-card">
 
-                                    <button class="share-listing-btn">
+                                    <button class="share-listing-btn" data-title="{{ listing.title }}"
+                                        data-url="{{ request.scheme }}://listings/{{ request.get_host }}{% url 'listings:listing_detail' listing.pk %}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <circle cx="18" cy="5" r="3" />
@@ -858,63 +859,53 @@
     </div>
 
 
+
     <script>
-        /*  اعمال فیلتر به صورت انی روی لیست اگهی ها */
-        document.addEventListener("DOMContentLoaded", function () {
-            const form = document.getElementById("filterForm");
-            let debounceTimer;
+        /*  ========================================
+  دکمه ذخیره آگهی 
 
-            form.querySelectorAll("input, select").forEach(function (el) {
-                const eventType = (el.type === "checkbox" || el.tagName === "SELECT") ? "change" :
-                    "input";
+  templates/listings/listing_list.html
+   ========================================  */
 
-                el.addEventListener(eventType, function () {
-                    if (el.type === "number" || el.type === "range") {
-                        clearTimeout(debounceTimer);
-                        debounceTimer = setTimeout(() => form.submit(), 2000);
-                    } else {
-                        form.submit();
-                    }
+        document.addEventListener('DOMContentLoaded', function () {
+            // دکمه ذخیره آگهی
+            document.querySelectorAll('.save-listing-btn').forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const listingId = this.dataset.listingId;
+                    const isSaved = this.dataset.isSaved === 'true';
+
+                    // پیدا کردن SVG و متن داخل دکمه
+                    const icon = this.querySelector('.bookmark-icon');
+                    const text = this.querySelector('span');
+
+                    fetch(`/accounts/toggle-save-listing/${listingId}/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                if (data.is_saved) {
+                                    // اضافه کردن انیمیشن و توپر شدن آیکون
+                                    icon.classList.add('saved');
+                                    text.textContent = 'ذخیره شده';
+                                    this.dataset.isSaved = 'true';
+                                } else {
+                                    // حذف انیمیشن و توخالی شدن آیکون
+                                    icon.classList.remove('saved');
+                                    text.textContent = 'ذخیره';
+                                    this.dataset.isSaved = 'false';
+                                }
+                            }
+                        });
                 });
             });
         });
-
-
-
-
-
-        /*  نمایش رنج فیلتر ها */
-        document.querySelectorAll('.range-slider').forEach(slider => {
-            const minInput = slider.querySelector('.range-min');
-            const maxInput = slider.querySelector('.range-max');
-            const fill = slider.querySelector('.range-fill');
-            const minLabel = slider.querySelector('.range-val-min');
-            const maxLabel = slider.querySelector('.range-val-max');
-            const min = +slider.dataset.min;
-            const max = +slider.dataset.max;
-
-            function fmt(val) {
-                return +val === max ? '∞' : Number(val).toLocaleString('en-us');
-            }
-
-            function update() {
-                let lo = Math.min(+minInput.value, +maxInput.value);
-                let hi = Math.max(+minInput.value, +maxInput.value);
-                const pLo = (lo - min) / (max - min) * 100;
-                const pHi = (hi - min) / (max - min) * 100;
-                fill.style.left = pLo + '%';
-                fill.style.width = (pHi - pLo) + '%';
-                minLabel.textContent = fmt(lo);
-                maxLabel.textContent = fmt(hi);
-            }
-
-            minInput.addEventListener('input', update);
-            maxInput.addEventListener('input', update);
-            update();
-        });
     </script>
-
-
 
 
 

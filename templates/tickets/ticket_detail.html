@@ -9,53 +9,85 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card mb-4 pad-10">
+                <div class="d-flex justify-content-between-ticket align-items-center">
                     <div>
                         <h3>{{ ticket.subject }}</h3>
-                        <small class="text-muted">شماره تیکت: #{{ ticket.id }}</small>
-                        {% if ticket.category %}
-                        <span class="badge bg-info">{{ ticket.category.name }}</span>
-                        {% endif %}
-                    </div>
-                    <div>
-                        {% if ticket.status == 'open' %}
-                        <span class="badge bg-success">باز</span>
-                        {% elif ticket.status == 'answered' %}
-                        <span class="badge bg-primary">پاسخ داده شده</span>
-                        {% else %}
-                        <span class="badge bg-secondary">بسته شده</span>
-                        {% endif %}
 
-                        {% if ticket.priority == 'low' %}
-                        <span class="badge bg-info">کم</span>
-                        {% elif ticket.priority == 'medium' %}
-                        <span class="badge bg-warning">متوسط</span>
-                        {% else %}
-                        <span class="badge bg-danger">بالا</span>
-                        {% endif %}
+
+                        <div class="detail-ticket-card-item">
+                            <span class="detail-ticket-card-item-muted">شماره تیکت: </span>
+                            <div class="detail-ticket-card-item-text">
+                                <span>#{{ ticket.id }}</span>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="detail-ticket-card">
+
+                        <div>
+                            {% if ticket.category %}
+                            <span class="detail-ticket-card-item-muted">دسته بندی: </span>
+                            <div class="detail-ticket-card-item-text">
+                                <span>{{ ticket.category.name }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <span class="detail-ticket-card-item-muted">وضعیت تیکت: </span>
+                            <div class="detail-ticket-card-item-text">
+                                {% if ticket.status == 'open' %}
+                                <span>باز</span>
+                                {% elif ticket.status == 'answered' %}
+                                <span>پاسخ داده شده</span>
+                                {% else %}
+                                <span>بسته شده</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div>
+                            <span class="detail-ticket-card-item-muted">اولویت تیکت: </span>
+                            <div class="detail-ticket-card-item-text">
+                                {% if ticket.priority == 'low' %}
+                                <span>کم</span>
+                                {% elif ticket.priority == 'medium' %}
+                                <span>متوسط</span>
+                                {% else %}
+                                <span>بالا</span>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <hr>
+
                 <div class="card-body">
                     <div class="messages-container">
                         {% for msg in ticket_messages %}
                         <div
-                            class="message-item {% if msg.is_admin_reply %}admin-message{% else %}user-message{% endif %} mb-3 p-3 rounded">
+                            class="message-item-ticket {% if msg.is_admin_reply %}admin-message{% else %}user-message{% endif %} mb-3 p-3 rounded">
                             <div class="d-flex justify-content-between mb-2">
                                 <strong>
                                     {% if msg.is_admin_reply %}
-                                    <span class="text-danger">پشتیبان</span>
+                                    <span class="text-danger heder-ticket-name-text">پشتیبان</span>
                                     {% else %}
-                                    <span class="text-primary">{{ msg.sender.username }}</span>
+                                    <span class="text-primary heder-ticket-name-text">{{ msg.sender.username }}</span>
                                     {% endif %}
                                 </strong>
-                                <small class="text-muted">{{ msg.created_at|date:"Y/m/d H:i" }}</small>
+                                <small
+                                    class="text-muted heder-ticket-name-text">{{ msg.created_at|date:"Y/m/d H:i" }}</small>
                             </div>
-                            <div class="message-text">
+                            <div class="message-text-ticket">
                                 {{ msg.message|linebreaks }}
                             </div>
                             {% if msg.attachment %}
-                            <div class="mt-2">
+                            <div class="pad-10">
                                 <a href="{{ msg.attachment.url }}" target="_blank"
                                     class="btn btn-sm btn-outline-secondary">
                                     📎 دانلود فایل پیوست
@@ -90,22 +122,18 @@
                         </form>
                     </div>
                     {% else %}
-                    <div class="alert alert-warning mt-4">
+                    <div class="alert-ticket alert-warning mt-4">
                         در انتظار پاسخ پشتیبانی هستید.
                     </div>
                     {% endif %}
                     {% else %}
-                    <div class="alert alert-secondary mt-4">
+                    <div class="alert-ticket alert-danger mt-4">
                         این تیکت بسته شده است.
                     </div>
                     {% endif %}
 
-                    <div class="mt-3">
+                    <div class="mt-5">
                         <a href="{% url 'tickets:ticket_list' %}" class="btn btn-secondary">بازگشت به لیست</a>
-                        {% if ticket.status != 'closed' %}
-                        <a href="{% url 'tickets:ticket_close' ticket.pk %}" class="btn btn-outline-secondary"
-                            onclick="return confirm('آیا مطمئن هستید؟')">بستن تیکت</a>
-                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -113,31 +141,4 @@
     </div>
 </div>
 
-<style>
-    .messages-container {
-        max-height: 500px;
-        overflow-y: auto;
-        padding: 10px;
-    }
-
-    .message-item {
-        border: 1px solid #ddd;
-    }
-
-    .admin-message {
-        background-color: #fff3cd;
-        border-right: 4px solid #ffc107;
-    }
-
-    .user-message {
-        background-color: #d1ecf1;
-        border-right: 4px solid #0dcaf0;
-    }
-
-    .message-text {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        line-height: 1.6;
-    }
-</style>
 {% endblock %}

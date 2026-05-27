@@ -473,6 +473,11 @@ option {
     margin: 10px 10px 30px 10px;
 }
 
+.scroll-link-save-share {
+    display: flex;
+    gap: 25px;
+}
+
 .scroll-link-navbar {
     display: flex;
     flex-wrap: wrap;
@@ -838,76 +843,301 @@ option {
 /* ========================================
    پیام‌های هشدار (Alerts)
    ======================================== */
-.alert {
-    padding: var(--spacing-md) var(--spacing-md);
-    margin: var(--spacing-xxl);
-    border-radius: var(--border-radius-md);
-    border: none;
-    position: relative;
-}
+/* ========================================
+   سیستم نوتیفیکیشن
+   ======================================== */
 
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-}
-
-.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-
-.alert-warning {
-    background-color: #fff3cd;
-    color: #856404;
-}
-
-.alert-info {
-    background-color: #d1ecf1;
-    color: #0c5460;
-    padding: 12px 14px;
-    border-radius: var(--border-radius-lg);
-    margin: 10px 0;
-}
-
-/* ثابت کردن موقعیت هشدار در بالای صفحه */
-.alert-dismissible {
+#notification-container {
     position: fixed;
-    top: 90px;
+    top: 0;
     left: 50%;
-    transform: translateX(-50%) translateY(-150%);
-    /* قرارگیری اولیه بیرون از کادر بالایی */
+    transform: translateX(-50%);
     z-index: 9999;
-    min-width: 300px;
-    text-align: center;
-
-    /* اجرای انیمیشن: مجموع زمان ۶ ثانیه (۱ ثانیه ورود و خروج + ۵ ثانیه توقف) */
-    animation: slideDownUp 6s ease-in-out forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding-top: 12px;
+    pointer-events: none;
 }
 
-@keyframes slideDownUp {
-    0% {
-        transform: translateX(-50%) translateY(-150%);
+.notification {
+    pointer-events: all;
+    min-width: 320px;
+    max-width: 480px;
+    padding: 14px 18px;
+    border-radius: 4px;
+    border-left: 4px solid;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    font-size: 14px;
+    line-height: 1.5;
+    direction: rtl;
+    border-left: none;
+    border-right: 4px solid;
+
+    /* انیمیشن ورود */
+    animation: notif-slide-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.notification.hiding {
+    animation: notif-slide-out 0.3s ease-in forwards;
+}
+
+/* رنگ‌ها */
+.notification.success {
+    background: rgba(220, 252, 231, 0.88);
+    border-color: #16a34a;
+    color: #14532d;
+}
+
+.notification.info {
+    background: rgba(219, 234, 254, 0.88);
+    border-color: #2563eb;
+    color: #1e3a8a;
+}
+
+.notification.error {
+    background: rgba(254, 226, 226, 0.88);
+    border-color: #dc2626;
+    color: #7f1d1d;
+}
+
+.notification.warning {
+    background: rgba(254, 243, 199, 0.88);
+    border-color: #d97706;
+    color: #78350f;
+}
+
+/* آیکون */
+.notification-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.notification.success .notification-icon { color: #16a34a; }
+.notification.info    .notification-icon { color: #2563eb; }
+.notification.error   .notification-icon { color: #dc2626; }
+.notification.warning .notification-icon { color: #d97706; }
+
+/* متن */
+.notification-text {
+    flex: 1;
+    font-weight: 500;
+}
+
+/* دکمه بستن */
+.notification-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 16px;
+    line-height: 1;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    color: inherit;
+    flex-shrink: 0;
+}
+
+.notification-close:hover {
+    opacity: 1;
+}
+
+/* progress bar */
+.notification-progress {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 0 0 0 4px;
+    animation: notif-progress linear forwards;
+}
+
+.notification {
+    position: relative;
+    overflow: hidden;
+}
+
+.notification.success .notification-progress { background: #16a34a; }
+.notification.info    .notification-progress { background: #2563eb; }
+.notification.error   .notification-progress { background: #dc2626; }
+.notification.warning .notification-progress { background: #d97706; }
+
+/* کی‌فریم‌ها */
+@keyframes notif-slide-in {
+    from {
         opacity: 0;
+        transform: translateY(-28px) scale(0.96);
     }
-
-    10% {
-        /* بعد از 0.6 ثانیه به پایین می‌آید */
-        transform: translateX(-50%) translateY(0);
+    to {
         opacity: 1;
+        transform: translateY(0) scale(1);
     }
+}
 
-    85% {
-        /* تا ثانیه 5.1 ثابت می‌ماند */
-        transform: translateX(-50%) translateY(0);
+@keyframes notif-slide-out {
+    from {
         opacity: 1;
+        transform: translateY(0) scale(1);
+        max-height: 100px;
+        margin-bottom: 0;
     }
-
-    100% {
-        /* در نهایت به بالا برمی‌گردد و حذف می‌شود */
-        transform: translateX(-50%) translateY(-150%);
+    to {
         opacity: 0;
-        visibility: hidden;
-        /* جلوگیری از کلیک خوردن بعد از مخفی شدن */
+        transform: translateY(-16px) scale(0.95);
+        max-height: 0;
+        margin-bottom: -8px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
+
+@keyframes notif-progress {
+    from { width: 100%; }
+    to   { width: 0%; }
+}
+
+
+/* ========================================
+   Modal Confirm
+   ======================================== */
+
+#confirm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(2px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: confirm-overlay-in 0.2s ease forwards;
+}
+
+#confirm-overlay.hiding {
+    animation: confirm-overlay-out 0.2s ease forwards;
+}
+
+#confirm-box {
+    background: #fff;
+    border-radius: 4px;
+    padding: 28px 28px 22px;
+    min-width: 300px;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    direction: rtl;
+    animation: confirm-box-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+#confirm-overlay.hiding #confirm-box {
+    animation: confirm-box-out 0.2s ease forwards;
+}
+
+/* آیکون */
+.confirm-icon {
+    font-size: 32px;
+    text-align: center;
+}
+
+.confirm-icon.warning { color: #d97706; }
+.confirm-icon.error   { color: #dc2626; }
+.confirm-icon.info    { color: #2563eb; }
+.confirm-icon.success { color: #16a34a; }
+
+/* متن */
+.confirm-message {
+    font-size: 15px;
+    font-weight: 500;
+    color: #1f2937;
+    text-align: center;
+    line-height: 1.7;
+}
+
+/* دکمه‌ها */
+.confirm-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.confirm-btn {
+    flex: 1;
+    padding: 9px 0;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.15s;
+}
+
+.confirm-btn:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+}
+
+.confirm-btn:active {
+    transform: translateY(0);
+}
+
+.confirm-btn-ok {
+    background: #dc2626;
+    color: #fff;
+}
+
+.confirm-btn-ok.success { background: #16a34a; }
+.confirm-btn-ok.info    { background: #2563eb; }
+.confirm-btn-ok.warning { background: #d97706; }
+
+.confirm-btn-cancel {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.confirm-btn-cancel:hover {
+    background: #e5e7eb;
+    opacity: 1;
+}
+
+/* کی‌فریم‌ها */
+@keyframes confirm-overlay-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes confirm-overlay-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+@keyframes confirm-box-in {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes confirm-box-out {
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.94) translateY(8px);
     }
 }
 
@@ -1491,15 +1721,18 @@ option {
    ======================================== */
 
 
-.aboutplatform-detail {
+.aboutplatform-detail {}
+
+.about-platform-detail {
     font-size: 15px;
     font-weight: 400;
-}
-
-.aboutplatform-detail-p {
+    padding: 15px;
     white-space: pre-line;
-    padding: 10px;
-    margin-bottom: 20px;
+    font-size: 15px;
+    font-weight: 400;
+    padding: 15px;
+    white-space: pre-line;
+    margin-top: -35px;
 }
 
 .aboutplatform-text {
@@ -2403,6 +2636,11 @@ option {
     width: 280px;
 }
 
+
+.justify-content-between {
+    gap: 15px;
+}
+
 /* ========================================
    hr
    ======================================== */
@@ -2771,6 +3009,7 @@ form textarea {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: fit-content;
 }
 
 .badge-card {
@@ -2786,6 +3025,22 @@ form textarea {
 
 
 /* تگ‌های وضعیت */
+
+.badge-normal {
+    padding: 3px 10px;
+    font-size: var(--font-size-base);
+    font-weight: 400;
+    border-radius: var(--border-radius-999);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-width: 85px;
+    background: #dfe9f3;
+    /* border: 1.5px solid #9baaae; */
+}
+
 
 .tag-active {
     background: #92d391;
@@ -3049,7 +3304,6 @@ form textarea {
 .row {
     display: flex;
     flex-wrap: wrap;
-    margin: 0 -0.75rem;
 }
 
 .col-md-3,
@@ -3233,6 +3487,7 @@ form textarea {
 
 .serch-home input {
     background: var(--white-bg);
+     padding: 12px !important;
 }
 
 .serch-bar-home {
@@ -3599,6 +3854,94 @@ form textarea {
 
 
 
+
+
+/* ========================================
+   تیکت (ticket)
+   ======================================== */
+
+.heder-ticket-name {}
+
+.heder-ticket-name-text {
+    display: flex;
+    min-height: 35px;
+    padding: 3px 10px;
+    border-radius: var(--border-radius-999);
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+}
+
+.justify-content-between-ticket {
+    justify-content: space-between;
+}
+
+.messages-container {
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.message-item-ticket {
+    border-radius: var(--border-radius-sm-md);
+    border: 1px solid #ddd;
+}
+
+.admin-message {
+    background-color: #fff3cd;
+    border-right: 4px solid #ffc107;
+}
+
+.user-message {
+    background-color: #d1ecf1;
+    border-right: 4px solid #0dcaf0;
+}
+
+.message-text-ticket {
+    padding: 10px 30px;
+    word-wrap: break-word;
+    line-height: 1.6;
+}
+
+
+.detail-ticket-card {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
+}
+
+.detail-ticket-card-item {
+    display: flex;
+    gap: 7px
+}
+
+.detail-ticket-card-item-muted {
+    color: var(--text-secondary);
+    font-size: var(--font-size-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.detail-ticket-card-item-text {
+    font-size: var(--font-size-md);
+    color: var(--text-secondary);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.alert-ticket {
+    padding: var(--spacing-md) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    border: none;
+    position: relative;
+    margin: 0 10px;
+}
 
 /* ========================================
    چت (Chat)
@@ -4057,7 +4400,6 @@ form textarea {
 .range-slider {
     position: relative;
     direction: ltr;
-    /* مهم: slider باید ltr باشه */
 }
 
 .range-track {
@@ -4088,6 +4430,7 @@ form textarea {
     appearance: none;
     margin: 0;
     padding: 0;
+    transform: scaleX(-1);
 }
 
 .range-input::-webkit-slider-thumb {
@@ -4130,6 +4473,34 @@ form textarea {
 .range-labels .range-val-max::before {
     content: "تا: ";
 }
+
+
+/* برای کروم، اج، سافاری (WebKit) */
+.range-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px; /* اندازه دایره */
+    height: 16px;
+    border-radius: 50%;
+    background: #0d6efd; /* رنگ داخل دایره */
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* سایه جذاب */
+    cursor: pointer;
+    pointer-events: auto; /* بسیار مهم برای اینکه دایره‌ها قابل کشیدن باشند */
+}
+
+/* برای فایرفاکس */
+.range-input::-moz-range-thumb {
+    width: 20px; /* اندازه دایره */
+    height: 20px;
+    border-radius: 50%;
+    background: #0d6efd; /* رنگ داخل دایره */
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* سایه جذاب */
+    cursor: pointer;
+    pointer-events: auto;
+}
+
 
 
 
@@ -5022,6 +5393,7 @@ footer {
     background: var(--white);
     padding: 60px 5% 30px;
     border-top: 1px solid #dee2e6 !important;
+    margin-top: 80px;
 }
 
 .footer-grid {

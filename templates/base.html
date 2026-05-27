@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}پلتفرم خرید و فروش{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="{% static 'js/script-head.js' %}"></script>
 
 </head>
 
@@ -194,27 +195,9 @@
         </div>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const dropBtn = document.getElementById('moreMenuBtn');
-            const dropdown = document.getElementById('moreDropdown');
 
-            // باز و بسته کردن منو با کلیک روی دکمه
-            dropBtn.addEventListener('click', function (event) {
-                event.preventDefault(); // جلوگیری از پرش صفحه به بالا
-                dropdown.classList.toggle('show');
-            });
-
-            // بستن منو در صورت کلیک در هر جای دیگر از صفحه
-            window.addEventListener('click', function (event) {
-                if (!event.target.closest('.dropdown-container')) {
-                    if (dropdown.classList.contains('show')) {
-                        dropdown.classList.remove('show');
-                    }
-                }
-            });
-        });
-    </script>
+<script src="{% static 'js/chart.umd.min.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
 
 
 </body>
