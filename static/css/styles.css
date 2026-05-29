@@ -316,7 +316,7 @@ option {
     position: fixed;
     top: 0;
     width: 100%;
-    height: 80px;
+    height: 70px;
     z-index: 1000;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -339,7 +339,7 @@ option {
 .navbar-scrolled {
     background-color: #ffffff;
     transition: background-color 0.3s ease;
-    box-shadow: 0 2px 10px 0 #0000007a;
+    box-shadow: 0 2px 10px 0 #00000048;
 }
 
 /* تغییر رنگ لینک‌ها در حالت روشن (اختیاری) */
@@ -375,7 +375,7 @@ option {
     color: var(--primary) !important;
 }
 
-.notification-link,
+
 .dropdown-toggle {
     margin-top: 10px;
 }
@@ -397,8 +397,8 @@ option {
     display: none;
     /* در حالت عادی مخفی است */
     position: absolute;
-    top: 100%;
-    left: 0;
+    top: 40px;
+    left: 0px;
     /* چون سایت RTL است، left: 0 باعث می‌شود منو سمت چپ دکمه تراز شود */
     background-color: #ffffff;
     min-width: 160px;
@@ -412,7 +412,7 @@ option {
 
 .dropdown-navbar a {
     color: #333;
-    padding: 10px 16px;
+    padding: 7px 12px;
     text-decoration: none;
     display: block;
     text-align: right;
@@ -919,10 +919,21 @@ option {
     margin-top: 1px;
 }
 
-.notification.success .notification-icon { color: #16a34a; }
-.notification.info    .notification-icon { color: #2563eb; }
-.notification.error   .notification-icon { color: #dc2626; }
-.notification.warning .notification-icon { color: #d97706; }
+.notification.success .notification-icon {
+    color: #16a34a;
+}
+
+.notification.info .notification-icon {
+    color: #2563eb;
+}
+
+.notification.error .notification-icon {
+    color: #dc2626;
+}
+
+.notification.warning .notification-icon {
+    color: #d97706;
+}
 
 /* متن */
 .notification-text {
@@ -963,10 +974,21 @@ option {
     overflow: hidden;
 }
 
-.notification.success .notification-progress { background: #16a34a; }
-.notification.info    .notification-progress { background: #2563eb; }
-.notification.error   .notification-progress { background: #dc2626; }
-.notification.warning .notification-progress { background: #d97706; }
+.notification.success .notification-progress {
+    background: #16a34a;
+}
+
+.notification.info .notification-progress {
+    background: #2563eb;
+}
+
+.notification.error .notification-progress {
+    background: #dc2626;
+}
+
+.notification.warning .notification-progress {
+    background: #d97706;
+}
 
 /* کی‌فریم‌ها */
 @keyframes notif-slide-in {
@@ -974,6 +996,7 @@ option {
         opacity: 0;
         transform: translateY(-28px) scale(0.96);
     }
+
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -987,6 +1010,7 @@ option {
         max-height: 100px;
         margin-bottom: 0;
     }
+
     to {
         opacity: 0;
         transform: translateY(-16px) scale(0.95);
@@ -998,8 +1022,13 @@ option {
 }
 
 @keyframes notif-progress {
-    from { width: 100%; }
-    to   { width: 0%; }
+    from {
+        width: 100%;
+    }
+
+    to {
+        width: 0%;
+    }
 }
 
 
@@ -1048,10 +1077,21 @@ option {
     text-align: center;
 }
 
-.confirm-icon.warning { color: #d97706; }
-.confirm-icon.error   { color: #dc2626; }
-.confirm-icon.info    { color: #2563eb; }
-.confirm-icon.success { color: #16a34a; }
+.confirm-icon.warning {
+    color: #d97706;
+}
+
+.confirm-icon.error {
+    color: #dc2626;
+}
+
+.confirm-icon.info {
+    color: #2563eb;
+}
+
+.confirm-icon.success {
+    color: #16a34a;
+}
 
 /* متن */
 .confirm-message {
@@ -1094,9 +1134,17 @@ option {
     color: #fff;
 }
 
-.confirm-btn-ok.success { background: #16a34a; }
-.confirm-btn-ok.info    { background: #2563eb; }
-.confirm-btn-ok.warning { background: #d97706; }
+.confirm-btn-ok.success {
+    background: #16a34a;
+}
+
+.confirm-btn-ok.info {
+    background: #2563eb;
+}
+
+.confirm-btn-ok.warning {
+    background: #d97706;
+}
 
 .confirm-btn-cancel {
     background: #f3f4f6;
@@ -1110,13 +1158,23 @@ option {
 
 /* کی‌فریم‌ها */
 @keyframes confirm-overlay-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes confirm-overlay-out {
-    from { opacity: 1; }
-    to   { opacity: 0; }
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
 }
 
 @keyframes confirm-box-in {
@@ -1124,6 +1182,7 @@ option {
         opacity: 0;
         transform: scale(0.92) translateY(12px);
     }
+
     to {
         opacity: 1;
         transform: scale(1) translateY(0);
@@ -1135,6 +1194,7 @@ option {
         opacity: 1;
         transform: scale(1) translateY(0);
     }
+
     to {
         opacity: 0;
         transform: scale(0.94) translateY(8px);
@@ -1524,6 +1584,11 @@ option {
     width: 100%;
 }
 
+.card-body-decoration {
+    padding: 5px 15px 5px 2px;
+    width: 100%;
+}
+
 .description-detail {
     margin: 12px 0;
     font-size: 15px;
@@ -1544,12 +1609,16 @@ option {
 
 
 .card-inf {
-    border-radius: var(--border-radius-sm-md);
+    border-radius: 4px;
     box-shadow: var(--card-shadow);
     border: none;
     overflow: hidden;
     transition: var(--transition-base);
-    padding: 8px 12px;
+    padding: 4px 14px;
+    margin: 0 auto;
+    width: fit-content;
+    font-weight: 500;
+    font-size: 11px;
 }
 
 /* ========================================
@@ -1981,7 +2050,6 @@ option {
 }
 
 .card-img {
-    padding: 5px;
     max-height: 210px;
     display: inline-block;
 }
@@ -2303,9 +2371,11 @@ option {
     margin-bottom: 5px;
 }
 
-/* .between-price-btn {
-    height: 50px;
-} */
+.between-price-btn {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+}
 
 .btn-primary-div {
     margin-top: auto;
@@ -3013,7 +3083,7 @@ form textarea {
 }
 
 .badge-card {
-    padding: 2px 6px;
+    padding: 2px 8px;
     font-size: 11px;
     font-weight: 400;
     border-radius: var(--border-radius-999);
@@ -3151,7 +3221,9 @@ form textarea {
     color: #e49518;
 }
 
-.premier-star {}
+.premier-star {
+    margin: 0 2px;
+}
 
 .badge-info,
 .bg-info {
@@ -3194,7 +3266,7 @@ form textarea {
 
 .all-badge-card {
     display: flex;
-    gap: 3px;
+    gap: 5px;
     margin: auto 0;
 }
 
@@ -3285,17 +3357,17 @@ form textarea {
 
 .premier-announcement-text,
 .boost-announcement-text {
-    font-size: 13px;
+    font-size: 12px;
     padding: 5px 5px;
 }
 
 .suggested-price {
-    color: #058d25;
-    background-color: #d3f7c9;
+    color: #054e3b;
+    background-color: #d7fae3;
 }
 
 .suggested-price-text {
-    font-size: 13px;
+    font-size: 12px;
 }
 
 /* ========================================
@@ -3487,7 +3559,7 @@ form textarea {
 
 .serch-home input {
     background: var(--white-bg);
-     padding: 12px !important;
+    padding: 12px !important;
 }
 
 .serch-bar-home {
@@ -4288,11 +4360,9 @@ form textarea {
 .custom-collapse {
     padding-left: 25px !important;
     padding-right: 0 !important;
-    background: #f8f9fa !important;
     border-top: none;
     border-radius: 0 0 8px 8px;
     margin-top: 0 !important;
-    box-shadow: var(--card-shadow);
     font-size: 16px;
     font-weight: 400;
     line-height: 23px;
@@ -4314,6 +4384,7 @@ form textarea {
     margin-bottom: 5px;
     font-size: 14px;
     color: #495057;
+    font-weight: 500;
 }
 
 .form-all-label {
@@ -4321,9 +4392,11 @@ form textarea {
 }
 
 .compact-filter-card {
-    padding: 30px;
     margin-top: 0 !important;
+}
 
+.compact-filter-card-items {
+    padding: 2px 8px;
 }
 
 .card-filter-btn-delet {
@@ -4479,24 +4552,31 @@ form textarea {
 .range-input::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 16px; /* اندازه دایره */
+    width: 16px;
+    /* اندازه دایره */
     height: 16px;
     border-radius: 50%;
-    background: #0d6efd; /* رنگ داخل دایره */
+    background: #0d6efd;
+    /* رنگ داخل دایره */
     border: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* سایه جذاب */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    /* سایه جذاب */
     cursor: pointer;
-    pointer-events: auto; /* بسیار مهم برای اینکه دایره‌ها قابل کشیدن باشند */
+    pointer-events: auto;
+    /* بسیار مهم برای اینکه دایره‌ها قابل کشیدن باشند */
 }
 
 /* برای فایرفاکس */
 .range-input::-moz-range-thumb {
-    width: 20px; /* اندازه دایره */
+    width: 20px;
+    /* اندازه دایره */
     height: 20px;
     border-radius: 50%;
-    background: #0d6efd; /* رنگ داخل دایره */
+    background: #0d6efd;
+    /* رنگ داخل دایره */
     border: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* سایه جذاب */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    /* سایه جذاب */
     cursor: pointer;
     pointer-events: auto;
 }
@@ -4560,6 +4640,22 @@ nav .nav-cta .btn-ghost {
     align-items: center;
 }
 
+.img-profile-nav {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    text-decoration: none;
+}
+
+.rounded-circle-profile-nav {
+    border-radius: 999px;
+    width: 38px;
+    height: 38px;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+    background: #e4e4e4;
+}
+
 .btn-home {
     padding: .55rem 1.25rem;
     border-radius: 8px;
@@ -4591,7 +4687,7 @@ nav .nav-cta .btn-ghost {
 
 .btn-ghost-nav {
     background: transparent;
-    border: 2px solid var(--border);
+    border: 2px solid #e0e0e0;
     color: #ffff !important;
 }
 

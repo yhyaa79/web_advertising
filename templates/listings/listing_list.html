@@ -70,7 +70,7 @@
         <div class="filter-list-dav">
 
             <div class="custom-collapse col-md-3" id="filterCollapse">
-                <div class="pad-10 card compact-filter-card">
+                <div class="compact-filter-card">
 
                     <div class="card-filter-btn-delet">
                         <div class="card-filter">
@@ -107,109 +107,128 @@
 
                             <!-- مرتب‌سازی -->
                             <div class="filter-group">
-                                <label class="form-label fw-bold">مرتب‌سازی:</label>
-                                <select name="sort_by" class="form-select form-select-sm">
-                                    <option value="">انتخاب کنید</option>
-                                    <option value="newest" {% if request.GET.sort_by == 'newest' %}selected{% endif %}>
-                                        جدیدترین آگهی</option>
-                                    <option value="oldest" {% if request.GET.sort_by == 'oldest' %}selected{% endif %}>
-                                        قدیمی‌ترین آگهی</option>
-                                    <option value="newest_platform"
-                                        {% if request.GET.sort_by == 'newest_platform' %}selected{% endif %}>جدیدترین
-                                        پلتفرم</option>
-                                    <option value="oldest_platform"
-                                        {% if request.GET.sort_by == 'oldest_platform' %}selected{% endif %}>قدیمی‌ترین
-                                        پلتفرم</option>
-                                    <option value="most_followers"
-                                        {% if request.GET.sort_by == 'most_followers' %}selected{% endif %}>بیشترین
-                                        دنبال‌کننده</option>
-                                    <option value="least_followers"
-                                        {% if request.GET.sort_by == 'least_followers' %}selected{% endif %}>کمترین
-                                        دنبال‌کننده</option>
-                                    <option value="most_views"
-                                        {% if request.GET.sort_by == 'most_views' %}selected{% endif %}>پربازدیدترین
-                                    </option>
-                                    <option value="cheapest"
-                                        {% if request.GET.sort_by == 'cheapest' %}selected{% endif %}>ارزان‌ترین
-                                    </option>
-                                    <option value="most_expensive"
-                                        {% if request.GET.sort_by == 'most_expensive' %}selected{% endif %}>گران‌ترین
-                                    </option>
-                                    <option value="highest_income"
-                                        {% if request.GET.sort_by == 'highest_income' %}selected{% endif %}>بیشترین
-                                        درآمد</option>
-                                    <option value="lowest_income"
-                                        {% if request.GET.sort_by == 'lowest_income' %}selected{% endif %}>کمترین درآمد
-                                    </option>
-                                    <option value="fastest_roi"
-                                        {% if request.GET.sort_by == 'fastest_roi' %}selected{% endif %}>سریع‌ترین برگشت
-                                        سرمایه</option>
-                                    <option value="highest_profit_margin"
-                                        {% if request.GET.sort_by == 'highest_profit_margin' %}selected{% endif %}>
-                                        بیشترین حاشیه سود</option>
-                                </select>
+                                <label class="form-label">مرتب‌سازی:</label>
+                                <div class="compact-filter-card-items">
+                                    <select name="sort_by" class="form-select form-select-sm">
+                                        <option value="">انتخاب کنید</option>
+                                        <option value="newest"
+                                            {% if request.GET.sort_by == 'newest' %}selected{% endif %}>
+                                            جدیدترین آگهی</option>
+                                        <option value="oldest"
+                                            {% if request.GET.sort_by == 'oldest' %}selected{% endif %}>
+                                            قدیمی‌ترین آگهی</option>
+                                        <option value="newest_platform"
+                                            {% if request.GET.sort_by == 'newest_platform' %}selected{% endif %}>
+                                            جدیدترین
+                                            پلتفرم</option>
+                                        <option value="oldest_platform"
+                                            {% if request.GET.sort_by == 'oldest_platform' %}selected{% endif %}>
+                                            قدیمی‌ترین
+                                            پلتفرم</option>
+                                        <option value="most_followers"
+                                            {% if request.GET.sort_by == 'most_followers' %}selected{% endif %}>بیشترین
+                                            دنبال‌کننده</option>
+                                        <option value="least_followers"
+                                            {% if request.GET.sort_by == 'least_followers' %}selected{% endif %}>کمترین
+                                            دنبال‌کننده</option>
+                                        <option value="most_views"
+                                            {% if request.GET.sort_by == 'most_views' %}selected{% endif %}>پربازدیدترین
+                                        </option>
+                                        <option value="cheapest"
+                                            {% if request.GET.sort_by == 'cheapest' %}selected{% endif %}>ارزان‌ترین
+                                        </option>
+                                        <option value="most_expensive"
+                                            {% if request.GET.sort_by == 'most_expensive' %}selected{% endif %}>
+                                            گران‌ترین
+                                        </option>
+                                        <option value="highest_income"
+                                            {% if request.GET.sort_by == 'highest_income' %}selected{% endif %}>بیشترین
+                                            درآمد</option>
+                                        <option value="lowest_income"
+                                            {% if request.GET.sort_by == 'lowest_income' %}selected{% endif %}>کمترین
+                                            درآمد
+                                        </option>
+                                        <option value="fastest_roi"
+                                            {% if request.GET.sort_by == 'fastest_roi' %}selected{% endif %}>سریع‌ترین
+                                            برگشت
+                                            سرمایه</option>
+                                        <option value="highest_profit_margin"
+                                            {% if request.GET.sort_by == 'highest_profit_margin' %}selected{% endif %}>
+                                            بیشترین حاشیه سود</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <!-- نوع پلتفرم -->
                             <div class="filter-group">
-                                <label class="form-label fw-bold">نوع پلتفرم:</label>
-                                <select name="platform_type" class="form-select form-select-sm">
-                                    <option value="">همه پلتفرم‌ها</option>
-                                    <option value="website"
-                                        {% if request.GET.platform_type == 'website' %}selected{% endif %}>وبسایت
-                                    </option>
-                                    <option value="instagram"
-                                        {% if request.GET.platform_type == 'instagram' %}selected{% endif %}>اینستاگرام
-                                    </option>
-                                    <option value="telegram"
-                                        {% if request.GET.platform_type == 'telegram' %}selected{% endif %}>تلگرام
-                                    </option>
-                                    <option value="youtube"
-                                        {% if request.GET.platform_type == 'youtube' %}selected{% endif %}>یوتیوب
-                                    </option>
-                                    <option value="aparat"
-                                        {% if request.GET.platform_type == 'aparat' %}selected{% endif %}>آپارات
-                                    </option>
-                                    <option value="other"
-                                        {% if request.GET.platform_type == 'other' %}selected{% endif %}>سایر</option>
-                                </select>
+                                <label class="form-label">نوع پلتفرم:</label>
+                                <div class="compact-filter-card-items">
+                                    <select name="platform_type" class="form-select form-select-sm">
+                                        <option value="">همه پلتفرم‌ها</option>
+                                        <option value="website"
+                                            {% if request.GET.platform_type == 'website' %}selected{% endif %}>وبسایت
+                                        </option>
+                                        <option value="instagram"
+                                            {% if request.GET.platform_type == 'instagram' %}selected{% endif %}>
+                                            اینستاگرام
+                                        </option>
+                                        <option value="telegram"
+                                            {% if request.GET.platform_type == 'telegram' %}selected{% endif %}>تلگرام
+                                        </option>
+                                        <option value="youtube"
+                                            {% if request.GET.platform_type == 'youtube' %}selected{% endif %}>یوتیوب
+                                        </option>
+                                        <option value="aparat"
+                                            {% if request.GET.platform_type == 'aparat' %}selected{% endif %}>آپارات
+                                        </option>
+                                        <option value="other"
+                                            {% if request.GET.platform_type == 'other' %}selected{% endif %}>سایر
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
 
                             <!-- چک‌باکس‌ها -->
                             <div class="filter-group checkbox-group">
-                                <label class="form-label fw-bold w-100">ویژگی‌ها:</label>
-                                <div class="form-all-label">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" name="filter_private"
-                                            id="filter_private" {% if request.GET.filter_private %}checked{% endif %}>
-                                        <label class="form-check-label" for="filter_private">خصوصی</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" name="filter_income"
-                                            id="filter_income" {% if request.GET.filter_income %}checked{% endif %}>
-                                        <label class="form-check-label" for="filter_income">درآمددار</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" name="filter_verified"
-                                            id="filter_verified" {% if request.GET.filter_verified %}checked{% endif %}>
-                                        <label class="form-check-label" for="filter_verified">تایید شده</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" name="filter_preferment"
-                                            id="filter_preferment"
-                                            {% if request.GET.filter_preferment %}checked{% endif %}>
-                                        <label class="form-check-label" for="filter_preferment">آگهی ویژه</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" name="filter_premier"
-                                            id="filter_premier" {% if request.GET.filter_premier %}checked{% endif %}>
-                                        <label class="form-check-label" for="filter_premier">آگهی برتر</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" name="filter_suggested_price"
-                                            id="filter_suggested_price"
-                                            {% if request.GET.filter_suggested_price %}checked{% endif %}>
-                                        <label class="form-check-label" for="filter_suggested_price">قابل مذاکره</label>
+                                <label class="form-label w-100">ویژگی‌ها:</label>
+                                <div class="compact-filter-card-items">
+                                    <div class="form-all-label">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="filter_private"
+                                                id="filter_private"
+                                                {% if request.GET.filter_private %}checked{% endif %}>
+                                            <label class="form-check-label" for="filter_private">خصوصی</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="filter_income"
+                                                id="filter_income" {% if request.GET.filter_income %}checked{% endif %}>
+                                            <label class="form-check-label" for="filter_income">درآمددار</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="filter_verified"
+                                                id="filter_verified"
+                                                {% if request.GET.filter_verified %}checked{% endif %}>
+                                            <label class="form-check-label" for="filter_verified">تایید شده</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="filter_preferment"
+                                                id="filter_preferment"
+                                                {% if request.GET.filter_preferment %}checked{% endif %}>
+                                            <label class="form-check-label" for="filter_preferment">آگهی ویژه</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="filter_premier"
+                                                id="filter_premier"
+                                                {% if request.GET.filter_premier %}checked{% endif %}>
+                                            <label class="form-check-label" for="filter_premier">آگهی برتر</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox"
+                                                name="filter_suggested_price" id="filter_suggested_price"
+                                                {% if request.GET.filter_suggested_price %}checked{% endif %}>
+                                            <label class="form-check-label" for="filter_suggested_price">قابل
+                                                مذاکره</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -219,129 +238,149 @@
                             <!-- مقدار های دیفالت در listings/views.py باید مقدار دیفالت html یکی باشه -->
                             <!-- قیمت -->
                             <div class="filter-group">
-                                <label class="form-label fw-bold">قیمت (تومان):</label>
-                                <div class="range-slider" data-min="0" data-max="10000000000">
-                                    <div class="range-track">
-                                        <div class="range-fill"></div>
-                                    </div>
-                                    <input type="range" class="range-input range-min" name="min_price" min="0"
-                                        max="10000000000" step="1000000" value="{{ request.GET.min_price|default:0 }}">
-                                    <input type="range" class="range-input range-max" name="max_price" min="0"
-                                        max="10000000000" step="1000000"
-                                        value="{{ request.GET.max_price|default:10000000000 }}">
-                                    <div class="range-labels">
-                                        <span class="range-val-min"></span>
-                                        <span class="range-val-max"></span>
+                                <label class="form-label">قیمت (تومان):</label>
+                                <div class="compact-filter-card-items">
+                                    <div class="range-slider" data-min="0" data-max="10000000000">
+                                        <div class="range-track">
+                                            <div class="range-fill"></div>
+                                        </div>
+                                        <input type="range" class="range-input range-min" name="min_price" min="0"
+                                            max="10000000000" step="1000000"
+                                            value="{{ request.GET.min_price|default:0 }}">
+                                        <input type="range" class="range-input range-max" name="max_price" min="0"
+                                            max="10000000000" step="1000000"
+                                            value="{{ request.GET.max_price|default:10000000000 }}">
+                                        <div class="range-labels">
+                                            <span class="range-val-min"></span>
+                                            <span class="range-val-max"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- سن پلتفرم -->
                             <div class="filter-group">
-                                <label class="form-label fw-bold">سن پلتفرم (سال):</label>
-                                <div class="range-slider" data-min="0" data-max="20">
-                                    <div class="range-track">
-                                        <div class="range-fill"></div>
-                                    </div>
-                                    <input type="range" class="range-input range-min" name="min_age" min="0" max="20"
-                                        step="1" value="{{ request.GET.min_age|default:0 }}">
-                                    <input type="range" class="range-input range-max" name="max_age" min="0" max="20"
-                                        step="1" value="{{ request.GET.max_age|default:20 }}">
-                                    <div class="range-labels">
-                                        <span class="range-val-min"></span>
-                                        <span class="range-val-max"></span>
+                                <label class="form-label">سن پلتفرم (سال):</label>
+                                <div class="compact-filter-card-items">
+                                    <div class="range-slider" data-min="0" data-max="20">
+                                        <div class="range-track">
+                                            <div class="range-fill"></div>
+                                        </div>
+                                        <input type="range" class="range-input range-min" name="min_age" min="0"
+                                            max="20" step="1" value="{{ request.GET.min_age|default:0 }}">
+                                        <input type="range" class="range-input range-max" name="max_age" min="0"
+                                            max="20" step="1" value="{{ request.GET.max_age|default:20 }}">
+                                        <div class="range-labels">
+                                            <span class="range-val-min"></span>
+                                            <span class="range-val-max"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- دنبال‌کننده -->
                             <div class="filter-group">
-                                <label class="form-label fw-bold">دنبال‌کننده:</label>
-                                <div class="range-slider" data-min="0" data-max="10000000">
-                                    <div class="range-track">
-                                        <div class="range-fill"></div>
-                                    </div>
-                                    <input type="range" class="range-input range-min" name="min_followers" min="0"
-                                        max="10000000" step="1000" value="{{ request.GET.min_followers|default:0 }}">
-                                    <input type="range" class="range-input range-max" name="max_followers" min="0"
-                                        max="10000000" step="1000"
-                                        value="{{ request.GET.max_followers|default:10000000 }}">
-                                    <div class="range-labels">
-                                        <span class="range-val-min"></span>
-                                        <span class="range-val-max"></span>
+                                <label class="form-label">دنبال‌کننده:</label>
+                                <div class="compact-filter-card-items">
+                                    <div class="range-slider" data-min="0" data-max="10000000">
+                                        <div class="range-track">
+                                            <div class="range-fill"></div>
+                                        </div>
+                                        <input type="range" class="range-input range-min" name="min_followers" min="0"
+                                            max="10000000" step="1000"
+                                            value="{{ request.GET.min_followers|default:0 }}">
+                                        <input type="range" class="range-input range-max" name="max_followers" min="0"
+                                            max="10000000" step="1000"
+                                            value="{{ request.GET.max_followers|default:10000000 }}">
+                                        <div class="range-labels">
+                                            <span class="range-val-min"></span>
+                                            <span class="range-val-max"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- درآمد ماهیانه -->
                             <div class="filter-group">
-                                <label class="form-label fw-bold">درآمد ماهیانه (تومان):</label>
-                                <div class="range-slider" data-min="0" data-max="1000000000">
-                                    <div class="range-track">
-                                        <div class="range-fill"></div>
-                                    </div>
-                                    <input type="range" class="range-input range-min" name="min_income" min="0"
-                                        max="1000000000" step="100000" value="{{ request.GET.min_income|default:0 }}">
-                                    <input type="range" class="range-input range-max" name="max_income" min="0"
-                                        max="1000000000" step="100000"
-                                        value="{{ request.GET.max_income|default:1000000000 }}">
-                                    <div class="range-labels">
-                                        <span class="range-val-min"></span>
-                                        <span class="range-val-max"></span>
+                                <label class="form-label">درآمد ماهیانه (تومان):</label>
+                                <div class="compact-filter-card-items">
+                                    <div class="range-slider" data-min="0" data-max="1000000000">
+                                        <div class="range-track">
+                                            <div class="range-fill"></div>
+                                        </div>
+                                        <input type="range" class="range-input range-min" name="min_income" min="0"
+                                            max="1000000000" step="100000"
+                                            value="{{ request.GET.min_income|default:0 }}">
+                                        <input type="range" class="range-input range-max" name="max_income" min="0"
+                                            max="1000000000" step="100000"
+                                            value="{{ request.GET.max_income|default:1000000000 }}">
+                                        <div class="range-labels">
+                                            <span class="range-val-min"></span>
+                                            <span class="range-val-max"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- برگشت سرمایه -->
                             <div class="filter-group">
-                                <label class="form-label fw-bold">برگشت سرمایه (ماه):</label>
-                                <div class="range-slider" data-min="0" data-max="120">
-                                    <div class="range-track">
-                                        <div class="range-fill"></div>
-                                    </div>
-                                    <input type="range" class="range-input range-min" name="min_roi_months" min="0"
-                                        max="120" step="1" value="{{ request.GET.min_roi_months|default:0 }}">
-                                    <input type="range" class="range-input range-max" name="max_roi_months" min="0"
-                                        max="120" step="1" value="{{ request.GET.max_roi_months|default:120 }}">
-                                    <div class="range-labels">
-                                        <span class="range-val-min"></span>
-                                        <span class="range-val-max"></span>
+                                <label class="form-label">برگشت سرمایه (ماه):</label>
+                                <div class="compact-filter-card-items">
+                                    <div class="range-slider" data-min="0" data-max="120">
+                                        <div class="range-track">
+                                            <div class="range-fill"></div>
+                                        </div>
+                                        <input type="range" class="range-input range-min" name="min_roi_months" min="0"
+                                            max="120" step="1" value="{{ request.GET.min_roi_months|default:0 }}">
+                                        <input type="range" class="range-input range-max" name="max_roi_months" min="0"
+                                            max="120" step="1" value="{{ request.GET.max_roi_months|default:120 }}">
+                                        <div class="range-labels">
+                                            <span class="range-val-min"></span>
+                                            <span class="range-val-max"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- حاشیه سود -->
                             <div class="filter-group">
-                                <label class="form-label fw-bold">حاشیه سود (%):</label>
-                                <div class="range-slider" data-min="0" data-max="100">
-                                    <div class="range-track">
-                                        <div class="range-fill"></div>
-                                    </div>
-                                    <input type="range" class="range-input range-min" name="min_profit_margin" min="0"
-                                        max="100" step="1" value="{{ request.GET.min_profit_margin|default:0 }}">
-                                    <input type="range" class="range-input range-max" name="max_profit_margin" min="0"
-                                        max="100" step="1" value="{{ request.GET.max_profit_margin|default:100 }}">
-                                    <div class="range-labels">
-                                        <span class="range-val-min"></span>
-                                        <span class="range-val-max"></span>
+                                <label class="form-label">حاشیه سود (%):</label>
+                                <div class="compact-filter-card-items">
+                                    <div class="range-slider" data-min="0" data-max="100">
+                                        <div class="range-track">
+                                            <div class="range-fill"></div>
+                                        </div>
+                                        <input type="range" class="range-input range-min" name="min_profit_margin"
+                                            min="0" max="100" step="1"
+                                            value="{{ request.GET.min_profit_margin|default:0 }}">
+                                        <input type="range" class="range-input range-max" name="max_profit_margin"
+                                            min="0" max="100" step="1"
+                                            value="{{ request.GET.max_profit_margin|default:100 }}">
+                                        <div class="range-labels">
+                                            <span class="range-val-min"></span>
+                                            <span class="range-val-max"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- بازدید -->
                             <div class="filter-group">
-                                <label class="form-label fw-bold">بیشترین بازدید:</label>
-                                <div class="range-slider" data-min="0" data-max="10000000">
-                                    <div class="range-track">
-                                        <div class="range-fill"></div>
-                                    </div>
-                                    <input type="range" class="range-input range-min" name="min_views" min="0"
-                                        max="10000000" step="1000" value="{{ request.GET.min_views|default:0 }}">
-                                    <input type="range" class="range-input range-max" name="max_views" min="0"
-                                        max="10000000" step="1000" value="{{ request.GET.max_views|default:10000000 }}">
-                                    <div class="range-labels">
-                                        <span class="range-val-min"></span>
-                                        <span class="range-val-max"></span>
+                                <label class="form-label">بیشترین بازدید:</label>
+                                <div class="compact-filter-card-items">
+                                    <div class="range-slider" data-min="0" data-max="10000000">
+                                        <div class="range-track">
+                                            <div class="range-fill"></div>
+                                        </div>
+                                        <input type="range" class="range-input range-min" name="min_views" min="0"
+                                            max="10000000" step="1000" value="{{ request.GET.min_views|default:0 }}">
+                                        <input type="range" class="range-input range-max" name="max_views" min="0"
+                                            max="10000000" step="1000"
+                                            value="{{ request.GET.max_views|default:10000000 }}">
+                                        <div class="range-labels">
+                                            <span class="range-val-min"></span>
+                                            <span class="range-val-max"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -628,7 +667,7 @@
 
                             <a href="{% url 'listings:listing_detail' listing.pk %}"
                                 style="text-decoration: none; color: inherit;">
-                                <div class="card-body">
+                                <div class="card-body-decoration">
 
                                     <h5 class="card-title">{{ listing.title }}</h5>
 
@@ -799,7 +838,7 @@
 
                                     <div class="between-price-btn">
                                         <a href="{% url 'listings:similar_listings' listing.pk %}" class="link-similar">
-                                            آیا به دنبال استارت آپ های مشابه این آگهی می‌گردید؟
+                                            آیا به دنبال اگهی های مشابه می‌گردید؟
                                         </a>
                                     </div>
 

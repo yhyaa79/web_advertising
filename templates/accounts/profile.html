@@ -225,7 +225,7 @@
             <div class="card">
                 <div class="card-body text-center">
 
-                    {% if profile.user_type == 'individual' %}
+                    {% if profile.user_type %}
                     {% if user.profile_image %}
                     <img src="{{ user.profile_image.url }}" alt="پروفایل" class="rounded-circle mb-3"
                         style="width: 120px; height: 120px; object-fit: cover;">
