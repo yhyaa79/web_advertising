@@ -4,8 +4,10 @@ from django.contrib import admin
 from .models import (
     Category, Listing, ListingAnalyst, SocialMedia, Attachment,
     SaleInclude, License, ConfirmedInformation, ServiceUsed, MonetizationMethod, Expense,
-    IncomeDataPoint, ViewsDataPoint, ListingImage, VisitRequest
+    IncomeDataPoint, ViewsDataPoint, ListingImage, VisitRequest,
+    TechnologyUsed, TrafficSource 
 )
+
 
 
 @admin.register(Category)
@@ -81,6 +83,18 @@ class ViewsDataPointInline(admin.TabularInline):
     fields = ('date', 'views')
 
 
+class TechnologyUsedInline(admin.TabularInline):
+    model = TechnologyUsed
+    extra = 1
+    fields = ('technology',)
+
+
+class TrafficSourceInline(admin.TabularInline):
+    model = TrafficSource
+    extra = 1
+    fields = ('source', 'percentage')
+
+
 class ListingImageInline(admin.TabularInline):
     model = ListingImage
     extra = 1
@@ -128,6 +142,8 @@ class ListingAdmin(admin.ModelAdmin):
         ExpenseInline,
         IncomeDataPointInline,
         ViewsDataPointInline,
+        TechnologyUsedInline, 
+        TrafficSourceInline, 
         ListingImageInline,
         VisitRequestInline,
     ]
@@ -140,7 +156,7 @@ class ListingAdmin(admin.ModelAdmin):
             'fields': ('price', 'discount_price', 'main_image')
         }),
         ('اطلاعات پلتفرم', {
-            'fields': ('platform_url', 'areas_activity', 'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment')
+            'fields': ('platform_url', 'areas_activity', 'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment', 'sale_reason', 'sale_reason_description')
         }),
         ('درآمد و هزینه', {
             'fields': (

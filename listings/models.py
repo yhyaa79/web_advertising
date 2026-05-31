@@ -55,6 +55,22 @@ class Listing(models.Model):
         ('other', 'سایر'),
     ]
 
+
+    # دلیل واگذاری
+    SALE_REASON_CHOICES = [
+        ('focus_other_projects', 'تمرکز روی پروژه‌های دیگر'),
+        ('lack_of_time', 'نداشتن زمان کافی'),
+        ('need_capital', 'نیاز به سرمایه و پول نقد'),
+        ('immigration', 'مهاجرت'),
+        ('career_change', 'تغییر شغل یا بازنشستگی'),
+        ('partner_dispute', 'اختلاف با شرکا / انحلال تیم'),
+        ('growth_ceiling', 'رسیدن به سقف رشد فردی'),
+        ('personal_health', 'دلایل شخصی / سلامتی'),
+    ]
+
+    sale_reason = models.CharField(max_length=30, choices=SALE_REASON_CHOICES, null=True, blank=True, verbose_name='دلیل واگذاری')
+    sale_reason_description = models.TextField(null=True, blank=True, verbose_name='توضیحات دلیل واگذاری')
+
     
     seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='listings', verbose_name='فروشنده')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='دسته‌بندی')
@@ -473,3 +489,155 @@ class ListingFAQ(models.Model):
 
     def __str__(self):
         return f"{self.listing.title} - {self.question}"
+
+
+# در انتهای listings/models.py اضافه کن
+
+class TechnologyUsed(models.Model):
+    """تکنولوژی‌های استفاده شده"""
+    TECHNOLOGY_CHOICES = [
+        # CMS و فروشگاه‌سازها
+        ('wordpress', 'وردپرس'),
+        ('joomla', 'جوملا'),
+        ('drupal', 'دروپال'),
+        ('woocommerce', 'ووکامرس'),
+        ('shopify', 'شاپیفای'),
+        ('magento', 'مجنتو'),
+        ('prestashop', 'پرستاشاپ'),
+        ('opencart', 'اوپن‌کارت'),
+        ('nopcommerce', 'ناپ‌کامرس'),
+        ('strapi', 'استراپی'),
+        ('contentful', 'کانتنت‌فول'),
+        ('ghost', 'گوست'),
+        ('sanity', 'سنتی'),
+        ('custom_cms', 'سیستم اختصاصی'),
+        # Backend
+        ('laravel', 'لاراول'),
+        ('symfony', 'سیمفونی'),
+        ('codeigniter', 'کدایگنایتر'),
+        ('core_php', 'پی‌اچ‌پی خام'),
+        ('nodejs', 'نود جی‌اس'),
+        ('expressjs', 'اکسپرس'),
+        ('nestjs', 'نست جی‌اس'),
+        ('django', 'جنگو'),
+        ('flask', 'فلسک'),
+        ('fastapi', 'فست ای‌پی‌آی'),
+        ('aspnet', 'ای‌اس‌پی دات‌نت کور'),
+        ('springboot', 'اسپرینگ بوت'),
+        ('golang', 'گو'),
+        ('rails', 'روبی آن ریلز'),
+        ('rust', 'راست'),
+        # Frontend
+        ('reactjs', 'ری‌اکت'),
+        ('nextjs', 'نکست جی‌اس'),
+        ('vuejs', 'ویو جی‌اس'),
+        ('nuxtjs', 'ناکس جی‌اس'),
+        ('angular', 'انگولار'),
+        ('svelte', 'سولت'),
+        ('jquery', 'جی‌کوئری'),
+        ('tailwind', 'تیلویند'),
+        ('bootstrap', 'بوت‌استرپ'),
+        ('mui', 'متریال یوآی'),
+        ('antdesign', 'ان دیزاین'),
+        ('sass_less', 'ساس/لس'),
+        ('vite', 'ویت'),
+        ('webpack', 'وب‌پک'),
+        # Database
+        ('mysql', 'مای‌اس‌کیوال'),
+        ('postgresql', 'پستگرس‌کیوال'),
+        ('mssql', 'مایکروسافت اس‌کیوال سرور'),
+        ('sqlite', 'اس‌کیوال‌لایت'),
+        ('oracle', 'اوراکل'),
+        ('mongodb', 'مونگو دی‌بی'),
+        ('cassandra', 'کاساندرا'),
+        ('couchdb', 'کوچ‌دی‌بی'),
+        ('firebase', 'فایربیس'),
+        ('redis', 'ردیس'),
+        ('memcached', 'مم‌کشد'),
+        ('elasticsearch', 'الستیک‌سرچ'),
+        ('algolia', 'آلگولیا'),
+        ('solr', 'آپاچی سولر'),
+        # Infrastructure
+        ('shared_hosting', 'هاست اشتراکی'),
+        ('vps', 'سرور مجازی'),
+        ('dedicated', 'سرور اختصاصی'),
+        ('hetzner', 'هتزنر'),
+        ('digitalocean', 'دیجیتال اوشن'),
+        ('aws', 'آمازون'),
+        ('liara', 'لیارا'),
+        ('arvancloud', 'آروان کلاد'),
+        ('parspak', 'پارس‌پک'),
+        ('nginx', 'انجین‌اکس'),
+        ('apache', 'آپاچی'),
+        ('litespeed', 'لایت‌اسپید'),
+        ('iis', 'آی‌آی‌اس'),
+        ('linux', 'لینوکس'),
+        ('windows_server', 'ویندوز سرور'),
+        # Mobile
+        ('flutter', 'فلاتر'),
+        ('react_native', 'ری‌اکت نیتیو'),
+        ('ionic', 'آیونیک'),
+        ('maui', '.NET MAUI'),
+        ('android_native', 'اندروید بومی'),
+        ('ios_native', 'آی‌او‌اس بومی'),
+        ('pwa', 'پروگرسیو وب اپلیکیشن'),
+        # DevOps
+        ('github', 'گیت‌هاب'),
+        ('gitlab', 'گیت‌لب'),
+        ('bitbucket', 'بیت‌باکت'),
+        ('docker', 'داکر'),
+        ('kubernetes', 'کوبرنیتیز'),
+        ('github_actions', 'گیت‌هاب اکشنز'),
+        ('gitlab_ci', 'گیت‌لب سی‌آی'),
+        ('jenkins', 'جنکینز'),
+        # Third-party
+        ('zarinpal', 'زرین‌پال'),
+        ('zibal', 'زیبال'),
+        ('payping', 'پی‌پینگ'),
+        ('bank_gateway', 'درگاه مستقیم بانکی'),
+        ('kavenegar', 'کاوه‌نگار'),
+        ('farazsms', 'فراز اس‌ام‌اس'),
+        ('melipayamak', 'ملی‌پیامک'),
+        ('mailchimp', 'میل‌چیمپ'),
+        ('sender', 'سندر'),
+        ('mailerlite', 'میلرلیت'),
+        ('pocket', 'پاکت'),
+        ('ga4', 'گوگل آنالیتیکس'),
+        ('clarity', 'مایکروسافت کلریتی'),
+        ('yandex_metrica', 'یاندکس متاریکا'),
+    ]
+
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='technologies_used', verbose_name='آگهی')
+    technology = models.CharField(max_length=50, choices=TECHNOLOGY_CHOICES, verbose_name='تکنولوژی')
+
+    class Meta:
+        verbose_name = 'تکنولوژی استفاده شده'
+        verbose_name_plural = 'تکنولوژی‌های استفاده شده'
+        unique_together = ['listing', 'technology']
+
+    def __str__(self):
+        return self.get_technology_display()
+
+
+class TrafficSource(models.Model):
+    """منابع ترافیک"""
+    SOURCE_CHOICES = [
+        ('organic_search', 'جستجوی ارگانیک (SEO)'),
+        ('direct', 'ترافیک مستقیم'),
+        ('social_media', 'شبکه‌های اجتماعی'),
+        ('referral', 'ارجاعی'),
+        ('paid_ads', 'تبلیغات پولی'),
+        ('email_sms', 'ایمیل مارکتینگ و پیامک'),
+        ('push_notification', 'پوش نوتیفیکیشن'),]
+
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='traffic_sources', verbose_name='آگهی')
+    source = models.CharField(max_length=30, choices=SOURCE_CHOICES, verbose_name='منبع')
+    percentage = models.PositiveSmallIntegerField(verbose_name='درصد')
+
+    class Meta:
+        verbose_name = 'منبع ترافیک'
+        verbose_name_plural = 'منابع ترافیک'
+        unique_together = ['listing', 'source']
+
+    def __str__(self):
+        return f"{self.get_source_display()} - {self.percentage}%"

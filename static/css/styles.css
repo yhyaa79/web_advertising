@@ -4635,6 +4635,20 @@ form textarea {
 
 
 
+
+.traffic-chart {
+    width: 420px;       /* هر اندازه‌ای که می‌خوای */
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+#trafficChart {
+    width: 100% !important;
+    height: 300px !important;
+}
+
+
+
 /* ========================================
    core new
    ======================================== */

@@ -243,9 +243,10 @@
                 <div class="specifications-detail">
 
                     <div class="inf-card-detail">
-                        <strong class="strong-inf-detail">تعداد دنبال‌کننده:</strong>
-                        <p>{{ listing.areas_activity }}</p>
+                        <strong class="strong-inf-detail">حوزه‌ فعالیت :</strong>
+                        <p>{{ listing.get_areas_activity_display }}</p>
                     </div>
+
 
                     <div class="inf-card-detail">
                         <strong class="strong-inf-detail">تعداد دنبال‌کننده:</strong>
@@ -999,6 +1000,54 @@
                 </div>
                 {% endif %}
 
+
+                {% if listing.sale_reason %}
+                <div id="section-license" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('7', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">دلیل فروش</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-7" class="more-height-btn open"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-7" class="social-media-text expanded">
+                        <div class="license-detail">
+                            <hr>
+                            <div class="list-license">
+                                <p>{{ listing.get_sale_reason_display }}</p>
+
+                                <p class="item-license-p">{{ listing.sale_reason_description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+
+
+
+
+                <div id="section-license" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('7', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">منابع ترافیک</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-7" class="more-height-btn open"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-7" class="social-media-text expanded">
+                        <div class="license-detail">
+                            <hr>
+                            <div class="traffic-sources">
+                                <div class="traffic-chart">
+                                    <canvas id="trafficChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
             </div>
 
         </div>
@@ -1728,6 +1777,78 @@
 
     });
 </script>
+
+
+<script>
+
+        /*  ========================================
+    نمودار دایره ای منابع ترافیک
+
+    templates/listings/listing_detail.html
+    ========================================  */
+document.addEventListener("DOMContentLoaded", function () {
+  const sources = [
+    {% for ts in listing.traffic_sources.all %}
+      { label: "{{ ts.get_source_display }}", value: {{ ts.percentage }} },
+    {% endfor %}
+  ];
+
+  const total = sources.reduce((s, x) => s + x.value, 0);
+  const other = Math.max(0, 100 - total);
+  const labels = sources.map(x => x.label);
+  const data = sources.map(x => x.value);
+  if (other > 0) { labels.push("سایر"); data.push(other); }
+
+  // ۱۰ رنگ متنوع
+  const colors = [
+    "#4e79a7", "#f28e2b", "#e15759", "#76b7b2", "#59a14f",
+    "#edc948", "#b07aa1", "#ff9da7", "#9c755f", "#bab0ac"
+  ];
+
+  // خواندن فونت از CSS
+  const bodyFont = getComputedStyle(document.body).fontFamily;
+
+  const ctx = document.getElementById("trafficChart");
+  if (!ctx) { console.error("canvas not found"); return; }
+
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: colors.slice(0, data.length)
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "left",        // legend سمت چپ
+          rtl: true,               // برای متن فارسی
+          labels: {
+            font: {
+              family: bodyFont,    // فونت از CSS
+              size: 13
+            },
+            padding: 15,
+            pointStyleWidth: 10
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: c => `${c.label}: ${c.parsed}%`
+          },
+          bodyFont: { family: bodyFont },
+          titleFont: { family: bodyFont }
+        }
+      }
+    }
+  });
+});
+</script>
+
 
 
 {% endblock %}
