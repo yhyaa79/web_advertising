@@ -481,28 +481,29 @@
                 {% if income_proofs %}
                 <div id="section-proofs" class="card card-body">
                     <div class="aboutplatform-card-h3">
-                        <h3 class="titel-card">اثبات درآمد</h3>
+                        <h3 class="titel-card">اثبات مالی</h3>
                     </div>
                     <hr>
                     <div class="row">
                         {% for proof in income_proofs %}
-                        <div class="mb-3">
-                            <div class="div-card-img-proof">
+                        <div class="mb-3 proof-item">
+                            <!-- استفاده از گرید بوت‌استرپ برای چیدمان بهتر -->
+                            <div class="proof-wrapper">
                                 {% if proof.image %}
                                 <img src="{{ proof.image.url }}" class="card-img-proof" alt="اثبات درآمد">
                                 {% endif %}
-                            </div>
 
-                            {% if proof.description %}
-                            <p class="card-text-income-proofs">{{ proof.description }}</p>
-                            {% endif %}
+                                <div class="proof-overlay">
+                                    {% if proof.description %}
+                                    <p class="card-text-income-proofs">{{ proof.description }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
                 {% endif %}
-
-
 
 
 

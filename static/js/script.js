@@ -597,8 +597,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     padding: { top: 8, bottom: 8, left: 12, right: 12 },
                     cornerRadius: 8,
                     displayColors: false,
-                    titleFont: { family: 'Vazir, IRANSans, sans-serif', size: 11 },
-                    bodyFont: { family: 'Vazir, IRANSans, sans-serif', size: 13, weight: 'bold' },
+                    titleFont: { size: 11 },
+                    bodyFont: { size: 13, weight: 'bold' },
                     callbacks: {
                         title: items => items[0].label,
                         label: item => '  ' + fmtFull(item.raw) + ' ' + unit,
@@ -611,7 +611,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     border: { display: false },
                     ticks: {
                         color: '#94a3b8',
-                        font: { family: 'Vazir, IRANSans, sans-serif', size: 10 },
+                        font: { size: 10 },
                         maxRotation: 40,
                         maxTicksLimit: 8,
                     }
@@ -622,7 +622,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     border: { display: false, dash: [4, 4] },
                     ticks: {
                         color: '#94a3b8',
-                        font: { family: 'Vazir, IRANSans, sans-serif', size: 10 },
+                        font: { size: 10 },
                         callback: v => fmt(v),
                         maxTicksLimit: 5,
                     },
@@ -825,8 +825,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     padding: { top: 10, bottom: 10, left: 14, right: 14 },
                     cornerRadius: 10,
                     displayColors: false,
-                    titleFont: { family: 'Vazir, IRANSans, sans-serif', size: 11 },
-                    bodyFont: { family: 'Vazir, IRANSans, sans-serif', size: 13, weight: 'bold' },
+                    titleFont: { size: 11 },
+                    bodyFont: { size: 13, weight: 'bold' },
                     callbacks: {
                         title: items => items[0].label,
                         label: item => '  ' + fmtFull(item.raw) + ' ' + unit,
@@ -838,7 +838,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     border: { display: false },
                     ticks: {
                         color: '#475569',
-                        font: { family: 'Vazir, IRANSans, sans-serif', size: 10 },
+                        font: { size: 10 },
                         maxRotation: 40,
                         maxTicksLimit: 8,
                     }
@@ -849,7 +849,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     border: { display: false, dash: [4, 4] },
                     ticks: {
                         color: '#475569',
-                        font: { family: 'Vazir, IRANSans, sans-serif', size: 10 },
+                        font: { size: 10 },
                         callback: v => fmt(v),
                         maxTicksLimit: 5,
                     },
