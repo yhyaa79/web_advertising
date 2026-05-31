@@ -33,6 +33,28 @@ class Listing(models.Model):
         ('rejected', 'رد شده'),
         ('deleted', 'حذف شده'),
     ]
+
+
+
+    ACTIVITY_CHOICES = [
+        ('shopping_commerce', 'فروشگاهی و تجارت الکترونیک'),
+        ('technology_software', 'تکنولوژی و نرم‌افزار '),
+        ('education_learning', 'آموزش و یادگیری'),
+        ('health_medicine_beauty', 'سلامت، پزشکی و زیبایی'),
+        ('news_magazines_portals', 'خبری، مجله و پورتال'),
+        ('finance_stock_exchange_cryptocurrency', 'مالی، بورس و ارز دیجیتال'),
+        ('entertainment_games_movies', 'سرگرمی، بازی و فیلم'),
+        ('lifestyle_fashion_fashion', 'سبک زندگی، مد و فشن'),
+        ('travel_tourism_immigration', 'سفر، گردشگری و مهاجرت'),
+        ('real_estate', 'املاک و مستغلات'),
+        ('corporate_B2B_services', 'خدمات شرکتی و B2B'),
+        ('sports_fitness', 'ورزشی و تناسب اندام'),
+        ('food_cooking_restaurants', 'غذا، آشپزی و رستوران'),
+        ('home_decoration_architecture', 'خانه، دکوراسیون و معماری'),
+        ('pets', 'حیوانات خانگی'),
+        ('other', 'سایر'),
+    ]
+
     
     seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='listings', verbose_name='فروشنده')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='دسته‌بندی')
@@ -71,6 +93,9 @@ class Listing(models.Model):
     
     # گزینه خصوصی
     is_private = models.BooleanField(default=False, verbose_name='آگهی خصوصی')
+
+    # حوزه‌های فعالیت 
+    areas_activity = models.CharField(max_length=60, choices=ACTIVITY_CHOICES, verbose_name='حوزه‌ فعالیت')
     
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name='وضعیت')
     rejection_reason = models.TextField(blank=True, null=True, verbose_name='دلیل رد')

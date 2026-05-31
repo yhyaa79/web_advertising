@@ -140,7 +140,7 @@ class ListingAdmin(admin.ModelAdmin):
             'fields': ('price', 'discount_price', 'main_image')
         }),
         ('اطلاعات پلتفرم', {
-            'fields': ('platform_url', 'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment')
+            'fields': ('platform_url', 'areas_activity', 'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment')
         }),
         ('درآمد و هزینه', {
             'fields': (
