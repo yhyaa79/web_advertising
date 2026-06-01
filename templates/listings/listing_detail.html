@@ -1003,13 +1003,13 @@
 
                 {% if listing.sale_reason %}
                 <div id="section-license" class="card card-body aboutplatform-card">
-                    <div onclick="toggleHeight('7', 0)" class="aboutplatform-card-h3 cursor-card">
+                    <div onclick="toggleHeight('11', 0)" class="aboutplatform-card-h3 cursor-card">
                         <h3 class="titel-card">دلیل فروش</h3>
                         <div class="btn-aboutplatform-card">
-                            <button id="more-height-btn-7" class="more-height-btn open"></button>
+                            <button id="more-height-btn-11" class="more-height-btn open"></button>
                         </div>
                     </div>
-                    <div id="box-text-7" class="social-media-text expanded">
+                    <div id="box-text-11" class="social-media-text expanded">
                         <div class="license-detail">
                             <hr>
                             <div class="list-license">
@@ -1027,13 +1027,13 @@
 
 
                 <div id="section-license" class="card card-body aboutplatform-card">
-                    <div onclick="toggleHeight('7', 0)" class="aboutplatform-card-h3 cursor-card">
+                    <div onclick="toggleHeight('12', 0)" class="aboutplatform-card-h3 cursor-card">
                         <h3 class="titel-card">منابع ترافیک</h3>
                         <div class="btn-aboutplatform-card">
-                            <button id="more-height-btn-7" class="more-height-btn open"></button>
+                            <button id="more-height-btn-12" class="more-height-btn open"></button>
                         </div>
                     </div>
-                    <div id="box-text-7" class="social-media-text expanded">
+                    <div id="box-text-12" class="social-media-text expanded">
                         <div class="license-detail">
                             <hr>
                             <div class="traffic-sources">
@@ -1042,15 +1042,151 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
 
+                {% if listing.technologies_used %}
+                {% with tech=listing.technologies_used %}
+                <div id="section-license" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('13', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">تکنولوژی‌های استفاده شده</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-13" class="more-height-btn open"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-13" class="social-media-text expanded">
+                        <div class="license-detail">
+                            <hr>
+                            
+                                <div class="tech-grid">
+
+                                    {% if tech.technology_cms %}
+                                    <div class="tech-category">
+                                    <div class="tech-category-header">
+                                        <span class="tech-icon">🛒</span>
+                                        <h3>CMS و فروشگاه‌ساز</h3>
+                                    </div>
+                                    <div class="tech-tags">
+                                        {% for item in tech.get_cms_display_list %}
+                                        <span class="tech-tag tech-tag--cms">{{ item }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if tech.technology_backend %}
+                                    <div class="tech-category">
+                                    <div class="tech-category-header">
+                                        <span class="tech-icon">⚙️</span>
+                                        <h3>Backend</h3>
+                                    </div>
+                                    <div class="tech-tags">
+                                        {% for item in tech.get_backend_display_list %}
+                                        <span class="tech-tag tech-tag--backend">{{ item }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if tech.technology_frontend %}
+                                    <div class="tech-category">
+                                    <div class="tech-category-header">
+                                        <span class="tech-icon">🎨</span>
+                                        <h3>Frontend</h3>
+                                    </div>
+                                    <div class="tech-tags">
+                                        {% for item in tech.get_frontend_display_list %}
+                                        <span class="tech-tag tech-tag--frontend">{{ item }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if tech.technology_database %}
+                                    <div class="tech-category">
+                                    <div class="tech-category-header">
+                                        <span class="tech-icon">🗄️</span>
+                                        <h3>Database</h3>
+                                    </div>
+                                    <div class="tech-tags">
+                                        {% for item in tech.get_database_display_list %}
+                                        <span class="tech-tag tech-tag--database">{{ item }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if tech.technology_infrastructure %}
+                                    <div class="tech-category">
+                                    <div class="tech-category-header">
+                                        <span class="tech-icon">🖥️</span>
+                                        <h3>Infrastructure</h3>
+                                    </div>
+                                    <div class="tech-tags">
+                                        {% for item in tech.get_infrastructure_display_list %}
+                                        <span class="tech-tag tech-tag--infra">{{ item }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if tech.technology_mobile %}
+                                    <div class="tech-category">
+                                    <div class="tech-category-header">
+                                        <span class="tech-icon">📱</span>
+                                        <h3>Mobile</h3>
+                                    </div>
+                                    <div class="tech-tags">
+                                        {% for item in tech.get_mobile_display_list %}
+                                        <span class="tech-tag tech-tag--mobile">{{ item }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if tech.technology_devops %}
+                                    <div class="tech-category">
+                                    <div class="tech-category-header">
+                                        <span class="tech-icon">🔄</span>
+                                        <h3>DevOps</h3>
+                                    </div>
+                                    <div class="tech-tags">
+                                        {% for item in tech.get_devops_display_list %}
+                                        <span class="tech-tag tech-tag--devops">{{ item }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if tech.technology_third_party %}
+                                    <div class="tech-category">
+                                    <div class="tech-category-header">
+                                        <span class="tech-icon">🔌</span>
+                                        <h3>سرویس‌های جانبی</h3>
+                                    </div>
+                                    <div class="tech-tags">
+                                        {% for item in tech.get_third_party_display_list %}
+                                        <span class="tech-tag tech-tag--third">{{ item }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    </div>
+                                    {% endif %}
+
+                                </div>
+                 
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}
+                {% endif %}
 
             </div>
-
         </div>
+
+
+
+        
 
 
 

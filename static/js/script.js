@@ -176,7 +176,9 @@ document.addEventListener("DOMContentLoaded", function () {
     checkContentHeight('8', 0, '1000px', 'open');
     checkContentHeight('9', 0, '1000px', 'open');
     checkContentHeight('10', 0, '1000px', 'open');
-
+    checkContentHeight('11', 0, '1000px', 'open');
+    checkContentHeight('12', 0, '1000px', 'open');
+    checkContentHeight('13', 0, '1000px', 'open');
 });
 
 function checkContentHeight(cardId, closeHeightNumber, openHeight, defaultState = 'closed') {

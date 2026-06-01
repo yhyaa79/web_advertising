@@ -491,12 +491,16 @@ class ListingFAQ(models.Model):
         return f"{self.listing.title} - {self.question}"
 
 
-# در انتهای listings/models.py اضافه کن
+
+from django.db import models
+from django.contrib.postgres.fields import ArrayField  # اگر PostgreSQL داری
+
 
 class TechnologyUsed(models.Model):
     """تکنولوژی‌های استفاده شده"""
-    TECHNOLOGY_CHOICES = [
-        # CMS و فروشگاه‌سازها
+
+    # CMS و فروشگاه‌سازها
+    TECHNOLOGY_CHOICES_CMS = [
         ('wordpress', 'وردپرس'),
         ('joomla', 'جوملا'),
         ('drupal', 'دروپال'),
@@ -511,7 +515,9 @@ class TechnologyUsed(models.Model):
         ('ghost', 'گوست'),
         ('sanity', 'سنتی'),
         ('custom_cms', 'سیستم اختصاصی'),
-        # Backend
+    ]
+
+    TECHNOLOGY_CHOICES_BACKEND = [
         ('laravel', 'لاراول'),
         ('symfony', 'سیمفونی'),
         ('codeigniter', 'کدایگنایتر'),
@@ -527,7 +533,9 @@ class TechnologyUsed(models.Model):
         ('golang', 'گو'),
         ('rails', 'روبی آن ریلز'),
         ('rust', 'راست'),
-        # Frontend
+    ]
+
+    TECHNOLOGY_CHOICES_FRONTEND = [
         ('reactjs', 'ری‌اکت'),
         ('nextjs', 'نکست جی‌اس'),
         ('vuejs', 'ویو جی‌اس'),
@@ -542,7 +550,9 @@ class TechnologyUsed(models.Model):
         ('sass_less', 'ساس/لس'),
         ('vite', 'ویت'),
         ('webpack', 'وب‌پک'),
-        # Database
+    ]
+
+    TECHNOLOGY_CHOICES_DATABASE = [
         ('mysql', 'مای‌اس‌کیوال'),
         ('postgresql', 'پستگرس‌کیوال'),
         ('mssql', 'مایکروسافت اس‌کیوال سرور'),
@@ -557,7 +567,9 @@ class TechnologyUsed(models.Model):
         ('elasticsearch', 'الستیک‌سرچ'),
         ('algolia', 'آلگولیا'),
         ('solr', 'آپاچی سولر'),
-        # Infrastructure
+    ]
+
+    TECHNOLOGY_CHOICES_INFRASTRUCTURE = [
         ('shared_hosting', 'هاست اشتراکی'),
         ('vps', 'سرور مجازی'),
         ('dedicated', 'سرور اختصاصی'),
@@ -573,7 +585,9 @@ class TechnologyUsed(models.Model):
         ('iis', 'آی‌آی‌اس'),
         ('linux', 'لینوکس'),
         ('windows_server', 'ویندوز سرور'),
-        # Mobile
+    ]
+
+    TECHNOLOGY_CHOICES_MOBILE = [
         ('flutter', 'فلاتر'),
         ('react_native', 'ری‌اکت نیتیو'),
         ('ionic', 'آیونیک'),
@@ -581,7 +595,9 @@ class TechnologyUsed(models.Model):
         ('android_native', 'اندروید بومی'),
         ('ios_native', 'آی‌او‌اس بومی'),
         ('pwa', 'پروگرسیو وب اپلیکیشن'),
-        # DevOps
+    ]
+
+    TECHNOLOGY_CHOICES_DEVOPS = [
         ('github', 'گیت‌هاب'),
         ('gitlab', 'گیت‌لب'),
         ('bitbucket', 'بیت‌باکت'),
@@ -590,7 +606,9 @@ class TechnologyUsed(models.Model):
         ('github_actions', 'گیت‌هاب اکشنز'),
         ('gitlab_ci', 'گیت‌لب سی‌آی'),
         ('jenkins', 'جنکینز'),
-        # Third-party
+    ]
+
+    TECHNOLOGY_CHOICES_THIRD_PARTY = [
         ('zarinpal', 'زرین‌پال'),
         ('zibal', 'زیبال'),
         ('payping', 'پی‌پینگ'),
@@ -607,16 +625,62 @@ class TechnologyUsed(models.Model):
         ('yandex_metrica', 'یاندکس متاریکا'),
     ]
 
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='technologies_used', verbose_name='آگهی')
-    technology = models.CharField(max_length=50, choices=TECHNOLOGY_CHOICES, verbose_name='تکنولوژی')
+    listing = models.OneToOneField(
+        Listing,
+        on_delete=models.CASCADE,
+        related_name='technologies_used',
+        verbose_name='آگهی'
+    )
+
+    # هر فیلد یک لیست از مقادیر انتخاب‌شده نگه می‌داره
+    technology_cms = models.JSONField(default=list, blank=True, verbose_name='CMS و فروشگاه‌ساز')
+    technology_backend = models.JSONField(default=list, blank=True, verbose_name='تکنولوژی Backend')
+    technology_frontend = models.JSONField(default=list, blank=True, verbose_name='تکنولوژی Frontend')
+    technology_database = models.JSONField(default=list, blank=True, verbose_name='تکنولوژی Database')
+    technology_infrastructure = models.JSONField(default=list, blank=True, verbose_name='تکنولوژی Infrastructure')
+    technology_mobile = models.JSONField(default=list, blank=True, verbose_name='تکنولوژی Mobile')
+    technology_devops = models.JSONField(default=list, blank=True, verbose_name='تکنولوژی DevOps')
+    technology_third_party = models.JSONField(default=list, blank=True, verbose_name='سرویس‌های جانبی')
 
     class Meta:
         verbose_name = 'تکنولوژی استفاده شده'
         verbose_name_plural = 'تکنولوژی‌های استفاده شده'
-        unique_together = ['listing', 'technology']
 
     def __str__(self):
-        return self.get_technology_display()
+        return f"تکنولوژی‌های آگهی: {self.listing.title}"
+
+    def get_cms_display_list(self):
+        lookup = dict(self.TECHNOLOGY_CHOICES_CMS)
+        return [lookup.get(v, v) for v in self.technology_cms]
+
+    def get_backend_display_list(self):
+        lookup = dict(self.TECHNOLOGY_CHOICES_BACKEND)
+        return [lookup.get(v, v) for v in self.technology_backend]
+
+    def get_frontend_display_list(self):
+        lookup = dict(self.TECHNOLOGY_CHOICES_FRONTEND)
+        return [lookup.get(v, v) for v in self.technology_frontend]
+
+    def get_database_display_list(self):
+        lookup = dict(self.TECHNOLOGY_CHOICES_DATABASE)
+        return [lookup.get(v, v) for v in self.technology_database]
+
+    def get_infrastructure_display_list(self):
+        lookup = dict(self.TECHNOLOGY_CHOICES_INFRASTRUCTURE)
+        return [lookup.get(v, v) for v in self.technology_infrastructure]
+
+    def get_mobile_display_list(self):
+        lookup = dict(self.TECHNOLOGY_CHOICES_MOBILE)
+        return [lookup.get(v, v) for v in self.technology_mobile]
+
+    def get_devops_display_list(self):
+        lookup = dict(self.TECHNOLOGY_CHOICES_DEVOPS)
+        return [lookup.get(v, v) for v in self.technology_devops]
+
+    def get_third_party_display_list(self):
+        lookup = dict(self.TECHNOLOGY_CHOICES_THIRD_PARTY)
+        return [lookup.get(v, v) for v in self.technology_third_party]
+
 
 
 class TrafficSource(models.Model):

@@ -4,8 +4,7 @@ from django.contrib import admin
 from .models import (
     Category, Listing, ListingAnalyst, SocialMedia, Attachment,
     SaleInclude, License, ConfirmedInformation, ServiceUsed, MonetizationMethod, Expense,
-    IncomeDataPoint, ViewsDataPoint, ListingImage, VisitRequest,
-    TechnologyUsed, TrafficSource 
+    IncomeDataPoint, ViewsDataPoint, ListingImage, VisitRequest, TechnologyUsed 
 )
 
 
@@ -83,18 +82,6 @@ class ViewsDataPointInline(admin.TabularInline):
     fields = ('date', 'views')
 
 
-class TechnologyUsedInline(admin.TabularInline):
-    model = TechnologyUsed
-    extra = 1
-    fields = ('technology',)
-
-
-class TrafficSourceInline(admin.TabularInline):
-    model = TrafficSource
-    extra = 1
-    fields = ('source', 'percentage')
-
-
 class ListingImageInline(admin.TabularInline):
     model = ListingImage
     extra = 1
@@ -110,6 +97,117 @@ class VisitRequestInline(admin.TabularInline):
     
     def has_add_permission(self, request, obj=None):
         return False
+
+
+from django import forms
+from django.contrib import admin
+from .models import TechnologyUsed
+
+
+class TechnologyUsedAdminForm(forms.ModelForm):
+    """فرم سفارشی با MultipleChoiceField برای هر دسته"""
+
+    technology_cms = forms.MultipleChoiceField(
+        choices=TechnologyUsed.TECHNOLOGY_CHOICES_CMS,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label='CMS و فروشگاه‌ساز'
+    )
+    technology_backend = forms.MultipleChoiceField(
+        choices=TechnologyUsed.TECHNOLOGY_CHOICES_BACKEND,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label='تکنولوژی Backend'
+    )
+    technology_frontend = forms.MultipleChoiceField(
+        choices=TechnologyUsed.TECHNOLOGY_CHOICES_FRONTEND,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label='تکنولوژی Frontend'
+    )
+    technology_database = forms.MultipleChoiceField(
+        choices=TechnologyUsed.TECHNOLOGY_CHOICES_DATABASE,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label='تکنولوژی Database'
+    )
+    technology_infrastructure = forms.MultipleChoiceField(
+        choices=TechnologyUsed.TECHNOLOGY_CHOICES_INFRASTRUCTURE,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label='تکنولوژی Infrastructure'
+    )
+    technology_mobile = forms.MultipleChoiceField(
+        choices=TechnologyUsed.TECHNOLOGY_CHOICES_MOBILE,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label='تکنولوژی Mobile'
+    )
+    technology_devops = forms.MultipleChoiceField(
+        choices=TechnologyUsed.TECHNOLOGY_CHOICES_DEVOPS,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label='تکنولوژی DevOps'
+    )
+    technology_third_party = forms.MultipleChoiceField(
+        choices=TechnologyUsed.TECHNOLOGY_CHOICES_THIRD_PARTY,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label='سرویس‌های جانبی'
+    )
+
+    class Meta:
+        model = TechnologyUsed
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # مقادیر ذخیره‌شده رو به فرم برگردون
+        if self.instance.pk:
+            for field in [
+                'technology_cms', 'technology_backend', 'technology_frontend',
+                'technology_database', 'technology_infrastructure',
+                'technology_mobile', 'technology_devops', 'technology_third_party'
+            ]:
+                self.fields[field].initial = getattr(self.instance, field) or []
+
+    def clean_technology_cms(self):
+        return list(self.cleaned_data.get('technology_cms', []))
+
+    def clean_technology_backend(self):
+        return list(self.cleaned_data.get('technology_backend', []))
+
+    def clean_technology_frontend(self):
+        return list(self.cleaned_data.get('technology_frontend', []))
+
+    def clean_technology_database(self):
+        return list(self.cleaned_data.get('technology_database', []))
+
+    def clean_technology_infrastructure(self):
+        return list(self.cleaned_data.get('technology_infrastructure', []))
+
+    def clean_technology_mobile(self):
+        return list(self.cleaned_data.get('technology_mobile', []))
+
+    def clean_technology_devops(self):
+        return list(self.cleaned_data.get('technology_devops', []))
+
+    def clean_technology_third_party(self):
+        return list(self.cleaned_data.get('technology_third_party', []))
+
+
+class TechnologyUsedInline(admin.StackedInline):
+    model = TechnologyUsed
+    form = TechnologyUsedAdminForm
+    extra = 0          # چون OneToOne هست، بیشتر از یکی نمی‌شه
+    max_num = 1
+    fields = (
+        'technology_cms', 'technology_backend', 'technology_frontend',
+        'technology_database', 'technology_infrastructure',
+        'technology_mobile', 'technology_devops', 'technology_third_party'
+    )
+
+
 
 
 @admin.register(Listing)
@@ -142,10 +240,9 @@ class ListingAdmin(admin.ModelAdmin):
         ExpenseInline,
         IncomeDataPointInline,
         ViewsDataPointInline,
-        TechnologyUsedInline, 
-        TrafficSourceInline, 
         ListingImageInline,
         VisitRequestInline,
+        TechnologyUsedInline, 
     ]
     
     fieldsets = (
@@ -156,7 +253,7 @@ class ListingAdmin(admin.ModelAdmin):
             'fields': ('price', 'discount_price', 'main_image')
         }),
         ('اطلاعات پلتفرم', {
-            'fields': ('platform_url', 'areas_activity', 'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment', 'sale_reason', 'sale_reason_description')
+            'fields': ('platform_url', 'areas_activity', 'followers_count', 'monthly_income', 'platform_age', 'most_like', 'most_view', 'most_comment')
         }),
         ('درآمد و هزینه', {
             'fields': (
