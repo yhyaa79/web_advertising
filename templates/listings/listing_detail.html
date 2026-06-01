@@ -1050,7 +1050,7 @@
                 {% with tech=listing.technologies_used %}
                 <div id="section-license" class="card card-body aboutplatform-card">
                     <div onclick="toggleHeight('13', 0)" class="aboutplatform-card-h3 cursor-card">
-                        <h3 class="titel-card">تکنولوژی‌های استفاده شده</h3>
+                        <h3 class="titel-card">تکنولوژی‌ها</h3>
                         <div class="btn-aboutplatform-card">
                             <button id="more-height-btn-13" class="more-height-btn open"></button>
                         </div>
@@ -1058,13 +1058,12 @@
                     <div id="box-text-13" class="social-media-text expanded">
                         <div class="license-detail">
                             <hr>
-                            
-                                <div class="tech-grid">
 
-                                    {% if tech.technology_cms %}
-                                    <div class="tech-category">
+                            <div class="tech-grid">
+
+                                {% if tech.technology_cms %}
+                                <div class="tech-category">
                                     <div class="tech-category-header">
-                                        <span class="tech-icon">🛒</span>
                                         <h3>CMS و فروشگاه‌ساز</h3>
                                     </div>
                                     <div class="tech-tags">
@@ -1072,13 +1071,12 @@
                                         <span class="tech-tag tech-tag--cms">{{ item }}</span>
                                         {% endfor %}
                                     </div>
-                                    </div>
-                                    {% endif %}
+                                </div>
+                                {% endif %}
 
-                                    {% if tech.technology_backend %}
-                                    <div class="tech-category">
+                                {% if tech.technology_backend %}
+                                <div class="tech-category">
                                     <div class="tech-category-header">
-                                        <span class="tech-icon">⚙️</span>
                                         <h3>Backend</h3>
                                     </div>
                                     <div class="tech-tags">
@@ -1086,13 +1084,12 @@
                                         <span class="tech-tag tech-tag--backend">{{ item }}</span>
                                         {% endfor %}
                                     </div>
-                                    </div>
-                                    {% endif %}
+                                </div>
+                                {% endif %}
 
-                                    {% if tech.technology_frontend %}
-                                    <div class="tech-category">
+                                {% if tech.technology_frontend %}
+                                <div class="tech-category">
                                     <div class="tech-category-header">
-                                        <span class="tech-icon">🎨</span>
                                         <h3>Frontend</h3>
                                     </div>
                                     <div class="tech-tags">
@@ -1100,13 +1097,12 @@
                                         <span class="tech-tag tech-tag--frontend">{{ item }}</span>
                                         {% endfor %}
                                     </div>
-                                    </div>
-                                    {% endif %}
+                                </div>
+                                {% endif %}
 
-                                    {% if tech.technology_database %}
-                                    <div class="tech-category">
+                                {% if tech.technology_database %}
+                                <div class="tech-category">
                                     <div class="tech-category-header">
-                                        <span class="tech-icon">🗄️</span>
                                         <h3>Database</h3>
                                     </div>
                                     <div class="tech-tags">
@@ -1114,13 +1110,12 @@
                                         <span class="tech-tag tech-tag--database">{{ item }}</span>
                                         {% endfor %}
                                     </div>
-                                    </div>
-                                    {% endif %}
+                                </div>
+                                {% endif %}
 
-                                    {% if tech.technology_infrastructure %}
-                                    <div class="tech-category">
+                                {% if tech.technology_infrastructure %}
+                                <div class="tech-category">
                                     <div class="tech-category-header">
-                                        <span class="tech-icon">🖥️</span>
                                         <h3>Infrastructure</h3>
                                     </div>
                                     <div class="tech-tags">
@@ -1128,13 +1123,12 @@
                                         <span class="tech-tag tech-tag--infra">{{ item }}</span>
                                         {% endfor %}
                                     </div>
-                                    </div>
-                                    {% endif %}
+                                </div>
+                                {% endif %}
 
-                                    {% if tech.technology_mobile %}
-                                    <div class="tech-category">
+                                {% if tech.technology_mobile %}
+                                <div class="tech-category">
                                     <div class="tech-category-header">
-                                        <span class="tech-icon">📱</span>
                                         <h3>Mobile</h3>
                                     </div>
                                     <div class="tech-tags">
@@ -1142,13 +1136,12 @@
                                         <span class="tech-tag tech-tag--mobile">{{ item }}</span>
                                         {% endfor %}
                                     </div>
-                                    </div>
-                                    {% endif %}
+                                </div>
+                                {% endif %}
 
-                                    {% if tech.technology_devops %}
-                                    <div class="tech-category">
+                                {% if tech.technology_devops %}
+                                <div class="tech-category">
                                     <div class="tech-category-header">
-                                        <span class="tech-icon">🔄</span>
                                         <h3>DevOps</h3>
                                     </div>
                                     <div class="tech-tags">
@@ -1156,13 +1149,12 @@
                                         <span class="tech-tag tech-tag--devops">{{ item }}</span>
                                         {% endfor %}
                                     </div>
-                                    </div>
-                                    {% endif %}
+                                </div>
+                                {% endif %}
 
-                                    {% if tech.technology_third_party %}
-                                    <div class="tech-category">
+                                {% if tech.technology_third_party %}
+                                <div class="tech-category">
                                     <div class="tech-category-header">
-                                        <span class="tech-icon">🔌</span>
                                         <h3>سرویس‌های جانبی</h3>
                                     </div>
                                     <div class="tech-tags">
@@ -1170,11 +1162,11 @@
                                         <span class="tech-tag tech-tag--third">{{ item }}</span>
                                         {% endfor %}
                                     </div>
-                                    </div>
-                                    {% endif %}
-
                                 </div>
-                 
+                                {% endif %}
+
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -1186,7 +1178,7 @@
 
 
 
-        
+
 
 
 
@@ -1917,7 +1909,7 @@
 
 <script>
 
-        /*  ========================================
+    /*  ========================================
     نمودار دایره ای منابع ترافیک
 
     templates/listings/listing_detail.html
@@ -1957,30 +1949,46 @@ document.addEventListener("DOMContentLoaded", function () {
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
         legend: {
-          position: "left",        // legend سمت چپ
-          rtl: true,               // برای متن فارسی
-          labels: {
+        position: "left",
+        rtl: true,
+        labels: {
             font: {
-              family: bodyFont,    // فونت از CSS
-              size: 13
+            family: bodyFont,
+            size: 12
             },
             padding: 15,
             pointStyleWidth: 10
-          }
+        }
         },
         tooltip: {
-          callbacks: {
+        callbacks: {
             label: c => `${c.label}: ${c.parsed}%`
-          },
-          bodyFont: { family: bodyFont },
-          titleFont: { family: bodyFont }
+        },
+        bodyFont: { family: bodyFont },
+        titleFont: { family: bodyFont },
+        backgroundColor: 'rgba(255,255,255,0.97)',
+        titleColor: '#94a3b8',
+        bodyColor: '#1e293b',
+        borderColor: 'rgba(0,0,0,0.1)',
+        borderWidth: 1 // ✅ ضخامت بردر
         }
-      }
+    },
+    layout: {
+        padding: {
+        left: 20  // ✅ فاصله بین legend و نمودار
+        }
+    },
+    datasets: {
+        doughnut: {
+        spacing: 0   // ✅ کاهش فاصله بین بخش‌ها (پیش‌فرض 0، مقدار کمتر = چسبیده‌تر)
+        }
     }
+    }
+
   });
 });
 </script>

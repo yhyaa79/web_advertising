@@ -4637,7 +4637,8 @@ form textarea {
 
 
 .traffic-chart {
-    width: 420px;       /* هر اندازه‌ای که می‌خوای */
+    width: 480px;
+    /* هر اندازه‌ای که می‌خوای */
     max-width: 100%;
     margin: 0 auto;
 }
@@ -4654,67 +4655,71 @@ form textarea {
 
 
 .technologies-section {
-  font-family: inherit;
-  padding: 1.5rem;
-  background: #f9fafb;
-  border-radius: 12px;
-  margin: 1.5rem 0;
+    font-family: inherit;
+    padding: 1.5rem;
+    background: #f9fafb;
+    border-radius: 12px;
+    margin: 1.5rem 0;
 }
 
 .tech-section-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e5e7eb;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
 }
 
 .tech-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
 }
 
 .tech-category {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 1rem;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1rem;
 }
 
 .tech-category-header {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
 }
 
 .tech-category-header h3 {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #374151;
-  margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+    margin: 0;
 }
 
 .tech-icon {
-  font-size: 1rem;
+    font-size: 1rem;
 }
 
 .tech-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
 }
 
 .tech-tag {
-  display: inline-block;
-  padding: 0.25rem 0.65rem;
-  border-radius: 20px;
-  font-size: 0.78rem;
-  font-weight: 500;
+    display: inline-block;
+    padding: 5px 16px;
+    border-radius: 20px;
+    height: 50%;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1.5px solid #e5e7eb;
+    align-items: center;
 }
 
+/* 
 .tech-tag--cms      { background: #fef3c7; color: #92400e; }
 .tech-tag--backend  { background: #dbeafe; color: #1e40af; }
 .tech-tag--frontend { background: #d1fae5; color: #065f46; }
@@ -4723,11 +4728,12 @@ form textarea {
 .tech-tag--mobile   { background: #fce7f3; color: #9d174d; }
 .tech-tag--devops   { background: #e0f2fe; color: #0c4a6e; }
 .tech-tag--third    { background: #f0fdf4; color: #14532d; }
+ */
 
 @media (max-width: 640px) {
-  .tech-grid {
-    grid-template-columns: 1fr;
-  }
+    .tech-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 
