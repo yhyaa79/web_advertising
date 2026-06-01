@@ -262,6 +262,11 @@ a {
     color: var(--blu-durk-color);
 }
 
+h3 {
+    font-size: 17px;
+}
+
+
 
 
 
@@ -1615,8 +1620,6 @@ option {
     overflow: hidden;
     transition: var(--transition-base);
     padding: 4px 14px;
-    margin: 0 auto;
-    width: fit-content;
     font-weight: 500;
     font-size: 11px;
 }
@@ -1877,7 +1880,7 @@ option {
 
 
 .card-title {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-md);
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: var(--spacing-sm);
@@ -1907,14 +1910,31 @@ option {
 
 .p-card-decoration {
     color: var(--text-2c3e50);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     white-space: nowrap;
 }
 
+.p-card-areas-activity {
+    color: var(--text-2c3e50);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    padding-left: 20px;
+    padding-right: 5px;
+}
+
+.p-card-areas-activity-hr {
+    margin: 8px 0 5px;
+}
+
+.p-card-areas-activity-div {
+    width: fit-content;
+}
+
 .link-similar {
     font-size: 12px;
-    padding: 10px;
+    padding-bottom: 4px;
     font-weight: 500;
     color: var(--blu-durk-color);
     text-decoration: underline;
@@ -1991,7 +2011,7 @@ option {
     display: inline-flex;
     gap: 5px;
     color: var(--text-2c3e50);
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 500;
 }
 
@@ -2378,7 +2398,7 @@ option {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: #00000096;
     /* رنگ مشکی با شفافیت ۷۰٪ */
     color: white;
     display: flex;
@@ -2412,8 +2432,7 @@ option {
 
 .income-display {
     margin-top: 10px;
-    margin-bottom: 10px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     color: var(--text-secondary);
 }
@@ -4262,7 +4281,7 @@ form textarea {
 }
 
 .text-muted {
-    color: var(--text-secondary);
+    color: var(--text-muted);
     font-size: var(--font-size-base) !important;
 }
 
@@ -4678,10 +4697,15 @@ form textarea {
 }
 
 .tech-category {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 1rem;
+    background: #fbfcfd;
+    padding: 8px 12px;
+    border-radius: var(--border-radius-md);
+    border: 1px solid #dee2e6;
+    font-weight: 500;
+    color: #2c3e50;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    align-items: center;
 }
 
 .tech-category-header {
@@ -4710,13 +4734,15 @@ form textarea {
 
 .tech-tag {
     display: inline-block;
-    padding: 5px 16px;
+    padding: 4px 16px;
     border-radius: 20px;
-    height: 50%;
+    /* height: 50%; */
     font-size: 13px;
     font-weight: 500;
     border: 1.5px solid #e5e7eb;
     align-items: center;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 /* 
