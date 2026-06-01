@@ -4712,7 +4712,13 @@ form textarea {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 15px;
+}
+
+.tech-category-header-svg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .tech-category-header h3 {
