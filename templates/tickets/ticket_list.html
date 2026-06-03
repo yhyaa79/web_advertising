@@ -11,7 +11,7 @@
         <div class="col-md-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>تیکت‌های من</h2>
-                <a href="{% url 'tickets:ticket_create' %}" class="btn btn-primary">تیکت جدید</a>
+                <a href="{% url 'tickets:ticket_create' %}" class="btn btn-success btn-medium btn-width-fit">تیکت جدید</a>
             </div>
 
             {% if tickets %}
@@ -61,7 +61,7 @@
                             <td>{{ ticket.created_at|date:"Y/m/d H:i" }}</td>
                             <td>
                                 <a href="{% url 'tickets:ticket_detail' ticket.pk %}"
-                                    class="btn btn-sm btn-primary">مشاهده</a>
+                                    class="btn btn-primary btn-medium btn-width-fit">مشاهده</a>
                             </td>
                         </tr>
                         {% endfor %}

@@ -1783,7 +1783,8 @@ option {
 }
 
 .btn-group-vertical {
-    margin-right: auto;
+display: flex;
+gap: 5px;
     margin-top: auto;
 }
 
@@ -2782,6 +2783,7 @@ option {
 
 .justify-content-between {
     gap: 15px;
+    justify-content: space-between;
 }
 
 /* ========================================

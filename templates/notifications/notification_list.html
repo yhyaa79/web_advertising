@@ -36,14 +36,14 @@
                         <div class="btn-group-vertical ms-3" role="group">
                             {% if notification.action_url %}
                             <!-- لینک رفتن به صفحه مربوطه -->
-                            <a href="{{ notification.action_url }}" class="btn btn-sm btn-primary mb-1">
-                                مشاهده و رفتن به صفحه
+                            <a href="{{ notification.action_url }}" class="btn btn-primary btn-medium btn-width-fit">
+                                رفتن به صفحه
                             </a>
                             {% endif %}
                             <form method="post" action="{% url 'notifications:delete_notification' notification.pk %}"
                                 class="d-inline">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-danger w-100">
+                                <button type="submit" class="btn btn-delet btn-medium btn-width-fit">
                                     حذف
                                 </button>
                             </form>
@@ -81,14 +81,14 @@
                         <div class="btn-group-vertical ms-3" role="group">
                             {% if notification.action_url %}
                             <!-- لینک رفتن به صفحه مربوطه -->
-                            <a href="{{ notification.action_url }}" class="btn btn-sm btn-primary mb-1">
-                                مشاهده و رفتن به صفحه
+                            <a href="{{ notification.action_url }}" class="btn btn-primary btn-medium btn-width-fit">
+                                رفتن به صفحه
                             </a>
                             {% endif %}
                             <form method="post" action="{% url 'notifications:delete_notification' notification.pk %}"
                                 class="d-inline">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-danger w-100">
+                                <button type="submit" class="btn btn-delet btn-medium btn-width-fit">
                                     حذف
                                 </button>
                             </form>

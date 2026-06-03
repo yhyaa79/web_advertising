@@ -89,7 +89,7 @@
                             {% if msg.attachment %}
                             <div class="pad-10">
                                 <a href="{{ msg.attachment.url }}" target="_blank"
-                                    class="btn btn-sm btn-outline-secondary">
+                                    class="btn btn-sm btn-outline-secondary btn-width-fit">
                                     📎 دانلود فایل پیوست
                                 </a>
                             </div>
@@ -118,7 +118,7 @@
                                 <div class="text-danger">{{ form.attachment.errors }}</div>
                                 {% endif %}
                             </div>
-                            <button type="submit" class="btn btn-primary">ارسال پاسخ</button>
+                            <button type="submit" class="btn btn-success btn-medium btn-width-fit">ارسال پاسخ</button>
                         </form>
                     </div>
                     {% else %}
@@ -133,7 +133,7 @@
                     {% endif %}
 
                     <div class="mt-5">
-                        <a href="{% url 'tickets:ticket_list' %}" class="btn btn-secondary">بازگشت به لیست</a>
+                        <a href="{% url 'tickets:ticket_list' %}" class="btn btn-primary btn-medium btn-width-fit">بازگشت به لیست</a>
                     </div>
                 </div>
             </div>
