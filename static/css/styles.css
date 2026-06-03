@@ -266,6 +266,9 @@ h3 {
     font-size: 17px;
 }
 
+h4 {
+    font-size: 15px;
+}
 
 
 
@@ -2843,41 +2846,35 @@ hr {
     cursor: default;
 }
 
+
+.buttom-category {
+    display: flex;
+    gap: 8px;
+    padding: 5px 25px;
+}
+
 /* ========================================
    دکمه‌ها (Buttons)
    ======================================== */
 
 .btn {
-    padding: 7px 30px;
+    display: flex;
     border-radius: var(--border-radius-999);
-    border-color: rgb(0 88 255);
-    ;
     border: none;
-    font-size: var(--font-size-md);
-    font-weight: 500;
     cursor: pointer;
     transition: var(--transition-base);
     text-decoration: none;
-    display: inline-block;
     text-align: center;
-    max-height: 45px;
     white-space: nowrap;
-}
-
-
-.send-message-btn {
-    margin-top: auto;
-    height: 45px !important;
-}
-
-.btn-primary {
-    /* background: linear-gradient(135deg, var(--accent-color) 0%, #2980b9 100%); */
-    color: var(--blu-color);
-    border: 1.7px solid var(--blu-color);
-    display: flex;
-    gap: 5px;
     align-items: center;
     justify-content: center;
+}
+
+
+
+.btn-primary {
+    color: var(--blu-color);
+    border: 1.6px solid var(--blu-color);
 }
 
 
@@ -2890,10 +2887,6 @@ hr {
 .btn-success {
     background: var(--blu-color);
     color: var(--white-bg);
-    display: flex;
-    gap: 5px;
-    align-items: center;
-    justify-content: center;
 }
 
 .btn-success:hover {
@@ -2905,26 +2898,64 @@ hr {
 .btn-delet {
     color: #df1111;
     background: #fcb3b2;
-    font-weight: bold;
-    border: none;
-    border-radius: var(--border-radius-999);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 3px 20px;
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    transition: var(--transition-base);
-    text-align: center;
-    cursor: pointer;
-    text-decoration: none;
 }
+
 
 .btn-delet:hover {
     color: #a91a1a;
     background: #f9918f;
 
 }
+
+.btn-outline-secondary {
+    background: transparent;
+    border: 1.5px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.btn-outline-secondary:hover {
+    background-color: #7f898a38;
+    border: 1.5px solid var(--border-color);
+}
+
+
+.btn-large {
+    padding: 7px 18px;
+    font-size: var(--font-size-md);
+    font-weight: 400;
+    height: 39px;
+    min-width: 70px;
+}
+
+.btn-medium {
+    padding: 5px 20px;
+    font-size: var(--font-size-base);
+    font-weight: 400;
+    height: 30px;
+    min-width: 60px;
+}
+
+.btn-small {
+    padding: 3px 17px;
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    height: 27px;
+    min-width: 50px;
+}
+
+
+.btn-width-100 {
+    width: 100%;
+}
+
+.btn-width-fit {
+    width: fit-content;
+}
+
+.btn-gap {
+    gap: 5px;
+}
+
 
 .btn-danger {
     background: linear-gradient(135deg, var(--danger-color) 0%, #c0392b 100%);
@@ -2975,16 +3006,6 @@ hr {
     color: var(--white-bg);
 }
 
-.btn-outline-secondary {
-    background: transparent;
-    border: 1.5px solid var(--border-color);
-    color: var(--text-secondary);
-}
-
-.btn-outline-secondary:hover {
-    background-color: #7f898a38;
-    border: 1.5px solid var(--border-color);
-}
 
 .btn-sm {
     padding: 5px var(--spacing-md);
@@ -3024,6 +3045,13 @@ hr {
     color: var(--blu-durk-color);
     font-weight: 500;
     font-size: var(--font-size-sm);
+}
+
+
+
+.send-message-btn {
+    margin-top: auto;
+    height: 45px !important;
 }
 
 
@@ -3168,7 +3196,7 @@ form textarea {
 
 .badge-normal {
     padding: 3px 10px;
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
     font-weight: 400;
     border-radius: var(--border-radius-999);
     white-space: nowrap;
@@ -3395,6 +3423,11 @@ form textarea {
 .table td {
     padding: var(--spacing-lg) var(--spacing-sm) !important;
 
+}
+
+.my-list-btn {
+    display: flex;
+    gap: 5px;
 }
 
 .table-striped tbody tr:nth-child(even) {
@@ -3868,7 +3901,7 @@ form textarea {
 .custom-modal-content,
 .modal-content {
     background-color: var(--white-bg);
-    margin: 15% auto;
+    margin: auto;
     padding: 0;
     border: 1px solid #888;
     width: 90%;
@@ -3882,6 +3915,7 @@ form textarea {
 
 .modal-content {
     height: 80vh !important;
+    margin-top: 60px;
 }
 
 .custom-modal-header,
@@ -4097,12 +4131,12 @@ form textarea {
 
 .chat-input-container textarea {
     flex: 1;
-    padding: 0.75rem;
+    padding: 8px;
     border: 1px solid var(--border-dark);
     border-radius: var(--border-radius-25);
     font-size: var(--font-size-base);
     resize: none;
-    min-height: 45px;
+    min-height: 40px;
     max-height: 150px;
     overflow: hidden;
     line-height: 1.5;

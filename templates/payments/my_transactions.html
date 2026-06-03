@@ -28,6 +28,7 @@
                                 <th>وضعیت</th>
                                 <th>قیمت آگهی</th>
                                 <th>قیمت پیشنهادی</th>
+                                <th>پیام</th>
                                 <th>موافقت خریدار</th>
                                 <th>موافقت فروشنده</th>
                                 <th>عملیات</th>
@@ -70,6 +71,18 @@
                                 <td>{{ proposal.proposed_price|floatformat:0 }} تومان</td> <!-- قیمت پیشنهادی -->
 
                                 <td>
+                                    <button
+                                        onclick="openChat('{{ proposal.id }}', '{{ proposal.listing.title|escapejs }}', '{{ proposal.status }}')"
+                                        class="btn btn-primary btn-medium btn-width-fit">
+                                        چت
+                                        {% if proposal.unread_count > 0 %}
+                                        <span class="chat-badge"
+                                            id="chat-badge-{{ proposal.id }}">{{ proposal.unread_count }}</span>
+                                        {% endif %}
+                                    </button>
+                                </td>
+
+                                <td>
                                     <span id="buyer-status-{{ proposal.id }}">
                                         {% if proposal.status == 'rejected' and proposal.buyer_rejected %}
                                         <span class="badge-normal">✗ رد کرده</span>
@@ -96,36 +109,27 @@
                                 <!-- در قسمت عملیات، دکمه چت را اینگونه تغییر دهید: -->
 
                                 <td>
-                                    <div class="action-buttons" id="actions-{{ proposal.id }}">
-                                        <button
-                                            onclick="openChat('{{ proposal.id }}', '{{ proposal.listing.title|escapejs }}', '{{ proposal.status }}')"
-                                            class="btn btn-primary btn-sm chat-btn-with-badge">
-                                            چت
-                                            {% if proposal.unread_count > 0 %}
-                                            <span class="chat-badge"
-                                                id="chat-badge-{{ proposal.id }}">{{ proposal.unread_count }}</span>
-                                            {% endif %}
-                                        </button>
+                                    <div class="my-list-btn" id="actions-{{ proposal.id }}">
 
                                         {% if proposal.status == 'rejected' %}
                                         {% if proposal.buyer == request.user and proposal.buyer_rejected %}
                                         <button onclick="undoRejection('{{ proposal.id }}')"
-                                            class="btn btn-warning btn-sm">برگرداندن</button>
+                                            class="btn btn-primary btn-medium btn-width-fit">برگرداندن</button>
                                         {% elif proposal.seller == request.user and proposal.seller_rejected %}
                                         <button onclick="undoRejection('{{ proposal.id }}')"
-                                            class="btn btn-warning btn-sm">برگرداندن</button>
+                                            class="btn btn-primary btn-medium btn-width-fit">برگرداندن</button>
                                         {% endif %}
                                         {% elif proposal.status == 'negotiating' %}
                                         {% if proposal.buyer == request.user and not proposal.buyer_agreed %}
                                         <button onclick="confirmDeal('{{ proposal.id }}')"
-                                            class="btn btn-success btn-sm">تایید</button>
+                                            class="btn btn-success btn-medium btn-width-fit">تایید</button>
                                         {% elif proposal.seller == request.user and not proposal.seller_agreed %}
                                         <button onclick="confirmDeal('{{ proposal.id }}')"
-                                            class="btn btn-success btn-sm">تایید</button>
+                                            class="btn btn-success btn-medium btn-width-fit">تایید</button>
                                         {% endif %}
 
                                         <button onclick="rejectDeal('{{ proposal.id }}')"
-                                            class="btn btn-danger btn-sm">رد</button>
+                                            class="btn btn-delet btn-medium btn-width-fit">رد</button>
                                         {% endif %}
                                     </div>
                                 </td>
@@ -240,7 +244,8 @@
                 <div class="chat-input-container" id="chatInputContainer">
                     <textarea id="chatInput" placeholder="پیام خود را بنویسید... (Shift+Enter برای خط جدید)"
                         onkeydown="handleChatKeydown(event)" rows="1"></textarea>
-                    <button onclick="sendMessage()" class="btn btn-primary send-message-btn">ارسال</button>
+                    <button onclick="sendMessage()" class="btn btn-success btn-large btn-width-fit"
+                        style="width: 100px;">ارسال</button>
                 </div>
                 <div id="chatDisabledMessage" class="chat-disabled-message" style="display: none;">
                     <p>امکان ارسال پیام در این وضعیت وجود ندارد.</p>

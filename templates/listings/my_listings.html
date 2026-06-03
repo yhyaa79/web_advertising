@@ -15,7 +15,7 @@
 
     <div class="btn-listing-create">
         <h2 class="mb-4">آگهی‌های من</h2>
-        <a href="{% url 'listings:listing_create' %}" class="btn btn-success mb-3">ثبت آگهی جدید</a>
+        <a href="{% url 'listings:listing_create' %}" class="btn btn-success btn-large btn-width-fit">ثبت آگهی جدید</a>
     </div>
 
     <!-- درخواست‌های بازدید در انتظار -->
@@ -43,14 +43,14 @@
 
                             <td>
                                 <a href="{% url 'listings:listing_detail' request.listing.pk %}"
-                                    class="btn btn-sm btn-link">
+                                    class="btn-sm btn-link">
                                     {{ request.listing.title }}
                                 </a>
                             </td>
 
                             <td>
                                 <a href="{% url 'listings:user_profile' request.requester.username %}"
-                                    class="btn btn-sm btn-link">
+                                    class="btn-sm btn-link">
                                     {{ request.requester.username }}
                                 </a>
                             </td>
@@ -60,7 +60,7 @@
                                 {% if request.message %}
                                 <!-- متن خلاصه شده با قابلیت کلیک -->
                                 <a href="javascript:void(0);" onclick="openModal('messageModal{{ request.pk }}')"
-                                    class="text-decoration-none">
+                                    class="btn-sm btn-link">
                                     {{ request.message|truncatewords:5 }}
                                 </a>
 
@@ -85,14 +85,14 @@
 
 
                             <td>{{ request.created_at|to_jalali }}</td>
-                            <td>
+                            <td class="my-list-btn">
                                 <a href="{% url 'listings:manage_visit_request' request.pk 'approve' %}"
-                                    class="btn btn-sm btn-success"
+                                    class="btn btn-success btn-medium btn-width-fit"
                                     onclick="return confirm('آیا از تایید این درخواست اطمینان دارید؟')">
                                     تایید
                                 </a>
                                 <a href="{% url 'listings:manage_visit_request' request.pk 'reject' %}"
-                                    class="btn btn-sm btn-danger"
+                                    class="btn btn-delet btn-medium btn-width-fit"
                                     onclick="return confirm('آیا از رد این درخواست اطمینان دارید؟')">
                                     رد
                                 </a>
@@ -230,7 +230,7 @@
 
                             <td>
                                 <!-- تغییر listing.title به listing.pk و اضافه کردن stopPropagation -->
-                                <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-sm btn-link"
+                                <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn-sm btn-link"
                                     onclick="event.stopPropagation();">
                                     {{ listing.title }}
                                 </a>
@@ -260,17 +260,17 @@
                             </td>
                             <td>{{ listing.views_count|split_number }}</td>
                             <td>{{ listing.created_at|jalali_date_numeric }}</td>
-                            <td onclick="event.stopPropagation();">
+                            <td onclick="event.stopPropagation();" class="my-list-btn">
                                 {% if listing.status != 'deleted' and listing.status != 'sold' %}
                                 <a href="{% url 'listings:listing_edit' listing.pk %}"
-                                    class="btn btn-sm btn-edit">ویرایش</a>
+                                    class="btn btn-primary btn-medium btn-width-fit">ویرایش</a>
                                 <a href="{% url 'listings:listing_delete' listing.pk %}"
-                                    class="btn btn-sm btn-remove">حذف</a>
+                                    class="btn btn-delet btn-medium btn-width-fit">حذف</a>
                                 {% endif %}
 
                                 {% if listing.status == 'deleted' %}
                                 <a href="{% url 'listings:listing_activate' listing.pk %}"
-                                    class="btn btn-sm btn-activation">فعال‌سازی</a>
+                                    class="btn btn-success btn-medium btn-width-fit">فعال‌سازی</a>
                                 {% endif %}
                             </td>
                         </tr>

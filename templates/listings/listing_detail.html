@@ -18,7 +18,7 @@
     <div class="rigt-navba-listing-detailr">
 
         <div class="ad-views-navbar">
-            <a href="{{ listing.platform_url }}" class="btn-primary-textarea" target="_blank">بازدید
+            <a href="{{ listing.platform_url }}" class="btn btn-primary btn-small btn-width-fit" target="_blank">بازدید
                 پلتفرم</a>
         </div>
 
@@ -1013,9 +1013,9 @@
                         <div class="license-detail">
                             <hr>
                             <div class="list-license">
-                                <p>{{ listing.get_sale_reason_display }}</p>
+                                <h4>{{ listing.get_sale_reason_display }}</h4>
 
-                                <p class="item-license-p">{{ listing.sale_reason_description }}</p>
+                                <p class="text-post-sale-support">{{ listing.sale_reason_description }}</p>
                             </div>
                         </div>
                     </div>
@@ -1025,7 +1025,7 @@
 
 
 
-
+                {% if listing.traffic_sources.exists %}
                 <div id="section-license" class="card card-body aboutplatform-card">
                     <div onclick="toggleHeight('12', 0)" class="aboutplatform-card-h3 cursor-card">
                         <h3 class="titel-card">منابع ترافیک</h3>
@@ -1044,7 +1044,7 @@
                         </div>
                     </div>
                 </div>
-
+                {% endif %}
 
                 {% if listing.technologies_used %}
                 {% with tech=listing.technologies_used %}
@@ -1298,7 +1298,7 @@
                             {% if has_access %}
                             <div class="btn-buy-card">
                                 <a href="{% url 'payments:initiate_purchase' listing.pk %}"
-                                    class="btn btn-success w-100">خرید</a>
+                                    class="btn btn-success btn-large btn-width-100">خرید</a>
                             </div>
                             {% else %}
                             <div class="btn-buy-access-card">
@@ -1315,13 +1315,13 @@
                             {% elif user == listing.seller %}
                             <div class="btn-edit-card">
                                 <a href="{% url 'listings:listing_edit' listing.pk %}"
-                                    class="btn btn-success w-100">ویرایش
+                                    class="btn btn-success btn-large btn-width-100">ویرایش
                                     آگهی</a>
                             </div>
 
                             {% else %}
                             <div class="btn-login-card">
-                                <a href="{% url 'accounts:login' %}" class="btn btn-success w-100">ورود برای خرید</a>
+                                <a href="{% url 'accounts:login' %}" class="btn btn-success btn-large btn-width-100 btn-gap">ورود برای خرید</a>
                             </div>
                             {% endif %}
 
@@ -1329,7 +1329,7 @@
 
 
                         <div class="ad-views">
-                            <a href="{{ listing.platform_url }}" class="btn btn-primary w-100" target="_blank">بازدید
+                            <a href="{{ listing.platform_url }}" class="btn btn-primary btn-large btn-width-100" target="_blank">بازدید
                                 پلتفرم</a>
                         </div>
 
@@ -1793,9 +1793,6 @@
                     </div>
 
 
-
-
-
                 </div>
             </div>
 
@@ -1806,9 +1803,8 @@
             {% if user.is_authenticated %}
             <div class="card mt-4" id="note-section">
                 <div class="card-header bg-light">
-                    <h5 class="mb-0">
-                        <i class="bi bi-journal-text"></i> یادداشت شخصی
-                    </h5>
+                    <h5 class="titel-card"> یادداشت شخصی</h5>
+                    <hr>
                 </div>
                 <div class="card-body">
                     <form id="note-form" method="post" action="{% url 'accounts:save_listing_note' listing.pk %}">
@@ -1818,9 +1814,9 @@
                                 placeholder="یادداشت خود را اینجا بنویسید...">{% if user_note %}{{ user_note.note }}{% endif %}</textarea>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <button class="btn-primary-textarea" type="submit">ذخیره</button>
+                            <button class="btn btn-primary btn-medium btn-width-fit" type="submit">ذخیره</button>
                             {% if user_note %}
-                            <button class="btn-delet" type="button" id="delete-note-btn">حذف</button>
+                            <button class="btn btn-delet btn-medium btn-width-fit" type="button" id="delete-note-btn">حذف</button>
                             {% endif %}
                         </div>
                     </form>

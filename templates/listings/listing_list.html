@@ -50,19 +50,21 @@
             <div class="col-md-12">
                 <strong>دسته‌بندی:</strong>
 
-                <!-- دکمه "همه" : اگر هیچ دسته‌بندی انتخاب نشده بود، پررنگ می‌شود -->
-                <a href="{% url 'listings:listing_list' %}"
-                    class="btn btn-sm {% if not request.GET.category %}btn-secondary{% else %}btn-outline-secondary{% endif %}">
-                    همه
-                </a>
+                <div class="buttom-category">
+                    <!-- دکمه "همه" : اگر هیچ دسته‌بندی انتخاب نشده بود، پررنگ می‌شود -->
+                    <a href="{% url 'listings:listing_list' %}"
+                        class="btn btn-secondary btn-medium btn-width-fit {% if not request.GET.category %}btn-secondary btn-medium btn-width-fit{% else %}btn-outline-secondary{% endif %}">
+                        همه
+                    </a>
 
-                <!-- لیست دسته‌بندی‌ها -->
-                {% for category in categories %}
-                <a href="?category={{ category.id }}"
-                    class="btn btn-sm {% if request.GET.category == category.id|stringformat:'s' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">
-                    {{ category.name }}
-                </a>
-                {% endfor %}
+                    <!-- لیست دسته‌بندی‌ها -->
+                    {% for category in categories %}
+                    <a href="?category={{ category.id }}"
+                        class="btn btn-secondary btn-medium btn-width-fit {% if request.GET.category == category.id|stringformat:'s' %}btn-secondary btn-medium btn-width-fit {% else %}btn-outline-secondary{% endif %}">
+                        {{ category.name }}
+                    </a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
 
@@ -85,7 +87,7 @@
 
                         <div class="div-btn-delet">
                             {% if has_active_filters %}
-                            <a href="{% url 'listings:listing_list' %}" class="btn-delet">
+                            <a href="{% url 'listings:listing_list' %}" class="btn btn-delet btn-small btn-width-fit">
                                 <i class="bi bi-x-circle"></i> حذف
                             </a>
                             {% endif %}
@@ -621,11 +623,11 @@
                                         <div class="btn-primary-div">
 
                                             <a href="{% url 'listings:listing_detail' listing.pk %}"
-                                                class="btn btn-primary w-100">مشاهده
+                                                class="btn btn-primary btn-large btn-width-100">مشاهده
                                             </a>
 
-                                            <a href="{{ listing.platform_url }}" class="btn btn-success w-100"
-                                                target="_blank">بازدید
+                                            <a href="{{ listing.platform_url }}"
+                                                class="btn btn-success btn-large btn-width-100 btn-gap" target="_blank">بازدید
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -761,7 +763,7 @@
 
                                     </div>
 
-                                    
+
                                     <div class="p-card-areas-activity-div">
                                         <hr class="p-card-areas-activity-hr">
                                         <p class="p-card-areas-activity"><strong class="strong-inf">حوزه‌ فعالیت:
@@ -853,10 +855,10 @@
                                     <div class="btn-primary-div">
 
                                         <a href="{% url 'listings:listing_detail' listing.pk %}"
-                                            class="btn btn-primary w-100">مشاهده</a>
+                                            class="btn btn-primary btn-large btn-width-100">اطلاعات بیشتر</a>
 
-                                        <a href="{{ listing.platform_url }}" class="btn btn-success w-100"
-                                            target="_blank">بازدید
+                                        <a href="{{ listing.platform_url }}"
+                                            class="btn btn-success btn-large btn-width-100 btn-gap" target="_blank">بازدید
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round">
