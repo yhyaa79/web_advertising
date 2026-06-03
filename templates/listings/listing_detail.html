@@ -178,7 +178,7 @@
                         {% elif visit_request %}
                         {% if visit_request.status == 'pending' %}
                         <div class="alert-info">
-                            <i class="bi bi-clock"></i> درخواست شما در انتظار تایید فروشنده است.
+                            <i class="badge-normal"></i> درخواست شما در انتظار تایید فروشنده است.
                         </div>
                         {% elif visit_request.status == 'rejected' %}
                         <div class="alert alert-danger">
@@ -186,7 +186,7 @@
                         </div>
                         {% endif %}
                         {% else %}
-                        <a href="{% url 'listings:request_visit' listing.pk %}" class="btn btn-warning">
+                        <a href="{% url 'listings:request_visit' listing.pk %}" class="btn btn-primary btn-medium btn-width-fit">
                             <i class="bi bi-send"></i> ارسال درخواست بازدید
                         </a>
                         {% endif %}
@@ -198,10 +198,10 @@
                 <div class="description-detail">
                     <p>{{ listing.description }}</p>
                 </div>
-                <div class="all-badge">
+                <div class="all-badge-card-detail">
                     {% if listing.is_private %}
                     <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge-detail bg-warning text-dark">
+                        <span class="badge-card-detail bg-warning text-dark">
                             <i class="bi bi-lock-fill"></i> خصوصی
                         </span>
                     </div>
@@ -209,15 +209,25 @@
 
                     {% if listing.is_income %}
                     <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge-detail bg-warning text-dark">
+                        <span class="badge-card-detail bg-warning text-dark">
                             <i class="bi bi-lock-fill"></i> درامد اگهی
                         </span>
                     </div>
                     {% endif %}
 
+
+                    {% if listing.is_verified %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge-card-detail bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
+                        </span>
+                    </div>
+                    {% endif %}
+
+
                     {% if listing.premier %}
                     <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge badge-detail bg-warning text-dark">
+                        <span class="badge-card-detail bg-warning text-dark">
                             <i class="bi bi-lock-fill"></i> اگهی برتر
 
                             <svg class="premier-star" width="18" height="18" viewBox="0 0 24 24" fill="#FFD700"
@@ -230,14 +240,13 @@
                     </div>
                     {% elif listing.boost %}
                     <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge badge-detail bg-warning text-dark">
+                        <span class="badge-card-detail bg-warning text-dark">
                             <i class="bi bi-lock-fill"></i> اگهی پیشرفته
                         </span>
                     </div>
                     {% endif %}
 
                 </div>
-
 
 
                 <div class="specifications-detail">
@@ -309,7 +318,7 @@
                     </div> -->
 
                 </div>
-                {% endif %}
+                
 
 
                 {% if listing.listing_analyst %}
@@ -1245,7 +1254,7 @@
                 </div>
                 {% endwith %}
                 {% endif %}
-
+                {% endif %}
             </div>
         </div>
 
@@ -1321,7 +1330,8 @@
 
                             {% else %}
                             <div class="btn-login-card">
-                                <a href="{% url 'accounts:login' %}" class="btn btn-success btn-large btn-width-100 btn-gap">ورود برای خرید</a>
+                                <a href="{% url 'accounts:login' %}"
+                                    class="btn btn-success btn-large btn-width-100 btn-gap">ورود برای خرید</a>
                             </div>
                             {% endif %}
 
@@ -1329,7 +1339,8 @@
 
 
                         <div class="ad-views">
-                            <a href="{{ listing.platform_url }}" class="btn btn-primary btn-large btn-width-100" target="_blank">بازدید
+                            <a href="{{ listing.platform_url }}" class="btn btn-primary btn-large btn-width-100"
+                                target="_blank">بازدید
                                 پلتفرم</a>
                         </div>
 
@@ -1504,6 +1515,45 @@
                 </p>
             </div>
             {% endif %}
+
+
+
+
+            {% if user.is_authenticated %}
+            <div class="card mt-3">
+                <div class="card-body pad-10">
+                    <h5> یادداشت شخصی</h5>
+                    <hr>
+                </div>
+                <div class="card-body">
+                    <form id="note-form" method="post" action="{% url 'accounts:save_listing_note' listing.pk %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <textarea class="form-control-textarea" name="note" id="listing-note" rows="4"
+                                placeholder="یادداشت خود را اینجا بنویسید...">{% if user_note %}{{ user_note.note }}{% endif %}</textarea>
+                        </div>
+                        <div class="my-list-btn">
+                            <button class="btn btn-primary btn-medium btn-width-fit" type="submit">ذخیره</button>
+                            {% if user_note %}
+                            <button class="btn btn-delet btn-medium btn-width-fit" type="button"
+                                id="delete-note-btn">حذف</button>
+                            {% endif %}
+                        </div>
+                    </form>
+
+                    <div id="note-timestamp" class="mt-2">
+                        {% if user_note %}
+                        <small class="text-muted">
+                            آخرین بروزرسانی: {{ user_note.updated_at|date:"Y/m/d H:i" }}
+                        </small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+
+
 
 
             <div class="card mt-3">
@@ -1719,7 +1769,7 @@
             <div class="card mt-3">
                 <div class="card-body pad-10">
 
-                    <h5 class="titel-card">راهنما</h5>
+                    <h5>راهنما</h5>
 
                     <hr>
                     <div class="guide-list">
@@ -1797,40 +1847,6 @@
             </div>
 
 
-
-
-
-            {% if user.is_authenticated %}
-            <div class="card mt-4" id="note-section">
-                <div class="card-header bg-light">
-                    <h5 class="titel-card"> یادداشت شخصی</h5>
-                    <hr>
-                </div>
-                <div class="card-body">
-                    <form id="note-form" method="post" action="{% url 'accounts:save_listing_note' listing.pk %}">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <textarea class="form-control-textarea" name="note" id="listing-note" rows="4"
-                                placeholder="یادداشت خود را اینجا بنویسید...">{% if user_note %}{{ user_note.note }}{% endif %}</textarea>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <button class="btn btn-primary btn-medium btn-width-fit" type="submit">ذخیره</button>
-                            {% if user_note %}
-                            <button class="btn btn-delet btn-medium btn-width-fit" type="button" id="delete-note-btn">حذف</button>
-                            {% endif %}
-                        </div>
-                    </form>
-
-                    <div id="note-timestamp" class="mt-2">
-                        {% if user_note %}
-                        <small class="text-muted">
-                            آخرین بروزرسانی: {{ user_note.updated_at|date:"Y/m/d H:i" }}
-                        </small>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            {% endif %}
 
 
 
@@ -2061,6 +2077,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
+
+
 
 
 

@@ -84,7 +84,7 @@
                             </td>
 
 
-                            <td>{{ request.created_at|to_jalali }}</td>
+                            <td class="date-td">{{ request.created_at|to_jalali }}</td>
                             <td class="my-list-btn">
                                 <a href="{% url 'listings:manage_visit_request' request.pk 'approve' %}"
                                     class="btn btn-success btn-medium btn-width-fit"
@@ -259,7 +259,7 @@
                                 {% endif %}
                             </td>
                             <td>{{ listing.views_count|split_number }}</td>
-                            <td>{{ listing.created_at|jalali_date_numeric }}</td>
+                            <td class="date-td">{{ listing.created_at|jalali_date_numeric }}</td>
                             <td onclick="event.stopPropagation();" class="my-list-btn">
                                 {% if listing.status != 'deleted' and listing.status != 'sold' %}
                                 <a href="{% url 'listings:listing_edit' listing.pk %}"
