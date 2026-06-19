@@ -177,11 +177,11 @@
                             style="width: fit-content; margin: 20px auto;">ورود برای ارسال درخواست</a>
                         {% elif visit_request %}
                         {% if visit_request.status == 'pending' %}
-                        <div class="alert-info">
-                            <i class="badge-normal"></i> درخواست شما در انتظار تایید فروشنده است.
+                        <div class="card-inf-request card-alarm-accept">
+                             درخواست شما در انتظار تایید فروشنده است.
                         </div>
                         {% elif visit_request.status == 'rejected' %}
-                        <div class="alert alert-danger">
+                        <div class="card-inf-request card-alarm-reject">
                             <i class="bi bi-x-circle"></i> درخواست شما رد شده است.
                         </div>
                         {% endif %}
@@ -286,10 +286,12 @@
                         <p>{{ listing.platform_age|floatformat:0 }} سال</p>
                     </div>
 
+                    {% if listing.location %}
                     <div class="inf-card-detail">
                         <strong class="strong-inf-detail">موقعیت مکانی:</strong>
-                        <p>{{ listing.location|default:"نامشخص" }}</p>
+                        <p>{{ listing.location }}</p>
                     </div>
+                    {% endif %}
 
                     <div class="inf-card-detail">
                         {% if listing.most_like %}

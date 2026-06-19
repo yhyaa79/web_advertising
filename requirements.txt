@@ -1,0 +1,4 @@
+Django==4.2.16
+psycopg2-binary
+jdatetime
+Pillow

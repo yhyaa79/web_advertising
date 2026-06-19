@@ -1624,8 +1624,26 @@ option {
     transition: var(--transition-base);
     padding: 4px 14px;
     font-weight: 500;
-    font-size: 11px;
+    font-size: 12px;
 }
+
+.text-dark {
+    padding: 4px 6px 0;
+}
+
+
+.card-inf-request {
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+    border: none;
+    overflow: hidden;
+    transition: var(--transition-base);
+    padding: 8px 18px;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
 
 /* ========================================
    کارد های listing_detail 
@@ -2925,9 +2943,9 @@ hr {
 
 .btn-large {
     padding: 7px 18px;
-    font-size: var(--font-size-md);
-    font-weight: 400;
-    height: 39px;
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    height: 35px;
     min-width: 70px;
 }
 
@@ -2957,7 +2975,7 @@ hr {
 }
 
 .btn-gap {
-    gap: 5px;
+    gap: 10px;
 }
 
 
@@ -3058,6 +3076,10 @@ hr {
     height: 45px !important;
 }
 
+
+.svg-btn {
+margin: auto 0;
+}
 
 /* ========================================
    فرم‌ها (Forms)
@@ -3478,6 +3500,16 @@ form textarea {
 .boost-announcement {
     color: #0560bc;
     background-color: #d5eaff;
+}
+
+.card-alarm-accept {
+    color: #0560bc;
+    background-color: #d5eaff;
+}
+
+.card-alarm-reject {
+    color: #b50f0f;
+    background-color: #ffbaba;
 }
 
 .premier-announcement-text,
@@ -4413,13 +4445,15 @@ form textarea {
 }
 
 .alert-warning {
-    background: #fef0cc;
-    padding: 16px 25px;
+    background: #fff4d9;
+    padding: 10px 25px;
     border-radius: 10px;
+    margin: 10px 0;
 }
 
 .alert-warning p {
     margin-bottom: 20px;
+    font-size: 15px;
 }
 
 
