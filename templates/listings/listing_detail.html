@@ -178,7 +178,7 @@
                         {% elif visit_request %}
                         {% if visit_request.status == 'pending' %}
                         <div class="card-inf-request card-alarm-accept">
-                             درخواست شما در انتظار تایید فروشنده است.
+                            درخواست شما در انتظار تایید فروشنده است.
                         </div>
                         {% elif visit_request.status == 'rejected' %}
                         <div class="card-inf-request card-alarm-reject">
@@ -186,13 +186,217 @@
                         </div>
                         {% endif %}
                         {% else %}
-                        <a href="{% url 'listings:request_visit' listing.pk %}" class="btn btn-primary btn-medium btn-width-fit">
+                        <a href="{% url 'listings:request_visit' listing.pk %}"
+                            class="btn btn-primary btn-medium btn-width-fit">
                             <i class="bi bi-send"></i> ارسال درخواست بازدید
                         </a>
                         {% endif %}
                     </div>
                     {% endif %}
                 </div>
+
+                {% if listing.sale_type %}
+                <div class="rsd-ps-card rsd-ps-sale-box">
+                    <div class="rsd-ps-sale-box__head">
+                        <div class="rsd-ps-sale-box__title-wrap">
+                            <span class="rsd-ps-sale-box__label">نوع فروش</span>
+                            <h4 class="rsd-ps-sale-box__title">{{ listing.get_sale_type_display }}</h4>
+                        </div>
+
+                        <div class="rsd-ps-sale-box__badges">
+                            {% if listing.sale_type == 'partial_ownership' and listing.partial_ownership_percentage %}
+                            <span class="rsd-ps-sale-box__badge rsd-ps-sale-box__badge--accent">
+                                {{ listing.partial_ownership_percentage }}٪ سهم
+                            </span>
+                            {% endif %}
+
+                            {% if listing.sale_type == 'license' %}
+                            {% if listing.license_duration_type %}
+                            <span class="rsd-ps-sale-box__badge rsd-ps-sale-box__badge--accent">
+                                {{ listing.get_license_duration_type_display }}
+                            </span>
+                            {% endif %}
+                            {% if listing.license_duration_months %}
+                            <span class="rsd-ps-sale-box__badge">
+                                {{ listing.license_duration_months }} ماه
+                            </span>
+                            {% endif %}
+                            {% endif %}
+
+                            {% if listing.sale_type == 'revenue_share' %}
+                            {% if listing.revenue_share_percentage %}
+                            <span class="rsd-ps-sale-box__badge rsd-ps-sale-box__badge--accent">
+                                {{ listing.revenue_share_percentage }}٪ سهم
+                            </span>
+                            {% endif %}
+                            {% if listing.revenue_share_contract_duration %}
+                            <span class="rsd-ps-sale-box__badge">
+                                {{ listing.revenue_share_contract_duration }} ماه
+                            </span>
+                            {% endif %}
+                            {% endif %}
+
+                            {% if listing.sale_type == 'brand' and listing.brand_legal_status %}
+                            <span class="rsd-ps-sale-box__badge rsd-ps-sale-box__badge--accent">
+                                {{ listing.get_brand_legal_status_display }}
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="rsd-ps-sale-details">
+
+                        {% if listing.sale_type == 'full_ownership' %}
+                        {% if listing.ownership_document_status %}
+                        <div class="rsd-ps-sale-row">
+                            <i class="ti ti-file-certificate"></i>
+                            <div>
+                                <span class="rsd-ps-sale-row-label">وضعیت اسناد</span>
+                                <span class="rsd-ps-sale-row-value">{{ listing.ownership_document_status }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if listing.ownership_transfer_conditions %}
+                        <div class="rsd-ps-sale-row">
+                            <i class="ti ti-refresh"></i>
+                            <div>
+                                <span class="rsd-ps-sale-row-label">شرایط انتقال</span>
+                                <span class="rsd-ps-sale-row-value">{{ listing.ownership_transfer_conditions }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+
+                        {% if listing.sale_type == 'partial_ownership' %}
+                        {% if listing.partial_ownership_valuation_method %}
+                        <div class="rsd-ps-sale-row">
+                            <i class="ti ti-calculator"></i>
+                            <div>
+                                <span class="rsd-ps-sale-row-label">روش ارزش‌گذاری</span>
+                                <span
+                                    class="rsd-ps-sale-row-value">{{ listing.partial_ownership_valuation_method }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if listing.partial_ownership_buyer_rights %}
+                        <div class="rsd-ps-sale-row">
+                            <i class="ti ti-check"></i>
+                            <div>
+                                <span class="rsd-ps-sale-row-label">حقوق خریدار</span>
+                                <span class="rsd-ps-sale-row-value">{{ listing.partial_ownership_buyer_rights }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if listing.partial_ownership_exit_conditions %}
+                        <div class="rsd-ps-sale-row">
+                            <i class="ti ti-door-exit"></i>
+                            <div>
+                                <span class="rsd-ps-sale-row-label">شرایط خروج</span>
+                                <span
+                                    class="rsd-ps-sale-row-value">{{ listing.partial_ownership_exit_conditions }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+
+                        {% if listing.sale_type == 'license' %}
+                        {% if listing.license_scope %}
+                        <div class="rsd-ps-sale-row">
+                            <i class="ti ti-map"></i>
+                            <div>
+                                <span class="rsd-ps-sale-row-label">محدوده مجوز</span>
+                                <span class="rsd-ps-sale-row-value">{{ listing.license_scope }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if listing.license_restrictions %}
+                        <div class="rsd-ps-sale-row">
+                            <i class="ti ti-ban"></i>
+                            <div>
+                                <span class="rsd-ps-sale-row-label">محدودیت‌ها</span>
+                                <span class="rsd-ps-sale-row-value">{{ listing.license_restrictions }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+
+                        {% if listing.sale_type == 'revenue_share' %}
+                        {% if listing.revenue_share_base %}
+                        <div class="rsd-ps-sale-row">
+                            <i class="ti ti-calculator"></i>
+                            <div>
+                                <span class="rsd-ps-sale-row-label">مبنای محاسبه</span>
+                                <span class="rsd-ps-sale-row-value">{{ listing.get_revenue_share_base_display }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if listing.revenue_share_payment_period %}
+                        <div class="rsd-ps-sale-row">
+                            <i class="ti ti-calendar"></i>
+                            <div>
+                                <span class="rsd-ps-sale-row-label">دوره پرداخت</span>
+                                <span
+                                    class="rsd-ps-sale-row-value">{{ listing.get_revenue_share_payment_period_display }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if listing.revenue_share_minimum_guarantee %}
+                        <div class="rsd-ps-sale-row">
+                            <i class="ti ti-shield"></i>
+                            <div>
+                                <span class="rsd-ps-sale-row-label">حداقل تضمینی ماهانه</span>
+                                <span class="rsd-ps-sale-row-value">
+                                    {{ listing.revenue_share_minimum_guarantee|split_number }} تومان
+                                </span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+
+                        {% if listing.sale_type == 'brand' %}
+                        {% if listing.brand_transferred_assets %}
+                        <div class="rsd-ps-sale-row">
+                            <i class="ti ti-package"></i>
+                            <div>
+                                <span class="rsd-ps-sale-row-label">اجزای منتقل‌شده</span>
+                                <span class="rsd-ps-sale-row-value">{{ listing.brand_transferred_assets }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if listing.brand_industry_scope %}
+                        <div class="rsd-ps-sale-row">
+                            <i class="ti ti-building-factory-2"></i>
+                            <div>
+                                <span class="rsd-ps-sale-row-label">حوزه برند</span>
+                                <span class="rsd-ps-sale-row-value">{{ listing.brand_industry_scope }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if listing.brand_usage_restrictions %}
+                        <div class="rsd-ps-sale-row">
+                            <i class="ti ti-alert-triangle"></i>
+                            <div>
+                                <span class="rsd-ps-sale-row-label">محدودیت‌ها</span>
+                                <span class="rsd-ps-sale-row-value">{{ listing.brand_usage_restrictions }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+
+                    </div>
+
+                </div>
+                {% endif %}
+
+
 
                 {% if has_access %}
                 <div class="description-detail">
@@ -320,7 +524,7 @@
                     </div> -->
 
                 </div>
-                
+
 
 
                 {% if listing.listing_analyst %}
@@ -1300,6 +1504,13 @@
 
                         <hr class="hr-between" style="margin-top: 7px;">
 
+                        <div class="rsd-ps-sale-row" style="display: flow;">
+                            <p class="sale-type-label">نوع فروش</p>
+                            <p class="sale-type-name">{{ listing.get_sale_type_display }}</p>
+                        </div>
+
+                        <hr class="hr-between" style="margin-top: 7px;">
+
                         <div class="btn-buy-edit-login-card">
 
                             {% if user.is_authenticated and user != listing.seller %}
@@ -1356,6 +1567,8 @@
                     </div>
                 </div>
             </div>
+
+
 
             <div class="card mt-3">
                 <div class="card-body pad-10">
@@ -1865,6 +2078,8 @@
 </div>
 
 
+
+
 <!-- تغییر کلاس نوار -->
 {% block extra_js %}
 <script>
@@ -2079,9 +2294,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
-
-
-
 
 
 {% endblock %}
