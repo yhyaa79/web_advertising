@@ -1,4 +1,4 @@
-# listings/models.py  — نسخه کامل با نوع فروش
+# listings/models.py
 
 from django.db import models
 from django.conf import settings

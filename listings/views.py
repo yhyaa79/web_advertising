@@ -16,7 +16,17 @@ from django.urls import reverse
 from accounts.models import SavedListing, ListingNote
 from django.db.models import FloatField, ExpressionWrapper
 
-
+import json
+import logging
+ 
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_http_methods
+ 
+from .models import Category, Listing
+ 
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
@@ -361,60 +371,131 @@ def listing_detail(request, pk):
 
 
 @login_required
+@require_http_methods(["GET", "POST"])
 def listing_create(request):
-    if request.method == 'POST':
-        form = ListingForm(request.POST, request.FILES)
-        income_proof_formset = IncomeProofFormSet(request.POST, request.FILES)
-        income_data_formset = IncomeDataPointFormSet(request.POST)
-        views_data_formset = ViewsDataPointFormSet(request.POST)
-        faq_formset = FAQFormSet(request.POST)
+    categories = Category.objects.all()
 
-        if (form.is_valid() and income_proof_formset.is_valid() and
-            income_data_formset.is_valid() and views_data_formset.is_valid() and
-            faq_formset.is_valid()):
+    if request.method == "GET":
+        return render(request, "listings/listing_create.html", {"categories": categories})
 
-            listing = form.save(commit=False)
-            listing.seller = request.user
-            listing.save()
+    # ── POST ──────────────────────────────────────────────────────────
+    is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
 
-            income_proof_formset.instance = listing
-            income_proof_formset.save()
+    def _err(msg, status=400, field_errors=None):
+        logger.warning("listing_create: validation error — %s | user=%s", msg, request.user)
+        if is_ajax:
+            payload = {"success": False, "error": msg}
+            if field_errors:
+                payload["errors"] = field_errors
+            return JsonResponse(payload, status=status)
+        # For non-AJAX, re-render with error context
+        return render(
+            request,
+            "listings/listing_create.html",
+            {"categories": categories, "error": msg, "field_errors": field_errors},
+            status=status,
+        )
 
-            income_data_formset.instance = listing
-            income_data_formset.save()
+    p = request.POST
+    files = request.FILES
 
-            views_data_formset.instance = listing
-            views_data_formset.save()
+    # ── Required fields ────────────────────────────────────────────────
+    field_errors = {}
+    title = p.get("title", "").strip()
+    description = p.get("description", "").strip()
+    price_raw = p.get("price", "").strip()
+    areas_activity = p.get("areas_activity", "").strip()
+    main_image = files.get("main_image")
 
-            # ذخیره FAQ ها با فیلتر کردن رکوردهای خالی
-            faqs = faq_formset.save(commit=False)
-            for faq in faqs:
-                # فقط FAQ هایی که question یا answer دارند را ذخیره کن
-                if faq.question and faq.question.strip() and faq.answer and faq.answer.strip():
-                    faq.listing = listing
-                    faq.save()
-            
-            # حذف FAQ های marked for deletion
-            for faq in faq_formset.deleted_objects:
-                faq.delete()
+    if not title:
+        field_errors["title"] = "عنوان آگهی اجباری است"
+    if not description:
+        field_errors["description"] = "توضیحات اجباری است"
+    if not areas_activity:
+        field_errors["areas_activity"] = "حوزه فعالیت اجباری است"
+    if not main_image:
+        field_errors["main_image"] = "تصویر اصلی اجباری است"
 
-            messages.success(request, 'آگهی شما با موفقیت ثبت شد و در انتظار تایید است.')
-            return redirect('listings:my_listings')
-    else:
-        form = ListingForm()
-        income_proof_formset = IncomeProofFormSet()
-        income_data_formset = IncomeDataPointFormSet()
-        views_data_formset = ViewsDataPointFormSet()
-        faq_formset = FAQFormSet()
+    try:
+        price = int(price_raw)
+        if price <= 0:
+            field_errors["price"] = "قیمت باید عدد مثبت باشد"
+    except (ValueError, TypeError):
+        price = None
+        field_errors["price"] = "قیمت وارد شده معتبر نیست"
 
-    return render(request, 'listings/listing_create.html', {
-        'form': form,
-        'income_proof_formset': income_proof_formset,
-        'income_data_formset': income_data_formset,
-        'views_data_formset': views_data_formset,
-        'faq_formset': faq_formset,
-    })
+    if field_errors:
+        return _err("فیلدهای اجباری تکمیل نشده‌اند", field_errors=field_errors)
 
+    # ── Optional fields ────────────────────────────────────────────────
+    def _int(val, default=0):
+        try:
+            return int(val) if val else default
+        except (ValueError, TypeError):
+            return default
+
+    def _decimal(val):
+        try:
+            return int(val) if val else None
+        except (ValueError, TypeError):
+            return None
+
+    category_id = _int(p.get("category"), None)
+    category = None
+    if category_id:
+        try:
+            category = Category.objects.get(pk=category_id)
+        except Category.DoesNotExist:
+            logger.warning("listing_create: category %s not found", category_id)
+
+    # ── Create Listing ─────────────────────────────────────────────────
+    try:
+        listing = Listing.objects.create(
+            seller=request.user,
+            category=category,
+            title=title,
+            description=description,
+            price=price,
+            discount_price=_decimal(p.get("discount_price")),
+            location=p.get("location", "").strip() or None,
+            platform_url=p.get("platform_url", "").strip(),
+            followers_count=_int(p.get("followers_count")),
+            platform_age=_int(p.get("platform_age")),
+            monthly_income=_decimal(p.get("monthly_income")),
+            most_like=_decimal(p.get("most_like")),
+            most_view=_decimal(p.get("most_view")),
+            most_comment=_decimal(p.get("most_comment")),
+            areas_activity=areas_activity,
+            sale_reason=p.get("sale_reason") or None,
+            sale_reason_description=p.get("sale_reason_description", "").strip() or None,
+            sale_type=p.get("sale_type") or None,
+            # BooleanFields — checkboxes: present = True, absent = False
+            is_income=p.get("is_income") == "on",
+            suggested_price=p.get("suggested_price") == "on",
+            is_private=p.get("is_private") == "on",
+            boost=p.get("boost") == "on",
+            premier=p.get("premier") == "on",
+            main_image=main_image,
+            status="pending",
+        )
+
+        logger.info(
+            "listing_create: SUCCESS — id=%s title=%r user=%s",
+            listing.pk, listing.title, request.user,
+        )
+
+        if is_ajax:
+            return JsonResponse({
+                "success": True,
+                "id": listing.pk,
+                "redirect": f"/listings/{listing.pk}/",   # adjust to your URL
+            })
+
+        return redirect("listings:detail", pk=listing.pk)  # adjust to your URL name
+
+    except Exception as exc:
+        logger.exception("listing_create: UNEXPECTED ERROR — user=%s | %s", request.user, exc)
+        return _err(f"خطای داخلی سرور: {exc}", status=500)
 
 
 @login_required
