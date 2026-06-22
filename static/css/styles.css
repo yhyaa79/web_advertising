@@ -409,7 +409,7 @@ option {
     left: 0px;
     /* چون سایت RTL است، left: 0 باعث می‌شود منو سمت چپ دکمه تراز شود */
     background-color: #ffffff;
-    min-width: 160px;
+    min-width: 200px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     border-radius: 8px;
@@ -420,7 +420,7 @@ option {
 
 .dropdown-navbar a {
     color: #333;
-    padding: 7px 12px;
+    padding: 5px 12px;
     text-decoration: none;
     display: block;
     text-align: right;
@@ -5011,7 +5011,7 @@ nav .nav-cta .btn-ghost {
 }
 
 .hero-grid {
-    position: absolute;
+    /*    position: absolute;
     inset: 0;
     z-index: 0;
     background-image:
@@ -5020,7 +5020,7 @@ nav .nav-cta .btn-ghost {
     background-size: 60px 60px;
 
     mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 30%, transparent 80%);
-    opacity: .4;
+    opacity: .4; */
 }
 
 .hero-badge {
@@ -7961,4 +7961,204 @@ body {
     border: none;
     border-top: 1px solid var(--border);
     margin: 16px 0
+}
+
+
+
+
+/* ═══════════════════════════════════════════════
+   Stats Dashboard — Horizontal Layout
+   ═══════════════════════════════════════════════ */
+
+
+
+
+
+.card.accent-blue {
+    border-right: 3px solid #378ADD;
+    border-radius: 0 12px 12px 0;
+}
+
+.card.accent-teal {
+    border-right: 3px solid #1D9E75;
+    border-radius: 0 12px 12px 0;
+}
+
+.card.accent-amber {
+    border-right: 3px solid #BA7517;
+    border-radius: 0 12px 12px 0;
+}
+
+.card.accent-purple {
+    border-right: 3px solid #7F77DD;
+    border-radius: 0 12px 12px 0;
+}
+
+.ic {
+    font-size: 15px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.card.accent-blue .ic {
+    color: #378ADD;
+}
+
+.card.accent-teal .ic {
+    color: #1D9E75;
+}
+
+.card.accent-amber .ic {
+    color: #BA7517;
+}
+
+.card.accent-purple .ic {
+    color: #7F77DD;
+}
+
+.lbl {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-bottom: 2px;
+}
+
+.val {
+    font-size: 22px;
+    font-weight: 500;
+    color: #111827;
+    line-height: 1.1;
+}
+
+.sub {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 3px;
+}
+
+/* ─── Section Title ─── */
+.sec {
+    font-size: 11px;
+    font-weight: 500;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.sec i {
+    font-size: 13px;
+}
+
+.sec-line {
+    flex: 1;
+    height: 0.5px;
+    background: rgba(0, 0, 0, .08);
+}
+
+/* ─── Financial Cards ─── */
+.fin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.fin-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.fin-header i {
+    font-size: 16px;
+    color: #6b7280;
+}
+
+.fin-header span {
+    font-size: 12px;
+    color: #374151;
+    font-weight: 500;
+}
+
+.fin-amount {
+    font-size: 19px;
+    font-weight: 500;
+    color: #111827;
+}
+
+.fin-amount.green {
+    color: #1D9E75;
+}
+
+.fin-currency {
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+.fin-foot {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 0.5px solid rgba(0, 0, 0, .08);
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+/* ─── Detailed Stats ─── */
+.detail-flex {
+    display: flex;
+    align-items: stretch;
+    padding: 0.85rem 1.25rem;
+}
+
+.divider-v {
+    width: 0.5px;
+    background: rgba(0, 0, 0, .08);
+    align-self: stretch;
+    margin: 0 4px;
+}
+
+.detail-col {
+    flex: 1;
+    padding: 0 1rem;
+}
+
+.detail-col:first-child {
+    padding-right: 0;
+}
+
+.detail-col:last-child {
+    padding-left: 0;
+}
+
+/* ─── Results Bar ─── */
+.results-bar {
+    border-top: 0.5px solid rgba(0, 0, 0, .08);
+    padding: 10px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 20%;
+}
+
+.r-text {
+    font-size: 15px;
+    color: #6b7280;
+    word-spacing: 1px;
+}
+
+.r-text strong {
+    color: #111827;
+    font-weight: 500;
+}
+
+.r-badge {
+    font-size: 12px;
+    color: #8d939d;
+    background: #f9fafb;
+    border: 0.5px solid rgba(0, 0, 0, .1);
+    border-radius: 6px;
+    padding: 3px 10px;
 }

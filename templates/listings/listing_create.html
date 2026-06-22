@@ -3,12 +3,14 @@
 {% load static %}
 
 {% block title %}ثبت آگهی جدید{% endblock %}
-{% block nav_class %}navbar-top-dark{% endblock %}
+
 {% block content %}
 
+<div class="container">
+<div id="toast-wrap"></div>
+<div id="overlay"><div class="spinner"></div><p id="overlay-msg">در حال ارسال...</p></div>
 
-<div class="navbar-listing-detail">
-  <!-- TOP BAR -->
+<!-- TOP BAR -->
 <div class="top-bar">
   <h1>📋 ثبت آگهی جدید</h1>
   <div class="top-bar-right">
@@ -49,16 +51,6 @@
     </div>
   </div>
 </div>
-
-
-</div>
-
-
-
-
-<div class="container">
-<div id="toast-wrap"></div>
-<div id="overlay"><div class="spinner"></div><p id="overlay-msg">در حال ارسال...</p></div>
 
 
 <div class="form-col">
@@ -290,7 +282,7 @@
 
   <div class="nav-bar">
     <div></div>
-    <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
+    <button type="button" class="btn btn-success btn-medium btn-width-fit" onclick="nextStep()">مرحله بعد</button>
   </div>
 </div><!-- /step-1 -->
 
@@ -376,8 +368,8 @@
   </div>
 
   <div class="nav-bar">
-    <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
-    <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
+    <button type="button" class="btn btn-primary btn-medium btn-width-fit" onclick="prevStep()">مرحله قبل</button>
+    <button type="button" class="btn btn-success btn-medium btn-width-fit" onclick="nextStep()">مرحله بعد</button>
   </div>
 </div><!-- /step-2 -->
 
@@ -455,8 +447,8 @@
   </div>
 
   <div class="nav-bar">
-    <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
-    <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
+    <button type="button" class="btn btn-primary btn-medium btn-width-fit" onclick="prevStep()">مرحله قبل</button>
+    <button type="button" class="btn btn-success btn-medium btn-width-fit" onclick="nextStep()">مرحله بعد</button>
   </div>
 </div><!-- /step-3 -->
 
@@ -516,8 +508,8 @@
   </div>
 
   <div class="nav-bar">
-    <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
-    <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
+    <button type="button" class="btn btn-primary btn-medium btn-width-fit" onclick="prevStep()">مرحله قبل</button>
+    <button type="button" class="btn btn-success btn-medium btn-width-fit" onclick="nextStep()">مرحله بعد</button>
   </div>
 </div><!-- /step-4 -->
 
@@ -567,8 +559,8 @@
   </div>
 
   <div class="nav-bar">
-    <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
-    <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
+    <button type="button" class="btn btn-primary btn-medium btn-width-fit" onclick="prevStep()">مرحله قبل</button>
+    <button type="button" class="btn btn-success btn-medium btn-width-fit" onclick="nextStep()">مرحله بعد</button>
   </div>
 </div><!-- /step-5 -->
 
@@ -693,8 +685,8 @@
   </div>
 
   <div class="nav-bar">
-    <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
-    <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
+    <button type="button" class="btn btn-primary btn-medium btn-width-fit" onclick="prevStep()">مرحله قبل</button>
+    <button type="button" class="btn btn-success btn-medium btn-width-fit" onclick="nextStep()">مرحله بعد</button>
   </div>
 </div><!-- /step-6 -->
 
@@ -730,7 +722,7 @@
   </div>
 
   <div class="nav-bar">
-    <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">مرحله قبل</button>
     <button type="button" class="btn btn-success" id="submit-btn" onclick="submitForm()">💾 ثبت نهایی آگهی</button>
   </div>
 </div><!-- /step-7 -->

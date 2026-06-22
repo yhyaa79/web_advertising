@@ -45,6 +45,93 @@ def get_roi_display(self):
     
     return f"{roi_months:.0f} ماه ({roi_years:.1f} سال)"
 
+# listings/views.py
+
+from decimal import Decimal
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db.models import Q, F, Case, When, DecimalField, Count, Sum
+from django.utils import timezone
+from datetime import timedelta
+from .models import Listing, Category, IncomeProof, VisitRequest, ViewsDataPoint
+from .forms import (ListingForm, IncomeProofFormSet, VisitRequestForm,
+                    IncomeDataPointFormSet, ViewsDataPointFormSet, FAQFormSet)
+import json
+from notifications.utils import create_notification
+from django.contrib.auth import get_user_model
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.urls import reverse
+from accounts.models import SavedListing, ListingNote
+from django.db.models import FloatField, ExpressionWrapper
+
+import json
+import logging
+ 
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_http_methods
+ 
+from .models import Category, Listing
+ 
+logger = logging.getLogger(__name__)
+
+User = get_user_model()
+
+
+def get_listing_stats():
+    """گزارش‌های کلی آگهی‌ها"""
+    now = timezone.now()
+    last_24_hours = now - timedelta(hours=24)
+    week_ago = now - timedelta(days=7)
+    month_ago = now - timedelta(days=30)
+    year_ago = now - timedelta(days=365)
+    
+    # آگهی‌های فعال
+    active_listings = Listing.objects.filter(status='active')
+    
+    # آگهی‌های فروخته شده
+    sold_listings = Listing.objects.filter(status='sold')
+    
+    stats = {
+        # آگهی‌های فعال
+        'active_24h': active_listings.filter(created_at__gte=last_24_hours).count(),
+        'active_week': active_listings.filter(created_at__gte=week_ago).count(),
+        'active_month': active_listings.filter(created_at__gte=month_ago).count(),
+        'active_year': active_listings.filter(created_at__gte=year_ago).count(),
+        'active_total': active_listings.count(),
+        
+        'active_total_price': active_listings.aggregate(
+            total=Sum(Case(
+                When(discount_price__isnull=False, then=F('discount_price')),
+                default=F('price'),
+                output_field=DecimalField()
+            ))
+        )['total'] or 0,
+        
+        # آگهی‌های فروخته شده
+        'sold_total': sold_listings.count(),
+        'sold_total_price': sold_listings.aggregate(
+            total=Sum(Case(
+                When(discount_price__isnull=False, then=F('discount_price')),
+                default=F('price'),
+                output_field=DecimalField()
+            ))
+        )['total'] or 0,
+    }
+    
+    return stats
+
+
+def format_number(num):
+    """فرمت‌کردن اعداد بزرگ"""
+    if num >= 1_000_000:
+        return f"{num / 1_000_000:.1f}M"
+    elif num >= 1_000:
+        return f"{num / 1_000:.1f}K"
+    return str(int(num))
+
 
 def listing_list(request):
     listings = Listing.objects.filter(status='active')
@@ -58,6 +145,16 @@ def listing_list(request):
     platform_type = request.GET.get('platform_type')
     if platform_type:
         listings = listings.filter(category__platform=platform_type)
+
+    # فیلتر حوزه فعالیت
+    areas_activity = request.GET.get('areas_activity')
+    if areas_activity:
+        listings = listings.filter(areas_activity=areas_activity)
+
+    # فیلتر نوع فروش
+    sale_type = request.GET.get('sale_type')
+    if sale_type:
+        listings = listings.filter(sale_type=sale_type)
 
     # جستجوی متنی
     search_query = request.GET.get('search')
@@ -81,14 +178,14 @@ def listing_list(request):
     if request.GET.get('filter_suggested_price'):
         listings = listings.filter(suggested_price=True)
 
-    # annotation قیمت نهایی (یک بار تعریف میشه)
+    # annotation قیمت نهایی
     final_price_annotation = Case(
         When(discount_price__isnull=False, then=F('discount_price')),
         default=F('price'),
         output_field=DecimalField()
     )
 
-    # بازه قیمت - فقط وقتی واقعاً فیلتر شده
+    # بازه قیمت
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
     price_min_val = int(min_price) if min_price else 0
@@ -213,7 +310,6 @@ def listing_list(request):
     elif sort_by == 'most_views':
         main_listings_queryset = main_listings_queryset.order_by('-views_count')
     elif sort_by == 'cheapest':
-        # اگر قبلاً annotate نشده، الان annotate کن
         if 'final_price' not in [a.alias for a in main_listings_queryset.query.annotations]:
             main_listings_queryset = main_listings_queryset.annotate(
                 final_price=final_price_annotation
@@ -263,12 +359,14 @@ def listing_list(request):
 
     categories = Category.objects.all()
 
-    # بررسی فیلترهای فعال - range فقط وقتی از مقدار default خارج شده
+    # بررسی فیلترهای فعال
     has_active_filters = any([
         request.GET.get('search'),
         request.GET.get('category'),
         request.GET.get('sort_by'),
         request.GET.get('platform_type'),
+        request.GET.get('areas_activity'),
+        request.GET.get('sale_type'),
         price_min_val > 0 or price_max_val < 10000000000,
         min_age_val > 0 or max_age_val < 20,
         min_fol_val > 0 or max_fol_val < 10000000,
@@ -290,16 +388,42 @@ def listing_list(request):
             SavedListing.objects.filter(user=request.user).values_list('listing_id', flat=True)
         )
 
+    # محاسبه شماره صفحه و نتایج
+    current_page = paginated_main_listings.number
+    items_per_page = paginator.per_page
+    start_item = (current_page - 1) * items_per_page + 1
+    end_item = min(current_page * items_per_page, paginator.count)
+    total_items = paginator.count
+
+    # گزارش‌های کلی
+    stats = get_listing_stats()
+
+    # انتخاب‌های حوزه فعالیت و نوع فروش برای فیلتر
+    areas_activity_choices = Listing.ACTIVITY_CHOICES
+    sale_type_choices = Listing.SALE_TYPE_CHOICES
+
     context = {
         'boosted_listings': boosted_listings,
         'listings': paginated_main_listings,
         'categories': categories,
         'has_active_filters': has_active_filters,
         'saved_listing_ids': saved_listing_ids,
+        
+        # اطلاعات صفحه‌بندی
+        'start_item': start_item,
+        'end_item': end_item,
+        'total_items': total_items,
+        
+        # گزارش‌ها
+        'stats': stats,
+        'format_number': format_number,
+
+        # انتخاب‌های فیلتر جدید
+        'areas_activity_choices': areas_activity_choices,
+        'sale_type_choices': sale_type_choices,
     }
 
     return render(request, 'listings/listing_list.html', context)
-
 
 
 def listing_detail(request, pk):

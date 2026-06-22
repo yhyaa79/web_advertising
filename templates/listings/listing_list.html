@@ -46,6 +46,119 @@
             </div>
         </div>
 
+        <div class="db">
+
+            <!-- گزارش‌های کلی -->
+            <p class="sec">
+                <i class="bi bi-lightning-fill"></i>
+                گزارش‌های کلی
+                <span class="sec-line"></span>
+            </p>
+            <div class="row row-4">
+
+                <div class="card accent-blue">
+                    <i class="bi bi-clock ic"></i>
+                    <p class="lbl">۲۴ ساعت گذشته</p>
+                    <p class="val">{{ stats.active_24h }}</p>
+                    <p class="sub">آگهی جدید</p>
+                </div>
+
+                <div class="card accent-teal">
+                    <i class="bi bi-check-circle-fill ic"></i>
+                    <p class="lbl">فروخته شده</p>
+                    <p class="val">{{ stats.sold_total }}</p>
+                    <p class="sub">آگهی تاکنون</p>
+                </div>
+
+                <div class="card accent-amber">
+                    <i class="bi bi-calendar-week ic"></i>
+                    <p class="lbl">این هفته</p>
+                    <p class="val">{{ stats.active_week }}</p>
+                    <p class="sub">آگهی جدید</p>
+                </div>
+
+                <div class="card accent-purple">
+                    <i class="bi bi-graph-up ic"></i>
+                    <p class="lbl">کل فعال</p>
+                    <p class="val">{{ stats.active_total }}</p>
+                    <p class="sub">آگهی</p>
+                </div>
+
+            </div>
+
+            <!-- مالی + تفصیلی -->
+            <div class="row row-2-3">
+
+                <!-- گزارش‌های مالی -->
+                <div>
+                    <p class="sec">
+                        <i class="bi bi-cash-coin"></i>
+                        گزارش‌های مالی
+                        <span class="sec-line"></span>
+                    </p>
+                    <div class="fin-grid">
+
+                        <div class="card">
+                            <div class="fin-header">
+                                <i class="bi bi-coin"></i>
+                                <span>ارزش فعال</span>
+                            </div>
+                            <p class="fin-amount">{{ stats.active_total_price|floatformat:0 }}</p>
+                            <p class="fin-currency">تومان</p>
+                            <div class="fin-foot">{{ stats.active_total }} آگهی</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="fin-header">
+                                <i class="bi bi-bag-check"></i>
+                                <span>ارزش فروخته</span>
+                            </div>
+                            <p class="fin-amount green">{{ stats.sold_total_price|floatformat:0 }}</p>
+                            <p class="fin-currency">تومان</p>
+                            <div class="fin-foot">{{ stats.sold_total }} آگهی</div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- آمار تفصیلی + نتایج -->
+                <div>
+                    <p class="sec">
+                        <i class="bi bi-bar-chart-line"></i>
+                        آمار تفصیلی
+                        <span class="sec-line"></span>
+                    </p>
+                    <div class="card" style="padding: 0; overflow: hidden;">
+
+                        <div class="detail-flex">
+                            <div class="detail-col">
+                                <p class="lbl">یک هفته گذشته</p>
+                                <p class="val" style="font-size:18px">{{ stats.active_week }}</p>
+                            </div>
+                            <div class="divider-v"></div>
+                            <div class="detail-col">
+                                <p class="lbl">یک ماه گذشته</p>
+                                <p class="val" style="font-size:18px">{{ stats.active_month }}</p>
+                            </div>
+                            <div class="divider-v"></div>
+                            <div class="detail-col">
+                                <p class="lbl">یک سال گذشته</p>
+                                <p class="val" style="font-size:18px">{{ stats.active_year }}</p>
+                            </div>
+                            <div class="divider-v"></div>
+                            <div class="detail-col">
+                                <p class="lbl">کل فروخته شده</p>
+                                <p class="val" style="font-size:18px">{{ stats.sold_total }}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
         <div class="row mb-5">
             <div class="col-md-12">
                 <h4>دسته‌بندی ها:</h4>
@@ -67,7 +180,19 @@
                 </div>
             </div>
         </div>
-
+        <div class="results-bar">
+            <p class="r-text">
+                نمایش
+                <strong>{{ start_item }}</strong>
+                -
+                <strong>{{ end_item }}</strong>
+                از
+                <strong>{{ total_items }}</strong>
+                نتیجه
+            </p>
+            <span class="r-badge">صفحه {{ listings.number }} از
+                {{ listings.paginator.num_pages }}</span>
+        </div>
 
         <div class="filter-list-dav">
 
@@ -121,12 +246,10 @@
                                             قدیمی‌ترین آگهی</option>
                                         <option value="newest_platform"
                                             {% if request.GET.sort_by == 'newest_platform' %}selected{% endif %}>
-                                            جدیدترین
-                                            پلتفرم</option>
+                                            جدیدترین پلتفرم</option>
                                         <option value="oldest_platform"
                                             {% if request.GET.sort_by == 'oldest_platform' %}selected{% endif %}>
-                                            قدیمی‌ترین
-                                            پلتفرم</option>
+                                            قدیمی‌ترین پلتفرم</option>
                                         <option value="most_followers"
                                             {% if request.GET.sort_by == 'most_followers' %}selected{% endif %}>بیشترین
                                             دنبال‌کننده</option>
@@ -152,8 +275,7 @@
                                         </option>
                                         <option value="fastest_roi"
                                             {% if request.GET.sort_by == 'fastest_roi' %}selected{% endif %}>سریع‌ترین
-                                            برگشت
-                                            سرمایه</option>
+                                            برگشت سرمایه</option>
                                         <option value="highest_profit_margin"
                                             {% if request.GET.sort_by == 'highest_profit_margin' %}selected{% endif %}>
                                             بیشترین حاشیه سود</option>
@@ -186,6 +308,38 @@
                                         <option value="other"
                                             {% if request.GET.platform_type == 'other' %}selected{% endif %}>سایر
                                         </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- حوزه فعالیت -->
+                            <div class="filter-group">
+                                <label class="form-label">حوزه فعالیت:</label>
+                                <div class="compact-filter-card-items">
+                                    <select name="areas_activity" class="form-select form-select-sm">
+                                        <option value="">همه حوزه‌ها</option>
+                                        {% for value, label in areas_activity_choices %}
+                                        <option value="{{ value }}"
+                                            {% if request.GET.areas_activity == value %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- نوع فروش -->
+                            <div class="filter-group">
+                                <label class="form-label">نوع فروش:</label>
+                                <div class="compact-filter-card-items">
+                                    <select name="sale_type" class="form-select form-select-sm">
+                                        <option value="">همه انواع</option>
+                                        {% for value, label in sale_type_choices %}
+                                        <option value="{{ value }}"
+                                            {% if request.GET.sale_type == value %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
@@ -627,7 +781,8 @@
                                             </a>
 
                                             <a href="{{ listing.platform_url }}"
-                                                class="btn btn-success btn-large btn-width-100 btn-gap" target="_blank">بازدید
+                                                class="btn btn-success btn-large btn-width-100 btn-gap"
+                                                target="_blank">بازدید
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -858,7 +1013,8 @@
                                             class="btn btn-primary btn-large btn-width-100">اطلاعات بیشتر</a>
 
                                         <a href="{{ listing.platform_url }}"
-                                            class="btn btn-success btn-large btn-width-100 btn-gap" target="_blank">بازدید
+                                            class="btn btn-success btn-large btn-width-100 btn-gap"
+                                            target="_blank">بازدید
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round" class="svg-btn">
@@ -908,53 +1064,53 @@
 </div>
 
 
-    <script>
-        /*  ========================================
+<script>
+    /*  ========================================
   دکمه ذخیره آگهی 
 
   templates/listings/listing_list.html
    ========================================  */
 
-        document.addEventListener('DOMContentLoaded', function () {
-            // دکمه ذخیره آگهی
-            document.querySelectorAll('.save-listing-btn').forEach(btn => {
-                btn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const listingId = this.dataset.listingId;
-                    const isSaved = this.dataset.isSaved === 'true';
+    document.addEventListener('DOMContentLoaded', function () {
+        // دکمه ذخیره آگهی
+        document.querySelectorAll('.save-listing-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const listingId = this.dataset.listingId;
+                const isSaved = this.dataset.isSaved === 'true';
 
-                    // پیدا کردن SVG و متن داخل دکمه
-                    const icon = this.querySelector('.bookmark-icon');
-                    const text = this.querySelector('span');
+                // پیدا کردن SVG و متن داخل دکمه
+                const icon = this.querySelector('.bookmark-icon');
+                const text = this.querySelector('span');
 
-                    fetch(`/accounts/toggle-save-listing/${listingId}/`, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRFToken': '{{ csrf_token }}',
-                                'X-Requested-With': 'XMLHttpRequest'
+                fetch(`/accounts/toggle-save-listing/${listingId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            if (data.is_saved) {
+                                // اضافه کردن انیمیشن و توپر شدن آیکون
+                                icon.classList.add('saved');
+                                text.textContent = 'ذخیره شده';
+                                this.dataset.isSaved = 'true';
+                            } else {
+                                // حذف انیمیشن و توخالی شدن آیکون
+                                icon.classList.remove('saved');
+                                text.textContent = 'ذخیره';
+                                this.dataset.isSaved = 'false';
                             }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                if (data.is_saved) {
-                                    // اضافه کردن انیمیشن و توپر شدن آیکون
-                                    icon.classList.add('saved');
-                                    text.textContent = 'ذخیره شده';
-                                    this.dataset.isSaved = 'true';
-                                } else {
-                                    // حذف انیمیشن و توخالی شدن آیکون
-                                    icon.classList.remove('saved');
-                                    text.textContent = 'ذخیره';
-                                    this.dataset.isSaved = 'false';
-                                }
-                            }
-                        });
-                });
+                        }
+                    });
             });
         });
-    </script>
+    });
+</script>
 
 
 
-    {% endblock %}
+{% endblock %}

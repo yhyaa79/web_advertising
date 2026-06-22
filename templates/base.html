@@ -161,7 +161,7 @@
                 <!-- محتویات منویی که باز می‌شود -->
                 <div class="dropdown-navbar" id="moreDropdown">
                     {% if request.user.profile.first_name or request.user.profile.last_name %}
-                    <a class="nav-link notification-link dropdown-toggle" style="margin-top: 0; margin-right: -6px;"
+                    <a class="nav-link notification-link dropdown-toggle" style="margin-top: 0; margin-right: -4px;"
                         href="{% url 'accounts:profile' %}">{{ request.user.profile.first_name }}
                         {{ request.user.profile.last_name }}
                         <br>
