@@ -1,2765 +1,1314 @@
-cat > /mnt/user-data/outputs/listing_create.html << 'HTMLEOF' {% load static %} <!DOCTYPE html>
-    <html lang="fa" dir="rtl">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ثبت آگهی جدید</title>
-        <style>
-            * {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0
-            }
-
-            :root {
-                --bg: #f0f2f7;
-                --white: #ffffff;
-                --primary: #3b5bdb;
-                --primary-dark: #2f4ac5;
-                --primary-light: #eef2ff;
-                --success: #2f9e44;
-                --success-light: #d3f9d8;
-                --warn: #e67700;
-                --warn-light: #fff3bf;
-                --error: #c92a2a;
-                --error-light: #ffe3e3;
-                --border: #dee2e6;
-                --text: #1a1a2e;
-                --muted: #868e96;
-                --card-shadow: 0 2px 12px rgba(0, 0, 0, .08);
-                --radius: 10px;
-            }
-
-            body {
-                font-family: 'Tahoma', 'Segoe UI', sans-serif;
-                background: var(--bg);
-                color: var(--text);
-                font-size: 14px;
-                line-height: 1.7;
-                min-height: 100vh
-            }
-
-            /* ─── Header ─── */
-            .top-bar {
-                background: var(--text);
-                color: #fff;
-                padding: 0 28px;
-                height: 56px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                position: sticky;
-                top: 0;
-                z-index: 100
-            }
-
-            .top-bar h1 {
-                font-size: 16px;
-                font-weight: 600
-            }
-
-            .top-bar-right {
-                display: flex;
-                align-items: center;
-                gap: 12px
-            }
-
-            /* ─── Progress ─── */
-            .progress-wrap {
-                background: #fff;
-                border-bottom: 1px solid var(--border);
-                padding: 16px 28px
-            }
-
-            .progress-steps {
-                display: flex;
-                align-items: flex-start;
-                gap: 0;
-                max-width: 900px;
-                margin: 0 auto
-            }
-
-            .step-item {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                position: relative;
-                cursor: pointer
-            }
-
-            .step-item:not(:last-child)::after {
-                content: '';
-                position: absolute;
-                top: 16px;
-                left: -50%;
-                width: 100%;
-                height: 2px;
-                background: var(--border);
-                z-index: 0
-            }
-
-            .step-item.done:not(:last-child)::after {
-                background: var(--primary)
-            }
-
-            .step-num {
-                width: 32px;
-                height: 32px;
-                border-radius: 50%;
-                background: var(--border);
-                color: var(--muted);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-weight: 700;
-                font-size: 13px;
-                position: relative;
-                z-index: 1;
-                transition: all .3s
-            }
-
-            .step-item.active .step-num {
-                background: var(--primary);
-                color: #fff;
-                box-shadow: 0 0 0 4px var(--primary-light)
-            }
-
-            .step-item.done .step-num {
-                background: var(--success);
-                color: #fff
-            }
-
-            .step-label {
-                font-size: 11px;
-                color: var(--muted);
-                margin-top: 5px;
-                text-align: center;
-                max-width: 80px
-            }
-
-            .step-item.active .step-label {
-                color: var(--primary);
-                font-weight: 600
-            }
-
-            .step-item.done .step-label {
-                color: var(--success)
-            }
-
-            /* ─── Layout ─── */
-            .main-layout {
-                display: grid;
-                grid-template-columns: 1fr 320px;
-                gap: 20px;
-                max-width: 1180px;
-                margin: 20px auto;
-                padding: 0 20px
-            }
-
-            @media(max-width:900px) {
-                .main-layout {
-                    grid-template-columns: 1fr
-                }
-
-                .log-col {
-                    order: -1
-                }
-            }
-
-            /* ─── Card ─── */
-            .card {
-                background: var(--white);
-                border-radius: var(--radius);
-                box-shadow: var(--card-shadow);
-                overflow: hidden;
-                margin-bottom: 16px
-            }
-
-            .card-head {
-                background: #f8f9fb;
-                border-bottom: 2px solid var(--border);
-                padding: 13px 20px;
-                font-size: 12px;
-                font-weight: 700;
-                color: var(--muted);
-                letter-spacing: .4px;
-                display: flex;
-                align-items: center;
-                gap: 8px
-            }
-
-            .card-head .icon {
-                font-size: 16px
-            }
-
-            .card-body {
-                padding: 20px
-            }
-
-            /* ─── Fields ─── */
-            .row {
-                display: grid;
-                gap: 14px;
-                margin-bottom: 14px
-            }
-
-            .row-2 {
-                grid-template-columns: 1fr 1fr
-            }
-
-            .row-3 {
-                grid-template-columns: 1fr 1fr 1fr
-            }
-
-            .row-1 {
-                grid-template-columns: 1fr
-            }
-
-            @media(max-width:600px) {
-
-                .row-2,
-                .row-3 {
-                    grid-template-columns: 1fr
-                }
-            }
-
-            .field label {
-                display: block;
-                font-size: 12px;
-                font-weight: 600;
-                color: #495057;
-                margin-bottom: 5px
-            }
-
-            .field label .req {
-                color: var(--error);
-                margin-right: 2px
-            }
-
-            .field label .opt {
-                color: var(--muted);
-                font-weight: 400;
-                font-size: 11px
-            }
-
-            .field input,
-            .field select,
-            .field textarea {
-                width: 100%;
-                border: 1.5px solid var(--border);
-                border-radius: 7px;
-                padding: 9px 12px;
-                font-family: inherit;
-                font-size: 13px;
-                color: var(--text);
-                background: #fff;
-                transition: border-color .2s, box-shadow .2s;
-                outline: none;
-                direction: rtl
-            }
-
-            .field input:focus,
-            .field select:focus,
-            .field textarea:focus {
-                border-color: var(--primary);
-                box-shadow: 0 0 0 3px rgba(59, 91, 219, .1)
-            }
-
-            .field input.err,
-            .field select.err,
-            .field textarea.err {
-                border-color: var(--error);
-                box-shadow: 0 0 0 3px rgba(201, 42, 42, .1)
-            }
-
-            .field textarea {
-                resize: vertical;
-                min-height: 90px
-            }
-
-            .field-hint {
-                font-size: 11px;
-                color: var(--muted);
-                margin-top: 4px
-            }
-
-            .field-err-msg {
-                font-size: 11px;
-                color: var(--error);
-                margin-top: 3px;
-                display: none
-            }
-
-            /* ─── Step panels ─── */
-            .step-panel {
-                display: none
-            }
-
-            .step-panel.active {
-                display: block
-            }
-
-            /* ─── Dynamic list items ─── */
-            .dyn-list {
-                display: flex;
-                flex-direction: column;
-                gap: 10px
-            }
-
-            .dyn-item {
-                background: #f8f9fb;
-                border: 1px solid var(--border);
-                border-radius: 8px;
-                padding: 14px;
-                position: relative
-            }
-
-            .dyn-item .remove-btn {
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                background: none;
-                border: none;
-                cursor: pointer;
-                color: var(--error);
-                font-size: 18px;
-                line-height: 1;
-                padding: 2px 6px;
-                border-radius: 4px
-            }
-
-            .dyn-item .remove-btn:hover {
-                background: var(--error-light)
-            }
-
-            .add-btn {
-                display: inline-flex;
-                align-items: center;
-                gap: 6px;
-                background: var(--primary-light);
-                color: var(--primary);
-                border: 1.5px dashed var(--primary);
-                border-radius: 7px;
-                padding: 8px 16px;
-                font-size: 13px;
-                font-weight: 600;
-                cursor: pointer;
-                font-family: inherit;
-                margin-top: 10px;
-                transition: all .2s
-            }
-
-            .add-btn:hover {
-                background: var(--primary);
-                color: #fff
-            }
-
-            /* ─── Image upload ─── */
-            .img-drop {
-                border: 2px dashed var(--border);
-                border-radius: 8px;
-                padding: 24px;
-                text-align: center;
-                cursor: pointer;
-                transition: all .2s
-            }
-
-            .img-drop:hover {
-                border-color: var(--primary);
-                background: var(--primary-light)
-            }
-
-            .img-drop input {
-                display: none
-            }
-
-            .img-drop .drop-icon {
-                font-size: 36px;
-                margin-bottom: 8px
-            }
-
-            .img-drop p {
-                font-size: 13px;
-                color: var(--muted)
-            }
-
-            #main-img-preview {
-                max-height: 140px;
-                border-radius: 7px;
-                margin-top: 10px;
-                display: none
-            }
-
-            /* ─── Chart builder ─── */
-            .chart-builder-wrap {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 16px
-            }
-
-            @media(max-width:700px) {
-                .chart-builder-wrap {
-                    grid-template-columns: 1fr
-                }
-            }
-
-            .chart-section-title {
-                font-size: 13px;
-                font-weight: 700;
-                color: var(--text);
-                margin-bottom: 10px;
-                padding-bottom: 6px;
-                border-bottom: 2px solid var(--primary);
-                display: inline-block
-            }
-
-            .chart-point-row {
-                display: grid;
-                grid-template-columns: 1fr 1fr auto;
-                gap: 8px;
-                align-items: center;
-                margin-bottom: 8px
-            }
-
-            .chart-point-row input {
-                width: 100%;
-                border: 1.5px solid var(--border);
-                border-radius: 6px;
-                padding: 7px 10px;
-                font-family: inherit;
-                font-size: 12px;
-                outline: none
-            }
-
-            .chart-point-row input:focus {
-                border-color: var(--primary)
-            }
-
-            .chart-remove {
-                background: none;
-                border: none;
-                cursor: pointer;
-                color: var(--error);
-                font-size: 16px;
-                padding: 4px 8px;
-                border-radius: 4px
-            }
-
-            .chart-remove:hover {
-                background: var(--error-light)
-            }
-
-            /* ─── About platform (rich) ─── */
-            .html-toolbar {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 6px;
-                margin-bottom: 8px;
-                padding: 8px;
-                background: #f8f9fb;
-                border: 1px solid var(--border);
-                border-radius: 7px 7px 0 0
-            }
-
-            .html-toolbar button {
-                background: #fff;
-                border: 1px solid var(--border);
-                border-radius: 4px;
-                padding: 4px 10px;
-                font-size: 12px;
-                cursor: pointer;
-                font-family: inherit;
-                transition: all .2s
-            }
-
-            .html-toolbar button:hover {
-                background: var(--primary);
-                color: #fff;
-                border-color: var(--primary)
-            }
-
-            .html-editor {
-                border: 1.5px solid var(--border);
-                border-top: none;
-                border-radius: 0 0 7px 7px;
-                min-height: 150px;
-                padding: 12px;
-                font-family: monospace;
-                font-size: 13px;
-                outline: none;
-                resize: vertical;
-                width: 100%;
-                direction: ltr;
-                text-align: left
-            }
-
-            .html-editor:focus {
-                border-color: var(--primary);
-                box-shadow: 0 0 0 3px rgba(59, 91, 219, .1)
-            }
-
-            .html-preview {
-                border: 1.5px solid var(--border);
-                border-radius: 7px;
-                min-height: 120px;
-                padding: 14px;
-                margin-top: 12px;
-                background: #fff;
-                font-size: 13px;
-                line-height: 1.8
-            }
-
-            .html-preview h2 {
-                font-size: 18px;
-                margin-bottom: 8px;
-                color: var(--text)
-            }
-
-            .html-preview h3 {
-                font-size: 15px;
-                margin-bottom: 6px;
-                color: var(--text)
-            }
-
-            .html-preview ul {
-                margin-right: 20px;
-                margin-bottom: 8px
-            }
-
-            .html-preview p {
-                margin-bottom: 8px
-            }
-
-            .html-preview strong {
-                font-weight: 700
-            }
-
-            .html-preview em {
-                font-style: italic
-            }
-
-            .preview-label {
-                font-size: 11px;
-                font-weight: 700;
-                color: var(--muted);
-                margin-bottom: 6px;
-                letter-spacing: .5px
-            }
-
-            /* ─── Traffic pie display ─── */
-            .traffic-total-bar {
-                height: 6px;
-                background: var(--border);
-                border-radius: 3px;
-                margin-top: 8px;
-                overflow: hidden;
-                display: flex;
-                gap: 2px
-            }
-
-            .traffic-seg {
-                height: 100%;
-                border-radius: 3px;
-                transition: width .3s
-            }
-
-            #traffic-total-display {
-                font-size: 12px;
-                margin-top: 4px;
-                font-weight: 600
-            }
-
-            /* ─── Technology grid ─── */
-            .tech-groups {
-                display: flex;
-                flex-direction: column;
-                gap: 14px
-            }
-
-            .tech-group-title {
-                font-size: 12px;
-                font-weight: 700;
-                color: var(--muted);
-                margin-bottom: 8px;
-                letter-spacing: .3px
-            }
-
-            .tech-chips {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 7px
-            }
-
-            .tech-chip {
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                padding: 5px 12px;
-                border: 1.5px solid var(--border);
-                border-radius: 20px;
-                font-size: 12px;
-                cursor: pointer;
-                transition: all .2s;
-                user-select: none;
-                background: #fff
-            }
-
-            .tech-chip:hover {
-                border-color: var(--primary);
-                background: var(--primary-light)
-            }
-
-            .tech-chip.selected {
-                background: var(--primary);
-                color: #fff;
-                border-color: var(--primary)
-            }
-
-            .tech-chip input {
-                display: none
-            }
-
-            /* ─── Monetization checkboxes ─── */
-            .method-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 8px
-            }
-
-            @media(max-width:500px) {
-                .method-grid {
-                    grid-template-columns: 1fr
-                }
-            }
-
-            .method-item {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                padding: 8px 12px;
-                border: 1.5px solid var(--border);
-                border-radius: 7px;
-                cursor: pointer;
-                font-size: 13px;
-                transition: all .2s
-            }
-
-            .method-item:hover {
-                border-color: var(--primary);
-                background: var(--primary-light)
-            }
-
-            .method-item.selected {
-                background: var(--primary-light);
-                border-color: var(--primary);
-                color: var(--primary);
-                font-weight: 600
-            }
-
-            .method-item input {
-                display: none
-            }
-
-            /* ─── Navigation buttons ─── */
-            .nav-bar {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 16px 20px;
-                background: #f8f9fb;
-                border-top: 1px solid var(--border)
-            }
-
-            .btn {
-                border: none;
-                border-radius: 8px;
-                padding: 10px 24px;
-                font-size: 14px;
-                font-weight: 600;
-                cursor: pointer;
-                font-family: inherit;
-                transition: all .2s;
-                display: inline-flex;
-                align-items: center;
-                gap: 7px
-            }
-
-            .btn:disabled {
-                opacity: .5;
-                cursor: not-allowed
-            }
-
-            .btn-primary {
-                background: var(--primary);
-                color: #fff
-            }
-
-            .btn-primary:hover:not(:disabled) {
-                background: var(--primary-dark)
-            }
-
-            .btn-secondary {
-                background: #fff;
-                color: #495057;
-                border: 1.5px solid var(--border)
-            }
-
-            .btn-secondary:hover:not(:disabled) {
-                border-color: var(--primary);
-                color: var(--primary)
-            }
-
-            .btn-success {
-                background: var(--success);
-                color: #fff
-            }
-
-            .btn-success:hover:not(:disabled) {
-                background: #237032
-            }
-
-            /* ─── LOG PANEL ─── */
-            .log-col {
-                display: flex;
-                flex-direction: column;
-                gap: 12px
-            }
-
-            .log-sticky {
-                position: sticky;
-                top: 72px;
-                display: flex;
-                flex-direction: column;
-                gap: 12px
-            }
-
-            .status-card {
-                background: #fff;
-                border-radius: var(--radius);
-                box-shadow: var(--card-shadow);
-                padding: 14px
-            }
-
-            .status-card h3 {
-                font-size: 11px;
-                font-weight: 700;
-                color: var(--muted);
-                letter-spacing: .5px;
-                margin-bottom: 10px;
-                text-transform: uppercase
-            }
-
-            .status-row {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 5px 0;
-                border-bottom: 1px solid #f0f2f5;
-                font-size: 12px
-            }
-
-            .status-row:last-child {
-                border-bottom: none
-            }
-
-            .s-label {
-                color: var(--muted)
-            }
-
-            .s-val {
-                font-weight: 600
-            }
-
-            .badge {
-                padding: 2px 9px;
-                border-radius: 10px;
-                font-size: 11px;
-                font-weight: 700
-            }
-
-            .badge-wait {
-                background: #e9ecef;
-                color: #495057
-            }
-
-            .badge-ok {
-                background: var(--success-light);
-                color: var(--success)
-            }
-
-            .badge-err {
-                background: var(--error-light);
-                color: var(--error)
-            }
-
-            .badge-info {
-                background: var(--primary-light);
-                color: var(--primary)
-            }
-
-            .log-console {
-                background: #0d1117;
-                border-radius: var(--radius);
-                box-shadow: var(--card-shadow);
-                overflow: hidden
-            }
-
-            .log-con-head {
-                background: #010409;
-                padding: 10px 14px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                border-bottom: 1px solid #21262d
-            }
-
-            .log-con-left {
-                display: flex;
-                align-items: center;
-                gap: 8px
-            }
-
-            .log-dot {
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                background: var(--primary);
-                transition: background .3s
-            }
-
-            .log-con-title {
-                color: #8b949e;
-                font-size: 11px;
-                font-weight: 700;
-                letter-spacing: .5px
-            }
-
-            .log-cnt {
-                background: #21262d;
-                color: #8b949e;
-                border-radius: 9px;
-                padding: 1px 7px;
-                font-size: 10px
-            }
-
-            .log-clr {
-                background: none;
-                border: 1px solid #21262d;
-                color: #8b949e;
-                border-radius: 4px;
-                padding: 2px 8px;
-                font-size: 10px;
-                cursor: pointer;
-                font-family: inherit
-            }
-
-            .log-clr:hover {
-                border-color: var(--error);
-                color: #fc8181
-            }
-
-            .log-body {
-                padding: 10px;
-                height: 300px;
-                overflow-y: auto;
-                font-family: 'Courier New', monospace;
-                font-size: 11px;
-                line-height: 1.6
-            }
-
-            .log-body::-webkit-scrollbar {
-                width: 3px
-            }
-
-            .log-body::-webkit-scrollbar-track {
-                background: #010409
-            }
-
-            .log-body::-webkit-scrollbar-thumb {
-                background: #21262d;
-                border-radius: 2px
-            }
-
-            .log-empty {
-                color: #3d444d;
-                text-align: center;
-                margin-top: 60px;
-                font-size: 12px
-            }
-
-            .log-entry {
-                display: flex;
-                gap: 6px;
-                margin-bottom: 3px;
-                animation: fadeUp .15s ease
-            }
-
-            @keyframes fadeUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(3px)
-                }
-
-                to {
-                    opacity: 1
-                }
-            }
-
-            .l-time {
-                color: #3d444d;
-                flex-shrink: 0;
-                font-size: 10px
-            }
-
-            .l-lv {
-                flex-shrink: 0;
-                font-weight: 700;
-                width: 40px;
-                font-size: 10px
-            }
-
-            .l-lv.INFO {
-                color: #58a6ff
-            }
-
-            .l-lv.OK {
-                color: #3fb950
-            }
-
-            .l-lv.WARN {
-                color: #d29922
-            }
-
-            .l-lv.ERR {
-                color: #f85149
-            }
-
-            .l-lv.DBG {
-                color: #bc8cff
-            }
-
-            .l-msg {
-                color: #c9d1d9;
-                word-break: break-all;
-                font-size: 11px
-            }
-
-            .err-card {
-                background: #fff;
-                border-radius: var(--radius);
-                box-shadow: var(--card-shadow);
-                padding: 14px;
-                display: none
-            }
-
-            .err-card h3 {
-                font-size: 11px;
-                font-weight: 700;
-                color: var(--error);
-                letter-spacing: .5px;
-                margin-bottom: 10px
-            }
-
-            .err-item {
-                padding: 6px 0;
-                border-bottom: 1px solid var(--error-light);
-                font-size: 12px;
-                color: var(--error)
-            }
-
-            .err-item:last-child {
-                border-bottom: none
-            }
-
-            /* ─── Toast ─── */
-            #toast-wrap {
-                position: fixed;
-                top: 16px;
-                left: 50%;
-                transform: translateX(-50%);
-                z-index: 9999;
-                pointer-events: none;
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-                min-width: 300px
-            }
-
-            .toast {
-                padding: 11px 18px;
-                border-radius: 8px;
-                font-size: 13px;
-                font-weight: 600;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, .2);
-                animation: slideD .3s ease;
-                text-align: center
-            }
-
-            @keyframes slideD {
-                from {
-                    opacity: 0;
-                    transform: translateY(-10px)
-                }
-
-                to {
-                    opacity: 1
-                }
-            }
-
-            .t-ok {
-                background: var(--success-light);
-                color: var(--success);
-                border: 1px solid #b2f2bb
-            }
-
-            .t-err {
-                background: var(--error-light);
-                color: var(--error);
-                border: 1px solid #ffc9c9
-            }
-
-            .t-info {
-                background: var(--primary-light);
-                color: var(--primary);
-                border: 1px solid #bac8ff
-            }
-
-            /* ─── Overlay ─── */
-            #overlay {
-                display: none;
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, .4);
-                z-index: 8000;
-                align-items: center;
-                justify-content: center;
-                flex-direction: column;
-                gap: 12px
-            }
-
-            #overlay.show {
-                display: flex
-            }
-
-            .spinner {
-                width: 42px;
-                height: 42px;
-                border: 4px solid rgba(255, 255, 255, .2);
-                border-top-color: #fff;
-                border-radius: 50%;
-                animation: spin .8s linear infinite
-            }
-
-            #overlay p {
-                color: #fff;
-                font-size: 13px
-            }
-
-            @keyframes spin {
-                to {
-                    transform: rotate(360deg)
-                }
-            }
-
-            /* ─── Conditional panels ─── */
-            .cond-section {
-                display: none
-            }
-
-            .cond-section.show {
-                display: block
-            }
-
-            /* Divider */
-            .divider {
-                border: none;
-                border-top: 1px solid var(--border);
-                margin: 16px 0
-            }
-        </style>
-    </head>
-
-    <body>
-
-        <div id="toast-wrap"></div>
-        <div id="overlay">
-            <div class="spinner"></div>
-            <p id="overlay-msg">در حال ارسال...</p>
-        </div>
-
-        <!-- TOP BAR -->
-        <div class="top-bar">
-            <h1>📋 ثبت آگهی جدید</h1>
-            <div class="top-bar-right">
-                <span id="top-step-label" style="font-size:12px;color:#adb5bd">مرحله ۱ از ۷</span>
-            </div>
-        </div>
-
-        <!-- PROGRESS -->
-        <div class="progress-wrap">
-            <div class="progress-steps">
-                <div class="step-item active" data-step="1" onclick="goStep(1)">
-                    <div class="step-num">1</div>
-                    <div class="step-label">اطلاعات پایه</div>
-                </div>
-                <div class="step-item" data-step="2" onclick="goStep(2)">
-                    <div class="step-num">2</div>
-                    <div class="step-label">اطلاعات مالی</div>
-                </div>
-                <div class="step-item" data-step="3" onclick="goStep(3)">
-                    <div class="step-num">3</div>
-                    <div class="step-label">محتوا</div>
-                </div>
-                <div class="step-item" data-step="4" onclick="goStep(4)">
-                    <div class="step-num">4</div>
-                    <div class="step-label">نمودارها</div>
-                </div>
-                <div class="step-item" data-step="5" onclick="goStep(5)">
-                    <div class="step-num">5</div>
-                    <div class="step-label">رسانه‌ها</div>
-                </div>
-                <div class="step-item" data-step="6" onclick="goStep(6)">
-                    <div class="step-num">6</div>
-                    <div class="step-label">فنی</div>
-                </div>
-                <div class="step-item" data-step="7" onclick="goStep(7)">
-                    <div class="step-num">7</div>
-                    <div class="step-label">ارسال</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="main-layout">
-            <!-- ══════ FORM COLUMN ══════ -->
-            <div class="form-col">
-                <form id="main-form" enctype="multipart/form-data" novalidate>
-                    {% csrf_token %}
-
-                    <!-- ════════════════════════════════════
+<!-- templates/listings/listing_create.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ثبت آگهی جدید{% endblock %}
+{% block nav_class %}navbar-top-dark{% endblock %}
+{% block content %}
+
+
+<div class="navbar-listing-detail">
+  <!-- TOP BAR -->
+<div class="top-bar">
+  <h1>📋 ثبت آگهی جدید</h1>
+  <div class="top-bar-right">
+    <span id="top-step-label" style="font-size:12px;color:#adb5bd">مرحله ۱ از ۷</span>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="step-item active" data-step="1" onclick="goStep(1)">
+      <div class="step-num">1</div>
+      <div class="step-label">اطلاعات پایه</div>
+    </div>
+    <div class="step-item" data-step="2" onclick="goStep(2)">
+      <div class="step-num">2</div>
+      <div class="step-label">اطلاعات مالی</div>
+    </div>
+    <div class="step-item" data-step="3" onclick="goStep(3)">
+      <div class="step-num">3</div>
+      <div class="step-label">محتوا</div>
+    </div>
+    <div class="step-item" data-step="4" onclick="goStep(4)">
+      <div class="step-num">4</div>
+      <div class="step-label">نمودارها</div>
+    </div>
+    <div class="step-item" data-step="5" onclick="goStep(5)">
+      <div class="step-num">5</div>
+      <div class="step-label">رسانه‌ها</div>
+    </div>
+    <div class="step-item" data-step="6" onclick="goStep(6)">
+      <div class="step-num">6</div>
+      <div class="step-label">فنی</div>
+    </div>
+    <div class="step-item" data-step="7" onclick="goStep(7)">
+      <div class="step-num">7</div>
+      <div class="step-label">ارسال</div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+
+
+
+<div class="container">
+<div id="toast-wrap"></div>
+<div id="overlay"><div class="spinner"></div><p id="overlay-msg">در حال ارسال...</p></div>
+
+
+<div class="form-col">
+<form id="main-form" enctype="multipart/form-data" novalidate>
+{% csrf_token %}
+
+<!-- ════════════════════════════════════
      STEP 1 — اطلاعات پایه
 ════════════════════════════════════ -->
-                    <div class="step-panel active" id="step-1">
+<div class="step-panel active" id="step-1">
 
-                        <div class="card">
-                            <div class="card-head"><span class="icon">🏷️</span> اطلاعات پایه آگهی</div>
-                            <div class="card-body">
+  <div class="card">
+    <div class="card-head"><span class="icon">🏷️</span> اطلاعات پایه آگهی</div>
+    <div class="card-body">
 
-                                <div class="row row-1">
-                                    <div class="field">
-                                        <label>عنوان آگهی <span class="req">*</span></label>
-                                        <input type="text" name="title" id="f-title"
-                                            placeholder="مثال: فروش وبسایت آموزشی با ۵۰۰۰ عضو فعال">
-                                        <div class="field-err-msg" id="e-title">عنوان الزامی است</div>
-                                    </div>
-                                </div>
+      <div class="row-fields row-fields-1">
+        <div class="field">
+          <label>عنوان آگهی <span class="req">*</span></label>
+          <input type="text" name="title" id="f-title" placeholder="مثال: فروش وبسایت آموزشی با ۵۰۰۰ عضو فعال">
+          <div class="field-err-msg" id="e-title">عنوان الزامی است</div>
+        </div>
+      </div>
 
-                                <div class="row row-2">
-                                    <div class="field">
-                                        <label>دسته‌بندی <span class="opt">(اختیاری)</span></label>
-                                        <select name="category" id="f-category">
-                                            <option value="">-- انتخاب دسته‌بندی --</option>
-                                            {% for cat in categories %}
-                                            <option value="{{ cat.id }}">{{ cat }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="field">
-                                        <label>حوزه فعالیت <span class="req">*</span></label>
-                                        <select name="areas_activity" id="f-areas">
-                                            <option value="">-- انتخاب حوزه --</option>
-                                            <option value="shopping_commerce">فروشگاهی و تجارت الکترونیک</option>
-                                            <option value="technology_software">تکنولوژی و نرم‌افزار</option>
-                                            <option value="education_learning">آموزش و یادگیری</option>
-                                            <option value="health_medicine_beauty">سلامت، پزشکی و زیبایی</option>
-                                            <option value="news_magazines_portals">خبری، مجله و پورتال</option>
-                                            <option value="finance_stock_exchange_cryptocurrency">مالی، بورس و ارز
-                                                دیجیتال</option>
-                                            <option value="entertainment_games_movies">سرگرمی، بازی و فیلم</option>
-                                            <option value="lifestyle_fashion_fashion">سبک زندگی، مد و فشن</option>
-                                            <option value="travel_tourism_immigration">سفر، گردشگری و مهاجرت</option>
-                                            <option value="real_estate">املاک و مستغلات</option>
-                                            <option value="corporate_B2B_services">خدمات شرکتی و B2B</option>
-                                            <option value="sports_fitness">ورزشی و تناسب اندام</option>
-                                            <option value="food_cooking_restaurants">غذا، آشپزی و رستوران</option>
-                                            <option value="home_decoration_architecture">خانه، دکوراسیون و معماری
-                                            </option>
-                                            <option value="pets">حیوانات خانگی</option>
-                                            <option value="other">سایر</option>
-                                        </select>
-                                        <div class="field-err-msg" id="e-areas">حوزه فعالیت الزامی است</div>
-                                    </div>
-                                </div>
+      <div class="row-fields row-fields-2">
+        <div class="field">
+          <label>دسته‌بندی <span class="opt">(اختیاری)</span></label>
+          <select name="category" id="f-category">
+            <option value="">-- انتخاب دسته‌بندی --</option>
+            {% for cat in categories %}
+              <option value="{{ cat.id }}">{{ cat }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="field">
+          <label>حوزه فعالیت <span class="req">*</span></label>
+          <select name="areas_activity" id="f-areas">
+            <option value="">-- انتخاب حوزه --</option>
+            <option value="shopping_commerce">فروشگاهی و تجارت الکترونیک</option>
+            <option value="technology_software">تکنولوژی و نرم‌افزار</option>
+            <option value="education_learning">آموزش و یادگیری</option>
+            <option value="health_medicine_beauty">سلامت، پزشکی و زیبایی</option>
+            <option value="news_magazines_portals">خبری، مجله و پورتال</option>
+            <option value="finance_stock_exchange_cryptocurrency">مالی، بورس و ارز دیجیتال</option>
+            <option value="entertainment_games_movies">سرگرمی، بازی و فیلم</option>
+            <option value="lifestyle_fashion_fashion">سبک زندگی، مد و فشن</option>
+            <option value="travel_tourism_immigration">سفر، گردشگری و مهاجرت</option>
+            <option value="real_estate">املاک و مستغلات</option>
+            <option value="corporate_B2B_services">خدمات شرکتی و B2B</option>
+            <option value="sports_fitness">ورزشی و تناسب اندام</option>
+            <option value="food_cooking_restaurants">غذا، آشپزی و رستوران</option>
+            <option value="home_decoration_architecture">خانه، دکوراسیون و معماری</option>
+            <option value="pets">حیوانات خانگی</option>
+            <option value="other">سایر</option>
+          </select>
+          <div class="field-err-msg" id="e-areas">حوزه فعالیت الزامی است</div>
+        </div>
+      </div>
 
-                                <div class="row row-2">
-                                    <div class="field">
-                                        <label>نوع فروش <span class="req">*</span></label>
-                                        <select name="sale_type" id="f-sale-type">
-                                            <option value="">-- انتخاب نوع فروش --</option>
-                                            <option value="full_ownership">فروش مالکیت / انتقال کامل</option>
-                                            <option value="partial_ownership">فروش مالکیت بخشی / سهمی</option>
-                                            <option value="license">فروش مجوز / لایسنس</option>
-                                            <option value="revenue_share">فروش سهم از درآمد</option>
-                                            <option value="brand">فروش برند</option>
-                                        </select>
-                                        <div class="field-err-msg" id="e-sale-type">نوع فروش الزامی است</div>
-                                    </div>
-                                    <div class="field">
-                                        <label>آدرس پلتفرم <span class="opt">(اختیاری)</span></label>
-                                        <input type="url" name="platform_url" id="f-platform-url"
-                                            placeholder="https://example.com" style="direction:ltr;text-align:left">
-                                    </div>
-                                </div>
+      <div class="row-fields row-fields-2">
+        <div class="field">
+          <label>نوع فروش <span class="req">*</span></label>
+          <select name="sale_type" id="f-sale-type">
+            <option value="">-- انتخاب نوع فروش --</option>
+            <option value="full_ownership">فروش مالکیت / انتقال کامل</option>
+            <option value="partial_ownership">فروش مالکیت بخشی / سهمی</option>
+            <option value="license">فروش مجوز / لایسنس</option>
+            <option value="revenue_share">فروش سهم از درآمد</option>
+            <option value="brand">فروش برند</option>
+          </select>
+          <div class="field-err-msg" id="e-sale-type">نوع فروش الزامی است</div>
+        </div>
+        <div class="field">
+          <label>آدرس پلتفرم <span class="opt">(اختیاری)</span></label>
+          <input type="url" name="platform_url" id="f-platform-url" placeholder="https://example.com" style="direction:ltr;text-align:left">
+        </div>
+      </div>
 
-                                <div class="row row-2">
-                                    <div class="field">
-                                        <label>موقعیت / شهر <span class="opt">(اختیاری)</span></label>
-                                        <input type="text" name="location" placeholder="تهران">
-                                    </div>
-                                    <div class="field">
-                                        <label>دلیل واگذاری <span class="opt">(اختیاری)</span></label>
-                                        <select name="sale_reason">
-                                            <option value="">-- انتخاب کنید --</option>
-                                            <option value="focus_other_projects">تمرکز روی پروژه‌های دیگر</option>
-                                            <option value="lack_of_time">نداشتن زمان کافی</option>
-                                            <option value="need_capital">نیاز به سرمایه و پول نقد</option>
-                                            <option value="immigration">مهاجرت</option>
-                                            <option value="career_change">تغییر شغل / بازنشستگی</option>
-                                            <option value="partner_dispute">اختلاف با شرکا</option>
-                                            <option value="growth_ceiling">رسیدن به سقف رشد فردی</option>
-                                            <option value="personal_health">دلایل شخصی / سلامتی</option>
-                                        </select>
-                                    </div>
-                                </div>
+      <div class="row-fields row-fields-2">
+        <div class="field">
+          <label>موقعیت / شهر <span class="opt">(اختیاری)</span></label>
+          <input type="text" name="location" placeholder="تهران">
+        </div>
+        <div class="field">
+          <label>دلیل واگذاری <span class="opt">(اختیاری)</span></label>
+          <select name="sale_reason">
+            <option value="">-- انتخاب کنید --</option>
+            <option value="focus_other_projects">تمرکز روی پروژه‌های دیگر</option>
+            <option value="lack_of_time">نداشتن زمان کافی</option>
+            <option value="need_capital">نیاز به سرمایه و پول نقد</option>
+            <option value="immigration">مهاجرت</option>
+            <option value="career_change">تغییر شغل / بازنشستگی</option>
+            <option value="partner_dispute">اختلاف با شرکا</option>
+            <option value="growth_ceiling">رسیدن به سقف رشد فردی</option>
+            <option value="personal_health">دلایل شخصی / سلامتی</option>
+          </select>
+        </div>
+      </div>
 
-                                <div class="row row-1">
-                                    <div class="field">
-                                        <label>توضیح دلیل واگذاری <span class="opt">(اختیاری)</span></label>
-                                        <textarea name="sale_reason_description" rows="2"
-                                            placeholder="توضیحات بیشتر..."></textarea>
-                                    </div>
-                                </div>
+      <div class="row-fields row-fields-1">
+        <div class="field">
+          <label>توضیح دلیل واگذاری <span class="opt">(اختیاری)</span></label>
+          <textarea name="sale_reason_description" rows="2" placeholder="توضیحات بیشتر..."></textarea>
+        </div>
+      </div>
 
-                                <!-- Conditional: full_ownership -->
-                                <div class="cond-section" id="cond-full_ownership">
-                                    <hr class="divider">
-                                    <div class="card-head"
-                                        style="background:none;border:none;padding:0 0 10px;font-size:12px"><span
-                                            class="icon">📄</span> جزئیات انتقال مالکیت</div>
-                                    <div class="row row-2">
-                                        <div class="field">
-                                            <label>وضعیت مالکیت / اسناد</label>
-                                            <input type="text" name="ownership_document_status"
-                                                placeholder="مثال: ثبت‌شده در دیجیتال‌سیگنال">
-                                        </div>
-                                        <div class="field">
-                                            <label>شرایط انتقال مالکیت</label>
-                                            <textarea name="ownership_transfer_conditions" rows="2"
-                                                placeholder="شرایط خاص انتقال..."></textarea>
-                                        </div>
-                                    </div>
-                                </div>
+      <!-- Conditional: full_ownership -->
+      <div class="cond-section" id="cond-full_ownership">
+        <hr class="divider">
+        <div class="card-head" style="background:none;border:none;padding:0 0 10px;font-size:12px"><span class="icon">📄</span> جزئیات انتقال مالکیت</div>
+        <div class="row-fields row-fields-2">
+          <div class="field">
+            <label>وضعیت مالکیت / اسناد</label>
+            <input type="text" name="ownership_document_status" placeholder="مثال: ثبت‌شده در دیجیتال‌سیگنال">
+          </div>
+          <div class="field">
+            <label>شرایط انتقال مالکیت</label>
+            <textarea name="ownership_transfer_conditions" rows="2" placeholder="شرایط خاص انتقال..."></textarea>
+          </div>
+        </div>
+      </div>
 
-                                <!-- Conditional: partial_ownership -->
-                                <div class="cond-section" id="cond-partial_ownership">
-                                    <hr class="divider">
-                                    <div class="card-head"
-                                        style="background:none;border:none;padding:0 0 10px;font-size:12px"><span
-                                            class="icon">🤝</span> جزئیات مالکیت سهمی</div>
-                                    <div class="row row-2">
-                                        <div class="field"><label>درصد سهم</label><input type="number"
-                                                name="partial_ownership_percentage" min="0" max="100" step="0.01"
-                                                placeholder="25.5"></div>
-                                        <div class="field"><label>روش ارزش‌گذاری</label><textarea
-                                                name="partial_ownership_valuation_method" rows="2"
-                                                placeholder="فرمول یا روش..."></textarea></div>
-                                    </div>
-                                    <div class="row row-2">
-                                        <div class="field"><label>حقوق خریدار</label><textarea
-                                                name="partial_ownership_buyer_rights" rows="2"
-                                                placeholder="حقوق و اختیارات خریدار..."></textarea></div>
-                                        <div class="field"><label>شرایط خروج</label><textarea
-                                                name="partial_ownership_exit_conditions" rows="2"
-                                                placeholder="شرایط فروش مجدد سهم..."></textarea></div>
-                                    </div>
-                                </div>
+      <!-- Conditional: partial_ownership -->
+      <div class="cond-section" id="cond-partial_ownership">
+        <hr class="divider">
+        <div class="card-head" style="background:none;border:none;padding:0 0 10px;font-size:12px"><span class="icon">🤝</span> جزئیات مالکیت سهمی</div>
+        <div class="row-fields row-fields-2">
+          <div class="field"><label>درصد سهم</label><input type="number" name="partial_ownership_percentage" min="0" max="100" step="0.01" placeholder="25.5"></div>
+          <div class="field"><label>روش ارزش‌گذاری</label><textarea name="partial_ownership_valuation_method" rows="2" placeholder="فرمول یا روش..."></textarea></div>
+        </div>
+        <div class="row-fields row-fields-2">
+          <div class="field"><label>حقوق خریدار</label><textarea name="partial_ownership_buyer_rights" rows="2" placeholder="حقوق و اختیارات خریدار..."></textarea></div>
+          <div class="field"><label>شرایط خروج</label><textarea name="partial_ownership_exit_conditions" rows="2" placeholder="شرایط فروش مجدد سهم..."></textarea></div>
+        </div>
+      </div>
 
-                                <!-- Conditional: license -->
-                                <div class="cond-section" id="cond-license">
-                                    <hr class="divider">
-                                    <div class="card-head"
-                                        style="background:none;border:none;padding:0 0 10px;font-size:12px"><span
-                                            class="icon">🔑</span> جزئیات مجوز / لایسنس</div>
-                                    <div class="row row-2">
-                                        <div class="field">
-                                            <label>نوع مدت مجوز</label>
-                                            <select name="license_duration_type" id="f-lic-dur-type">
-                                                <option value="">-- انتخاب --</option>
-                                                <option value="permanent">دائمی</option>
-                                                <option value="limited">مدت‌دار</option>
-                                            </select>
-                                        </div>
-                                        <div class="field" id="lic-months-field" style="display:none">
-                                            <label>مدت مجوز (ماه)</label>
-                                            <input type="number" name="license_duration_months" min="1"
-                                                placeholder="12">
-                                        </div>
-                                    </div>
-                                    <div class="row row-2">
-                                        <div class="field"><label>محدوده مجوز</label><textarea name="license_scope"
-                                                rows="2" placeholder="چه استفاده‌هایی مجاز است..."></textarea></div>
-                                        <div class="field"><label>محدودیت‌های مجوز</label><textarea
-                                                name="license_restrictions" rows="2"
-                                                placeholder="چه استفاده‌هایی ممنوع است..."></textarea></div>
-                                    </div>
-                                </div>
+      <!-- Conditional: license -->
+      <div class="cond-section" id="cond-license">
+        <hr class="divider">
+        <div class="card-head" style="background:none;border:none;padding:0 0 10px;font-size:12px"><span class="icon">🔑</span> جزئیات مجوز / لایسنس</div>
+        <div class="row-fields row-fields-2">
+          <div class="field">
+            <label>نوع مدت مجوز</label>
+            <select name="license_duration_type" id="f-lic-dur-type">
+              <option value="">-- انتخاب --</option>
+              <option value="permanent">دائمی</option>
+              <option value="limited">مدت‌دار</option>
+            </select>
+          </div>
+          <div class="field" id="lic-months-field" style="display:none">
+            <label>مدت مجوز (ماه)</label>
+            <input type="number" name="license_duration_months" min="1" placeholder="12">
+          </div>
+        </div>
+        <div class="row-fields row-fields-2">
+          <div class="field"><label>محدوده مجوز</label><textarea name="license_scope" rows="2" placeholder="چه استفاده‌هایی مجاز است..."></textarea></div>
+          <div class="field"><label>محدودیت‌های مجوز</label><textarea name="license_restrictions" rows="2" placeholder="چه استفاده‌هایی ممنوع است..."></textarea></div>
+        </div>
+      </div>
 
-                                <!-- Conditional: revenue_share -->
-                                <div class="cond-section" id="cond-revenue_share">
-                                    <hr class="divider">
-                                    <div class="card-head"
-                                        style="background:none;border:none;padding:0 0 10px;font-size:12px"><span
-                                            class="icon">💰</span> جزئیات سهم از درآمد</div>
-                                    <div class="row row-3">
-                                        <div class="field"><label>درصد سهم از درآمد</label><input type="number"
-                                                name="revenue_share_percentage" min="0" max="100" step="0.01"
-                                                placeholder="20"></div>
-                                        <div class="field">
-                                            <label>مبنای محاسبه</label>
-                                            <select name="revenue_share_base">
-                                                <option value="">--</option>
-                                                <option value="gross">درآمد ناخالص</option>
-                                                <option value="net">درآمد خالص</option>
-                                            </select>
-                                        </div>
-                                        <div class="field">
-                                            <label>دوره پرداخت</label>
-                                            <select name="revenue_share_payment_period">
-                                                <option value="">--</option>
-                                                <option value="weekly">هفتگی</option>
-                                                <option value="monthly">ماهانه</option>
-                                                <option value="quarterly">فصلی</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row row-2">
-                                        <div class="field"><label>مدت قرارداد (ماه)</label><input type="number"
-                                                name="revenue_share_contract_duration" placeholder="24"></div>
-                                        <div class="field"><label>حداقل تضمینی ماهانه (تومان)</label><input
-                                                type="number" name="revenue_share_minimum_guarantee" placeholder="0">
-                                        </div>
-                                    </div>
-                                </div>
+      <!-- Conditional: revenue_share -->
+      <div class="cond-section" id="cond-revenue_share">
+        <hr class="divider">
+        <div class="card-head" style="background:none;border:none;padding:0 0 10px;font-size:12px"><span class="icon">💰</span> جزئیات سهم از درآمد</div>
+        <div class="row-fields row-fields-3">
+          <div class="field"><label>درصد سهم از درآمد</label><input type="number" name="revenue_share_percentage" min="0" max="100" step="0.01" placeholder="20"></div>
+          <div class="field">
+            <label>مبنای محاسبه</label>
+            <select name="revenue_share_base">
+              <option value="">--</option>
+              <option value="gross">درآمد ناخالص</option>
+              <option value="net">درآمد خالص</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>دوره پرداخت</label>
+            <select name="revenue_share_payment_period">
+              <option value="">--</option>
+              <option value="weekly">هفتگی</option>
+              <option value="monthly">ماهانه</option>
+              <option value="quarterly">فصلی</option>
+            </select>
+          </div>
+        </div>
+        <div class="row-fields row-fields-2">
+          <div class="field"><label>مدت قرارداد (ماه)</label><input type="number" name="revenue_share_contract_duration" placeholder="24"></div>
+          <div class="field"><label>حداقل تضمینی ماهانه (تومان)</label><input type="number" name="revenue_share_minimum_guarantee" placeholder="0"></div>
+        </div>
+      </div>
 
-                                <!-- Conditional: brand -->
-                                <div class="cond-section" id="cond-brand">
-                                    <hr class="divider">
-                                    <div class="card-head"
-                                        style="background:none;border:none;padding:0 0 10px;font-size:12px"><span
-                                            class="icon">™️</span> جزئیات فروش برند</div>
-                                    <div class="row row-2">
-                                        <div class="field"><label>اجزای برند منتقل‌شده</label><textarea
-                                                name="brand_transferred_assets" rows="2"
-                                                placeholder="لوگو، رنگ‌بندی، دامنه، شبکه اجتماعی..."></textarea></div>
-                                        <div class="field">
-                                            <label>وضعیت حقوقی برند</label>
-                                            <select name="brand_legal_status">
-                                                <option value="">--</option>
-                                                <option value="registered">ثبت‌شده</option>
-                                                <option value="in_progress">در حال ثبت</option>
-                                                <option value="usage_right_only">فقط حق استفاده</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row row-2">
-                                        <div class="field"><label>محدودیت‌های کاربرد</label><textarea
-                                                name="brand_usage_restrictions" rows="2" placeholder="..."></textarea>
-                                        </div>
-                                        <div class="field"><label>حوزه / صنعت برند</label><input type="text"
-                                                name="brand_industry_scope" placeholder="مثال: آموزش آنلاین، فناوری">
-                                        </div>
-                                    </div>
-                                </div>
+      <!-- Conditional: brand -->
+      <div class="cond-section" id="cond-brand">
+        <hr class="divider">
+        <div class="card-head" style="background:none;border:none;padding:0 0 10px;font-size:12px"><span class="icon">™️</span> جزئیات فروش برند</div>
+        <div class="row-fields row-fields-2">
+          <div class="field"><label>اجزای برند منتقل‌شده</label><textarea name="brand_transferred_assets" rows="2" placeholder="لوگو، رنگ‌بندی، دامنه، شبکه اجتماعی..."></textarea></div>
+          <div class="field">
+            <label>وضعیت حقوقی برند</label>
+            <select name="brand_legal_status">
+              <option value="">--</option>
+              <option value="registered">ثبت‌شده</option>
+              <option value="in_progress">در حال ثبت</option>
+              <option value="usage_right_only">فقط حق استفاده</option>
+            </select>
+          </div>
+        </div>
+        <div class="row-fields row-fields-2">
+          <div class="field"><label>محدودیت‌های کاربرد</label><textarea name="brand_usage_restrictions" rows="2" placeholder="..."></textarea></div>
+          <div class="field"><label>حوزه / صنعت برند</label><input type="text" name="brand_industry_scope" placeholder="مثال: آموزش آنلاین، فناوری"></div>
+        </div>
+      </div>
 
-                            </div>
-                        </div>
+    </div>
+  </div>
 
-                        <!-- تصویر اصلی -->
-                        <div class="card">
-                            <div class="card-head"><span class="icon">🖼️</span> تصویر اصلی</div>
-                            <div class="card-body">
-                                <label class="img-drop" for="f-main-image">
-                                    <div class="drop-icon">📁</div>
-                                    <p>برای آپلود کلیک کنید یا فایل را بکشید اینجا</p>
-                                    <p style="font-size:11px;color:#adb5bd;margin-top:4px">JPG، PNG، WEBP — حداکثر ۵
-                                        مگابایت</p>
-                                    <input type="file" name="main_image" id="f-main-image" accept="image/*">
-                                    <img id="main-img-preview" alt="">
-                                </label>
-                                <div class="field-err-msg" id="e-main-image" style="display:none">تصویر اصلی الزامی است
-                                </div>
-                            </div>
-                        </div>
+  <!-- تصویر اصلی -->
+  <div class="card">
+    <div class="card-head"><span class="icon">🖼️</span> تصویر اصلی</div>
+    <div class="card-body">
+      <label class="img-drop" for="f-main-image">
+        <div class="drop-icon">📁</div>
+        <p>برای آپلود کلیک کنید یا فایل را بکشید اینجا</p>
+        <p style="font-size:11px;color:#adb5bd;margin-top:4px">JPG، PNG، WEBP — حداکثر ۵ مگابایت</p>
+        <input type="file" name="main_image" id="f-main-image" accept="image/*">
+        <img id="main-img-preview" alt="">
+      </label>
+      <div class="field-err-msg" id="e-main-image" style="display:none">تصویر اصلی الزامی است</div>
+    </div>
+  </div>
 
-                        <div class="nav-bar">
-                            <div></div>
-                            <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
-                        </div>
-                    </div><!-- /step-1 -->
+  <div class="nav-bar">
+    <div></div>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
+  </div>
+</div><!-- /step-1 -->
 
 
-                    <!-- ════════════════════════════════════
+<!-- ════════════════════════════════════
      STEP 2 — اطلاعات مالی
 ════════════════════════════════════ -->
-                    <div class="step-panel" id="step-2">
+<div class="step-panel" id="step-2">
 
-                        <div class="card">
-                            <div class="card-head"><span class="icon">💵</span> قیمت‌گذاری</div>
-                            <div class="card-body">
-                                <div class="row row-2">
-                                    <div class="field">
-                                        <label>قیمت (تومان) <span class="req">*</span></label>
-                                        <input type="number" name="price" id="f-price" min="0" placeholder="۰">
-                                        <div class="field-err-msg" id="e-price">قیمت الزامی است</div>
-                                    </div>
-                                    <div class="field">
-                                        <label>قیمت با تخفیف (تومان) <span class="opt">(اختیاری)</span></label>
-                                        <input type="number" name="discount_price" min="0" placeholder="۰">
-                                    </div>
-                                </div>
-                                <div class="row row-1">
-                                    <div class="field">
-                                        <label>امکان پیشنهاد قیمت توسط خریدار</label>
-                                        <div style="display:flex;gap:16px;margin-top:6px">
-                                            <label
-                                                style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
-                                                    type="checkbox" name="suggested_price"> بله</label>
-                                            <label
-                                                style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
-                                                    type="checkbox" name="is_income" checked> آگهی به درآمد
-                                                رسیده</label>
-                                            <label
-                                                style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
-                                                    type="checkbox" name="is_private"> آگهی خصوصی</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+  <div class="card">
+    <div class="card-head"><span class="icon">💵</span> قیمت‌گذاری</div>
+    <div class="card-body">
+      <div class="row-fields row-fields-2">
+        <div class="field">
+          <label>قیمت (تومان) <span class="req">*</span></label>
+          <input type="number" name="price" id="f-price" min="0" placeholder="۰">
+          <div class="field-err-msg" id="e-price">قیمت الزامی است</div>
+        </div>
+        <div class="field">
+          <label>قیمت با تخفیف (تومان) <span class="opt">(اختیاری)</span></label>
+          <input type="number" name="discount_price" min="0" placeholder="۰">
+        </div>
+      </div>
+      <div class="row-fields row-fields-1">
+        <div class="field">
+          <label>امکان پیشنهاد قیمت توسط خریدار</label>
+          <div style="display:flex;gap:16px;margin-top:6px">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" name="suggested_price"> بله</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" name="is_income" checked> آگهی به درآمد رسیده</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" name="is_private"> آگهی خصوصی</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-                        <div class="card">
-                            <div class="card-head"><span class="icon">📈</span> آمار مالی</div>
-                            <div class="card-body">
-                                <div class="row row-2">
-                                    <div class="field"><label>درآمد ماهانه (تومان)</label><input type="number"
-                                            name="monthly_income" min="0" placeholder="۰"></div>
-                                    <div class="field"><label>میانگین درآمد ماهانه</label><input type="number"
-                                            name="avg_monthly_revenue" min="0" placeholder="۰"></div>
-                                </div>
-                                <div class="row row-2">
-                                    <div class="field"><label>میانگین سود ماهانه</label><input type="number"
-                                            name="avg_monthly_profit" min="0" placeholder="۰"></div>
-                                    <div class="field"><label>حاشیه سود (درصد)</label><input type="number"
-                                            name="profit_margin" min="0" max="100" step="0.01" placeholder="۰"></div>
-                                </div>
-                                <div class="row row-2">
-                                    <div class="field"><label>درآمد کل</label><input type="number" name="total_revenue"
-                                            min="0" placeholder="۰"></div>
-                                    <div class="field"><label>سود کل</label><input type="number" name="total_profit"
-                                            min="0" placeholder="۰"></div>
-                                </div>
-                                <div class="row row-2">
-                                    <div class="field"><label>ضریب سود</label><input type="number"
-                                            name="profit_multiplier" min="0" step="0.01" placeholder="۰"></div>
-                                    <div class="field"><label>ضریب درآمد</label><input type="number"
-                                            name="revenue_multiplier" min="0" step="0.01" placeholder="۰"></div>
-                                </div>
-                            </div>
-                        </div>
+  <div class="card">
+    <div class="card-head"><span class="icon">📈</span> آمار مالی</div>
+    <div class="card-body">
+      <div class="row-fields row-fields-2">
+        <div class="field"><label>درآمد ماهانه (تومان)</label><input type="number" name="monthly_income" min="0" placeholder="۰"></div>
+        <div class="field"><label>میانگین درآمد ماهانه</label><input type="number" name="avg_monthly_revenue" min="0" placeholder="۰"></div>
+      </div>
+      <div class="row-fields row-fields-2">
+        <div class="field"><label>میانگین سود ماهانه</label><input type="number" name="avg_monthly_profit" min="0" placeholder="۰"></div>
+        <div class="field"><label>حاشیه سود (درصد)</label><input type="number" name="profit_margin" min="0" max="100" step="0.01" placeholder="۰"></div>
+      </div>
+      <div class="row-fields row-fields-2">
+        <div class="field"><label>درآمد کل</label><input type="number" name="total_revenue" min="0" placeholder="۰"></div>
+        <div class="field"><label>سود کل</label><input type="number" name="total_profit" min="0" placeholder="۰"></div>
+      </div>
+      <div class="row-fields row-fields-2">
+        <div class="field"><label>ضریب سود</label><input type="number" name="profit_multiplier" min="0" step="0.01" placeholder="۰"></div>
+        <div class="field"><label>ضریب درآمد</label><input type="number" name="revenue_multiplier" min="0" step="0.01" placeholder="۰"></div>
+      </div>
+    </div>
+  </div>
 
-                        <div class="card">
-                            <div class="card-head"><span class="icon">💸</span> هزینه‌ها</div>
-                            <div class="card-body">
-                                <div class="dyn-list" id="expenses-list"></div>
-                                <button type="button" class="add-btn" onclick="addExpense()">+ افزودن هزینه</button>
-                            </div>
-                        </div>
+  <div class="card">
+    <div class="card-head"><span class="icon">💸</span> هزینه‌ها</div>
+    <div class="card-body">
+      <div class="dyn-list" id="expenses-list"></div>
+      <button type="button" class="add-btn" onclick="addExpense()">+ افزودن هزینه</button>
+    </div>
+  </div>
 
-                        <div class="card">
-                            <div class="card-head"><span class="icon">💳</span> روش‌های کسب درآمد</div>
-                            <div class="card-body">
-                                <div class="method-grid" id="monetization-grid">
-                                    <label class="method-item"><input type="checkbox" name="monetization_methods"
-                                            value="banner_click_advertising"><span>تبلیغات بنری و کلیکی</span></label>
-                                    <label class="method-item"><input type="checkbox" name="monetization_methods"
-                                            value="sponsored_posts"><span>پست‌های حمایت‌شده</span></label>
-                                    <label class="method-item"><input type="checkbox" name="monetization_methods"
-                                            value="cooperation_sales"><span>همکاری در فروش</span></label>
-                                    <label class="method-item"><input type="checkbox" name="monetization_methods"
-                                            value="special_subscription_sale"><span>فروش اشتراک ویژه</span></label>
-                                    <label class="method-item"><input type="checkbox" name="monetization_methods"
-                                            value="selling_digital_products"><span>فروش محصولات دیجیتال</span></label>
-                                    <label class="method-item"><input type="checkbox" name="monetization_methods"
-                                            value="selling_physical_products"><span>فروش محصولات فیزیکی</span></label>
-                                    <label class="method-item"><input type="checkbox" name="monetization_methods"
-                                            value="receive_financial_support"><span>دریافت حمایت مالی</span></label>
-                                    <label class="method-item"><input type="checkbox" name="monetization_methods"
-                                            value="holding_training_courses"><span>دوره‌های آموزشی و
-                                            وبینار</span></label>
-                                    <label class="method-item"><input type="checkbox" name="monetization_methods"
-                                            value="sell_backlinks"><span>فروش بک‌لینک</span></label>
-                                    <label class="method-item"><input type="checkbox" name="monetization_methods"
-                                            value="providing_consulting_services"><span>خدمات مشاوره و
-                                            فریلنسری</span></label>
-                                </div>
-                            </div>
-                        </div>
+  <div class="card">
+    <div class="card-head"><span class="icon">💳</span> روش‌های کسب درآمد</div>
+    <div class="card-body">
+      <div class="method-grid" id="monetization-grid">
+        <label class="method-item"><input type="checkbox" name="monetization_methods" value="banner_click_advertising"><span>تبلیغات بنری و کلیکی</span></label>
+        <label class="method-item"><input type="checkbox" name="monetization_methods" value="sponsored_posts"><span>پست‌های حمایت‌شده</span></label>
+        <label class="method-item"><input type="checkbox" name="monetization_methods" value="cooperation_sales"><span>همکاری در فروش</span></label>
+        <label class="method-item"><input type="checkbox" name="monetization_methods" value="special_subscription_sale"><span>فروش اشتراک ویژه</span></label>
+        <label class="method-item"><input type="checkbox" name="monetization_methods" value="selling_digital_products"><span>فروش محصولات دیجیتال</span></label>
+        <label class="method-item"><input type="checkbox" name="monetization_methods" value="selling_physical_products"><span>فروش محصولات فیزیکی</span></label>
+        <label class="method-item"><input type="checkbox" name="monetization_methods" value="receive_financial_support"><span>دریافت حمایت مالی</span></label>
+        <label class="method-item"><input type="checkbox" name="monetization_methods" value="holding_training_courses"><span>دوره‌های آموزشی و وبینار</span></label>
+        <label class="method-item"><input type="checkbox" name="monetization_methods" value="sell_backlinks"><span>فروش بک‌لینک</span></label>
+        <label class="method-item"><input type="checkbox" name="monetization_methods" value="providing_consulting_services"><span>خدمات مشاوره و فریلنسری</span></label>
+      </div>
+    </div>
+  </div>
 
-                        <div class="nav-bar">
-                            <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
-                            <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
-                        </div>
-                    </div><!-- /step-2 -->
+  <div class="nav-bar">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
+  </div>
+</div><!-- /step-2 -->
 
 
-                    <!-- ════════════════════════════════════
+<!-- ════════════════════════════════════
      STEP 3 — محتوا
 ════════════════════════════════════ -->
-                    <div class="step-panel" id="step-3">
+<div class="step-panel" id="step-3">
 
-                        <div class="card">
-                            <div class="card-head"><span class="icon">📝</span> توضیحات اصلی</div>
-                            <div class="card-body">
-                                <div class="field">
-                                    <label>توضیحات آگهی <span class="req">*</span></label>
-                                    <textarea name="description" id="f-description" rows="5"
-                                        placeholder="توضیح کامل و جامع درباره آگهی..."></textarea>
-                                    <div class="field-err-msg" id="e-description">توضیحات الزامی است</div>
-                                </div>
-                                <hr class="divider">
-                                <div class="field">
-                                    <label>پشتیبانی پس از فروش <span class="opt">(اختیاری)</span></label>
-                                    <textarea name="post_sale_support" rows="3"
-                                        placeholder="چه پشتیبانی‌ای پس از فروش ارائه می‌دهید..."></textarea>
-                                </div>
-                            </div>
-                        </div>
+  <div class="card">
+    <div class="card-head"><span class="icon">📝</span> توضیحات اصلی</div>
+    <div class="card-body">
+      <div class="field">
+        <label>توضیحات آگهی <span class="req">*</span></label>
+        <textarea name="description" id="f-description" rows="5" placeholder="توضیح کامل و جامع درباره آگهی..."></textarea>
+        <div class="field-err-msg" id="e-description">توضیحات الزامی است</div>
+      </div>
+      <hr class="divider">
+      <div class="field">
+        <label>پشتیبانی پس از فروش <span class="opt">(اختیاری)</span></label>
+        <textarea name="post_sale_support" rows="3" placeholder="چه پشتیبانی‌ای پس از فروش ارائه می‌دهید..."></textarea>
+      </div>
+    </div>
+  </div>
 
-                        <!-- About Platform با HTML editor -->
-                        <div class="card">
-                            <div class="card-head"><span class="icon">🌐</span> درباره پلتفرم (با پشتیبانی HTML)</div>
-                            <div class="card-body">
-                                <p style="font-size:12px;color:var(--muted);margin-bottom:10px">می‌توانید از تگ‌های HTML
-                                    برای قالب‌بندی استفاده کنید. روی دکمه‌های زیر کلیک کنید تا تگ درج شود:</p>
-                                <div class="html-toolbar">
-                                    <button type="button" onclick="insertTag('h2')">H2 تیتر</button>
-                                    <button type="button" onclick="insertTag('h3')">H3 زیرتیتر</button>
-                                    <button type="button" onclick="insertTag('p')">پاراگراف</button>
-                                    <button type="button" onclick="insertTag('strong')"><b>Bold</b></button>
-                                    <button type="button" onclick="insertTag('em')"><i>Italic</i></button>
-                                    <button type="button" onclick="insertTag('ul-li')">لیست</button>
-                                    <button type="button" onclick="insertTag('br')">خط جدید</button>
-                                    <button type="button" onclick="insertTag('hr')">خط جدا</button>
-                                    <button type="button" onclick="insertTag('span-highlight')">هایلایت</button>
-                                </div>
-                                <textarea class="html-editor" id="about-platform-editor" name="about_platform"
-                                    oninput="updateHtmlPreview()"
-                                    placeholder="<h2>درباره پلتفرم</h2>&#10;<p>توضیحات شما اینجا...</p>"></textarea>
-                                <div class="preview-label" style="margin-top:14px">👁️ پیش‌نمایش زنده:</div>
-                                <div class="html-preview" id="about-platform-preview">
-                                    <span style="color:var(--muted);font-size:12px">متن خود را تایپ کنید تا پیش‌نمایش
-                                        نمایش داده شود...</span>
-                                </div>
-                            </div>
-                        </div>
+  <!-- About Platform با HTML editor -->
+  <div class="card">
+    <div class="card-head"><span class="icon">🌐</span> درباره پلتفرم (با پشتیبانی HTML)</div>
+    <div class="card-body">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px">می‌توانید از تگ‌های HTML برای قالب‌بندی استفاده کنید. روی دکمه‌های زیر کلیک کنید تا تگ درج شود:</p>
+      <div class="html-toolbar">
+        <button type="button" onclick="insertTag('h2')">H2 تیتر</button>
+        <button type="button" onclick="insertTag('h3')">H3 زیرتیتر</button>
+        <button type="button" onclick="insertTag('p')">پاراگراف</button>
+        <button type="button" onclick="insertTag('strong')"><b>Bold</b></button>
+        <button type="button" onclick="insertTag('em')"><i>Italic</i></button>
+        <button type="button" onclick="insertTag('ul-li')">لیست</button>
+        <button type="button" onclick="insertTag('br')">خط جدید</button>
+        <button type="button" onclick="insertTag('hr')">خط جدا</button>
+        <button type="button" onclick="insertTag('span-highlight')">هایلایت</button>
+      </div>
+      <textarea class="html-editor" id="about-platform-editor" name="about_platform" oninput="updateHtmlPreview()" placeholder="<h2>درباره پلتفرم</h2>&#10;<p>توضیحات شما اینجا...</p>"></textarea>
+      <div class="preview-label" style="margin-top:14px">👁️ پیش‌نمایش زنده:</div>
+      <div class="html-preview" id="about-platform-preview">
+        <span style="color:var(--muted);font-size:12px">متن خود را تایپ کنید تا پیش‌نمایش نمایش داده شود...</span>
+      </div>
+    </div>
+  </div>
 
-                        <!-- FAQ -->
-                        <div class="card">
-                            <div class="card-head"><span class="icon">❓</span> پرسش و پاسخ</div>
-                            <div class="card-body">
-                                <div class="dyn-list" id="faq-list"></div>
-                                <button type="button" class="add-btn" onclick="addFaq()">+ افزودن پرسش و پاسخ</button>
-                            </div>
-                        </div>
+  <!-- FAQ -->
+  <div class="card">
+    <div class="card-head"><span class="icon">❓</span> پرسش و پاسخ</div>
+    <div class="card-body">
+      <div class="dyn-list" id="faq-list"></div>
+      <button type="button" class="add-btn" onclick="addFaq()">+ افزودن پرسش و پاسخ</button>
+    </div>
+  </div>
 
-                        <!-- Sale Includes -->
-                        <div class="card">
-                            <div class="card-head"><span class="icon">📦</span> دارایی‌های فروش (موارد شامل)</div>
-                            <div class="card-body">
-                                <div class="dyn-list" id="sale-includes-list"></div>
-                                <button type="button" class="add-btn" onclick="addSaleInclude()">+ افزودن
-                                    دارایی</button>
-                            </div>
-                        </div>
+  <!-- Sale Includes -->
+  <div class="card">
+    <div class="card-head"><span class="icon">📦</span> دارایی‌های فروش (موارد شامل)</div>
+    <div class="card-body">
+      <div class="dyn-list" id="sale-includes-list"></div>
+      <button type="button" class="add-btn" onclick="addSaleInclude()">+ افزودن دارایی</button>
+    </div>
+  </div>
 
-                        <!-- Licenses -->
-                        <div class="card">
-                            <div class="card-head"><span class="icon">📜</span> مجوزها</div>
-                            <div class="card-body">
-                                <div class="dyn-list" id="licenses-list"></div>
-                                <button type="button" class="add-btn" onclick="addLicense()">+ افزودن مجوز</button>
-                            </div>
-                        </div>
+  <!-- Licenses -->
+  <div class="card">
+    <div class="card-head"><span class="icon">📜</span> مجوزها</div>
+    <div class="card-body">
+      <div class="dyn-list" id="licenses-list"></div>
+      <button type="button" class="add-btn" onclick="addLicense()">+ افزودن مجوز</button>
+    </div>
+  </div>
 
-                        <div class="nav-bar">
-                            <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
-                            <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
-                        </div>
-                    </div><!-- /step-3 -->
+  <div class="nav-bar">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
+  </div>
+</div><!-- /step-3 -->
 
 
-                    <!-- ════════════════════════════════════
+<!-- ════════════════════════════════════
      STEP 4 — نمودارها
 ════════════════════════════════════ -->
-                    <div class="step-panel" id="step-4">
+<div class="step-panel" id="step-4">
 
-                        <div class="card">
-                            <div class="card-head"><span class="icon">📊</span> داده‌های نمودار</div>
-                            <div class="card-body">
-                                <p style="font-size:12px;color:var(--muted);margin-bottom:14px">برای هر نقطه، تاریخ و
-                                    مقدار مورد نظر را وارد کنید. می‌توانید هر تعداد نقطه اضافه کنید.</p>
-                                <div class="chart-builder-wrap">
+  <div class="card">
+    <div class="card-head"><span class="icon">📊</span> داده‌های نمودار</div>
+    <div class="card-body">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:14px">برای هر نقطه، تاریخ و مقدار مورد نظر را وارد کنید. می‌توانید هر تعداد نقطه اضافه کنید.</p>
+      <div class="chart-builder-wrap">
 
-                                    <!-- درآمد -->
-                                    <div>
-                                        <div class="chart-section-title">📈 نمودار درآمد</div>
-                                        <div
-                                            style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:6px">
-                                            <span style="font-size:11px;color:var(--muted);font-weight:700">تاریخ</span>
-                                            <span style="font-size:11px;color:var(--muted);font-weight:700">مبلغ
-                                                (تومان)</span>
-                                            <span></span>
-                                        </div>
-                                        <div id="income-points"></div>
-                                        <button type="button" class="add-btn" style="margin-top:8px;font-size:12px"
-                                            onclick="addIncomePoint()">+ افزودن نقطه</button>
-                                    </div>
+        <!-- درآمد -->
+        <div>
+          <div class="chart-section-title">📈 نمودار درآمد</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:6px">
+            <span style="font-size:11px;color:var(--muted);font-weight:700">تاریخ</span>
+            <span style="font-size:11px;color:var(--muted);font-weight:700">مبلغ (تومان)</span>
+            <span></span>
+          </div>
+          <div id="income-points"></div>
+          <button type="button" class="add-btn" style="margin-top:8px;font-size:12px" onclick="addIncomePoint()">+ افزودن نقطه</button>
+        </div>
 
-                                    <!-- بازدید -->
-                                    <div>
-                                        <div class="chart-section-title">👁️ نمودار بازدید</div>
-                                        <div
-                                            style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:6px">
-                                            <span style="font-size:11px;color:var(--muted);font-weight:700">تاریخ</span>
-                                            <span style="font-size:11px;color:var(--muted);font-weight:700">تعداد
-                                                بازدید</span>
-                                            <span></span>
-                                        </div>
-                                        <div id="views-points"></div>
-                                        <button type="button" class="add-btn" style="margin-top:8px;font-size:12px"
-                                            onclick="addViewPoint()">+ افزودن نقطه</button>
-                                    </div>
+        <!-- بازدید -->
+        <div>
+          <div class="chart-section-title">👁️ نمودار بازدید</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:6px">
+            <span style="font-size:11px;color:var(--muted);font-weight:700">تاریخ</span>
+            <span style="font-size:11px;color:var(--muted);font-weight:700">تعداد بازدید</span>
+            <span></span>
+          </div>
+          <div id="views-points"></div>
+          <button type="button" class="add-btn" style="margin-top:8px;font-size:12px" onclick="addViewPoint()">+ افزودن نقطه</button>
+        </div>
 
-                                </div>
-                            </div>
-                        </div>
+      </div>
+    </div>
+  </div>
 
-                        <div class="card">
-                            <div class="card-head"><span class="icon">📊</span> آمار پلتفرم</div>
-                            <div class="card-body">
-                                <div class="row row-3">
-                                    <div class="field"><label>تعداد فالوور</label><input type="number"
-                                            name="followers_count" min="0" value="0"></div>
-                                    <div class="field"><label>سن پلتفرم (ماه)</label><input type="number"
-                                            name="platform_age" min="0" value="0"></div>
-                                    <div class="field"><label>بیشترین لایک</label><input type="number" name="most_like"
-                                            min="0" placeholder="۰"></div>
-                                </div>
-                                <div class="row row-2">
-                                    <div class="field"><label>بیشترین بازدید</label><input type="number"
-                                            name="most_view" min="0" placeholder="۰"></div>
-                                    <div class="field"><label>بیشترین کامنت</label><input type="number"
-                                            name="most_comment" min="0" placeholder="۰"></div>
-                                </div>
-                            </div>
-                        </div>
+  <div class="card">
+    <div class="card-head"><span class="icon">📊</span> آمار پلتفرم</div>
+    <div class="card-body">
+      <div class="row-fields row-fields-3">
+        <div class="field"><label>تعداد فالوور</label><input type="number" name="followers_count" min="0" value="0"></div>
+        <div class="field"><label>سن پلتفرم (ماه)</label><input type="number" name="platform_age" min="0" value="0"></div>
+        <div class="field"><label>بیشترین لایک</label><input type="number" name="most_like" min="0" placeholder="۰"></div>
+      </div>
+      <div class="row-fields row-fields-2">
+        <div class="field"><label>بیشترین بازدید</label><input type="number" name="most_view" min="0" placeholder="۰"></div>
+        <div class="field"><label>بیشترین کامنت</label><input type="number" name="most_comment" min="0" placeholder="۰"></div>
+      </div>
+    </div>
+  </div>
 
-                        <div class="nav-bar">
-                            <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
-                            <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
-                        </div>
-                    </div><!-- /step-4 -->
+  <div class="nav-bar">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
+  </div>
+</div><!-- /step-4 -->
 
 
-                    <!-- ════════════════════════════════════
+<!-- ════════════════════════════════════
      STEP 5 — رسانه‌ها
 ════════════════════════════════════ -->
-                    <div class="step-panel" id="step-5">
+<div class="step-panel" id="step-5">
 
-                        <!-- Social Media -->
-                        <div class="card">
-                            <div class="card-head"><span class="icon">📱</span> رسانه‌های اجتماعی</div>
-                            <div class="card-body">
-                                <div class="dyn-list" id="social-list"></div>
-                                <button type="button" class="add-btn" onclick="addSocial()">+ افزودن رسانه
-                                    اجتماعی</button>
-                            </div>
-                        </div>
+  <!-- Social Media -->
+  <div class="card">
+    <div class="card-head"><span class="icon">📱</span> رسانه‌های اجتماعی</div>
+    <div class="card-body">
+      <div class="dyn-list" id="social-list"></div>
+      <button type="button" class="add-btn" onclick="addSocial()">+ افزودن رسانه اجتماعی</button>
+    </div>
+  </div>
 
-                        <!-- Income Proofs -->
-                        <div class="card">
-                            <div class="card-head"><span class="icon">🧾</span> اثبات درآمد</div>
-                            <div class="card-body">
-                                <div class="dyn-list" id="income-proof-list"></div>
-                                <button type="button" class="add-btn" onclick="addIncomeProof()">+ افزودن مدرک</button>
-                            </div>
-                        </div>
+  <!-- Income Proofs -->
+  <div class="card">
+    <div class="card-head"><span class="icon">🧾</span> اثبات درآمد</div>
+    <div class="card-body">
+      <div class="dyn-list" id="income-proof-list"></div>
+      <button type="button" class="add-btn" onclick="addIncomeProof()">+ افزودن مدرک</button>
+    </div>
+  </div>
 
-                        <!-- Attachments -->
-                        <div class="card">
-                            <div class="card-head"><span class="icon">📎</span> پیوست‌ها</div>
-                            <div class="card-body">
-                                <div class="dyn-list" id="attachments-list"></div>
-                                <button type="button" class="add-btn" onclick="addAttachment()">+ افزودن پیوست</button>
-                            </div>
-                        </div>
+  <!-- Attachments -->
+  <div class="card">
+    <div class="card-head"><span class="icon">📎</span> پیوست‌ها</div>
+    <div class="card-body">
+      <div class="dyn-list" id="attachments-list"></div>
+      <button type="button" class="add-btn" onclick="addAttachment()">+ افزودن پیوست</button>
+    </div>
+  </div>
 
-                        <!-- Traffic Sources -->
-                        <div class="card">
-                            <div class="card-head"><span class="icon">🚦</span> منابع ترافیک</div>
-                            <div class="card-body">
-                                <p style="font-size:12px;color:var(--muted);margin-bottom:10px">جمع درصدها باید ۱۰۰
-                                    باشد.</p>
-                                <div class="dyn-list" id="traffic-list"></div>
-                                <button type="button" class="add-btn" onclick="addTraffic()">+ افزودن منبع</button>
-                                <div id="traffic-total-display" style="margin-top:8px"></div>
-                                <div class="traffic-total-bar" id="traffic-bar"></div>
-                            </div>
-                        </div>
+  <!-- Traffic Sources -->
+  <div class="card">
+    <div class="card-head"><span class="icon">🚦</span> منابع ترافیک</div>
+    <div class="card-body">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px">جمع درصدها باید ۱۰۰ باشد.</p>
+      <div class="dyn-list" id="traffic-list"></div>
+      <button type="button" class="add-btn" onclick="addTraffic()">+ افزودن منبع</button>
+      <div id="traffic-total-display" style="margin-top:8px"></div>
+      <div class="traffic-total-bar" id="traffic-bar"></div>
+    </div>
+  </div>
 
-                        <div class="nav-bar">
-                            <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
-                            <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
-                        </div>
-                    </div><!-- /step-5 -->
+  <div class="nav-bar">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
+  </div>
+</div><!-- /step-5 -->
 
 
-                    <!-- ════════════════════════════════════
+<!-- ════════════════════════════════════
      STEP 6 — فنی
 ════════════════════════════════════ -->
-                    <div class="step-panel" id="step-6">
+<div class="step-panel" id="step-6">
 
-                        <div class="card">
-                            <div class="card-head"><span class="icon">⚙️</span> تکنولوژی‌های استفاده‌شده</div>
-                            <div class="card-body">
-                                <p style="font-size:12px;color:var(--muted);margin-bottom:14px">روی هر تکنولوژی کلیک
-                                    کنید تا انتخاب یا لغو انتخاب شود.</p>
-                                <div class="tech-groups">
+  <div class="card">
+    <div class="card-head"><span class="icon">⚙️</span> تکنولوژی‌های استفاده‌شده</div>
+    <div class="card-body">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:14px">روی هر تکنولوژی کلیک کنید تا انتخاب یا لغو انتخاب شود.</p>
+      <div class="tech-groups">
 
-                                    <div>
-                                        <div class="tech-group-title">🗂️ CMS و فروشگاه‌ساز</div>
-                                        <div class="tech-chips" id="tc-cms">
-                                            <label class="tech-chip"><input type="checkbox" name="tech_cms"
-                                                    value="wordpress"><span>وردپرس</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_cms"
-                                                    value="joomla"><span>جوملا</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_cms"
-                                                    value="woocommerce"><span>ووکامرس</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_cms"
-                                                    value="shopify"><span>شاپیفای</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_cms"
-                                                    value="magento"><span>مجنتو</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_cms"
-                                                    value="prestashop"><span>پرستاشاپ</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_cms"
-                                                    value="ghost"><span>گوست</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_cms"
-                                                    value="custom_cms"><span>سیستم اختصاصی</span></label>
-                                        </div>
-                                    </div>
+        <div>
+          <div class="tech-group-title">🗂️ CMS و فروشگاه‌ساز</div>
+          <div class="tech-chips" id="tc-cms">
+            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="wordpress"><span>وردپرس</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="joomla"><span>جوملا</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="woocommerce"><span>ووکامرس</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="shopify"><span>شاپیفای</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="magento"><span>مجنتو</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="prestashop"><span>پرستاشاپ</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="ghost"><span>گوست</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="custom_cms"><span>سیستم اختصاصی</span></label>
+          </div>
+        </div>
 
-                                    <div>
-                                        <div class="tech-group-title">🔧 Backend</div>
-                                        <div class="tech-chips">
-                                            <label class="tech-chip"><input type="checkbox" name="tech_backend"
-                                                    value="laravel"><span>لاراول</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_backend"
-                                                    value="django"><span>جنگو</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_backend"
-                                                    value="fastapi"><span>FastAPI</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_backend"
-                                                    value="nodejs"><span>Node.js</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_backend"
-                                                    value="nestjs"><span>Nest.js</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_backend"
-                                                    value="flask"><span>Flask</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_backend"
-                                                    value="aspnet"><span>ASP.NET</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_backend"
-                                                    value="springboot"><span>Spring Boot</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_backend"
-                                                    value="golang"><span>Go</span></label>
-                                        </div>
-                                    </div>
+        <div>
+          <div class="tech-group-title">🔧 Backend</div>
+          <div class="tech-chips">
+            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="laravel"><span>لاراول</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="django"><span>جنگو</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="fastapi"><span>FastAPI</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="nodejs"><span>Node.js</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="nestjs"><span>Nest.js</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="flask"><span>Flask</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="aspnet"><span>ASP.NET</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="springboot"><span>Spring Boot</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="golang"><span>Go</span></label>
+          </div>
+        </div>
 
-                                    <div>
-                                        <div class="tech-group-title">🎨 Frontend</div>
-                                        <div class="tech-chips">
-                                            <label class="tech-chip"><input type="checkbox" name="tech_frontend"
-                                                    value="reactjs"><span>React</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_frontend"
-                                                    value="nextjs"><span>Next.js</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_frontend"
-                                                    value="vuejs"><span>Vue.js</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_frontend"
-                                                    value="nuxtjs"><span>Nuxt.js</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_frontend"
-                                                    value="angular"><span>Angular</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_frontend"
-                                                    value="svelte"><span>Svelte</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_frontend"
-                                                    value="jquery"><span>jQuery</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_frontend"
-                                                    value="tailwind"><span>Tailwind</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_frontend"
-                                                    value="bootstrap"><span>Bootstrap</span></label>
-                                        </div>
-                                    </div>
+        <div>
+          <div class="tech-group-title">🎨 Frontend</div>
+          <div class="tech-chips">
+            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="reactjs"><span>React</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="nextjs"><span>Next.js</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="vuejs"><span>Vue.js</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="nuxtjs"><span>Nuxt.js</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="angular"><span>Angular</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="svelte"><span>Svelte</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="jquery"><span>jQuery</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="tailwind"><span>Tailwind</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="bootstrap"><span>Bootstrap</span></label>
+          </div>
+        </div>
 
-                                    <div>
-                                        <div class="tech-group-title">🗄️ Database</div>
-                                        <div class="tech-chips">
-                                            <label class="tech-chip"><input type="checkbox" name="tech_db"
-                                                    value="mysql"><span>MySQL</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_db"
-                                                    value="postgresql"><span>PostgreSQL</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_db"
-                                                    value="mongodb"><span>MongoDB</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_db"
-                                                    value="redis"><span>Redis</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_db"
-                                                    value="sqlite"><span>SQLite</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_db"
-                                                    value="firebase"><span>Firebase</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_db"
-                                                    value="elasticsearch"><span>Elasticsearch</span></label>
-                                        </div>
-                                    </div>
+        <div>
+          <div class="tech-group-title">🗄️ Database</div>
+          <div class="tech-chips">
+            <label class="tech-chip"><input type="checkbox" name="tech_db" value="mysql"><span>MySQL</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_db" value="postgresql"><span>PostgreSQL</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_db" value="mongodb"><span>MongoDB</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_db" value="redis"><span>Redis</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_db" value="sqlite"><span>SQLite</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_db" value="firebase"><span>Firebase</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_db" value="elasticsearch"><span>Elasticsearch</span></label>
+          </div>
+        </div>
 
-                                    <div>
-                                        <div class="tech-group-title">☁️ زیرساخت</div>
-                                        <div class="tech-chips">
-                                            <label class="tech-chip"><input type="checkbox" name="tech_infra"
-                                                    value="vps"><span>VPS</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_infra"
-                                                    value="dedicated"><span>سرور اختصاصی</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_infra"
-                                                    value="shared_hosting"><span>هاست اشتراکی</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_infra"
-                                                    value="hetzner"><span>Hetzner</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_infra"
-                                                    value="aws"><span>AWS</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_infra"
-                                                    value="liara"><span>لیارا</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_infra"
-                                                    value="arvancloud"><span>آروان‌کلاد</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_infra"
-                                                    value="nginx"><span>Nginx</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_infra"
-                                                    value="docker"><span>Docker</span></label>
-                                        </div>
-                                    </div>
+        <div>
+          <div class="tech-group-title">☁️ زیرساخت</div>
+          <div class="tech-chips">
+            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="vps"><span>VPS</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="dedicated"><span>سرور اختصاصی</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="shared_hosting"><span>هاست اشتراکی</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="hetzner"><span>Hetzner</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="aws"><span>AWS</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="liara"><span>لیارا</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="arvancloud"><span>آروان‌کلاد</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="nginx"><span>Nginx</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="docker"><span>Docker</span></label>
+          </div>
+        </div>
 
-                                    <div>
-                                        <div class="tech-group-title">📱 موبایل</div>
-                                        <div class="tech-chips">
-                                            <label class="tech-chip"><input type="checkbox" name="tech_mobile"
-                                                    value="flutter"><span>Flutter</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_mobile"
-                                                    value="react_native"><span>React Native</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_mobile"
-                                                    value="android_native"><span>Android Native</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_mobile"
-                                                    value="ios_native"><span>iOS Native</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_mobile"
-                                                    value="pwa"><span>PWA</span></label>
-                                        </div>
-                                    </div>
+        <div>
+          <div class="tech-group-title">📱 موبایل</div>
+          <div class="tech-chips">
+            <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="flutter"><span>Flutter</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="react_native"><span>React Native</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="android_native"><span>Android Native</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="ios_native"><span>iOS Native</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="pwa"><span>PWA</span></label>
+          </div>
+        </div>
 
-                                    <div>
-                                        <div class="tech-group-title">🔌 سرویس‌های جانبی</div>
-                                        <div class="tech-chips">
-                                            <label class="tech-chip"><input type="checkbox" name="tech_third"
-                                                    value="zarinpal"><span>زرین‌پال</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_third"
-                                                    value="zibal"><span>زیبال</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_third"
-                                                    value="kavenegar"><span>کاوه‌نگار</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_third"
-                                                    value="ga4"><span>Google Analytics</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_third"
-                                                    value="mailchimp"><span>Mailchimp</span></label>
-                                            <label class="tech-chip"><input type="checkbox" name="tech_third"
-                                                    value="clarity"><span>MS Clarity</span></label>
-                                        </div>
-                                    </div>
+        <div>
+          <div class="tech-group-title">🔌 سرویس‌های جانبی</div>
+          <div class="tech-chips">
+            <label class="tech-chip"><input type="checkbox" name="tech_third" value="zarinpal"><span>زرین‌پال</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_third" value="zibal"><span>زیبال</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_third" value="kavenegar"><span>کاوه‌نگار</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_third" value="ga4"><span>Google Analytics</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_third" value="mailchimp"><span>Mailchimp</span></label>
+            <label class="tech-chip"><input type="checkbox" name="tech_third" value="clarity"><span>MS Clarity</span></label>
+          </div>
+        </div>
 
-                                </div>
-                            </div>
-                        </div>
+      </div>
+    </div>
+  </div>
 
-                        <!-- Services Used -->
-                        <div class="card">
-                            <div class="card-head"><span class="icon">🛠️</span> خدمات مورد استفاده</div>
-                            <div class="card-body">
-                                <div class="dyn-list" id="services-list"></div>
-                                <button type="button" class="add-btn" onclick="addService()">+ افزودن خدمت</button>
-                            </div>
-                        </div>
+  <!-- Services Used -->
+  <div class="card">
+    <div class="card-head"><span class="icon">🛠️</span> خدمات مورد استفاده</div>
+    <div class="card-body">
+      <div class="dyn-list" id="services-list"></div>
+      <button type="button" class="add-btn" onclick="addService()">+ افزودن خدمت</button>
+    </div>
+  </div>
 
-                        <div class="nav-bar">
-                            <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
-                            <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
-                        </div>
-                    </div><!-- /step-6 -->
+  <div class="nav-bar">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">مرحله بعد ←</button>
+  </div>
+</div><!-- /step-6 -->
 
 
-                    <!-- ════════════════════════════════════
+<!-- ════════════════════════════════════
      STEP 7 — مرور و ارسال
 ════════════════════════════════════ -->
-                    <div class="step-panel" id="step-7">
+<div class="step-panel" id="step-7">
 
-                        <div class="card">
-                            <div class="card-head"><span class="icon">✅</span> مرور و تأیید نهایی</div>
-                            <div class="card-body">
-                                <div id="review-content" style="font-size:13px;line-height:1.8">
-                                    <p style="color:var(--muted)">در حال آماده‌سازی خلاصه...</p>
-                                </div>
+  <div class="card">
+    <div class="card-head"><span class="icon">✅</span> مرور و تأیید نهایی</div>
+    <div class="card-body">
+      <div id="review-content" style="font-size:13px;line-height:1.8">
+        <p style="color:var(--muted)">در حال آماده‌سازی خلاصه...</p>
+      </div>
 
-                                <hr class="divider">
+      <hr class="divider">
 
-                                <div class="row row-1">
-                                    <div style="display:flex;flex-wrap:wrap;gap:16px">
-                                        <label
-                                            style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
-                                            <input type="checkbox" name="boost"> آگهی پیشرفته
-                                        </label>
-                                        <label
-                                            style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
-                                            <input type="checkbox" name="premier"> آگهی برتر
-                                        </label>
-                                        <label
-                                            style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
-                                            <input type="checkbox" name="is_verified"> اطلاعات تأیید شده
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="nav-bar">
-                            <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
-                            <button type="button" class="btn btn-success" id="submit-btn" onclick="submitForm()">💾 ثبت
-                                نهایی آگهی</button>
-                        </div>
-                    </div><!-- /step-7 -->
-
-                </form>
-            </div><!-- /form-col -->
-
-
-            <!-- ══════ LOG COLUMN ══════ -->
-            <div class="log-col">
-                <div class="log-sticky">
-
-                    <!-- Status -->
-                    <div class="status-card">
-                        <h3>وضعیت</h3>
-                        <div class="status-row"><span class="s-label">مرحله جاری</span><span class="s-val" id="s-step">۱
-                                از ۷</span></div>
-                        <div class="status-row"><span class="s-label">وضعیت فرم</span><span class="badge badge-wait"
-                                id="s-form-badge">در انتظار</span></div>
-                        <div class="status-row"><span class="s-label">اعتبارسنجی</span><span class="s-val"
-                                id="s-valid">—</span></div>
-                        <div class="status-row"><span class="s-label">HTTP</span><span class="s-val"
-                                id="s-http">—</span></div>
-                        <div class="status-row"><span class="s-label">ID آگهی</span><span class="s-val"
-                                id="s-id">—</span></div>
-                        <div class="status-row"><span class="s-label">زمان ارسال</span><span class="s-val"
-                                id="s-time">—</span></div>
-                    </div>
-
-                    <!-- Console -->
-                    <div class="log-console">
-                        <div class="log-con-head">
-                            <div class="log-con-left">
-                                <div class="log-dot" id="l-dot"></div>
-                                <span class="log-con-title">CONSOLE</span>
-                                <span class="log-cnt" id="l-cnt">0</span>
-                            </div>
-                            <button class="log-clr" onclick="Logger.clear()">پاک کردن</button>
-                        </div>
-                        <div class="log-body" id="l-body">
-                            <div class="log-empty">منتظر فعالیت...</div>
-                        </div>
-                    </div>
-
-                    <!-- Errors -->
-                    <div class="err-card" id="err-card">
-                        <h3>❌ خطاها</h3>
-                        <div id="err-list"></div>
-                    </div>
-
-                </div>
-            </div><!-- /log-col -->
-
-        </div><!-- /main-layout -->
-
-        <script>
-            // ═══════════════════════════
-            //  Logger
-            // ═══════════════════════════
-            const Logger = (() => {
-                let cnt = 0;
-                const body = document.getElementById('l-body');
-                const cntEl = document.getElementById('l-cnt');
-                const dot = document.getElementById('l-dot');
-                const COLORS = {
-                    INFO: '#58a6ff',
-                    OK: '#3fb950',
-                    WARN: '#d29922',
-                    ERR: '#f85149',
-                    DBG: '#bc8cff'
-                };
-
-                function ts() {
-                    return new Date().toLocaleTimeString('fa-IR', {
-                        hour12: false
-                    });
-                }
-
-                function log(lv, msg) {
-                    cnt++;
-                    cntEl.textContent = cnt;
-                    const empty = body.querySelector('.log-empty');
-                    if (empty) empty.remove();
-                    const row = document.createElement('div');
-                    row.className = 'log-entry';
-                    row.innerHTML =
-                        `<span class="l-time">${ts()}</span><span class="l-lv ${lv}">${lv}</span><span class="l-msg">${msg}</span>`;
-                    body.appendChild(row);
-                    body.scrollTop = body.scrollHeight;
-                    dot.style.background = COLORS[lv] || '#58a6ff';
-                }
-
-                return {
-                    info: m => log('INFO', m),
-                    ok: m => log('OK', m),
-                    warn: m => log('WARN', m),
-                    error: m => log('ERR', m),
-                    debug: m => log('DBG', m),
-                    clear: () => {
-                        cnt = 0;
-                        cntEl.textContent = '0';
-                        body.innerHTML = '<div class="log-empty">پاک شد...</div>';
-                        dot.style.background = '#58a6ff';
-                    }
-                };
-            })();
-
-            // ═══════════════════════════
-            //  Toast
-            // ═══════════════════════════
-            function toast(msg, type = 'info', ms = 4000) {
-                const wrap = document.getElementById('toast-wrap');
-                const t = document.createElement('div');
-                t.className = `toast t-${type}`;
-                t.textContent = msg;
-                wrap.appendChild(t);
-                setTimeout(() => {
-                    t.style.opacity = '0';
-                    t.style.transition = 'opacity .3s';
-                    setTimeout(() => t.remove(), 300);
-                }, ms);
-            }
-
-            // ═══════════════════════════
-            //  Step management
-            // ═══════════════════════════
-            const TOTAL_STEPS = 7;
-            let currentStep = 1;
-            const STEP_NAMES = ['', 'اطلاعات پایه', 'اطلاعات مالی', 'محتوا', 'نمودارها', 'رسانه‌ها', 'فنی',
-                'مرور نهایی'];
-
-            function goStep(n) {
-                if (n < 1 || n > TOTAL_STEPS) return;
-                // Show panel
-                document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
-                document.getElementById(`step-${n}`).classList.add('active');
-                // Update progress
-                document.querySelectorAll('.step-item').forEach((el, i) => {
-                    const s = i + 1;
-                    el.classList.remove('active', 'done');
-                    if (s === n) el.classList.add('active');
-                    else if (s < n) el.classList.add('done');
-                });
-                currentStep = n;
-                document.getElementById('top-step-label').textContent = `مرحله ${n} از ${TOTAL_STEPS}`;
-                document.getElementById('s-step').textContent = `${n} از ${TOTAL_STEPS}`;
-                Logger.info(`انتقال به مرحله ${n}: ${STEP_NAMES[n]}`);
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-                if (n === 7) buildReview();
-            }
-
-            function nextStep() {
-                const errs = validateStep(currentStep);
-                if (errs.length) {
-                    Logger.warn(`اعتبارسنجی مرحله ${currentStep} ناموفق: ${errs.join('، ')}`);
-                    toast(`لطفاً تکمیل کنید: ${errs.join('، ')}`, 'err', 5000);
-                    document.getElementById('s-valid').textContent = `${errs.length} خطا`;
-                    document.getElementById('s-valid').style.color = 'var(--error)';
-                    return;
-                }
-                document.getElementById('s-valid').textContent = '✓';
-                document.getElementById('s-valid').style.color = 'var(--success)';
-                goStep(currentStep + 1);
-            }
-
-            function prevStep() {
-                goStep(currentStep - 1);
-            }
-
-            // ═══════════════════════════
-            //  Validation per step
-            // ═══════════════════════════
-            function validateStep(n) {
-                const errs = [];
-                const v = (id, label) => {
-                    const el = document.getElementById(id);
-                    if (!el) return;
-                    const ok = el.value && el.value.trim();
-                    if (!ok) {
-                        errs.push(label);
-                        el.classList.add('err');
-                    } else el.classList.remove('err');
-                    const em = document.getElementById('e-' + id.replace('f-', ''));
-                    if (em) em.style.display = ok ? 'none' : 'block';
-                };
-
-                if (n === 1) {
-                    v('f-title', 'عنوان');
-                    v('f-areas', 'حوزه فعالیت');
-                    v('f-sale-type', 'نوع فروش');
-                    const img = document.getElementById('f-main-image');
-                    if (!img.files.length) {
-                        errs.push('تصویر اصلی');
-                        document.getElementById('e-main-image').style.display = 'block';
-                    } else {
-                        document.getElementById('e-main-image').style.display = 'none';
-                    }
-                }
-                if (n === 2) {
-                    const p = document.getElementById('f-price');
-                    if (!p.value || parseInt(p.value) <= 0) {
-                        errs.push('قیمت');
-                        p.classList.add('err');
-                        document.getElementById('e-price').style.display = 'block';
-                    } else {
-                        p.classList.remove('err');
-                        document.getElementById('e-price').style.display = 'none';
-                    }
-                }
-                if (n === 3) {
-                    v('f-description', 'توضیحات');
-                }
-                return errs;
-            }
-
-            // ═══════════════════════════
-            //  Conditional sale type
-            // ═══════════════════════════
-            const saleTypePanels = ['full_ownership', 'partial_ownership', 'license', 'revenue_share', 'brand'];
-            document.getElementById('f-sale-type').addEventListener('change', function () {
-                saleTypePanels.forEach(id => {
-                    const el = document.getElementById('cond-' + id);
-                    if (el) el.classList.toggle('show', this.value === id);
-                });
-                Logger.debug(`نوع فروش تغییر کرد: ${this.value}`);
-            });
-
-            // License duration conditional
-            document.getElementById('f-lic-dur-type') ? .addEventListener('change', function () {
-                const mf = document.getElementById('lic-months-field');
-                if (mf) mf.style.display = this.value === 'limited' ? 'block' : 'none';
-            });
-
-            // ═══════════════════════════
-            //  Image preview
-            // ═══════════════════════════
-            document.getElementById('f-main-image').addEventListener('change', function () {
-                const file = this.files[0];
-                if (!file) return;
-                if (file.size > 5 * 1024 * 1024) {
-                    toast('حجم فایل بیش از ۵ مگابایت', 'err');
-                    Logger.warn(`تصویر رد شد: ${file.name} (${(file.size/1024).toFixed(0)}KB)`);
-                    this.value = '';
-                    return;
-                }
-                Logger.info(`تصویر انتخاب شد: ${file.name} (${(file.size/1024).toFixed(0)}KB)`);
-                const reader = new FileReader();
-                reader.onload = e => {
-                    const img = document.getElementById('main-img-preview');
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                    Logger.ok('پیش‌نمایش تصویر آماده شد');
-                };
-                reader.readAsDataURL(file);
-            });
-
-            // ═══════════════════════════
-            //  Tech chips toggle
-            // ═══════════════════════════
-            document.querySelectorAll('.tech-chip').forEach(chip => {
-                chip.addEventListener('click', function () {
-                    const cb = this.querySelector('input[type=checkbox]');
-                    cb.checked = !cb.checked;
-                    this.classList.toggle('selected', cb.checked);
-                });
-            });
-
-            // Method items toggle
-            document.querySelectorAll('.method-item').forEach(item => {
-                item.addEventListener('click', function () {
-                    const cb = this.querySelector('input[type=checkbox]');
-                    cb.checked = !cb.checked;
-                    this.classList.toggle('selected', cb.checked);
-                });
-            });
-
-            // ═══════════════════════════
-            //  HTML editor
-            // ═══════════════════════════
-            let lastCursorPos = 0;
-            const htmlEditor = document.getElementById('about-platform-editor');
-
-            htmlEditor.addEventListener('click', () => {
-                lastCursorPos = htmlEditor.selectionStart;
-            });
-            htmlEditor.addEventListener('keyup', () => {
-                lastCursorPos = htmlEditor.selectionStart;
-            });
-
-            function insertTag(tag) {
-                const textarea = htmlEditor;
-                const pos = textarea.selectionStart !== textarea.selectionEnd ?
-                    {
-                        start: textarea.selectionStart,
-                        end: textarea.selectionEnd
-                    } :
-                    {
-                        start: lastCursorPos,
-                        end: lastCursorPos
-                    };
-
-                const selected = textarea.value.substring(pos.start, pos.end);
-                let insertion = '';
-
-                const tagMap = {
-                    'h2': `<h2>${selected || 'تیتر اصلی'}</h2>`,
-                    'h3': `<h3>${selected || 'زیرتیتر'}</h3>`,
-                    'p': `<p>${selected || 'پاراگراف جدید...'}</p>`,
-                    'strong': `<strong>${selected || 'متن بولد'}</strong>`,
-                    'em': `<em>${selected || 'متن ایتالیک'}</em>`,
-                    'ul-li': `<ul>\n  <li>مورد اول</li>\n  <li>مورد دوم</li>\n</ul>`,
-                    'br': `<br>`,
-                    'hr': `<hr>`,
-                    'span-highlight': `<span style="background:#fff3cd;padding:2px 6px;border-radius:3px">${selected || 'متن هایلایت'}</span>`,
-                };
-
-                insertion = tagMap[tag] || `<${tag}>${selected}</${tag}>`;
-
-                const before = textarea.value.substring(0, pos.start);
-                const after = textarea.value.substring(pos.end);
-                textarea.value = before + insertion + after;
-                textarea.focus();
-                const newPos = pos.start + insertion.length;
-                textarea.setSelectionRange(newPos, newPos);
-                updateHtmlPreview();
-                Logger.debug(`تگ درج شد: <${tag}>`);
-            }
-
-            function updateHtmlPreview() {
-                const val = htmlEditor.value;
-                const preview = document.getElementById('about-platform-preview');
-                if (!val.trim()) {
-                    preview.innerHTML =
-                        '<span style="color:var(--muted);font-size:12px">متن خود را تایپ کنید تا پیش‌نمایش نمایش داده شود...</span>';
-                    return;
-                }
-                // Sanitize: allow only safe tags
-                const allowed = ['h2', 'h3', 'h4', 'p', 'strong', 'em', 'ul', 'ol', 'li', 'br', 'hr', 'span', 'b', 'i',
-                    'u'
-                ];
-                preview.innerHTML = val; // Show as-is (DOMPurify recommended in production)
-            }
-
-            // ═══════════════════════════
-            //  Dynamic lists
-            // ═══════════════════════════
-            function mkRemove(fn) {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'remove-btn';
-                btn.innerHTML = '×';
-                btn.onclick = function () {
-                    this.closest('.dyn-item').remove();
-                    fn && fn();
-                };
-                return btn;
-            }
-
-            // — FAQ —
-            let faqIdx = 0;
-
-            function addFaq() {
-                const list = document.getElementById('faq-list');
-                const idx = faqIdx++;
-                const item = document.createElement('div');
-                item.className = 'dyn-item';
-                item.innerHTML = `
-    <div class="row row-1" style="margin-bottom:8px">
-      <div class="field"><label>پرسش</label>
-        <input type="text" name="faq_question_${idx}" placeholder="سوال کاربران...">
+      <div class="row-fields row-fields-1">
+        <div style="display:flex;flex-wrap:wrap;gap:16px">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+            <input type="checkbox" name="boost"> آگهی پیشرفته
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+            <input type="checkbox" name="premier"> آگهی برتر
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+            <input type="checkbox" name="is_verified"> اطلاعات تأیید شده
+          </label>
+        </div>
       </div>
     </div>
-    <div class="row row-1">
-      <div class="field"><label>پاسخ</label>
-        <textarea name="faq_answer_${idx}" rows="2" placeholder="پاسخ شما..."></textarea>
-      </div>
-    </div>
-    <input type="hidden" name="faq_order_${idx}" value="${idx}">
-  `;
-                item.appendChild(mkRemove());
-                list.appendChild(item);
-                Logger.debug(`پرسش و پاسخ #${idx+1} اضافه شد`);
-            }
+  </div>
 
-            // — Expenses —
-            let expIdx = 0;
+  <div class="nav-bar">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">→ مرحله قبل</button>
+    <button type="button" class="btn btn-success" id="submit-btn" onclick="submitForm()">💾 ثبت نهایی آگهی</button>
+  </div>
+</div><!-- /step-7 -->
 
-            function addExpense() {
-                const list = document.getElementById('expenses-list');
-                const idx = expIdx++;
-                const item = document.createElement('div');
-                item.className = 'dyn-item';
-                item.innerHTML = `
-    <div class="row row-3">
-      <div class="field"><label>نام هزینه</label><input type="text" name="exp_name_${idx}" placeholder="مثال: هاست، نیروی انسانی..."></div>
-      <div class="field"><label>مبلغ (تومان)</label><input type="number" name="exp_amount_${idx}" min="0" placeholder="0"></div>
-      <div class="field"><label>دوره</label>
-        <select name="exp_period_${idx}">
-          <option value="monthly">ماهانه</option>
-          <option value="yearly">سالانه</option>
-          <option value="one_time">یکبار</option>
-        </select>
-      </div>
-    </div>
-  `;
-                item.appendChild(mkRemove());
-                list.appendChild(item);
-                Logger.debug(`هزینه #${idx+1} اضافه شد`);
-            }
+</form>
+</div><!-- /form-col -->
+</div>
+<script>
+// ═══════════════════════════
+//  Toast
+// ═══════════════════════════
+function toast(msg, type, ms) {
+  type = type || 'info';
+  ms = ms || 4000;
+  var wrap = document.getElementById('toast-wrap');
+  var t = document.createElement('div');
+  t.className = 'toast t-' + type;
+  t.textContent = msg;
+  wrap.appendChild(t);
+  setTimeout(function() {
+    t.style.opacity = '0';
+    t.style.transition = 'opacity .3s';
+    setTimeout(function() { t.remove(); }, 300);
+  }, ms);
+}
 
-            // — Sale includes —
-            let siIdx = 0;
+// ═══════════════════════════
+//  Step management
+// ═══════════════════════════
+var TOTAL_STEPS = 7;
+var currentStep = 1;
 
-            function addSaleInclude() {
-                const list = document.getElementById('sale-includes-list');
-                const idx = siIdx++;
-                const item = document.createElement('div');
-                item.className = 'dyn-item';
-                item.innerHTML =
-                    `<div class="field"><label>نام دارایی</label><input type="text" name="sale_include_${idx}" placeholder="مثال: سورس کد، دامنه، اکانت Google Ads..."></div>`;
-                item.appendChild(mkRemove());
-                list.appendChild(item);
-            }
+function goStep(n) {
+  if (n < 1 || n > TOTAL_STEPS) return;
+  document.querySelectorAll('.step-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById('step-' + n).classList.add('active');
+  document.querySelectorAll('.step-item').forEach(function(el, i) {
+    var s = i + 1;
+    el.classList.remove('active', 'done');
+    if (s === n) el.classList.add('active');
+    else if (s < n) el.classList.add('done');
+  });
+  currentStep = n;
+  document.getElementById('top-step-label').textContent = 'مرحله ' + n + ' از ' + TOTAL_STEPS;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (n === 7) buildReview();
+}
 
-            // — Licenses —
-            let licIdx = 0;
+function nextStep() {
+  var errs = validateStep(currentStep);
+  if (errs.length) {
+    toast('لطفاً تکمیل کنید: ' + errs.join('، '), 'err', 5000);
+    return;
+  }
+  goStep(currentStep + 1);
+}
 
-            function addLicense() {
-                const list = document.getElementById('licenses-list');
-                const idx = licIdx++;
-                const item = document.createElement('div');
-                item.className = 'dyn-item';
-                item.innerHTML =
-                    `<div class="field"><label>نام مجوز</label><input type="text" name="lic_name_${idx}" placeholder="مثال: مجوز تجارت الکترونیک، نماد اعتماد..."></div>`;
-                item.appendChild(mkRemove());
-                list.appendChild(item);
-            }
+function prevStep() { goStep(currentStep - 1); }
 
-            // — Social media —
-            let smIdx = 0;
+// ═══════════════════════════
+//  Validation per step
+// ═══════════════════════════
+function validateStep(n) {
+  var errs = [];
 
-            function addSocial() {
-                const list = document.getElementById('social-list');
-                const idx = smIdx++;
-                const item = document.createElement('div');
-                item.className = 'dyn-item';
-                item.innerHTML = `
-    <div class="row row-3">
-      <div class="field"><label>پلتفرم</label>
-        <select name="sm_platform_${idx}">
-          <option value="instagram">اینستاگرام</option>
-          <option value="telegram">تلگرام</option>
-          <option value="twitter">توییتر</option>
-          <option value="linkedin">لینکدین</option>
-          <option value="youtube">یوتیوب</option>
-          <option value="github">گیت‌هاب</option>
-          <option value="facebook">فیسبوک</option>
-          <option value="other">سایر</option>
-        </select>
-      </div>
-      <div class="field"><label>تعداد فالوور</label><input type="text" name="sm_followers_${idx}" placeholder="مثال: ۱۲,۵۰۰"></div>
-      <div class="field"><label>لینک</label><input type="url" name="sm_url_${idx}" placeholder="https://" style="direction:ltr;text-align:left"></div>
-    </div>
-  `;
-                item.appendChild(mkRemove());
-                list.appendChild(item);
-                Logger.debug(`رسانه اجتماعی #${idx+1} اضافه شد`);
-            }
+  function checkField(id, label) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var ok = el.value && el.value.trim();
+    if (!ok) {
+      errs.push(label);
+      el.classList.add('err');
+    } else {
+      el.classList.remove('err');
+    }
+    var errId = 'e-' + id.replace('f-', '');
+    var em = document.getElementById(errId);
+    if (em) em.style.display = ok ? 'none' : 'block';
+  }
 
-            // — Income proofs —
-            let ipIdx = 0;
+  if (n === 1) {
+    checkField('f-title', 'عنوان');
+    checkField('f-areas', 'حوزه فعالیت');
+    checkField('f-sale-type', 'نوع فروش');
+    var img = document.getElementById('f-main-image');
+    if (!img.files.length) {
+      errs.push('تصویر اصلی');
+      document.getElementById('e-main-image').style.display = 'block';
+    } else {
+      document.getElementById('e-main-image').style.display = 'none';
+    }
+  }
+  if (n === 2) {
+    var p = document.getElementById('f-price');
+    if (!p.value || parseInt(p.value) <= 0) {
+      errs.push('قیمت');
+      p.classList.add('err');
+      document.getElementById('e-price').style.display = 'block';
+    } else {
+      p.classList.remove('err');
+      document.getElementById('e-price').style.display = 'none';
+    }
+  }
+  if (n === 3) {
+    checkField('f-description', 'توضیحات');
+  }
+  return errs;
+}
 
-            function addIncomeProof() {
-                const list = document.getElementById('income-proof-list');
-                const idx = ipIdx++;
-                const item = document.createElement('div');
-                item.className = 'dyn-item';
-                item.innerHTML = `
-    <div class="row row-2">
-      <div class="field"><label>تصویر اثبات</label><input type="file" name="income_proof_img_${idx}" accept="image/*"></div>
-      <div class="field"><label>توضیحات</label><textarea name="income_proof_desc_${idx}" rows="2" placeholder="توضیح تصویر..."></textarea></div>
-    </div>
-  `;
-                item.appendChild(mkRemove());
-                list.appendChild(item);
-                Logger.debug(`اثبات درآمد #${idx+1} اضافه شد`);
-            }
+// ═══════════════════════════
+//  Conditional sale type
+// ═══════════════════════════
+var saleTypePanels = ['full_ownership', 'partial_ownership', 'license', 'revenue_share', 'brand'];
 
-            // — Attachments —
-            let attIdx = 0;
+document.getElementById('f-sale-type').addEventListener('change', function() {
+  var val = this.value;
+  saleTypePanels.forEach(function(id) {
+    var el = document.getElementById('cond-' + id);
+    if (el) el.classList.toggle('show', val === id);
+  });
+});
 
-            function addAttachment() {
-                const list = document.getElementById('attachments-list');
-                const idx = attIdx++;
-                const item = document.createElement('div');
-                item.className = 'dyn-item';
-                item.innerHTML =
-                    `<div class="field"><label>فایل پیوست</label><input type="file" name="attachment_${idx}"></div>`;
-                item.appendChild(mkRemove());
-                list.appendChild(item);
-            }
+document.getElementById('f-lic-dur-type').addEventListener('change', function() {
+  var mf = document.getElementById('lic-months-field');
+  if (mf) mf.style.display = this.value === 'limited' ? 'block' : 'none';
+});
 
-            // — Services —
-            let srvIdx = 0;
+// ═══════════════════════════
+//  Image preview
+// ═══════════════════════════
+document.getElementById('f-main-image').addEventListener('change', function() {
+  var file = this.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) {
+    toast('حجم فایل بیش از ۵ مگابایت', 'err');
+    this.value = '';
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = document.getElementById('main-img-preview');
+    img.src = e.target.result;
+    img.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+});
 
-            function addService() {
-                const list = document.getElementById('services-list');
-                const idx = srvIdx++;
-                const item = document.createElement('div');
-                item.className = 'dyn-item';
-                item.innerHTML =
-                    `<div class="field"><label>نام خدمت</label><input type="text" name="service_${idx}" placeholder="مثال: سرویس ایمیل مارکتینگ، CDN..."></div>`;
-                item.appendChild(mkRemove());
-                list.appendChild(item);
-            }
+// ═══════════════════════════
+//  Tech chips toggle
+// ═══════════════════════════
+document.querySelectorAll('.tech-chip').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    var cb = this.querySelector('input[type=checkbox]');
+    cb.checked = !cb.checked;
+    this.classList.toggle('selected', cb.checked);
+  });
+});
 
-            // — Traffic sources —
-            let trfIdx = 0;
-            const TRAFFIC_COLORS = ['#4c6ef5', '#f76707', '#2f9e44', '#e03131', '#ae3ec9', '#0c8599', '#862e9c'];
+document.querySelectorAll('.method-item').forEach(function(item) {
+  item.addEventListener('click', function() {
+    var cb = this.querySelector('input[type=checkbox]');
+    cb.checked = !cb.checked;
+    this.classList.toggle('selected', cb.checked);
+  });
+});
 
-            function addTraffic() {
-                const list = document.getElementById('traffic-list');
-                const idx = trfIdx++;
-                const item = document.createElement('div');
-                item.className = 'dyn-item';
-                item.innerHTML = `
-    <div class="row row-2">
-      <div class="field"><label>منبع</label>
-        <select name="trf_source_${idx}">
-          <option value="organic_search">جستجوی ارگانیک (SEO)</option>
-          <option value="direct">ترافیک مستقیم</option>
-          <option value="social_media">شبکه‌های اجتماعی</option>
-          <option value="referral">ارجاعی</option>
-          <option value="paid_ads">تبلیغات پولی</option>
-          <option value="email_sms">ایمیل مارکتینگ</option>
-          <option value="push_notification">پوش نوتیفیکیشن</option>
-        </select>
-      </div>
-      <div class="field"><label>درصد</label>
-        <input type="number" name="trf_pct_${idx}" min="0" max="100" placeholder="0" oninput="updateTrafficTotal()">
-      </div>
-    </div>
-  `;
-                item.appendChild(mkRemove(updateTrafficTotal));
-                list.appendChild(item);
-                Logger.debug(`منبع ترافیک #${idx+1} اضافه شد`);
-            }
+// ═══════════════════════════
+//  HTML editor
+// ═══════════════════════════
+var lastCursorPos = 0;
+var htmlEditor = document.getElementById('about-platform-editor');
 
-            function updateTrafficTotal() {
-                const inputs = document.querySelectorAll('[name^="trf_pct_"]');
-                let total = 0;
-                inputs.forEach(i => {
-                    total += parseInt(i.value) || 0;
-                });
-                const display = document.getElementById('traffic-total-display');
-                display.textContent = `جمع: ${total}%`;
-                display.style.color = total === 100 ? 'var(--success)' : total > 100 ? 'var(--error)' : 'var(--warn)';
-            }
+htmlEditor.addEventListener('click', function() { lastCursorPos = htmlEditor.selectionStart; });
+htmlEditor.addEventListener('keyup', function() { lastCursorPos = htmlEditor.selectionStart; });
 
-            // — Chart points —
-            let incomeIdx = 0;
+function insertTag(tag) {
+  var textarea = htmlEditor;
+  var start = textarea.selectionStart;
+  var end = textarea.selectionEnd;
+  var pos = (start !== end) ? { start: start, end: end } : { start: lastCursorPos, end: lastCursorPos };
+  var selected = textarea.value.substring(pos.start, pos.end);
 
-            function addIncomePoint() {
-                const list = document.getElementById('income-points');
-                const idx = incomeIdx++;
-                const row = document.createElement('div');
-                row.className = 'chart-point-row';
-                row.innerHTML = `
-    <input type="date" name="income_date_${idx}">
-    <input type="number" name="income_val_${idx}" min="0" placeholder="0">
-    <button type="button" class="chart-remove" onclick="this.closest('.chart-point-row').remove();Logger.debug('نقطه درآمد حذف شد')">×</button>
-  `;
-                list.appendChild(row);
-                Logger.debug(`نقطه درآمد #${idx+1} اضافه شد`);
-            }
+  var tagMap = {
+    'h2': '<h2>' + (selected || 'تیتر اصلی') + '</h2>',
+    'h3': '<h3>' + (selected || 'زیرتیتر') + '</h3>',
+    'p':  '<p>' + (selected || 'پاراگراف جدید...') + '</p>',
+    'strong': '<strong>' + (selected || 'متن بولد') + '</strong>',
+    'em': '<em>' + (selected || 'متن ایتالیک') + '</em>',
+    'ul-li': '<ul>\n  <li>مورد اول</li>\n  <li>مورد دوم</li>\n</ul>',
+    'br': '<br>',
+    'hr': '<hr>',
+    'span-highlight': '<span style="background:#fff3cd;padding:2px 6px;border-radius:3px">' + (selected || 'متن هایلایت') + '</span>'
+  };
 
-            let viewsIdx = 0;
+  var insertion = tagMap[tag] || ('<' + tag + '>' + selected + '</' + tag + '>');
+  var before = textarea.value.substring(0, pos.start);
+  var after  = textarea.value.substring(pos.end);
+  textarea.value = before + insertion + after;
+  textarea.focus();
+  var newPos = pos.start + insertion.length;
+  textarea.setSelectionRange(newPos, newPos);
+  updateHtmlPreview();
+}
 
-            function addViewPoint() {
-                const list = document.getElementById('views-points');
-                const idx = viewsIdx++;
-                const row = document.createElement('div');
-                row.className = 'chart-point-row';
-                row.innerHTML = `
-    <input type="date" name="views_date_${idx}">
-    <input type="number" name="views_val_${idx}" min="0" placeholder="0">
-    <button type="button" class="chart-remove" onclick="this.closest('.chart-point-row').remove();Logger.debug('نقطه بازدید حذف شد')">×</button>
-  `;
-                list.appendChild(row);
-                Logger.debug(`نقطه بازدید #${idx+1} اضافه شد`);
-            }
+function updateHtmlPreview() {
+  var val = htmlEditor.value;
+  var preview = document.getElementById('about-platform-preview');
+  if (!val.trim()) {
+    preview.innerHTML = '<span style="color:var(--muted);font-size:12px">متن خود را تایپ کنید تا پیش‌نمایش نمایش داده شود...</span>';
+    return;
+  }
+  preview.innerHTML = val;
+}
 
-            // ═══════════════════════════
-            //  Review builder
-            // ═══════════════════════════
-            function buildReview() {
-                const fd = new FormData(document.getElementById('main-form'));
-                const title = fd.get('title') || '—';
-                const price = fd.get('price') ? parseInt(fd.get('price')).toLocaleString('fa') : '—';
-                const areas = document.getElementById('f-areas').selectedOptions[0] ? .text || '—';
-                const saleType = document.getElementById('f-sale-type').selectedOptions[0] ? .text || '—';
-                const imgFile = document.getElementById('f-main-image').files[0];
-                const faqCount = document.querySelectorAll('[name^="faq_question_"]').length;
-                const expCount = document.querySelectorAll('[name^="exp_name_"]').length;
-                const incCount = document.querySelectorAll('[name^="income_date_"]').length;
-                const vwCount = document.querySelectorAll('[name^="views_date_"]').length;
-                const smCount = document.querySelectorAll('[name^="sm_platform_"]').length;
+// ═══════════════════════════
+//  Dynamic lists
+// ═══════════════════════════
+function mkRemove(callback) {
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'remove-btn';
+  btn.innerHTML = '×';
+  btn.onclick = function() {
+    this.closest('.dyn-item').remove();
+    if (callback) callback();
+  };
+  return btn;
+}
 
-                document.getElementById('review-content').innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">عنوان</span><div style="font-weight:700;margin-top:2px">${title}</div></div>
-      <div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">قیمت</span><div style="font-weight:700;margin-top:2px">${price} تومان</div></div>
-      <div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">حوزه</span><div style="font-weight:700;margin-top:2px">${areas}</div></div>
-      <div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">نوع فروش</span><div style="font-weight:700;margin-top:2px">${saleType}</div></div>
-      <div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">تصویر</span><div style="font-weight:700;margin-top:2px">${imgFile ? imgFile.name : '—'}</div></div>
-      <div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">پرسش و پاسخ</span><div style="font-weight:700;margin-top:2px">${faqCount} مورد</div></div>
-      <div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">هزینه‌ها</span><div style="font-weight:700;margin-top:2px">${expCount} مورد</div></div>
-      <div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">رسانه اجتماعی</span><div style="font-weight:700;margin-top:2px">${smCount} مورد</div></div>
-      <div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">نقاط درآمد</span><div style="font-weight:700;margin-top:2px">${incCount} نقطه</div></div>
-      <div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">نقاط بازدید</span><div style="font-weight:700;margin-top:2px">${vwCount} نقطه</div></div>
-    </div>
-  `;
-                Logger.info('خلاصه مرور آگهی آماده شد');
-            }
+// — FAQ —
+var faqIdx = 0;
+function addFaq() {
+  var list = document.getElementById('faq-list');
+  var idx = faqIdx++;
+  var item = document.createElement('div');
+  item.className = 'dyn-item';
+  item.innerHTML =
+    '<div class="row-fields row-fields-1" style="margin-bottom:8px">' +
+      '<div class="field"><label>پرسش</label>' +
+        '<input type="text" name="faq_question_' + idx + '" placeholder="سوال کاربران...">' +
+      '</div>' +
+    '</div>' +
+    '<div class="row-fields row-fields-1">' +
+      '<div class="field"><label>پاسخ</label>' +
+        '<textarea name="faq_answer_' + idx + '" rows="2" placeholder="پاسخ شما..."></textarea>' +
+      '</div>' +
+    '</div>' +
+    '<input type="hidden" name="faq_order_' + idx + '" value="' + idx + '">';
+  item.appendChild(mkRemove());
+  list.appendChild(item);
+}
 
-            // ═══════════════════════════
-            //  Submit
-            // ═══════════════════════════
-            async function submitForm() {
-                // Final validation pass over all steps
-                const allErrs = [];
-                for (let s = 1; s <= 6; s++) {
-                    const e = validateStep(s);
-                    if (e.length) allErrs.push(`مرحله ${s}: ${e.join('، ')}`);
-                }
-                if (allErrs.length) {
-                    Logger.error(`اعتبارسنجی نهایی ناموفق:\n${allErrs.join('\n')}`);
-                    toast('لطفاً مراحل قبل را کامل کنید', 'err', 5000);
-                    setBadge('خطا', 'badge-err');
-                    return;
-                }
+// — Expenses —
+var expIdx = 0;
+function addExpense() {
+  var list = document.getElementById('expenses-list');
+  var idx = expIdx++;
+  var item = document.createElement('div');
+  item.className = 'dyn-item';
+  item.innerHTML =
+    '<div class="row-fields row-fields-3">' +
+      '<div class="field"><label>نام هزینه</label><input type="text" name="exp_name_' + idx + '" placeholder="مثال: هاست، نیروی انسانی..."></div>' +
+      '<div class="field"><label>مبلغ (تومان)</label><input type="number" name="exp_amount_' + idx + '" min="0" placeholder="0"></div>' +
+      '<div class="field"><label>دوره</label>' +
+        '<select name="exp_period_' + idx + '">' +
+          '<option value="monthly">ماهانه</option>' +
+          '<option value="yearly">سالانه</option>' +
+          '<option value="one_time">یکبار</option>' +
+        '</select>' +
+      '</div>' +
+    '</div>';
+  item.appendChild(mkRemove());
+  list.appendChild(item);
+}
 
-                const t0 = performance.now();
-                Logger.info('═══════════ ارسال فرم ═══════════');
-                setBadge('در حال ارسال', 'badge-info');
-                document.getElementById('submit-btn').disabled = true;
-                document.getElementById('submit-btn').textContent = '⏳ در حال ارسال...';
-                showOverlay('در حال ارسال آگهی...');
+// — Sale includes —
+var siIdx = 0;
+function addSaleInclude() {
+  var list = document.getElementById('sale-includes-list');
+  var idx = siIdx++;
+  var item = document.createElement('div');
+  item.className = 'dyn-item';
+  item.innerHTML = '<div class="field"><label>نام دارایی</label><input type="text" name="sale_include_' + idx + '" placeholder="مثال: سورس کد، دامنه، اکانت Google Ads..."></div>';
+  item.appendChild(mkRemove());
+  list.appendChild(item);
+}
 
-                const form = document.getElementById('main-form');
-                const fd = new FormData(form);
+// — Licenses —
+var licIdx = 0;
+function addLicense() {
+  var list = document.getElementById('licenses-list');
+  var idx = licIdx++;
+  var item = document.createElement('div');
+  item.className = 'dyn-item';
+  item.innerHTML = '<div class="field"><label>نام مجوز</label><input type="text" name="lic_name_' + idx + '" placeholder="مثال: مجوز تجارت الکترونیک، نماد اعتماد..."></div>';
+  item.appendChild(mkRemove());
+  list.appendChild(item);
+}
 
-                // Collect dynamic items counts
-                fd.append('faq_count', faqIdx);
-                fd.append('expense_count', expIdx);
-                fd.append('income_point_count', incomeIdx);
-                fd.append('views_point_count', viewsIdx);
-                fd.append('social_count', smIdx);
-                fd.append('income_proof_count', ipIdx);
-                fd.append('sale_include_count', siIdx);
-                fd.append('license_item_count', licIdx);
-                fd.append('service_count', srvIdx);
-                fd.append('traffic_count', trfIdx);
+// — Social media —
+var smIdx = 0;
+function addSocial() {
+  var list = document.getElementById('social-list');
+  var idx = smIdx++;
+  var item = document.createElement('div');
+  item.className = 'dyn-item';
+  item.innerHTML =
+    '<div class="row-fields row-fields-3">' +
+      '<div class="field"><label>پلتفرم</label>' +
+        '<select name="sm_platform_' + idx + '">' +
+          '<option value="instagram">اینستاگرام</option>' +
+          '<option value="telegram">تلگرام</option>' +
+          '<option value="twitter">توییتر</option>' +
+          '<option value="linkedin">لینکدین</option>' +
+          '<option value="youtube">یوتیوب</option>' +
+          '<option value="github">گیت‌هاب</option>' +
+          '<option value="facebook">فیسبوک</option>' +
+          '<option value="other">سایر</option>' +
+        '</select>' +
+      '</div>' +
+      '<div class="field"><label>تعداد فالوور</label><input type="text" name="sm_followers_' + idx + '" placeholder="مثال: ۱۲,۵۰۰"></div>' +
+      '<div class="field"><label>لینک</label><input type="url" name="sm_url_' + idx + '" placeholder="https://" style="direction:ltr;text-align:left"></div>' +
+    '</div>';
+  item.appendChild(mkRemove());
+  list.appendChild(item);
+}
 
-                // Tech chips
-                ['tech_cms', 'tech_backend', 'tech_frontend', 'tech_db', 'tech_infra', 'tech_mobile', 'tech_third']
-                .forEach(name => {
-                    fd.delete(name); // remove pre-filled
-                    document.querySelectorAll(`input[name="${name}"]:checked`).forEach(cb => fd.append(name,
-                        cb.value));
-                });
+// — Income proofs —
+var ipIdx = 0;
+function addIncomeProof() {
+  var list = document.getElementById('income-proof-list');
+  var idx = ipIdx++;
+  var item = document.createElement('div');
+  item.className = 'dyn-item';
+  item.innerHTML =
+    '<div class="row-fields row-fields-2">' +
+      '<div class="field"><label>تصویر اثبات</label><input type="file" name="income_proof_img_' + idx + '" accept="image/*"></div>' +
+      '<div class="field"><label>توضیحات</label><textarea name="income_proof_desc_' + idx + '" rows="2" placeholder="توضیح تصویر..."></textarea></div>' +
+    '</div>';
+  item.appendChild(mkRemove());
+  list.appendChild(item);
+}
 
-                Logger.debug(`فیلدهای FormData: ${[...fd.keys()].length} فیلد`);
-                Logger.info(`عنوان: "${fd.get('title')}"`);
-                Logger.info(`قیمت: ${parseInt(fd.get('price')||0).toLocaleString('fa')} تومان`);
+// — Attachments —
+var attIdx = 0;
+function addAttachment() {
+  var list = document.getElementById('attachments-list');
+  var idx = attIdx++;
+  var item = document.createElement('div');
+  item.className = 'dyn-item';
+  item.innerHTML = '<div class="field"><label>فایل پیوست</label><input type="file" name="attachment_' + idx + '"></div>';
+  item.appendChild(mkRemove());
+  list.appendChild(item);
+}
 
-                try {
-                    const resp = await fetch(window.location.href, {
-                        method: 'POST',
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        body: fd,
-                    });
+// — Services —
+var srvIdx = 0;
+function addService() {
+  var list = document.getElementById('services-list');
+  var idx = srvIdx++;
+  var item = document.createElement('div');
+  item.className = 'dyn-item';
+  item.innerHTML = '<div class="field"><label>نام خدمت</label><input type="text" name="service_' + idx + '" placeholder="مثال: سرویس ایمیل مارکتینگ، CDN..."></div>';
+  item.appendChild(mkRemove());
+  list.appendChild(item);
+}
 
-                    const elapsed = (performance.now() - t0).toFixed(0);
-                    document.getElementById('s-http').textContent = `${resp.status} (${elapsed}ms)`;
-                    document.getElementById('s-time').textContent = `${elapsed}ms`;
-                    Logger.info(`پاسخ HTTP: ${resp.status} ${resp.statusText} — ${elapsed}ms`);
+// — Traffic sources —
+var trfIdx = 0;
+function addTraffic() {
+  var list = document.getElementById('traffic-list');
+  var idx = trfIdx++;
+  var item = document.createElement('div');
+  item.className = 'dyn-item';
+  item.innerHTML =
+    '<div class="row-fields row-fields-2">' +
+      '<div class="field"><label>منبع</label>' +
+        '<select name="trf_source_' + idx + '">' +
+          '<option value="organic_search">جستجوی ارگانیک (SEO)</option>' +
+          '<option value="direct">ترافیک مستقیم</option>' +
+          '<option value="social_media">شبکه‌های اجتماعی</option>' +
+          '<option value="referral">ارجاعی</option>' +
+          '<option value="paid_ads">تبلیغات پولی</option>' +
+          '<option value="email_sms">ایمیل مارکتینگ</option>' +
+          '<option value="push_notification">پوش نوتیفیکیشن</option>' +
+        '</select>' +
+      '</div>' +
+      '<div class="field"><label>درصد</label>' +
+        '<input type="number" name="trf_pct_' + idx + '" min="0" max="100" placeholder="0" oninput="updateTrafficTotal()">' +
+      '</div>' +
+    '</div>';
+  item.appendChild(mkRemove(updateTrafficTotal));
+  list.appendChild(item);
+}
 
-                    const ct = resp.headers.get('Content-Type') || '';
-                    Logger.debug(`Content-Type: ${ct}`);
+function updateTrafficTotal() {
+  var inputs = document.querySelectorAll('[name^="trf_pct_"]');
+  var total = 0;
+  inputs.forEach(function(i) { total += parseInt(i.value) || 0; });
+  var display = document.getElementById('traffic-total-display');
+  display.textContent = 'جمع: ' + total + '%';
+  display.style.color = total === 100 ? 'var(--success)' : total > 100 ? 'var(--error)' : 'var(--warn)';
+}
 
-                    if (ct.includes('application/json')) {
-                        const data = await resp.json();
-                        Logger.debug(`JSON: ${JSON.stringify(data)}`);
+// — Chart points —
+var incomeIdx = 0;
+function addIncomePoint() {
+  var list = document.getElementById('income-points');
+  var idx = incomeIdx++;
+  var row = document.createElement('div');
+  row.className = 'chart-point-row';
+  row.innerHTML =
+    '<input type="date" name="income_date_' + idx + '">' +
+    '<input type="number" name="income_val_' + idx + '" min="0" placeholder="0">' +
+    '<button type="button" class="chart-remove" onclick="this.closest(\'.chart-point-row\').remove()">×</button>';
+  list.appendChild(row-fields);
+}
 
-                        if (resp.ok && (data.success || data.id)) {
-                            const id = data.id || '—';
-                            document.getElementById('s-id').textContent = id;
-                            setBadge('ثبت موفق ✓', 'badge-ok');
-                            Logger.ok(`آگهی ثبت شد — ID: ${id}`);
-                            toast('آگهی با موفقیت ثبت شد!', 'ok');
-                            if (data.redirect) {
-                                Logger.info(`ریدایرکت: ${data.redirect}`);
-                                setTimeout(() => {
-                                    window.location.href = data.redirect;
-                                }, 1500);
-                            }
-                        } else {
-                            setBadge('خطا', 'badge-err');
-                            const errs = data.errors || data.error || 'خطای ناشناخته';
-                            Logger.error(`خطای سرور: ${JSON.stringify(errs)}`);
-                            showErrors(typeof errs === 'object' ? errs : {
-                                خطا: errs
-                            });
-                            toast('خطا در ثبت آگهی', 'err');
-                        }
+var viewsIdx = 0;
+function addViewPoint() {
+  var list = document.getElementById('views-points');
+  var idx = viewsIdx++;
+  var row = document.createElement('div');
+  row.className = 'chart-point-row';
+  row.innerHTML =
+    '<input type="date" name="views_date_' + idx + '">' +
+    '<input type="number" name="views_val_' + idx + '" min="0" placeholder="0">' +
+    '<button type="button" class="chart-remove" onclick="this.closest(\'.chart-point-row\').remove()">×</button>';
+  list.appendChild(row);
+}
 
-                    } else if (resp.redirected || resp.ok) {
-                        setBadge('ثبت موفق ✓', 'badge-ok');
-                        Logger.ok('ریدایرکت / پاسخ موفق دریافت شد');
-                        toast('آگهی با موفقیت ثبت شد!', 'ok');
-                        if (resp.redirected) {
-                            Logger.info(`مقصد: ${resp.url}`);
-                            window.location.href = resp.url;
-                        } else {
-                            const html = await resp.text();
-                            const doc = new DOMParser().parseFromString(html, 'text/html');
-                            const erEls = doc.querySelectorAll('.errorlist li, .alert-danger, .field-error');
-                            if (erEls.length) {
-                                setBadge('خطای فرم', 'badge-err');
-                                const msgs = [...erEls].map(e => e.textContent.trim()).filter(Boolean);
-                                msgs.forEach(m => Logger.error(`خطای فرم: ${m}`));
-                                showErrors({
-                                    'خطاهای فرم': msgs.join(' | ')
-                                });
-                                toast('فرم دارای خطا است', 'err');
-                            }
-                        }
-                    } else {
-                        setBadge('خطای سرور', 'badge-err');
-                        Logger.error(`HTTP ${resp.status}: ${resp.statusText}`);
-                        if (resp.status === 403) Logger.warn('احتمال مشکل CSRF');
-                        if (resp.status === 500) Logger.error('خطای داخلی — لاگ سرور را بررسی کنید');
-                        toast(`خطای سرور: ${resp.status}`, 'err');
-                    }
+// ═══════════════════════════
+//  Review builder
+// ═══════════════════════════
+function buildReview() {
+  var fd = new FormData(document.getElementById('main-form'));
+  var title = fd.get('title') || '—';
+  var priceRaw = fd.get('price');
+  var price = priceRaw ? parseInt(priceRaw).toLocaleString('fa') : '—';
+  var areasEl = document.getElementById('f-areas');
+  var areas = areasEl.options[areasEl.selectedIndex] ? areasEl.options[areasEl.selectedIndex].text : '—';
+  var saleEl = document.getElementById('f-sale-type');
+  var saleType = saleEl.options[saleEl.selectedIndex] ? saleEl.options[saleEl.selectedIndex].text : '—';
+  var imgFile = document.getElementById('f-main-image').files[0];
+  var faqCount = document.querySelectorAll('[name^="faq_question_"]').length;
+  var expCount = document.querySelectorAll('[name^="exp_name_"]').length;
+  var incCount = document.querySelectorAll('[name^="income_date_"]').length;
+  var vwCount  = document.querySelectorAll('[name^="views_date_"]').length;
+  var smCount  = document.querySelectorAll('[name^="sm_platform_"]').length;
 
-                } catch (err) {
-                    setBadge('خطای شبکه', 'badge-err');
-                    Logger.error(`خطای شبکه: ${err.message}`);
-                    Logger.debug(`Stack: ${err.stack}`);
-                    document.getElementById('s-http').textContent = 'خطای شبکه';
-                    toast('خطای اتصال به سرور', 'err');
-                } finally {
-                    hideOverlay();
-                    document.getElementById('submit-btn').disabled = false;
-                    document.getElementById('submit-btn').textContent = '💾 ثبت نهایی آگهی';
-                }
-            }
+  document.getElementById('review-content').innerHTML =
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
+      '<div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">عنوان</span><div style="font-weight:700;margin-top:2px">' + title + '</div></div>' +
+      '<div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">قیمت</span><div style="font-weight:700;margin-top:2px">' + price + ' تومان</div></div>' +
+      '<div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">حوزه</span><div style="font-weight:700;margin-top:2px">' + areas + '</div></div>' +
+      '<div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">نوع فروش</span><div style="font-weight:700;margin-top:2px">' + saleType + '</div></div>' +
+      '<div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">تصویر</span><div style="font-weight:700;margin-top:2px">' + (imgFile ? imgFile.name : '—') + '</div></div>' +
+      '<div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">پرسش و پاسخ</span><div style="font-weight:700;margin-top:2px">' + faqCount + ' مورد</div></div>' +
+      '<div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">هزینه‌ها</span><div style="font-weight:700;margin-top:2px">' + expCount + ' مورد</div></div>' +
+      '<div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">رسانه اجتماعی</span><div style="font-weight:700;margin-top:2px">' + smCount + ' مورد</div></div>' +
+      '<div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">نقاط درآمد</span><div style="font-weight:700;margin-top:2px">' + incCount + ' نقطه</div></div>' +
+      '<div style="padding:10px;background:#f8f9fb;border-radius:8px"><span style="color:var(--muted);font-size:11px">نقاط بازدید</span><div style="font-weight:700;margin-top:2px">' + vwCount + ' نقطه</div></div>' +
+    '</div>';
+}
 
-            function setBadge(label, cls) {
-                const b = document.getElementById('s-form-badge');
-                b.textContent = label;
-                b.className = `badge ${cls}`;
-            }
+// ═══════════════════════════
+//  Submit
+// ═══════════════════════════
+async function submitForm() {
+  var allErrs = [];
+  for (var s = 1; s <= 6; s++) {
+    var e = validateStep(s);
+    if (e.length) allErrs.push('مرحله ' + s + ': ' + e.join('، '));
+  }
+  if (allErrs.length) {
+    toast('لطفاً مراحل قبل را کامل کنید', 'err', 5000);
+    return;
+  }
 
-            function showOverlay(msg) {
-                document.getElementById('overlay-msg').textContent = msg;
-                document.getElementById('overlay').classList.add('show');
-            }
+  var submitBtn = document.getElementById('submit-btn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = '⏳ در حال ارسال...';
+  showOverlay('در حال ارسال آگهی...');
 
-            function hideOverlay() {
-                document.getElementById('overlay').classList.remove('show');
-            }
+  var form = document.getElementById('main-form');
+  var fd = new FormData(form);
 
-            function showErrors(errs) {
-                const card = document.getElementById('err-card');
-                const list = document.getElementById('err-list');
-                card.style.display = 'block';
-                list.innerHTML = '';
-                Object.entries(errs).forEach(([k, v]) => {
-                    const d = document.createElement('div');
-                    d.className = 'err-item';
-                    d.textContent = typeof v === 'object' ? `${k}: ${JSON.stringify(v)}` : `${k}: ${v}`;
-                    list.appendChild(d);
-                });
-            }
+  fd.append('faq_count', faqIdx);
+  fd.append('expense_count', expIdx);
+  fd.append('income_point_count', incomeIdx);
+  fd.append('views_point_count', viewsIdx);
+  fd.append('social_count', smIdx);
+  fd.append('income_proof_count', ipIdx);
+  fd.append('sale_include_count', siIdx);
+  fd.append('license_item_count', licIdx);
+  fd.append('service_count', srvIdx);
+  fd.append('traffic_count', trfIdx);
+  fd.append('attachment_count', attIdx);
 
-            // ═══════════════════════════
-            //  Boot
-            // ═══════════════════════════
-            Logger.info('فرم ثبت آگهی بارگذاری شد');
-            Logger.debug(`URL: ${window.location.pathname}`);
-            const csrf = document.querySelector('[name=csrfmiddlewaretoken]');
-            Logger.debug(`CSRF: ${csrf?.value ? 'موجود ✓' : 'یافت نشد ✗'}`);
-            Logger.info('آماده دریافت اطلاعات...');
+  ['tech_cms','tech_backend','tech_frontend','tech_db','tech_infra','tech_mobile','tech_third'].forEach(function(name) {
+    fd.delete(name);
+    document.querySelectorAll('input[name="' + name + '"]:checked').forEach(function(cb) {
+      fd.append(name, cb.value);
+    });
+  });
 
-            // Add initial items for convenience
-            addExpense();
-            addFaq();
-            addSocial();
-            addTraffic();
-            addIncomePoint();
-            addViewPoint();
-        </script>
-    </body>
+  try {
+    var resp = await fetch(window.location.href, {
+      method: 'POST',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      body: fd
+    });
 
-    </html>
+    var ct = resp.headers.get('Content-Type') || '';
+
+    if (ct.includes('application/json')) {
+      var data = await resp.json();
+      if (resp.ok && (data.success || data.id)) {
+        toast('آگهی با موفقیت ثبت شد!', 'ok');
+        if (data.redirect) {
+          setTimeout(function() { window.location.href = data.redirect; }, 1500);
+        }
+      } else {
+        var errs = data.errors || data.error || 'خطای ناشناخته';
+        toast('خطا در ثبت آگهی', 'err');
+        showErrors(typeof errs === 'object' ? errs : { خطا: errs });
+      }
+    } else if (resp.redirected || resp.ok) {
+      toast('آگهی با موفقیت ثبت شد!', 'ok');
+      if (resp.redirected) {
+        window.location.href = resp.url;
+      } else {
+        var html = await resp.text();
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var erEls = doc.querySelectorAll('.errorlist li, .alert-danger, .field-error');
+        if (erEls.length) {
+          var msgs = Array.from(erEls).map(function(el) { return el.textContent.trim(); }).filter(Boolean);
+          showErrors({ 'خطاهای فرم': msgs.join(' | ') });
+          toast('فرم دارای خطا است', 'err');
+        }
+      }
+    } else {
+      toast('خطای سرور: ' + resp.status, 'err');
+    }
+  } catch (err) {
+    toast('خطای اتصال به سرور', 'err');
+  } finally {
+    hideOverlay();
+    submitBtn.disabled = false;
+    submitBtn.textContent = '💾 ثبت نهایی آگهی';
+  }
+}
+
+function showOverlay(msg) {
+  document.getElementById('overlay-msg').textContent = msg;
+  document.getElementById('overlay').classList.add('show');
+}
+function hideOverlay() {
+  document.getElementById('overlay').classList.remove('show');
+}
+
+function showErrors(errs) {
+  // نمایش خطاها در صورت نیاز — می‌توانید یک div خطا در قالب اضافه کنید
+  var msg = Object.entries(errs).map(function(entry) {
+    return entry[0] + ': ' + (typeof entry[1] === 'object' ? JSON.stringify(entry[1]) : entry[1]);
+  }).join('\n');
+  toast(msg, 'err', 7000);
+}
+
+// ═══════════════════════════
+//  Boot — add initial items
+// ═══════════════════════════
+addExpense();
+addFaq();
+addSocial();
+addTraffic();
+addIncomePoint();
+addViewPoint();
+</script>
+
+{% endblock %}

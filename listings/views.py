@@ -378,7 +378,6 @@ def listing_create(request):
     if request.method == "GET":
         return render(request, "listings/listing_create.html", {"categories": categories})
 
-    # ── POST ──────────────────────────────────────────────────────────
     is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
 
     def _err(msg, status=400, field_errors=None):
@@ -388,7 +387,6 @@ def listing_create(request):
             if field_errors:
                 payload["errors"] = field_errors
             return JsonResponse(payload, status=status)
-        # For non-AJAX, re-render with error context
         return render(
             request,
             "listings/listing_create.html",
@@ -399,7 +397,6 @@ def listing_create(request):
     p = request.POST
     files = request.FILES
 
-    # ── Required fields ────────────────────────────────────────────────
     field_errors = {}
     title = p.get("title", "").strip()
     description = p.get("description", "").strip()
@@ -427,17 +424,24 @@ def listing_create(request):
     if field_errors:
         return _err("فیلدهای اجباری تکمیل نشده‌اند", field_errors=field_errors)
 
-    # ── Optional fields ────────────────────────────────────────────────
     def _int(val, default=0):
         try:
-            return int(val) if val else default
+            return int(val) if val and str(val).strip() else default
         except (ValueError, TypeError):
             return default
 
-    def _decimal(val):
+    def _decimal(val, decimal_places=0):
         try:
-            return int(val) if val else None
-        except (ValueError, TypeError):
+            if val is None or str(val).strip() == "":
+                return None
+            from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
+            d = Decimal(str(val).strip())
+            if decimal_places == 0:
+                return d.quantize(Decimal("1"))
+            elif decimal_places == 2:
+                return d.quantize(Decimal("0.01"))
+            return d
+        except (ValueError, TypeError, InvalidOperation):
             return None
 
     category_id = _int(p.get("category"), None)
@@ -448,7 +452,6 @@ def listing_create(request):
         except Category.DoesNotExist:
             logger.warning("listing_create: category %s not found", category_id)
 
-    # ── Create Listing ─────────────────────────────────────────────────
     try:
         listing = Listing.objects.create(
             seller=request.user,
@@ -462,14 +465,14 @@ def listing_create(request):
             followers_count=_int(p.get("followers_count")),
             platform_age=_int(p.get("platform_age")),
             monthly_income=_decimal(p.get("monthly_income")),
-            most_like=_decimal(p.get("most_like")),
-            most_view=_decimal(p.get("most_view")),
-            most_comment=_decimal(p.get("most_comment")),
+            # ✅ اصلاح: استفاده از _int به جای _decimal
+            most_like=_int(p.get("most_like")),
+            most_view=_int(p.get("most_view")),
+            most_comment=_int(p.get("most_comment")),
             areas_activity=areas_activity,
             sale_reason=p.get("sale_reason") or None,
             sale_reason_description=p.get("sale_reason_description", "").strip() or None,
             sale_type=p.get("sale_type") or None,
-            # BooleanFields — checkboxes: present = True, absent = False
             is_income=p.get("is_income") == "on",
             suggested_price=p.get("suggested_price") == "on",
             is_private=p.get("is_private") == "on",
@@ -477,25 +480,197 @@ def listing_create(request):
             premier=p.get("premier") == "on",
             main_image=main_image,
             status="pending",
+            # فیلدهای مالی اضافه
+            avg_monthly_revenue=_decimal(p.get("avg_monthly_revenue")),
+            avg_monthly_profit=_decimal(p.get("avg_monthly_profit")),
+            total_revenue=_decimal(p.get("total_revenue")),
+            total_profit=_decimal(p.get("total_profit")),
+            profit_margin=_decimal(p.get("profit_margin"), 2),
+            profit_multiplier=_decimal(p.get("profit_multiplier"), 2),
+            revenue_multiplier=_decimal(p.get("revenue_multiplier"), 2),
+            post_sale_support=p.get("post_sale_support", "").strip() or None,
+            about_platform=p.get("about_platform", "").strip() or None,
+            # sale_type conditional fields
+            ownership_document_status=p.get("ownership_document_status", "").strip() or None,
+            ownership_transfer_conditions=p.get("ownership_transfer_conditions", "").strip() or None,
+            partial_ownership_percentage=_decimal(p.get("partial_ownership_percentage"), 2),
+            partial_ownership_valuation_method=p.get("partial_ownership_valuation_method", "").strip() or None,
+            partial_ownership_buyer_rights=p.get("partial_ownership_buyer_rights", "").strip() or None,
+            partial_ownership_exit_conditions=p.get("partial_ownership_exit_conditions", "").strip() or None,
+            license_duration_type=p.get("license_duration_type") or None,
+            license_duration_months=_int(p.get("license_duration_months")) or None,
+            license_scope=p.get("license_scope", "").strip() or None,
+            license_restrictions=p.get("license_restrictions", "").strip() or None,
+            revenue_share_percentage=_decimal(p.get("revenue_share_percentage"), 2),
+            revenue_share_base=p.get("revenue_share_base") or None,
+            revenue_share_payment_period=p.get("revenue_share_payment_period") or None,
+            revenue_share_contract_duration=_int(p.get("revenue_share_contract_duration")) or None,
+            revenue_share_minimum_guarantee=_decimal(p.get("revenue_share_minimum_guarantee")),
+            brand_transferred_assets=p.get("brand_transferred_assets", "").strip() or None,
+            brand_legal_status=p.get("brand_legal_status") or None,
+            brand_usage_restrictions=p.get("brand_usage_restrictions", "").strip() or None,
+            brand_industry_scope=p.get("brand_industry_scope", "").strip() or None,
         )
 
-        logger.info(
-            "listing_create: SUCCESS — id=%s title=%r user=%s",
-            listing.pk, listing.title, request.user,
+        logger.info("listing_create: SUCCESS — id=%s title=%r user=%s", listing.pk, listing.title, request.user)
+
+        # ── FAQs ──────────────────────────────────────────────────────
+        from .models import (
+            ListingFAQ, Expense, SaleInclude, License, SocialMedia,
+            IncomeProof, Attachment, TrafficSource, MonetizationMethod,
+            IncomeDataPoint, ViewsDataPoint, TechnologyUsed, ServiceUsed, ListingImage
         )
+
+        faq_count = _int(p.get("faq_count"))
+        for i in range(faq_count):
+            q = p.get(f"faq_question_{i}", "").strip()
+            a = p.get(f"faq_answer_{i}", "").strip()
+            order = _int(p.get(f"faq_order_{i}"), i)
+            if q or a:
+                ListingFAQ.objects.create(listing=listing, question=q, answer=a, order=order)
+
+        # ── Expenses ──────────────────────────────────────────────────
+        exp_count = _int(p.get("expense_count"))
+        for i in range(exp_count):
+            name = p.get(f"exp_name_{i}", "").strip()
+            amount_raw = p.get(f"exp_amount_{i}", "").strip()
+            period = p.get(f"exp_period_{i}", "monthly")
+            if name and amount_raw:
+                try:
+                    Expense.objects.create(
+                        listing=listing,
+                        expense_name=name,
+                        amount=Decimal(amount_raw),
+                        period=period
+                    )
+                except Exception as e:
+                    logger.warning("expense create error: %s", e)
+
+        # ── Sale Includes ─────────────────────────────────────────────
+        si_count = _int(p.get("sale_include_count"))
+        for i in range(si_count):
+            name = p.get(f"sale_include_{i}", "").strip()
+            if name:
+                SaleInclude.objects.create(listing=listing, asset_name=name)
+
+        # ── Licenses ──────────────────────────────────────────────────
+        lic_count = _int(p.get("license_item_count"))
+        for i in range(lic_count):
+            name = p.get(f"lic_name_{i}", "").strip()
+            if name:
+                License.objects.create(listing=listing, license_name=name)
+
+        # ── Social Media ──────────────────────────────────────────────
+        sm_count = _int(p.get("social_count"))
+        for i in range(sm_count):
+            platform = p.get(f"sm_platform_{i}", "").strip()
+            followers = p.get(f"sm_followers_{i}", "").strip()
+            url = p.get(f"sm_url_{i}", "").strip()
+            if platform and followers:
+                SocialMedia.objects.create(listing=listing, platform=platform, followers=followers, url=url)
+
+        # ── Income Proofs ─────────────────────────────────────────────
+        ip_count = _int(p.get("income_proof_count"))
+        for i in range(ip_count):
+            img = files.get(f"income_proof_img_{i}")
+            desc = p.get(f"income_proof_desc_{i}", "").strip()
+            if img or desc:
+                IncomeProof.objects.create(listing=listing, image=img, description=desc)
+
+        # ── Attachments ───────────────────────────────────────────────
+        att_count = _int(p.get("attachment_count"))
+        for i in range(att_count):
+            f_file = files.get(f"attachment_{i}")
+            if f_file:
+                Attachment.objects.create(listing=listing, file=f_file)
+
+        # ── Traffic Sources ───────────────────────────────────────────
+        trf_count = _int(p.get("traffic_count"))
+        for i in range(trf_count):
+            source = p.get(f"trf_source_{i}", "").strip()
+            pct_raw = p.get(f"trf_pct_{i}", "").strip()
+            if source and pct_raw:
+                try:
+                    TrafficSource.objects.get_or_create(
+                        listing=listing,
+                        source=source,
+                        defaults={"percentage": int(pct_raw)}
+                    )
+                except Exception as e:
+                    logger.warning("traffic create error: %s", e)
+
+        # ── Monetization Methods ──────────────────────────────────────
+        for method in p.getlist("monetization_methods"):
+            if method:
+                MonetizationMethod.objects.create(listing=listing, method=method)
+
+        # ── Income Data Points ────────────────────────────────────────
+        inc_count = _int(p.get("income_point_count"))
+        for i in range(inc_count):
+            date_raw = p.get(f"income_date_{i}", "").strip()
+            val_raw = p.get(f"income_val_{i}", "").strip()
+            if date_raw and val_raw:
+                try:
+                    IncomeDataPoint.objects.get_or_create(
+                        listing=listing,
+                        date=date_raw,
+                        defaults={"income": Decimal(val_raw)}
+                    )
+                except Exception as e:
+                    logger.warning("income point error: %s", e)
+
+        # ── Views Data Points ─────────────────────────────────────────
+        vw_count = _int(p.get("views_point_count"))
+        for i in range(vw_count):
+            date_raw = p.get(f"views_date_{i}", "").strip()
+            val_raw = p.get(f"views_val_{i}", "").strip()
+            if date_raw and val_raw:
+                try:
+                    ViewsDataPoint.objects.get_or_create(
+                        listing=listing,
+                        date=date_raw,
+                        defaults={"views": int(val_raw)}
+                    )
+                except Exception as e:
+                    logger.warning("views point error: %s", e)
+
+        # ── Technologies ──────────────────────────────────────────────
+        tech_map = {
+            "technology_cms":            p.getlist("tech_cms"),
+            "technology_backend":        p.getlist("tech_backend"),
+            "technology_frontend":       p.getlist("tech_frontend"),
+            "technology_database":       p.getlist("tech_db"),
+            "technology_infrastructure": p.getlist("tech_infra"),
+            "technology_mobile":         p.getlist("tech_mobile"),
+            "technology_third_party":    p.getlist("tech_third"),
+        }
+        if any(tech_map.values()):
+            TechnologyUsed.objects.create(listing=listing, **tech_map)
+
+        # ── Services Used ─────────────────────────────────────────────
+        srv_count = _int(p.get("service_count"))
+        for i in range(srv_count):
+            name = p.get(f"service_{i}", "").strip()
+            if name:
+                ServiceUsed.objects.create(listing=listing, service_name=name)
+
+        # ── Gallery Images ────────────────────────────────────────────
+        for img in files.getlist("gallery_images"):
+            ListingImage.objects.create(listing=listing, image=img)
 
         if is_ajax:
             return JsonResponse({
                 "success": True,
                 "id": listing.pk,
-                "redirect": f"/listings/{listing.pk}/",   # adjust to your URL
+                "redirect": f"/listings/{listing.pk}/",
             })
 
-        return redirect("listings:detail", pk=listing.pk)  # adjust to your URL name
+        return redirect("listings:detail", pk=listing.pk)
 
     except Exception as exc:
         logger.exception("listing_create: UNEXPECTED ERROR — user=%s | %s", request.user, exc)
         return _err(f"خطای داخلی سرور: {exc}", status=500)
+
 
 
 @login_required
