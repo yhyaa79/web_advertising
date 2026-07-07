@@ -188,6 +188,36 @@
                     </div>
 
                 </div>
+                            <div class="card mt-3">
+                <div class="card-body pad-10">
+                    <h5> یادداشت شخصی</h5>
+                    <hr>
+                </div>
+                <div class="card-body">
+                    <form id="note-form" method="post" action="{% url 'accounts:save_listing_note' saved.listing.pk %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <textarea class="form-control-textarea" name="note" id="listing-note" rows="4"
+                                placeholder="یادداشت خود را اینجا بنویسید...">{% if user_note %}{{ user_note.note }}{% endif %}</textarea>
+                        </div>
+                        <div class="my-list-btn">
+                            <button class="btn btn-primary btn-medium btn-width-fit" type="submit">ذخیره</button>
+                            {% if user_note %}
+                            <button class="btn btn-delet btn-medium btn-width-fit" type="button"
+                                id="delete-note-btn">حذف</button>
+                            {% endif %}
+                        </div>
+                    </form>
+
+                    <div id="note-timestamp" class="mt-2">
+                        {% if user_note %}
+                        <small class="text-muted">
+                            آخرین بروزرسانی: {{ user_note.updated_at|date:"Y/m/d H:i" }}
+                        </small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
             </div>
 
             {% endfor %}
