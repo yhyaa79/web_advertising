@@ -65,135 +65,120 @@
     </div>
 </div>
 
-
-
-<!-- Hero -->
 <section class="stacked-hero-section">
-    <h1 class="stacked-hero-section__title">acq<span>uire</span></h1>
-    <p class="stacked-hero-section__subtitle"> شروع به کار کنید</p>
-    <div class="stacked-hero-section__scroll-hint">
-        <span class="stacked-hero-section__scroll-hint-label">Scroll</span>
-        <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
-            <path d="M8 0v20M1 13l7 7 7-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-        </svg>
-    </div>
+            <div class="db">
+
+            <!-- گزارش‌های کلی -->
+            <p class="sec">
+                <i class="bi bi-lightning-fill"></i>
+                گزارش‌های کلی
+                <span class="sec-line"></span>
+            </p>
+            <div class="row row-4">
+
+                <div class="card accent-blue">
+                    <i class="bi bi-clock ic"></i>
+                    <p class="lbl">۲۴ ساعت گذشته</p>
+                    <p class="val">{{ stats.active_24h }}</p>
+                    <p class="sub">آگهی جدید</p>
+                </div>
+
+                <div class="card accent-teal">
+                    <i class="bi bi-check-circle-fill ic"></i>
+                    <p class="lbl">فروخته شده</p>
+                    <p class="val">{{ stats.sold_total }}</p>
+                    <p class="sub">آگهی تاکنون</p>
+                </div>
+
+                <div class="card accent-amber">
+                    <i class="bi bi-calendar-week ic"></i>
+                    <p class="lbl">این هفته</p>
+                    <p class="val">{{ stats.active_week }}</p>
+                    <p class="sub">آگهی جدید</p>
+                </div>
+
+                <div class="card accent-purple">
+                    <i class="bi bi-graph-up ic"></i>
+                    <p class="lbl">کل فعال</p>
+                    <p class="val">{{ stats.active_total }}</p>
+                    <p class="sub">آگهی</p>
+                </div>
+
+            </div>
+
+            <!-- مالی + تفصیلی -->
+            <div class="row row-2-3">
+
+                <!-- گزارش‌های مالی -->
+                <div>
+                    <p class="sec">
+                        <i class="bi bi-cash-coin"></i>
+                        گزارش‌های مالی
+                        <span class="sec-line"></span>
+                    </p>
+                    <div class="fin-grid">
+
+                        <div class="card">
+                            <div class="fin-header">
+                                <i class="bi bi-coin"></i>
+                                <span>ارزش فعال</span>
+                            </div>
+                            <p class="fin-amount">{{ stats.active_total_price|floatformat:0 }}</p>
+                            <p class="fin-currency">تومان</p>
+                            <div class="fin-foot">{{ stats.active_total }} آگهی</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="fin-header">
+                                <i class="bi bi-bag-check"></i>
+                                <span>ارزش فروخته</span>
+                            </div>
+                            <p class="fin-amount green">{{ stats.sold_total_price|floatformat:0 }}</p>
+                            <p class="fin-currency">تومان</p>
+                            <div class="fin-foot">{{ stats.sold_total }} آگهی</div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- آمار تفصیلی + نتایج -->
+                <div>
+                    <p class="sec">
+                        <i class="bi bi-bar-chart-line"></i>
+                        آمار تفصیلی
+                        <span class="sec-line"></span>
+                    </p>
+                    <div class="card" style="padding: 0; overflow: hidden;">
+
+                        <div class="detail-flex">
+                            <div class="detail-col">
+                                <p class="lbl">یک هفته گذشته</p>
+                                <p class="val" style="font-size:18px">{{ stats.active_week }}</p>
+                            </div>
+                            <div class="divider-v"></div>
+                            <div class="detail-col">
+                                <p class="lbl">یک ماه گذشته</p>
+                                <p class="val" style="font-size:18px">{{ stats.active_month }}</p>
+                            </div>
+                            <div class="divider-v"></div>
+                            <div class="detail-col">
+                                <p class="lbl">یک سال گذشته</p>
+                                <p class="val" style="font-size:18px">{{ stats.active_year }}</p>
+                            </div>
+                            <div class="divider-v"></div>
+                            <div class="detail-col">
+                                <p class="lbl">کل فروخته شده</p>
+                                <p class="val" style="font-size:18px">{{ stats.sold_total }}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
 </section>
-
-<!-- Stack -->
-<section class="stacked-cards-section">
-
-    <div class="stacked-cards-section__card-wrapper">
-        <div class="stacked-cards-section__card-item">
-            <div class="stacked-cards-section__card-item__tag">
-                <span class="stacked-cards-section__card-item__tag-dot"></span> طراحی
-            </div>
-            <h2 class="stacked-cards-section__card-item__title">رابط کاربری مدرن<br>با تجربه‌ای متفاوت</h2>
-            <p class="stacked-cards-section__card-item__description">طراحی لایه‌ای حس عمق و سه‌بعدی بودن ایجاد می‌کند.
-                هر کارت داستانی جداگانه دارد.</p>
-            <div class="stacked-cards-section__card-item__footer">
-                <div class="stacked-cards-section__card-item__progress-dots">
-                    <span
-                        class="stacked-cards-section__card-item__progress-dot stacked-cards-section__card-item__progress-dot--active"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                </div>
-            </div>
-            <span class="stacked-cards-section__card-item__bg-number">01</span>
-        </div>
-    </div>
-
-    <div class="stacked-cards-section__card-wrapper">
-        <div class="stacked-cards-section__card-item">
-            <div class="stacked-cards-section__card-item__tag">
-                <span class="stacked-cards-section__card-item__tag-dot"></span> توسعه
-            </div>
-            <h2 class="stacked-cards-section__card-item__title">کدنویسی تمیز<br>و قابل نگهداری</h2>
-            <p class="stacked-cards-section__card-item__description">معماری درست از ابتدا باعث می‌شود توسعه سریع‌تر و
-                خطاها کمتر باشند.</p>
-            <div class="stacked-cards-section__card-item__footer">
-                <div class="stacked-cards-section__card-item__progress-dots">
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span
-                        class="stacked-cards-section__card-item__progress-dot stacked-cards-section__card-item__progress-dot--active"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                </div>
-            </div>
-            <span class="stacked-cards-section__card-item__bg-number">02</span>
-        </div>
-    </div>
-
-    <div class="stacked-cards-section__card-wrapper">
-        <div class="stacked-cards-section__card-item">
-            <div class="stacked-cards-section__card-item__tag">
-                <span class="stacked-cards-section__card-item__tag-dot"></span> عملکرد
-            </div>
-            <h2 class="stacked-cards-section__card-item__title">سرعت و بهینه‌سازی<br>در هر مرحله</h2>
-            <p class="stacked-cards-section__card-item__description">انیمیشن‌های روان با استفاده از CSS و کمترین بار
-                پردازشی ممکن پیاده‌سازی شده‌اند.</p>
-            <div class="stacked-cards-section__card-item__footer">
-                <div class="stacked-cards-section__card-item__progress-dots">
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span
-                        class="stacked-cards-section__card-item__progress-dot stacked-cards-section__card-item__progress-dot--active"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                </div>
-            </div>
-            <span class="stacked-cards-section__card-item__bg-number">03</span>
-        </div>
-    </div>
-
-    <div class="stacked-cards-section__card-wrapper">
-        <div class="stacked-cards-section__card-item">
-            <div class="stacked-cards-section__card-item__tag">
-                <span class="stacked-cards-section__card-item__tag-dot"></span> امنیت
-            </div>
-            <h2 class="stacked-cards-section__card-item__title">حفاظت از داده‌ها<br>در هر لحظه</h2>
-            <p class="stacked-cards-section__card-item__description">امنیت باید از لایه اول طراحی در نظر گرفته شود، نه
-                به عنوان یک افزونه.</p>
-            <div class="stacked-cards-section__card-item__footer">
-                <div class="stacked-cards-section__card-item__progress-dots">
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span
-                        class="stacked-cards-section__card-item__progress-dot stacked-cards-section__card-item__progress-dot--active"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                </div>
-            </div>
-            <span class="stacked-cards-section__card-item__bg-number">04</span>
-        </div>
-    </div>
-
-    <div class="stacked-cards-section__card-wrapper">
-        <div class="stacked-cards-section__card-item">
-            <div class="stacked-cards-section__card-item__tag">
-                <span class="stacked-cards-section__card-item__tag-dot"></span> نوآوری
-            </div>
-            <h2 class="stacked-cards-section__card-item__title">ایده‌های تازه<br>برای مسائل قدیمی</h2>
-            <p class="stacked-cards-section__card-item__description">خلاقیت در طراحی یعنی دیدن مسئله از زاویه‌ای که
-                دیگران نمی‌بینند.</p>
-            <div class="stacked-cards-section__card-item__footer">
-                <div class="stacked-cards-section__card-item__progress-dots">
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span class="stacked-cards-section__card-item__progress-dot"></span>
-                    <span
-                        class="stacked-cards-section__card-item__progress-dot stacked-cards-section__card-item__progress-dot--active"></span>
-                </div>
-            </div>
-            <span class="stacked-cards-section__card-item__bg-number">05</span>
-        </div>
-    </div>
-
-</section>
-
 
 
 
@@ -204,11 +189,12 @@
         <p class="section-sub">با سرچ کردن کلمات کلیدی توی تیتر اگهی ها و و با انتخاب دسته بندی اگهی های مناسبتان
             را پیدا کنید.</p>
     </div>
-<div class="steps">
-    <div class="serch-bur-ui-wrapper">   <!-- یا هر کلاس دیگه‌ای بدون انیمیشن -->
-        <div class="top-port-serch serch-bur-ui">
-        </div>
-        <div class="bottom-port-serch serch-bur-ui">
+    <div class="steps">
+        <div class="serch-bur-ui-wrapper">
+            <!-- یا هر کلاس دیگه‌ای بدون انیمیشن -->
+            <div class="top-port-serch serch-bur-ui">
+            </div>
+            <div class="bottom-port-serch serch-bur-ui">
                 <h2>پلتفرم خرید و فروش</h2>
 
                 <div class="row mb-4 serch-home">

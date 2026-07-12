@@ -13,26 +13,6 @@
 
 {% block content %}
 
-
-<div class="navbar-listing-list">
-
-    <div class="rigt-navba-listing-detailr">
-
-
-    </div>
-
-
-    <div class="scroll-link-save-share">
-        <a href="" class="btn btn-primary btn-large btn-width-100">اطلاعات
-            بیشتر</a>
-
-        <a href="{% url 'listings:listing_create' %}" class="btn btn-success btn-large btn-width-100">ثبت آگهی جدید</a>
-    </div>
-</div>
-
-<br>
-<br>
-
 <div class="container">
     <div class="heder-listing-list">
         {% if is_similar_view %}
@@ -66,119 +46,6 @@
             </div>
         </div>
 
-        <div class="db">
-
-            <!-- گزارش‌های کلی -->
-            <p class="sec">
-                <i class="bi bi-lightning-fill"></i>
-                گزارش‌های کلی
-                <span class="sec-line"></span>
-            </p>
-            <div class="row row-4">
-
-                <div class="card accent-blue">
-                    <i class="bi bi-clock ic"></i>
-                    <p class="lbl">۲۴ ساعت گذشته</p>
-                    <p class="val">{{ stats.active_24h }}</p>
-                    <p class="sub">آگهی جدید</p>
-                </div>
-
-                <div class="card accent-teal">
-                    <i class="bi bi-check-circle-fill ic"></i>
-                    <p class="lbl">فروخته شده</p>
-                    <p class="val">{{ stats.sold_total }}</p>
-                    <p class="sub">آگهی تاکنون</p>
-                </div>
-
-                <div class="card accent-amber">
-                    <i class="bi bi-calendar-week ic"></i>
-                    <p class="lbl">این هفته</p>
-                    <p class="val">{{ stats.active_week }}</p>
-                    <p class="sub">آگهی جدید</p>
-                </div>
-
-                <div class="card accent-purple">
-                    <i class="bi bi-graph-up ic"></i>
-                    <p class="lbl">کل فعال</p>
-                    <p class="val">{{ stats.active_total }}</p>
-                    <p class="sub">آگهی</p>
-                </div>
-
-            </div>
-
-            <!-- مالی + تفصیلی -->
-            <div class="row row-2-3">
-
-                <!-- گزارش‌های مالی -->
-                <div>
-                    <p class="sec">
-                        <i class="bi bi-cash-coin"></i>
-                        گزارش‌های مالی
-                        <span class="sec-line"></span>
-                    </p>
-                    <div class="fin-grid">
-
-                        <div class="card">
-                            <div class="fin-header">
-                                <i class="bi bi-coin"></i>
-                                <span>ارزش فعال</span>
-                            </div>
-                            <p class="fin-amount">{{ stats.active_total_price|floatformat:0 }}</p>
-                            <p class="fin-currency">تومان</p>
-                            <div class="fin-foot">{{ stats.active_total }} آگهی</div>
-                        </div>
-
-                        <div class="card">
-                            <div class="fin-header">
-                                <i class="bi bi-bag-check"></i>
-                                <span>ارزش فروخته</span>
-                            </div>
-                            <p class="fin-amount green">{{ stats.sold_total_price|floatformat:0 }}</p>
-                            <p class="fin-currency">تومان</p>
-                            <div class="fin-foot">{{ stats.sold_total }} آگهی</div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- آمار تفصیلی + نتایج -->
-                <div>
-                    <p class="sec">
-                        <i class="bi bi-bar-chart-line"></i>
-                        آمار تفصیلی
-                        <span class="sec-line"></span>
-                    </p>
-                    <div class="card" style="padding: 0; overflow: hidden;">
-
-                        <div class="detail-flex">
-                            <div class="detail-col">
-                                <p class="lbl">یک هفته گذشته</p>
-                                <p class="val" style="font-size:18px">{{ stats.active_week }}</p>
-                            </div>
-                            <div class="divider-v"></div>
-                            <div class="detail-col">
-                                <p class="lbl">یک ماه گذشته</p>
-                                <p class="val" style="font-size:18px">{{ stats.active_month }}</p>
-                            </div>
-                            <div class="divider-v"></div>
-                            <div class="detail-col">
-                                <p class="lbl">یک سال گذشته</p>
-                                <p class="val" style="font-size:18px">{{ stats.active_year }}</p>
-                            </div>
-                            <div class="divider-v"></div>
-                            <div class="detail-col">
-                                <p class="lbl">کل فروخته شده</p>
-                                <p class="val" style="font-size:18px">{{ stats.sold_total }}</p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
         <div class="row mb-5">
             <div class="col-md-12">
                 <h4>دسته‌بندی ها:</h4>
@@ -186,14 +53,14 @@
                 <div class="buttom-category">
                     <!-- دکمه "همه" : اگر هیچ دسته‌بندی انتخاب نشده بود، پررنگ می‌شود -->
                     <a href="{% url 'listings:listing_list' %}"
-                        class="btn btn-sm btn-medium {% if not request.GET.category %}btn-secondary btn-medium btn-width-fit{% else %}btn-outline-secondary{% endif %}">
+                        class="btn btn-medium {% if not request.GET.category %}btn-secondary btn-medium btn-width-fit{% else %}btn-outline-secondary{% endif %}">
                         همه
                     </a>
 
                     <!-- لیست دسته‌بندی‌ها -->
                     {% for category in categories %}
                     <a href="?category={{ category.id }}"
-                        class="btn btn-sm btn-medium {% if request.GET.category == category.id|stringformat:'s' %}btn-secondary btn-medium btn-width-fit {% else %}btn-outline-secondary{% endif %}">
+                        class="btn btn-medium {% if request.GET.category == category.id|stringformat:'s' %}btn-secondary btn-medium btn-width-fit {% else %}btn-outline-secondary{% endif %}">
                         {{ category.name }}
                     </a>
                     {% endfor %}
