@@ -378,7 +378,7 @@ option {
 .dropdown-toggle {
     color: #bfbfc9;
     text-decoration: none;
-    font-size: var(--font-size-3xl);
+    font-size: var(--font-size-2xl);
     font-weight: 500;
     transition: color .2s;
 }
@@ -1606,7 +1606,7 @@ option {
 
 .card-header h4 {
     margin: 0;
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-3xl);
     font-weight: 600;
 }
 
@@ -3117,7 +3117,7 @@ form label {
     margin-bottom: var(--spacing-sm);
     color: var(--text-primary);
     font-weight: 400;
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-xl);
 }
 
 .form-control {
@@ -3136,7 +3136,7 @@ form textarea {
     padding: 8px 12px;
     border: 1.5px solid var(--border-color);
     border-radius: var(--border-radius-md);
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-xl);
     transition: var(--transition-base);
 }
 
@@ -3258,7 +3258,7 @@ form textarea {
 
 .badge-normal {
     padding: 3px 10px;
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-md);
     font-weight: 400;
     border-radius: var(--border-radius-999);
     white-space: nowrap;
@@ -3476,7 +3476,7 @@ form textarea {
     padding: var(--spacing-md);
     text-align: right;
     font-weight: 600;
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-lg);
     background: #f8f9fa;
     color: #333;
 }
@@ -3881,7 +3881,7 @@ form textarea {
     background: transparent;
     border: none;
     cursor: pointer;
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-xl);
     color: #666;
     transition: var(--transition-base);
     white-space: nowrap;
