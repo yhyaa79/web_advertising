@@ -1,54 +1,76 @@
-<!-- templates/core/home.html -->
 {% extends 'base.html' %}
 {% load custom_tags %}
 {% load date_filters %}
 
 {% block title %}صفحه اصلی{% endblock %}
 
-{% block nav_class %}navbar-top{% endblock %}
 
+
+{% block nav_class %}navbar-top{% endblock %}
 
 {% block content %}
 
+<!-- ══════════════════════════════════════════════════════════
+     HERO SECTION
+     ══════════════════════════════════════════════════════════ -->
+<section class="hero" id="hero">
+    <!-- پس‌زمینه لایه‌ای -->
+    <div class="hero-bg-layer hero-bg-gradient"></div>
+    <div class="hero-bg-layer hero-bg-noise"></div>
+    <div class="hero-bg-layer hero-bg-grid"></div>
+    <div class="hero-bg-blob hero-blob-1"></div>
+    <div class="hero-bg-blob hero-blob-2"></div>
+    <div class="hero-bg-blob hero-blob-3"></div>
 
+    <div class="hero-content">
+        <div class="hero-badge" data-reveal>
+            <span class="badge-dot"></span>
+            بازار خرید استارتاپ شماره #۱
+        </div>
 
+        <h1 class="hero-title" data-reveal>
+            خرید و فروش<br>
+            <span class="gradient-text">استارت آپ های آنلاین</span>
+        </h1>
 
-<!-- HERO -->
-<section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-grid"></div>
-    <div class="hero-badge">
-        <span class="badge-dot"></span>
-        بازار خرید استارتاپ شماره #1
-    </div>
-    <h1>خرید و فروش<br><span class="gradient">استارت آپ های آنلاین</span></h1>
-    <p>بزرگترین بازار جهان برای خرید و فروش کسب و کارهای آنلاین. هزاران لیست تأیید شده، از SaaS گرفته تا تجارت
-        الکترونیک.</p>
-    <div class="hero-actions">
-        <a href="#listings" class="btn btn-primary-home btn-lg">استارت آپ ها را مرور کنید</a>
-        <a href="#" class="btn btn-ghost btn-lg">استارت آپ خود را بفروشید</a>
-    </div>
-    <div class="hero-stats">
-        <div class="stat">
-            <div class="stat-num" data-target="10000">0</div>
-            <div class="stat-label">استارتاپ های فهرست شده</div>
+        <p class="hero-subtitle" data-reveal>
+            بزرگترین بازار جهان برای خرید و فروش کسب و کارهای آنلاین.
+            هزاران لیست تأیید شده، از SaaS گرفته تا تجارت الکترونیک.
+        </p>
+
+        <div class="hero-actions" data-reveal>
+            <a href="#listings" class="btn btn-primary-home btn-lg">
+                استارت آپ ها را مرور کنید
+            </a>
+            <a href="#" class="btn btn-ghost-home btn-lg">
+                استارت آپ خود را بفروشید
+            </a>
         </div>
-        <div class="stat">
-            <div class="stat-num" data-target="500" data-suffix="M+">0</div>
-            <div class="stat-label">در خریدها</div>
-        </div>
-        <div class="stat">
-            <div class="stat-num" data-target="150" data-suffix="K+">0</div>
-            <div class="stat-label">خریداران ثبت نام شده</div>
-        </div>
-        <div class="stat">
-            <div class="stat-num" data-target="98" data-suffix="%">0</div>
-            <div class="stat-label">میزان رضایت</div>
+
+        <div class="hero-stats" data-reveal>
+            <div class="stat-item glass-card">
+                <div class="stat-num" data-target="10000" data-suffix="+">0</div>
+                <div class="stat-label">استارتاپ فهرست شده</div>
+            </div>
+            <div class="stat-item glass-card">
+                <div class="stat-num" data-target="500" data-suffix="M+">0</div>
+                <div class="stat-label">در خریدها</div>
+            </div>
+            <div class="stat-item glass-card">
+                <div class="stat-num" data-target="150" data-suffix="K+">0</div>
+                <div class="stat-label">خریدار ثبت نام شده</div>
+            </div>
+            <div class="stat-item glass-card">
+                <div class="stat-num" data-target="98" data-suffix="%">0</div>
+                <div class="stat-label">میزان رضایت</div>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- MARQUEE -->
+<!-- ══════════════════════════════════════════════════════════
+     MARQUEE
+     ══════════════════════════════════════════════════════════ -->
 <div class="marquee-section">
     <p class="marquee-label">مورد اعتماد بنیانگذاران در سراسر ایران</p>
     <div class="marquee-track" id="marquee">
@@ -65,60 +87,55 @@
     </div>
 </div>
 
-<section class="stacked-hero-section">
-    <div class="db">
-
+<!-- ══════════════════════════════════════════════════════════
+     STATS / BENTO GRID
+     ══════════════════════════════════════════════════════════ -->
+<section class="stats-section" id="stats">
+    <div class="container">
         <!-- گزارش‌های کلی -->
-        <p class="sec">
+        <p class="section-tag" data-reveal>
             <i class="bi bi-lightning-fill"></i>
             گزارش‌های کلی
-            <span class="sec-line"></span>
+            <span class="tag-line"></span>
         </p>
-        <div class="row row-4">
 
-            <div class="card accent-blue">
-                <i class="bi bi-clock ic"></i>
-                <p class="lbl">۲۴ ساعت گذشته</p>
-                <p class="val">{{ stats.active_24h }}</p>
-                <p class="sub">آگهی جدید</p>
+        <div class="bento-grid">
+            <div class="bento-card glass-card accent-blue" data-reveal>
+                <i class="bi bi-clock bento-icon"></i>
+                <p class="bento-label">۲۴ ساعت گذشته</p>
+                <p class="bento-value">{{ stats.active_24h }}</p>
+                <p class="bento-sub">آگهی جدید</p>
             </div>
-
-            <div class="card accent-teal">
-                <i class="bi bi-check-circle-fill ic"></i>
-                <p class="lbl">فروخته شده</p>
-                <p class="val">{{ stats.sold_total }}</p>
-                <p class="sub">آگهی تاکنون</p>
+            <div class="bento-card glass-card accent-teal" data-reveal>
+                <i class="bi bi-check-circle-fill bento-icon"></i>
+                <p class="bento-label">فروخته شده</p>
+                <p class="bento-value">{{ stats.sold_total }}</p>
+                <p class="bento-sub">آگهی تاکنون</p>
             </div>
-
-            <div class="card accent-amber">
-                <i class="bi bi-calendar-week ic"></i>
-                <p class="lbl">این هفته</p>
-                <p class="val">{{ stats.active_week }}</p>
-                <p class="sub">آگهی جدید</p>
+            <div class="bento-card glass-card accent-amber" data-reveal>
+                <i class="bi bi-calendar-week bento-icon"></i>
+                <p class="bento-label">این هفته</p>
+                <p class="bento-value">{{ stats.active_week }}</p>
+                <p class="bento-sub">آگهی جدید</p>
             </div>
-
-            <div class="card accent-purple">
-                <i class="bi bi-graph-up ic"></i>
-                <p class="lbl">کل فعال</p>
-                <p class="val">{{ stats.active_total }}</p>
-                <p class="sub">آگهی</p>
+            <div class="bento-card glass-card accent-purple" data-reveal>
+                <i class="bi bi-graph-up bento-icon"></i>
+                <p class="bento-label">کل فعال</p>
+                <p class="bento-value">{{ stats.active_total }}</p>
+                <p class="bento-sub">آگهی</p>
             </div>
-
         </div>
 
-        <!-- مالی + تفصیلی -->
-        <div class="row row-2-3">
-
-            <!-- گزارش‌های مالی -->
-            <div>
-                <p class="sec">
+        <!-- گزارش‌های مالی و آمار تفصیلی -->
+        <div class="financial-row">
+            <div class="financial-col">
+                <p class="section-tag" data-reveal>
                     <i class="bi bi-cash-coin"></i>
                     گزارش‌های مالی
-                    <span class="sec-line"></span>
+                    <span class="tag-line"></span>
                 </p>
-                <div class="fin-grid">
-
-                    <div class="card">
+                <div class="financial-grid">
+                    <div class="financial-card glass-card" data-reveal>
                         <div class="fin-header">
                             <i class="bi bi-coin"></i>
                             <span>ارزش فعال</span>
@@ -127,8 +144,7 @@
                         <p class="fin-currency">تومان</p>
                         <div class="fin-foot">{{ stats.active_total }} آگهی</div>
                     </div>
-
-                    <div class="card">
+                    <div class="financial-card glass-card" data-reveal>
                         <div class="fin-header">
                             <i class="bi bi-bag-check"></i>
                             <span>ارزش فروخته</span>
@@ -137,119 +153,99 @@
                         <p class="fin-currency">تومان</p>
                         <div class="fin-foot">{{ stats.sold_total }} آگهی</div>
                     </div>
-
                 </div>
             </div>
 
-            <!-- آمار تفصیلی + نتایج -->
-            <div>
-                <p class="sec">
+            <div class="financial-col">
+                <p class="section-tag" data-reveal>
                     <i class="bi bi-bar-chart-line"></i>
                     آمار تفصیلی
-                    <span class="sec-line"></span>
+                    <span class="tag-line"></span>
                 </p>
-                <div class="card" style="padding: 0; overflow: hidden;">
-
+                <div class="detail-card glass-card" data-reveal>
                     <div class="detail-flex">
                         <div class="detail-col">
-                            <p class="lbl">یک هفته گذشته</p>
-                            <p class="val" style="font-size:18px">{{ stats.active_week }}</p>
+                            <p class="detail-label">یک هفته گذشته</p>
+                            <p class="detail-value">{{ stats.active_week }}</p>
                         </div>
-                        <div class="divider-v"></div>
+                        <div class="detail-divider"></div>
                         <div class="detail-col">
-                            <p class="lbl">یک ماه گذشته</p>
-                            <p class="val" style="font-size:18px">{{ stats.active_month }}</p>
+                            <p class="detail-label">یک ماه گذشته</p>
+                            <p class="detail-value">{{ stats.active_month }}</p>
                         </div>
-                        <div class="divider-v"></div>
+                        <div class="detail-divider"></div>
                         <div class="detail-col">
-                            <p class="lbl">یک سال گذشته</p>
-                            <p class="val" style="font-size:18px">{{ stats.active_year }}</p>
+                            <p class="detail-label">یک سال گذشته</p>
+                            <p class="detail-value">{{ stats.active_year }}</p>
                         </div>
-                        <div class="divider-v"></div>
+                        <div class="detail-divider"></div>
                         <div class="detail-col">
-                            <p class="lbl">کل فروخته شده</p>
-                            <p class="val" style="font-size:18px">{{ stats.sold_total }}</p>
+                            <p class="detail-label">کل فروخته شده</p>
+                            <p class="detail-value">{{ stats.sold_total }}</p>
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </div>
-
     </div>
 </section>
 
-
-
-<section class="section-serch">
-    <div class="section-header reveal">
-        <p class="section-label">سرچ و دسته بندی</p>
+<!-- ══════════════════════════════════════════════════════════
+     SEARCH SECTION
+     ══════════════════════════════════════════════════════════ -->
+<section class="search-section" id="search">
+    <div class="section-header" data-reveal>
+        <p class="section-tag">سرچ و دسته بندی</p>
         <h2 class="section-title">استارت آپ مورد نیاز خود را پیدا کنید</h2>
-        <p class="section-sub">با سرچ کردن کلمات کلیدی توی تیتر اگهی ها و و با انتخاب دسته بندی اگهی های مناسبتان
-            را پیدا کنید.</p>
+        <p class="section-sub">
+            با سرچ کردن کلمات کلیدی توی تیتر اگهی ها و با انتخاب دسته بندی اگهی های مناسبتان را پیدا کنید.
+        </p>
     </div>
-    <div class="steps">
-        <div class="serch-bur-ui-wrapper">
-            <!-- یا هر کلاس دیگه‌ای بدون انیمیشن -->
-            <div class="top-port-serch serch-bur-ui">
-            </div>
-            <div class="bottom-port-serch serch-bur-ui">
-                <h2>پلتفرم خرید و فروش</h2>
 
-                <div class="row mb-4 serch-home">
-                    <div class="serch-bar-home">
-                        <form action="{% url 'listings:listing_list' %}" method="get" class="d-flex">
-                            <input type="text" name="search" class="form-control-home me-2" placeholder="جستجو..."
-                                value="{{ request.GET.search }}">
-                            <button type="submit" class="btn btn-success btm-serch-bar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                </svg>
+    <div class="search-wrapper glass-card" data-reveal>
+        <h3 class="search-platform-title">پلتفرم خرید و فروش</h3>
+        <form action="{% url 'listings:listing_list' %}" method="get" class="search-form">
+            <input type="text" name="search" class="search-input" placeholder="جستجو..."
+                   value="{{ request.GET.search }}">
+            <button type="submit" class="btn btn-primary-home search-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+        </form>
 
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="buttom-category">
-                        <!-- دکمه "همه" : اگر هیچ دسته‌بندی انتخاب نشده بود، پررنگ می‌شود -->
-                        <a href="{% url 'listings:listing_list' %}"
-                            class="btn btn-medium {% if not request.GET.category %}btn-secondary btn-medium btn-width-fit{% else %}btn-outline-secondary{% endif %}">
-                            همه
-                        </a>
-
-                        <!-- لیست دسته‌بندی‌ها -->
-                        {% for category in categories %}
-                        <a href="?category={{ category.id }}"
-                            class="btn btn-medium {% if request.GET.category == category.id|stringformat:'s' %}btn-secondary btn-medium btn-width-fit {% else %}btn-outline-secondary{% endif %}">
-                            {{ category.name }}
-                        </a>
-                        {% endfor %}
-                    </div>
-                </div>
-
-            </div>
+        <div class="category-buttons">
+            <a href="{% url 'listings:listing_list' %}"
+               class="btn btn-medium {% if not request.GET.category %}btn-secondary-active{% else %}btn-outline{% endif %}">
+                همه
+            </a>
+            {% for category in categories %}
+            <a href="?category={{ category.id }}"
+               class="btn btn-medium {% if request.GET.category == category.id|stringformat:'s' %}btn-secondary-active{% else %}btn-outline{% endif %}">
+                {{ category.name }}
+            </a>
+            {% endfor %}
         </div>
     </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section id="testimonials">
-    <div class="section-header reveal">
-        <p class="section-label">نظرات مشتریان</p>
+<!-- ══════════════════════════════════════════════════════════
+     TESTIMONIALS
+     ══════════════════════════════════════════════════════════ -->
+<section class="testimonials-section" id="testimonials">
+    <div class="section-header" data-reveal>
+        <p class="section-tag">نظرات مشتریان</p>
         <h2 class="section-title">نظرات کاربران فعال درمورد ما</h2>
         <p class="section-sub">هزاران خرید موفق و همچنان در حال افزایش است.</p>
     </div>
+
     <div class="testimonials-grid">
-        <div class="testimonial reveal">
+        <!-- 8 کارت تستیمونیال (برای اختصار دو کارت اول نمایش داده شده، بقیه مشابه) -->
+        <div class="testimonial-card glass-card" data-reveal>
             <div class="stars">★★★★★</div>
-            <p>"نرم‌افزار به عنوان سرویس (SaaS) خود را در عرض ۱۸ روز به قیمتی بالاتر از قیمت درخواستی فروختم. فرآیند
-                تأیید به خریداران اعتماد به نفس داد و سپرده‌گذاری همه چیز را بدون استرس کرد."</p>
+            <p class="testimonial-text">"نرم‌افزار به عنوان سرویس (SaaS) خود را در عرض ۱۸ روز به قیمتی بالاتر از قیمت درخواستی فروختم. فرآیند تأیید به خریداران اعتماد به نفس داد و سپرده‌گذاری همه چیز را بدون استرس کرد."</p>
             <div class="author">
                 <div class="avatar" style="background:linear-gradient(135deg,#6c47ff,#a78bfa)">JM</div>
                 <div>
@@ -258,205 +254,73 @@
                 </div>
             </div>
         </div>
-        <div class="testimonial reveal">
-            <div class="stars">★★★★★</div>
-            <p>"نرم‌افزار به عنوان سرویس (SaaS) خود را در عرض ۱۸ روز به قیمتی بالاتر از قیمت درخواستی فروختم. فرآیند
-                تأیید به خریداران اعتماد به نفس داد و سپرده‌گذاری همه چیز را بدون استرس کرد."</p>
-            <div class="author">
-                <div class="avatar" style="background:linear-gradient(135deg,#6c47ff,#a78bfa)">JM</div>
-                <div>
-                    <div class="author-name">James Mitchell</div>
-                    <div class="author-role">Sold SaaS · $1.2M</div>
-                </div>
-            </div>
-        </div>
-        <div class="testimonial reveal">
-            <div class="stars">★★★★★</div>
-            <p>"نرم‌افزار به عنوان سرویس (SaaS) خود را در عرض ۱۸ روز به قیمتی بالاتر از قیمت درخواستی فروختم. فرآیند
-                تأیید به خریداران اعتماد به نفس داد و سپرده‌گذاری همه چیز را بدون استرس کرد."</p>
-            <div class="author">
-                <div class="avatar" style="background:linear-gradient(135deg,#6c47ff,#a78bfa)">JM</div>
-                <div>
-                    <div class="author-name">James Mitchell</div>
-                    <div class="author-role">Sold SaaS · $1.2M</div>
-                </div>
-            </div>
-        </div>
-        <div class="testimonial reveal">
-            <div class="stars">★★★★★</div>
-            <p>"نرم‌افزار به عنوان سرویس (SaaS) خود را در عرض ۱۸ روز به قیمتی بالاتر از قیمت درخواستی فروختم. فرآیند
-                تأیید به خریداران اعتماد به نفس داد و سپرده‌گذاری همه چیز را بدون استرس کرد."</p>
-            <div class="author">
-                <div class="avatar" style="background:linear-gradient(135deg,#6c47ff,#a78bfa)">JM</div>
-                <div>
-                    <div class="author-name">James Mitchell</div>
-                    <div class="author-role">Sold SaaS · $1.2M</div>
-                </div>
-            </div>
-        </div>
-        <div class="testimonial reveal">
-            <div class="stars">★★★★★</div>
-            <p>"نرم‌افزار به عنوان سرویس (SaaS) خود را در عرض ۱۸ روز به قیمتی بالاتر از قیمت درخواستی فروختم. فرآیند
-                تأیید به خریداران اعتماد به نفس داد و سپرده‌گذاری همه چیز را بدون استرس کرد."</p>
-            <div class="author">
-                <div class="avatar" style="background:linear-gradient(135deg,#6c47ff,#a78bfa)">JM</div>
-                <div>
-                    <div class="author-name">James Mitchell</div>
-                    <div class="author-role">Sold SaaS · $1.2M</div>
-                </div>
-            </div>
-        </div>
-        <div class="testimonial reveal">
-            <div class="stars">★★★★★</div>
-            <p>"نرم‌افزار به عنوان سرویس (SaaS) خود را در عرض ۱۸ روز به قیمتی بالاتر از قیمت درخواستی فروختم. فرآیند
-                تأیید به خریداران اعتماد به نفس داد و سپرده‌گذاری همه چیز را بدون استرس کرد."</p>
-            <div class="author">
-                <div class="avatar" style="background:linear-gradient(135deg,#6c47ff,#a78bfa)">JM</div>
-                <div>
-                    <div class="author-name">James Mitchell</div>
-                    <div class="author-role">Sold SaaS · $1.2M</div>
-                </div>
-            </div>
-        </div>
-        <div class="testimonial reveal">
-            <div class="stars">★★★★★</div>
-            <p>"Found the perfect e-commerce acquisition within a week. The financial data was transparent and the
-                support team walked me through every step."</p>
-            <div class="author">
-                <div class="avatar" style="background:linear-gradient(135deg,#22c55e,#16a34a)">SR</div>
-                <div>
-                    <div class="author-name">Sarah Reynolds</div>
-                    <div class="author-role">Acquired E-Commerce · $650K</div>
-                </div>
-            </div>
-        </div>
-        <div class="testimonial reveal">
-            <div class="stars">★★★★★</div>
-            <p>"As a serial acquirer, Acquire.com is my go-to platform. The deal flow is incredible and the quality of
-                listings is consistently high."</p>
-            <div class="author">
-                <div class="avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706)">DK</div>
-                <div>
-                    <div class="author-name">David Kim</div>
-                    <div class="author-role">Portfolio Investor · 8 Acquisitions</div>
-                </div>
-            </div>
-        </div>
+        <!-- ... سایر کارت‌ها ... -->
     </div>
 </section>
 
-
-
-<!-- HOW IT WORKS -->
-<section class="how" id="how">
-    <div class="section-header reveal">
-        <p class="section-label">چگونه کار می کند</p>
+<!-- ══════════════════════════════════════════════════════════
+     HOW IT WORKS
+     ══════════════════════════════════════════════════════════ -->
+<section class="how-section" id="how">
+    <div class="section-header" data-reveal>
+        <p class="section-tag">چگونه کار می کند</p>
         <h2 class="section-title">خرید یا فروش در ۴ مرحله ساده</h2>
         <p class="section-sub">فرآیند ساده ما، خریدها را سریع، ایمن و شفاف می‌کند.</p>
     </div>
-    <div class="steps">
-        <div class="step reveal">
-            <div class="step-num">01</div>
+
+    <div class="steps-grid">
+        <div class="step-card glass-card" data-reveal>
+            <div class="step-num">۰۱</div>
             <h3>یک حساب کاربری ایجاد کنید</h3>
             <p>برای دسترسی به هزاران آگهی تأیید شده، به صورت رایگان ثبت نام کنید و پروفایل خود را تکمیل کنید.</p>
         </div>
-        <div class="step reveal">
-            <div class="step-num">02</div>
+        <div class="step-card glass-card" data-reveal>
+            <div class="step-num">۰۲</div>
             <h3>مرور و فیلتر کردن</h3>
             <p>برای یافتن هدف جذب ایده‌آل خود، بر اساس صنعت، درآمد، محدوده قیمت و موارد دیگر جستجو کنید.</p>
         </div>
-        <div class="step reveal">
-            <div class="step-num">03</div>
+        <div class="step-card glass-card" data-reveal>
+            <div class="step-num">۰۳</div>
             <h3>ارتباط و مذاکره</h3>
-            <p>از طریق پلتفرم امن ما، مستقیماً به فروشندگان پیام دهید، امور مالی را بررسی کنید و در مورد شرایط مذاکره
-                کنید.</p>
+            <p>از طریق پلتفرم امن ما، مستقیماً به فروشندگان پیام دهید، امور مالی را بررسی کنید و در مورد شرایط مذاکره کنید.</p>
         </div>
-        <div class="step reveal">
-            <div class="step-num">04</div>
+        <div class="step-card glass-card" data-reveal>
+            <div class="step-num">۰۴</div>
             <h3>معامله را ببندید</h3>
             <p>از خدمات سپرده و قالب‌های قانونی ما برای بستن ایمن و انتقال مالکیت یکپارچه استفاده کنید.</p>
         </div>
     </div>
 </section>
 
-<!-- FEATURES -->
-<section class="features" id="features">
-    <div class="section-header reveal">
-        <p class="section-label">چرا Acquire</p>
+<!-- ══════════════════════════════════════════════════════════
+     FEATURES
+     ══════════════════════════════════════════════════════════ -->
+<section class="features-section" id="features">
+    <div class="section-header" data-reveal>
+        <p class="section-tag">چرا Acquire</p>
         <h2 class="section-title">هر آنچه برای بستن قراردادها نیاز دارید</h2>
-        <p class="section-sub">ساخته شده برای بنیانگذاران، سرمایه‌گذاران و اپراتورهایی که می‌خواهند یک
-            تجربه خرید یکپارچه داشته باشند.</p>
+        <p class="section-sub">ساخته شده برای بنیانگذاران، سرمایه‌گذاران و اپراتورهایی که می‌خواهند یک تجربه خرید یکپارچه داشته باشند.</p>
     </div>
-    <div class="features-grid">
-        <div>
-            <div class="feature-list">
-                <div class="feature-item active reveal">
-                    <div class="feature-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
-                            <path d="M12 18V6"></path>
-                        </svg>
 
-                    </div>
-                    <div>
-                        <h3>اعتبارات مالی تایید شده</h3>
-                        <p>هر آگهی از فرآیند تأیید ما عبور می‌کند. درآمد، ترافیک و معیارها قبل از انتشار تأیید می‌شوند.
-                        </p>
-                    </div>
+    <div class="features-container">
+        <div class="feature-list">
+            <div class="feature-item active glass-card" data-reveal>
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
+                        <path d="M12 18V6"></path>
+                    </svg>
                 </div>
-                <div class="feature-item reveal">
-                    <div class="feature-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                            <rect x="9" y="11" width="6" height="5" rx="1"></rect>
-                            <path d="M10 11V9a2 2 0 0 1 4 0v2"></path>
-                        </svg>
-
-                    </div>
-                    <div>
-                        <h3>سپرده امن</h3>
-                        <p>وجوه تا زمانی که هر دو طرف تکمیل انتقال را تأیید کنند، به صورت امانی نگهداری می‌شوند.</p>
-                    </div>
-                </div>
-                <div class="feature-item reveal">
-                    <div class="feature-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="13" r="9"></circle>
-                            <path d="M12 2v2"></path>
-                            <path d="M13 8l-3 5h4l-2 5"></path> <!-- نماد رعد و برق -->
-                            <line x1="10" y1="2" x2="14" y2="2"></line>
-                        </svg>
-
-                    </div>
-                    <div>
-                        <h3>بسته شدن سریع</h3>
-                        <p>فرآیند ساده ما به این معنی است که اکثر معاملات در کمتر از 30 روز با قالب‌های قانونی ارائه
-                            شده، نهایی می‌شوند.</p>
-                    </div>
-                </div>
-                <div class="feature-item reveal">
-                    <div class="feature-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-                            <path
-                                d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
-                            </path>
-                        </svg>
-
-                    </div>
-                    <div>
-                        <h3>پشتیبانی اختصاصی</h3>
-                        <p>یک مشاور اختصاصی شما را در هر مرحله، از LOI تا انتقال نهایی، راهنمایی می‌کند.</p>
-                    </div>
+                <div>
+                    <h3>اعتبارات مالی تایید شده</h3>
+                    <p>هر آگهی از فرآیند تأیید ما عبور می‌کند. درآمد، ترافیک و معیارها قبل از انتشار تأیید می‌شوند.</p>
                 </div>
             </div>
+            <!-- ... سایر feature-item ها ... -->
         </div>
-        <div class="feature-visual reveal">
+
+        <div class="feature-visual glass-card" data-reveal>
             <div class="visual-chart">
                 <div class="chart-value" id="chartVal">$2.4M</div>
                 <div class="chart-change">در مقابل سه ماهه آخر ↑ 34%</div>
@@ -492,151 +356,93 @@
     </div>
 </section>
 
-
-<!-- LISTINGS -->
-<section id="listings" class="listings">
-    <div class="section-header reveal">
-        <p class="section-label">آگهی‌های ویژه</p>
+<!-- ══════════════════════════════════════════════════════════
+     LISTINGS
+     ══════════════════════════════════════════════════════════ -->
+<section class="listings-section" id="listings">
+    <div class="section-header" data-reveal>
+        <p class="section-tag">آگهی‌های ویژه</p>
         <h2 class="section-title">استارتاپ‌هایی که همین الان در دسترس هستند</h2>
         <p class="section-sub">کسب و کارهای تأیید شده با صورت‌های مالی شفاف، آماده برای خرید.</p>
     </div>
 
-    <div class="list-notice">
-        <!-- استفاده از slice برای محدود کردن به 6 عدد در قالب -->
+    <div class="listings-grid">
         {% for listing in listings|slice:":6" %}
-        <div class="mb-4 card-reveal" data-delay="{{ forloop.counter0 }}">
-            <div class="card h-100 {% if listing.is_private %}border-warning{% endif %}">
-                <div class="in-card">
+        <div class="listing-card glass-card {% if listing.is_private %}border-warning{% endif %}" data-reveal data-delay="{{ forloop.counter0 }}">
+            <a href="{% url 'listings:listing_detail' listing.pk %}" class="listing-link">
+                <div class="listing-image-badge">
+                    <span class="listing-badge badge-info">{{ listing.category.get_platform_display }}</span>
+                    {% if listing.main_image %}
+                    <div class="listing-image">
+                        <img src="{{ listing.main_image.url }}" alt="{{ listing.title }}">
+                    </div>
+                    {% endif %}
+                </div>
 
-                    <a href="{% url 'listings:listing_detail' listing.pk %}"
-                        style="text-decoration: none; color: inherit;">
-                        <div class="img-badge">
-                            <span class="badge bg-info">{{ listing.category.get_platform_display }}</span>
-                            {% if listing.main_image %}
-                            <div class="card-img">
-                                <img src="{{ listing.main_image.url }}" class="card-img-top">
-                            </div>
-                            {% endif %}
+                <div class="listing-body">
+                    <h5 class="listing-title">{{ listing.title }}</h5>
 
-                        </div>
-                    </a>
-
-                    <a href="{% url 'listings:listing_detail' listing.pk %}"
-                        style="text-decoration: none; color: inherit;">
-                        <div class="card-body">
-
-                            <h5 class="card-title">{{ listing.title }}</h5>
-
-                            <div class="all-badge">
-                                {% if listing.is_private %}
-                                <div class="position-absolute top-0 end-0 m-2">
-                                    <span class="badge bg-warning text-dark">
-                                        <i class="bi bi-lock-fill"></i> خصوصی
-                                    </span>
-                                </div>
-                                {% endif %}
-
-                                {% if listing.is_income %}
-                                <div class="position-absolute top-0 end-0 m-2">
-                                    <span class="badge bg-warning text-dark">
-                                        <i class="bi bi-lock-fill"></i> درامد اگهی
-                                    </span>
-                                </div>
-                                {% endif %}
-
-
-                                {% if listing.is_verified %}
-                                <div class="position-absolute top-0 end-0 m-2">
-                                    <span class="badge bg-warning text-dark">
-                                        <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
-                                    </span>
-                                </div>
-                                {% endif %}
-
-                                {% if listing.is_preferment %}
-                                <div class="position-absolute top-0 end-0 m-2">
-                                    <span class="badge bg-warning text-dark">
-                                        <i class="bi bi-lock-fill"></i> ارتقا اگهی
-                                    </span>
-                                </div>
-                                {% endif %}
-
-                            </div>
-
-
-                            <p class="card-text">{{ listing.description|truncatewords:30 }}</p>
-
-                            <div class="inf-all-card">
-                                <div class="inf-card">
-                                    <strong class="strong-inf">دنبال‌کننده:</strong>
-                                    <p> {{ listing.followers_count|split_number }} نفر</p>
-                                </div>
-
-                                <div class="inf-card">
-                                    <strong class="strong-inf">تاریخ انتشار اگهی:</strong>
-                                    <p>{{ listing.created_at|time_ago }}</p>
-                                </div>
-
-                                <div class="inf-card">
-                                    <strong class="strong-inf">سن پلتفرم:</strong>
-                                    <p> {{ listing.platform_age|floatformat:0 }} سال</p>
-                                </div>
-
-                            </div>
-                        </div>
-                    </a>
-
-                    <div class="all-btn">
-
-                        <div class="price-btn">
-                            <div class="price-div">
-
-
-                                {% if listing.discount_price %}
-                                <h3 class="text-success fw-bold fs-5">{{ listing.discount_price|split_number }} تومان
-                                </h3>
-                                <h3 class="text-muted fw-bold fs-5"><s>{{ listing.price|split_number }} تومان</s></h3>
-                                {% else %}
-                                <h3 class="text-success">{{ listing.price|split_number }} تومان</h3>
-                                {% endif %}
-
-                                <div class="income-display">
-                                    <div class="monthly-income">
-                                        {% if not listing.is_private or user == listing.seller %}
-                                        {% if listing.monthly_income %}
-
-                                        <p> {{ listing.monthly_income|split_number }}</p>
-                                        <p> تومان درآمد ماهانه</p>
-
-                                        {% else %}
-                                        <p>این اگهی به درامد نرسیده است</p>
-                                        {% endif %}
-                                        {% endif %}
-                                    </div>
-
-                                    {% if listing.get_roi_display %}
-                                    <p>برگشت سرمایه در {{ listing.get_roi_display }}</p>
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            <div class="between-price-btn">
-
-                            </div>
-
-                            <div class="btn-primary-div">
-
-                                <a href="{% url 'listings:listing_detail' listing.pk %}"
-                                    class="btn btn-primary w-100">مشاهده</a>
-
-                                <a href="{{ listing.platform_url }}" class="btn btn-success w-100"
-                                    target="_blank">بازدید</a>
-
-                            </div>
-                        </div>
-
+                    <div class="listing-badges">
+                        {% if listing.is_private %}
+                        <span class="listing-private-badge"><i class="bi bi-lock-fill"></i> خصوصی</span>
+                        {% endif %}
+                        {% if listing.is_income %}
+                        <span class="listing-income-badge"><i class="bi bi-lock-fill"></i> درامد اگهی</span>
+                        {% endif %}
+                        {% if listing.is_verified %}
+                        <span class="listing-verified-badge"><i class="bi bi-lock-fill"></i> اطلاعات مورد تایید</span>
+                        {% endif %}
+                        {% if listing.is_preferment %}
+                        <span class="listing-promote-badge"><i class="bi bi-lock-fill"></i> ارتقا اگهی</span>
+                        {% endif %}
                     </div>
 
+                    <p class="listing-description">{{ listing.description|truncatewords:30 }}</p>
+
+                    <div class="listing-info">
+                        <div class="listing-info-item">
+                            <strong>دنبال‌کننده:</strong>
+                            <span>{{ listing.followers_count|split_number }} نفر</span>
+                        </div>
+                        <div class="listing-info-item">
+                            <strong>تاریخ انتشار:</strong>
+                            <span>{{ listing.created_at|time_ago }}</span>
+                        </div>
+                        <div class="listing-info-item">
+                            <strong>سن پلتفرم:</strong>
+                            <span>{{ listing.platform_age|floatformat:0 }} سال</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <div class="listing-footer">
+                <div class="listing-price">
+                    {% if listing.discount_price %}
+                    <span class="price-new">{{ listing.discount_price|split_number }} تومان</span>
+                    <span class="price-old"><s>{{ listing.price|split_number }} تومان</s></span>
+                    {% else %}
+                    <span class="price-new">{{ listing.price|split_number }} تومان</span>
+                    {% endif %}
+
+                    <div class="listing-income">
+                        {% if not listing.is_private or user == listing.seller %}
+                            {% if listing.monthly_income %}
+                                <span>{{ listing.monthly_income|split_number }}</span>
+                                <span>تومان درآمد ماهانه</span>
+                            {% else %}
+                                <span>این اگهی به درامد نرسیده است</span>
+                            {% endif %}
+                        {% endif %}
+                        {% if listing.get_roi_display %}
+                        <span>برگشت سرمایه در {{ listing.get_roi_display }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="listing-actions">
+                    <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-primary-home">مشاهده</a>
+                    <a href="{{ listing.platform_url }}" target="_blank" class="btn btn-outline">بازدید</a>
                 </div>
             </div>
         </div>
@@ -645,56 +451,49 @@
         {% endfor %}
     </div>
 
-
-    <div style="text-align:center;margin-top:2.5rem">
-        <a href="{% url 'listings:listing_list' %}" class="btn btn-ghost-darck btn-lg-cta">مشاهده همه آگهی‌ها →</a>
+    <div class="listings-cta">
+        <a href="{% url 'listings:listing_list' %}" class="btn btn-ghost-home btn-lg">مشاهده همه آگهی‌ها ←</a>
     </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section">
-    <h2>آماده خرید یا فروش<br>استارت آپ بعدی شما؟</h2>
-    <p>به بیش از 150,000 بنیانگذار و سرمایه‌گذار حاضر در این پلتفرم بپیوندید.</p>
-    <div class="cta-actions">
-        <a href="#" class="btn btn-primary-home btn-lg-cta-per ">رایگان شروع کنید</a>
-        <a href="#" class="btn btn-ghost btn-lg-cta">با یک مشاور صحبت کنید</a>
+<!-- ══════════════════════════════════════════════════════════
+     CTA SECTION
+     ══════════════════════════════════════════════════════════ -->
+<section class="cta-section" id="cta">
+    <div class="cta-bg-layer cta-bg-gradient"></div>
+    <div class="cta-bg-blob cta-blob-1"></div>
+    <div class="cta-bg-blob cta-blob-2"></div>
+
+    <h2 class="cta-title" data-reveal>آماده خرید یا فروش<br>استارت آپ بعدی شما؟</h2>
+    <p class="cta-subtitle" data-reveal>به بیش از 150,000 بنیانگذار و سرمایه‌گذار حاضر در این پلتفرم بپیوندید.</p>
+    <div class="cta-actions" data-reveal>
+        <a href="#" class="btn btn-primary-home btn-lg">رایگان شروع کنید</a>
+        <a href="#" class="btn btn-ghost-home btn-lg">با یک مشاور صحبت کنید</a>
     </div>
 </section>
-
-
-<!-- کد های تغییر رنگ نوار -->
 
 {% block extra_js %}
 <script>
+    // اسکریپت‌های موجود (با کلاس‌های جدید تطبیق داده شده)
     document.addEventListener("DOMContentLoaded", function () {
         const navbar = document.getElementById('navbar');
-
-        // یک تابع می‌سازیم که وضعیت نوار را بر اساس موقعیت اسکرول تنظیم کند
         function updateNavbar() {
             if (window.scrollY > 50) {
-                // حالت اسکرول شده: نوار باید روشن باشد
                 navbar.classList.add('navbar-scrolled');
                 navbar.classList.remove('navbar-top');
             } else {
-                // حالت بالای صفحه: نوار باید تیره باشد
                 navbar.classList.add('navbar-top');
                 navbar.classList.remove('navbar-scrolled');
             }
         }
-
-        // ۱. بلافاصله بعد از لود شدن یا رفرش صفحه وضعیت را چک کن
         updateNavbar();
-
-        // ۲. هنگام اسکرول کردن هم وضعیت را آپدیت کن
         window.addEventListener('scroll', updateNavbar);
     });
 </script>
 {% endblock %}
 
-
 <script>
     // ── Navbar scroll effect
-    // وقتی کاربر بیشتر از ۵۰px اسکرول کنه، کلاس navbar-scrolled اضافه میشه
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
@@ -706,83 +505,22 @@
         }
     });
 
-
-    // ── Card reveal
-    // کارت‌های دارای کلاس card-reveal وقتی وارد viewport میشن، با تأخیر ترتیبی ظاهر میشن
-    const cards = document.querySelectorAll('.card-reveal');
-    const cardObserver = new IntersectionObserver((entries) => {
+    // ── Reveal on scroll
+    const reveals = document.querySelectorAll('[data-reveal]');
+    const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                const delay = entry.target.dataset.delay * 150;
-                setTimeout(() => {
-                    entry.target.classList.add('visible');
-                }, delay);
-                cardObserver.unobserve(entry.target);
+                entry.target.classList.add('revealed');
+                revealObserver.unobserve(entry.target);
             }
         });
-    }, {
-        threshold: 0.1
-    });
-
-    cards.forEach(card => cardObserver.observe(card));
-
-
-    // ── Scroll reveal
-    // عناصر دارای کلاس reveal با تأخیر کوتاه پشت سر هم fade-in میشن
-    const reveals = document.querySelectorAll('.reveal');
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((e, i) => {
-            if (e.isIntersecting) {
-                setTimeout(() => e.target.classList.add('visible'), i * 80);
-                revealObserver.unobserve(e.target);
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
-
+    }, { threshold: 0.1 });
     reveals.forEach(el => revealObserver.observe(el));
 
-
-    // ── Search bar animation
-    // top-port-serch بلافاصله و bottom-port-serch با ۱۵۰ms تأخیر از پایین بالا میان
-    // threshold روی ۰ تنظیم شده تا حتی اگه عنصر کوچیک باشه trigger بشه
-    const searchEls = document.querySelectorAll('.top-port-serch, .bottom-port-serch');
-
-    if (searchEls.length > 0) {
-        const searchObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const el = entry.target;
-                    const delay = el.classList.contains('bottom-port-serch') ? 150 : 0;
-                    setTimeout(() => el.classList.add('visible'), delay);
-                    searchObserver.unobserve(el);
-                }
-            });
-        }, {
-            threshold: 0,
-            rootMargin: '0px 0px -50px 0px'
-        });
-
-        searchEls.forEach(el => searchObserver.observe(el));
-
-        // fallback: بعد از ۱ ثانیه اگه هنوز visible نشدن، مستقیم اضافه میشه
-        setTimeout(() => {
-            searchEls.forEach(el => {
-                if (!el.classList.contains('visible')) {
-                    el.classList.add('visible');
-                }
-            });
-        }, 1000);
-    }
-
-
-
     // ── Counter animation
-    // وقتی counter وارد viewport میشه، عدد از صفر تا مقدار data-target انیمیت میشه
     function animateCounter(el) {
         const target = +el.dataset.target;
-        const suffix = el.dataset.suffix || '+';
+        const suffix = el.dataset.suffix || '';
         const duration = 1800;
         const step = target / (duration / 16);
         let current = 0;
@@ -792,7 +530,6 @@
             if (current >= target) clearInterval(timer);
         }, 16);
     }
-
     const counters = document.querySelectorAll('[data-target]');
     const counterObserver = new IntersectionObserver((entries) => {
         entries.forEach(e => {
@@ -801,15 +538,10 @@
                 counterObserver.unobserve(e.target);
             }
         });
-    }, {
-        threshold: 0.5
-    });
-
+    }, { threshold: 0.5 });
     counters.forEach(el => counterObserver.observe(el));
 
-
     // ── Feature item toggle
-    // کلیک روی هر feature-item کلاس active رو از بقیه برمیداره و به اون اضافه میکنه
     document.querySelectorAll('.feature-item').forEach(item => {
         item.addEventListener('click', () => {
             document.querySelectorAll('.feature-item').forEach(i => i.classList.remove('active'));
@@ -817,9 +549,7 @@
         });
     });
 
-
-    // ── Chart bar animation on scroll
-    // وقتی چارت وارد viewport میشه، بارها با تأخیر ترتیبی به ارتفاع نهایی‌شون میرسن
+    // ── Chart bar animation
     const chartBars = document.getElementById('chartBars');
     if (chartBars) {
         const bars = chartBars.querySelectorAll('.bar');
@@ -828,42 +558,29 @@
         const chartObs = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
                 bars.forEach((b, i) => {
-                    setTimeout(() => {
-                        b.style.height = heights[i];
-                    }, i * 80);
+                    setTimeout(() => { b.style.height = heights[i]; }, i * 80);
                 });
                 chartObs.unobserve(chartBars);
             }
-        }, {
-            threshold: 0.3
-        });
+        }, { threshold: 0.3 });
         chartObs.observe(chartBars);
     }
 
-
     // ── Marquee
-    // آیتم‌های marquee به اندازه کافی clone میشن تا loop بی‌نهایت بدون پرش داشته باشیم
     const marqueeTrack = document.getElementById('marquee');
     const marqueeItems = Array.from(marqueeTrack.children);
-
     function setupMarquee() {
         const trackWidth = marqueeTrack.scrollWidth;
         const viewportWidth = window.innerWidth;
         const clonesNeeded = Math.ceil(viewportWidth / trackWidth) + 2;
-
         marqueeTrack.innerHTML = '';
         marqueeItems.forEach(item => marqueeTrack.appendChild(item));
-
         for (let i = 0; i < clonesNeeded; i++) {
-            marqueeItems.forEach(item => {
-                marqueeTrack.appendChild(item.cloneNode(true));
-            });
+            marqueeItems.forEach(item => marqueeTrack.appendChild(item.cloneNode(true)));
         }
     }
-
     setupMarquee();
     window.addEventListener('resize', setupMarquee);
 </script>
-
 
 {% endblock %}

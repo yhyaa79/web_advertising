@@ -1,0 +1,1217 @@
+/* ══════════════════════════════════════════════════════════════
+   common.css
+   فایل مشترک متغیرها (Design Tokens) و کلاس‌های تکراری پروژه
+   شامل: فونت‌ها، رنگ‌ها، فاصله‌ها، شعاع گوشه‌ها، سایه‌ها،
+   دکمه‌ها، بج‌ها/تگ‌ها، کارت پایه، فرم پایه و کلاس‌های کمکی
+   ══════════════════════════════════════════════════════════════ */
+
+
+/* ========================================
+   1) فونت‌ها (Font Faces)
+   ======================================== */
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Thin.ttf") format("truetype");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-ExtraBold.ttf") format("truetype");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Thin.ttf") format("truetype");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-ExtraBold.ttf") format("truetype");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+}
+
+
+/* ========================================
+   2) ریست پایه
+   ======================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Vazirmatn", "Roboto", "Tahoma", "Segoe UI", sans-serif;
+    background-color: var(--body-bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    direction: rtl;
+    overflow-x: hidden;
+}
+
+html,
+body,
+p,
+span,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+li,
+ul,
+ol,
+td,
+label,
+small,
+medium,
+strong,
+em,
+b,
+i,
+blockquote,
+q,
+cite,
+code,
+pre,
+button,
+input,
+textarea,
+select,
+option {
+    font-family: "Vazirmatn", "Roboto", sans-serif;
+}
+
+
+/* ========================================
+   3) متغیرهای اصلی (Design Tokens)
+   ======================================== */
+:root {
+
+    /* ---- رنگ‌های برند / اصلی ---- */
+    --primary-color: #011f44;
+    --secondary-color: #022a5b;
+    --accent-color: #3498db;
+    --blu-color: #0058ff;
+    --blu-durk-color: #0544bb;
+
+    /* رنگ سیستم دومِ برند (وارد شده در نسخه‌های جدیدتر فایل‌ها) */
+    --primary: #4F6EF7;
+    --primary-dark: #3A56D4;
+    --primary-light: #EEF1FF;
+
+    /* برند نسخه‌ی تیره (صفحات هیرو/مارکتینگ) */
+    --dark-hero: #22203a;
+    --dark-marquee: #272459;
+    --card-bg: #16162a;
+    --light-card-bg: #dee6f5;
+    --light-serch-bg: #eef2fe;
+    --border-dark-theme: #3a3a5e;
+    --muted: #8888aa;
+    --muted-dark: #59596d;
+    --text-light-on-dark: #e2e2f0;
+
+    /* ---- رنگ‌های وضعیت (Status) ---- */
+    --success-color: #27ae60;
+    --success: #2f9e44;
+    --success-light: #d3f9d8;
+    --danger-color: #e74c3c;
+    --danger: #EF4444;
+    --danger-light: #FEE2E2;
+    --error: #c92a2a;
+    --error-light: #ffe3e3;
+    --warning-color: #f39c12d9;
+    --warn: #e67700;
+    --warn-light: #fff3bf;
+    --info-color: #16a085cc;
+    --accent: #10B981;
+    --accent-light: #D1FAE5;
+    --green: #22c55e;
+
+    /* ---- رنگ‌های پس‌زمینه ---- */
+    --light-bg: #ecf0f1;
+    --dark-bg: #1a252f;
+    --body-bg: #fdfdff;
+    --bg: #f0f2f7;
+    --home-bg-1: #e7f0ff;
+    --home-bg-2: #f0f5ff;
+    --home-bg-3: #e7f0ff;
+    --white-bg: #ffffff;
+    --white: #ffffff;
+    --black: #000000;
+    --surface: #FFFFFF;
+
+    /* ---- رنگ‌های متن ---- */
+    --text-primary: #2c3e50;
+    --text-secondary: #737879;
+    --text-muted: #999;
+    --muted-generic: #868e96;
+
+    /* ---- رنگ‌های مرز (Border) ---- */
+    --border-color: #bdc3c7;
+    --border-light: #dee2e6;
+    --border-dark: #ddd;
+    --border: #E2E8F0;
+    --border-focus: #4F6EF7;
+
+    /* ---- سایه‌ها (Shadows) ---- */
+    --card-shadow: 0 2px 10px rgba(0, 0, 0, .03);
+    --hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --modal-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, .06), 0 1px 2px rgba(0, 0, 0, .04);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, .08), 0 2px 6px rgba(0, 0, 0, .04);
+    --shadow-lg: 0 10px 32px rgba(0, 0, 0, .1), 0 4px 12px rgba(0, 0, 0, .05);
+
+    /* ---- شعاع گوشه‌ها (Radius) ---- */
+    --border-radius-sm: 4px;
+    --border-radius-sm-md: 6px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 10px;
+    --border-radius-xl: 12px;
+    --border-radius-50: 14px;
+    --border-radius-25: 25px;
+    --border-radius-999: 999px;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-xs: 6px;
+
+    /* ---- فاصله‌ها (Spacing) ---- */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-xxl: 3rem;
+
+    /* ---- سایز فونت‌ها (Font Scale) ---- */
+    --text: 6px;
+    --font-size-xs: calc(var(--text) + 1px);
+    --font-size-sm: calc(var(--text) + 2px);
+    --font-size-base: calc(var(--text) + 3px);
+    --font-size-md: calc(var(--text) + 4px);
+    --font-size-lg: calc(var(--text) + 5px);
+    --font-size-xl: calc(var(--text) + 6px);
+    --font-size-2xl: calc(var(--text) + 7px);
+    --font-size-3xl: calc(var(--text) + 9px);
+    --font-size-4xl: calc(var(--text) + 11px);
+    --font-size-5xl: calc(var(--text) + 15px);
+    --font-size-6xl: calc(var(--text) + 20px);
+    --font-size-7xl: calc(var(--text) + 24px);
+
+    /* ---- ابعاد ثابت پرکاربرد ---- */
+    --stacked-card-height: 420px;
+    --stacked-card-offset: 24px;
+
+    /* ---- انتقال (Transition) ---- */
+    --transition-base: all 0.3s ease;
+    --transition: .2s ease;
+}
+
+
+/* ========================================
+   4) تایپوگرافی پایه
+   ======================================== */
+strong {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+}
+
+h3 {
+    font-size: var(--font-size-3xl);
+}
+
+h4 {
+    font-size: var(--font-size-2xl);
+}
+
+a {
+    color: var(--blu-durk-color);
+    text-decoration: none;
+}
+
+hr,
+.divider,
+.form-divider {
+    border: none;
+    height: 1px;
+    margin: 12px 0;
+    background-color: var(--border-light);
+}
+
+
+/* ========================================
+   5) دکمه‌ها (Buttons)
+   ======================================== */
+
+/* پایه مشترک همه دکمه‌ها */
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius-999);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-base);
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.btn:hover {
+    opacity: .9;
+}
+
+/* ---- رنگ‌های دکمه ---- */
+.btn-primary {
+    background: transparent;
+    color: var(--blu-color);
+    border: 1.6px solid var(--blu-color);
+}
+
+.btn-primary:hover {
+    background: #5151511d;
+    box-shadow: 0 3px 8px #0049cf81;
+}
+
+.btn-success {
+    background: var(--blu-color);
+    color: var(--white-bg);
+}
+
+.btn-success:hover {
+    background: #014bd4;
+    box-shadow: 0 3px 8px #004fe3c0;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger-color) 0%, #c0392b 100%);
+    color: var(--white-bg);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #c0392b 0%, var(--danger-color) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.btn-warning {
+    background: var(--warning-color);
+    color: var(--white-bg);
+}
+
+.btn-warning:hover {
+    background: #f0984b;
+    transform: translateY(-2px);
+}
+
+.btn-info {
+    background: linear-gradient(135deg, var(--info-color) 0%, #138d75 100%);
+    color: var(--white-bg);
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, #138d75 0%, var(--info-color) 100%);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: #9ca3a3b5;
+    color: var(--white-bg);
+    border: 1.5px solid var(--border-color);
+}
+
+.btn-outline-primary {
+    background: transparent;
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+}
+
+.btn-outline-primary:hover {
+    background: var(--accent-color);
+    color: var(--white-bg);
+}
+
+.btn-outline-secondary {
+    background: transparent;
+    border: 1.5px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.btn-outline-secondary:hover {
+    background-color: #7f898a38;
+}
+
+.btn-delet {
+    color: #df1111;
+    background: #fcb3b2;
+}
+
+.btn-delet:hover {
+    color: #a91a1a;
+    background: #f9918f;
+}
+
+.btn-remove {
+    background: #da5457;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-edit {
+    background: #4e90d9;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-activation {
+    background: #e0da66;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+/* دکمه‌های شیشه‌ای/تیره (روی نوار ناوبری تیره یا هیرو) */
+.btn-ghost {
+    background: transparent;
+    border: 2px solid var(--border-dark-theme);
+    color: #ffff;
+}
+
+.btn-ghost-darck {
+    background: transparent;
+    color: var(--muted-dark);
+    border: 2px solid var(--border-dark-theme);
+}
+
+.btn-ghost:hover,
+.btn-ghost-darck:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* ---- سایزهای دکمه ---- */
+.btn-small,
+.btn-sm {
+    padding: 3px 17px;
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    height: 27px;
+    min-width: 50px;
+}
+
+.btn-medium,
+.btn-md {
+    padding: 5px 20px;
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    height: 30px;
+    min-width: 60px;
+}
+
+.btn-large,
+.btn-lg {
+    padding: 8px 30px;
+    font-size: var(--font-size-2xl);
+    font-weight: 500;
+    height: 35px;
+    min-width: 70px;
+    border-radius: 10px;
+}
+
+.btn-lg-cta,
+.btn-lg-cta-per {
+    padding: 8px 30px;
+    font-size: 1rem;
+    border-radius: 10px;
+}
+
+.btn-lg-cta {
+    color: var(--black) !important;
+}
+
+.btn-lg-cta:hover {
+    color: var(--primary) !important;
+}
+
+/* ---- وضعیت/چیدمان کمکی دکمه ---- */
+.btn-width-100 {
+    width: 100%;
+}
+
+.btn-width-fit {
+    width: fit-content;
+}
+
+.btn-gap {
+    gap: 10px;
+}
+
+.btn-group-vertical {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+/* ---- دکمه‌های مرحله‌بندی (Wizard/Nav) ---- */
+.btn-nav,
+.btn-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border-radius: var(--radius-sm);
+    font-size: .9rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    transition: all var(--transition);
+    text-decoration: none;
+}
+
+.btn-prev {
+    background: var(--surface);
+    color: var(--text-secondary);
+    border: 1.5px solid var(--border);
+}
+
+.btn-prev:hover {
+    background: var(--bg);
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
+}
+
+.btn-next,
+.btn-primary-home {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(79, 110, 247, .35);
+}
+
+.btn-next:hover,
+.btn-primary-home:hover {
+    background: var(--primary-dark);
+    box-shadow: 0 6px 20px rgba(79, 110, 247, .4);
+    transform: translateY(-1px);
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, var(--accent), #059669);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, .35);
+}
+
+.btn-submit:hover {
+    box-shadow: 0 6px 20px rgba(16, 185, 129, .45);
+    transform: translateY(-1px);
+}
+
+
+/* ========================================
+   6) بج‌ها و تگ‌های وضعیت (Badges / Tags)
+   ======================================== */
+.badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 3px 10px;
+    font-size: var(--font-size-lg);
+    font-weight: 400;
+    border-radius: var(--border-radius-999);
+    white-space: nowrap;
+}
+
+.badge-success,
+.bg-success {
+    background-color: var(--success-color);
+    color: var(--white-bg);
+}
+
+.badge-warning,
+.bg-warning,
+.badge-secondary {
+    background-color: #f9bc5c63;
+    color: #e49518;
+}
+
+.badge-info,
+.bg-info {
+    background-color: var(--info-color);
+    color: var(--white-bg);
+}
+
+.badge-danger,
+.bg-danger {
+    background-color: var(--danger-color);
+    color: var(--white-bg);
+}
+
+.badge-primary,
+.bg-primary {
+    background-color: var(--accent-color);
+    color: var(--white-bg);
+}
+
+/* تگ‌های رنگی وضعیت آگهی/سفارش */
+.tag-active {
+    background: #92d391;
+    color: #ffffff;
+}
+
+.tag-waiting {
+    background: #f2a676;
+    color: #ffffff;
+}
+
+.tag-not-accepted {
+    background: #d46469;
+    color: #ffffff;
+}
+
+.tag-deleted {
+    background: #949494;
+    color: #ffffff;
+}
+
+.tag-sold {
+    background: #6da69d;
+    color: #ffffff;
+}
+
+.tag-general {
+    background: #81a9bc;
+    color: #ffffff;
+}
+
+.tag-private {
+    background: #ae9ed3;
+    color: #ffffff;
+}
+
+.tag-active,
+.tag-waiting,
+.tag-not-accepted,
+.tag-deleted,
+.tag-sold,
+.tag-general,
+.tag-private {
+    padding: 3px 10px;
+    font-size: var(--font-size-sm);
+    border-radius: var(--border-radius-999);
+}
+
+.badge-wait {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.badge-ok {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.badge-err {
+    background: var(--error-light);
+    color: var(--error);
+}
+
+.badge-info {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+
+/* ========================================
+   7) کارت پایه (Card Base)
+   ======================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    background: var(--white-bg);
+    border-radius: var(--border-radius-sm-md);
+    box-shadow: var(--card-shadow);
+    margin-bottom: var(--spacing-xl);
+    border: none;
+    overflow: hidden;
+    transition: var(--transition-base);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.card-header {
+    padding: var(--spacing-md);
+    border-bottom: none;
+    font-size: var(--font-size-4xl);
+}
+
+.card-header h4 {
+    margin: 0;
+    font-size: var(--font-size-3xl);
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 10px 15px;
+    width: 100%;
+}
+
+.card-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.card-text {
+    color: var(--text-primary);
+    font-size: var(--font-size-lg);
+    margin: 5px 0;
+    font-weight: 400;
+}
+
+
+/* ========================================
+   8) فرم پایه (Form Base)
+   ======================================== */
+form label,
+.form-label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    font-weight: 400;
+    font-size: var(--font-size-xl);
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="number"],
+form input[type="url"],
+form input[type="file"],
+form select,
+form textarea,
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-xl);
+    font-family: inherit;
+    color: var(--text-primary);
+    background: var(--white-bg);
+    transition: var(--transition-base);
+    outline: none;
+    direction: rtl;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus,
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.form-input.error,
+.form-select.error,
+.form-textarea.error,
+.field input.err,
+.field select.err,
+.field textarea.err {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px var(--danger-light);
+}
+
+form textarea,
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.field-error,
+.field-err-msg {
+    font-size: var(--font-size-md);
+    color: var(--error);
+    margin-top: 4px;
+    display: none;
+}
+
+.field-error.visible {
+    display: block;
+}
+
+.field-hint {
+    font-size: var(--font-size-md);
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+
+/* ========================================
+   9) کلاس‌های کمکی (Utilities)
+   ======================================== */
+.w-100 {
+    width: 100%;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.mt-2 {
+    margin-top: var(--spacing-sm);
+}
+
+.mt-3 {
+    margin-top: var(--spacing-md);
+}
+
+.mt-4 {
+    margin-top: var(--spacing-lg);
+}
+
+.mt-5 {
+    margin-top: var(--spacing-xxl);
+}
+
+.mb-2 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.mb-3 {
+    margin-bottom: var(--spacing-md);
+}
+
+.mb-4 {
+    margin-bottom: var(--spacing-lg);
+}
+
+.mb-5 {
+    margin-bottom: var(--spacing-xxl);
+}
+
+.me-2 {
+    margin-left: var(--spacing-sm);
+}
+
+.py-5 {
+    padding-top: var(--spacing-xxl);
+    padding-bottom: var(--spacing-xxl);
+}
+
+.pad-10 {
+    padding: var(--spacing-md) !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-end {
+    text-align: right;
+}
+
+.text-muted {
+    color: var(--text-muted);
+    font-size: var(--font-size-xl) !important;
+}
+
+.text-success {
+    color: var(--success-color);
+}
+
+.text-danger {
+    color: var(--danger-color);
+}
+
+.text-warning {
+    color: var(--warning-color);
+}
+
+.fw-bold {
+    font-weight: 700;
+}
+
+.fs-4 {
+    font-size: var(--font-size-xl);
+}
+
+.fs-5 {
+    font-size: var(--font-size-3xl);
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.justify-content-between {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.justify-content-end {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+
+
+/* ========================================
+   10) سیستم Grid ساده
+   ======================================== */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-md-3,
+.col-md-4,
+.col-md-6,
+.col-md-8,
+.col-md-10,
+.col-md-11,
+.col-md-12 {
+    padding: 0 15px;
+}
+
+.col-md-3 {
+    flex: 0 0 20%;
+    max-width: 20%;
+}
+
+.col-md-4 {
+    flex: 0 0 33.333%;
+    max-width: 33.333%;
+}
+
+.col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.col-md-8 {
+    flex: 0 0 66.666%;
+    max-width: 66.666%;
+}
+
+.col-md-10 {
+    flex: 0 0 70%;
+    max-width: 70%;
+}
+
+.col-md-11 {
+    flex: 0 0 80%;
+    max-width: 80%;
+}
+
+.col-md-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+
+/* ========================================
+   11) جداول پایه
+   ======================================== */
+.table-responsive {
+    overflow-x: auto;
+    margin-bottom: var(--spacing-lg);
+}
+
+.table,
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white-bg);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+}
+
+.table thead,
+.data-table thead {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: var(--white-bg);
+}
+
+.table th,
+.data-table th {
+    padding: var(--spacing-md);
+    text-align: right;
+    font-weight: 600;
+    font-size: var(--font-size-lg);
+    background: #f8f9fa;
+    color: #333;
+}
+
+.table td,
+.data-table td {
+    padding: var(--spacing-lg) var(--spacing-sm) !important;
+    border-bottom: 1px solid var(--light-bg);
+    color: var(--text-primary);
+    white-space: nowrap !important;
+}
+
+.table-striped tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.table tbody tr:hover,
+.data-table tbody tr:hover {
+    background-color: var(--light-bg);
+}
+
+
+/* ========================================
+   12) مودال پایه
+   ======================================== */
+.custom-modal,
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.custom-modal-content,
+.modal-content {
+    background-color: var(--white-bg);
+    margin: auto;
+    padding: 0;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--modal-shadow);
+    max-width: 650px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-modal-header,
+.modal-header {
+    padding: var(--spacing-md) var(--spacing-lg);
+    background-color: #f8f9fa;
+    border-bottom: 1px solid var(--border-light);
+    border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.custom-modal-body,
+.modal-body {
+    padding: var(--spacing-lg);
+    max-height: 70vh;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-modal-close,
+.close {
+    background: none;
+    border: none;
+    font-size: var(--font-size-xl);
+    font-weight: bold;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 1;
+}
+
+.custom-modal-close:hover,
+.close:hover {
+    color: #333;
+}
+
+
+/* ========================================
+   13) پیشرفت مرحله‌ای (Progress Steps) — مشترک بین ویزاردها
+   ======================================== */
+.step-panel {
+    display: none;
+}
+
+.step-panel.active {
+    display: block;
+}
+
+.progress-bar-track,
+.progress-wrap .progress-bar-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 99px;
+    transition: width .4s cubic-bezier(.4, 0, .2, 1);
+}
+
+
+/* ========================================
+   14) ریسپانسیو مشترک
+   ======================================== */
+@media (max-width: 768px) {
+
+    .col-md-3,
+    .col-md-4,
+    .col-md-6,
+    .col-md-8,
+    .col-md-10 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .table,
+    .data-table {
+        font-size: var(--font-size-sm);
+    }
+
+    .table th,
+    .table td,
+    .data-table th,
+    .data-table td {
+        padding: 0.75rem var(--spacing-sm);
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+}
