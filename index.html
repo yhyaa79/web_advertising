@@ -1,0 +1,1735 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>کسبیت | بازارگاه امن خرید و فروش دارایی‌های دیجیتال ایران</title>
+    <meta name="description"
+        content="کسبیت پلتفرم امن خرید و فروش فروشگاه اینترنتی، وب‌سایت، کانال تلگرام، پیج اینستاگرام و اپلیکیشن با کارشناسی حرفه‌ای، قرارداد قانونی و پرداخت امانی." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+
+    <style>
+        /* ==========================================================================
+   کسبیت — بازارگاه امن خرید و فروش دارایی دیجیتال
+   Design tokens
+   ========================================================================== */
+
+        :root {
+            --paper: #f5f8fa;
+            --paper-deep: #eef3f7;
+            --surface: #ffffff;
+            --ink: #12233a;
+            --ink-soft: #24384f;
+            --slate: #66798f;
+            --slate-soft: #8a9bb0;
+            --line: #e1eaf2;
+
+            --teal: #2a6f8f;
+            --teal-dark: #1a4d63;
+            --teal-tint: #e6f0f5;
+
+            --gold: #b8862f;
+            --gold-dark: #8f6a24;
+            --gold-tint: #f6ecd7;
+
+            --ink-inverse: #f7fafc;
+
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 30px;
+            --radius-pill: 999px;
+
+            --shadow-sm: 0 4px 14px rgba(18, 35, 58, 0.06);
+            --shadow-md: 0 14px 34px rgba(18, 35, 58, 0.09);
+            --shadow-teal: 0 16px 34px rgba(42, 111, 143, 0.22);
+
+            --font-display: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
+            --font-body: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--paper);
+            color: var(--ink-soft);
+            line-height: 1.75;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img,
+        svg {
+            display: block;
+            max-width: 100%;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: var(--teal-dark);
+            background: var(--teal-tint);
+            padding: 7px 16px;
+            border-radius: var(--radius-pill);
+            margin-bottom: 18px;
+        }
+
+        .eyebrow i {
+            font-size: 0.75rem;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: var(--font-display);
+            color: var(--ink);
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        .section-head {
+            max-width: 640px;
+            margin-bottom: 48px;
+        }
+
+        .section-head.center {
+            margin-inline: auto;
+            text-align: center;
+        }
+
+        .section-head h2 {
+            font-size: clamp(1.6rem, 2.6vw, 2.15rem);
+            margin-bottom: 14px;
+        }
+
+        .section-head p {
+            color: var(--slate);
+            font-size: 1rem;
+        }
+
+        section {
+            padding: 96px 0;
+        }
+
+        .section-alt {
+            background: var(--surface);
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        /* ---------- buttons ---------- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px 28px;
+            border-radius: var(--radius-pill);
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--teal);
+            color: #fff;
+            box-shadow: var(--shadow-teal);
+        }
+
+        .btn-primary:hover {
+            background: var(--teal-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-ghost {
+            background: var(--surface);
+            color: var(--ink);
+            border: 1.5px solid var(--line);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--teal);
+            color: var(--teal-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: #fff;
+            box-shadow: 0 14px 28px rgba(184, 134, 47, 0.28);
+        }
+
+        .btn-gold:hover {
+            background: var(--gold-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        /* ==========================================================================
+   Header
+   ========================================================================== */
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(245, 248, 250, 0.85);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .site-header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 78px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-mark {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--teal);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            box-shadow: var(--shadow-teal);
+        }
+
+        .brand-text {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--ink);
+        }
+
+        .brand-text span {
+            color: var(--teal);
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 34px;
+        }
+
+        .main-nav a {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--ink-soft);
+            transition: color 0.15s ease;
+        }
+
+        .main-nav a:hover {
+            color: var(--teal-dark);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-toggle {
+            display: none;
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--line);
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            color: var(--ink);
+        }
+
+        /* ==========================================================================
+   Hero
+   ========================================================================== */
+
+        .hero {
+            padding: 72px 0 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: -20% -10% auto auto;
+            width: 620px;
+            height: 620px;
+            background: radial-gradient(circle, rgba(42, 111, 143, 0.14), transparent 70%);
+            z-index: 0;
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 56px;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.1rem, 4vw, 3.15rem);
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--teal);
+            position: relative;
+        }
+
+        .hero-sub {
+            font-size: 1.05rem;
+            color: var(--slate);
+            max-width: 520px;
+            margin-bottom: 34px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .hero-microline {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--slate-soft);
+        }
+
+        .hero-microline .avatars {
+            display: flex;
+        }
+
+        .hero-microline .avatars span {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--teal-tint);
+            border: 2px solid var(--paper);
+            margin-inline-start: -10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            color: var(--teal-dark);
+            font-weight: 700;
+        }
+
+        .hero-microline .avatars span:first-child {
+            margin-inline-start: 0;
+        }
+
+        /* --- hero visual: escrow "vault card" + seal --- */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vault-card {
+            width: 100%;
+            max-width: 400px;
+            background: var(--ink);
+            color: var(--ink-inverse);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vault-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 100% 0%, rgba(184, 134, 47, 0.28), transparent 55%);
+        }
+
+        .vault-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 26px;
+        }
+
+        .vault-top .tag {
+            font-size: 0.72rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 12px;
+            border-radius: var(--radius-pill);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #d7e4ed;
+        }
+
+        .vault-top .tag i {
+            color: #6fd39a;
+            font-size: 0.6rem;
+        }
+
+        .vault-label {
+            font-size: 0.8rem;
+            color: #9db2c6;
+            margin-bottom: 6px;
+            position: relative;
+        }
+
+        .vault-amount {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            margin-bottom: 24px;
+            position: relative;
+            direction: ltr;
+            text-align: right;
+            font-family: var(--font-display);
+        }
+
+        .vault-amount small {
+            font-size: 1rem;
+            color: #9db2c6;
+            font-weight: 600;
+            margin-inline-start: 6px;
+        }
+
+        .vault-progress {
+            height: 6px;
+            border-radius: var(--radius-pill);
+            background: rgba(255, 255, 255, 0.12);
+            overflow: hidden;
+            margin-bottom: 14px;
+            position: relative;
+        }
+
+        .vault-progress i {
+            display: block;
+            height: 100%;
+            width: 66%;
+            border-radius: var(--radius-pill);
+            background: linear-gradient(90deg, var(--teal), #6fb8d4);
+        }
+
+        .vault-steps {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #93a9bd;
+            position: relative;
+        }
+
+        .vault-steps b {
+            color: #d7e4ed;
+            font-weight: 700;
+        }
+
+        .seal {
+            position: absolute;
+            top: -22px;
+            left: -28px;
+            width: 118px;
+            height: 118px;
+            border-radius: 50%;
+            border: 2px dashed var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gold-tint);
+            transform: rotate(-11deg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .seal-inner {
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            border: 1.5px solid var(--gold);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            text-align: center;
+        }
+
+        .seal-inner i {
+            color: var(--gold-dark);
+            font-size: 1.15rem;
+        }
+
+        .seal-inner span {
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: var(--gold-dark);
+            line-height: 1.3;
+        }
+
+        .float-chip {
+            position: absolute;
+            bottom: -18px;
+            right: -22px;
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 230px;
+        }
+
+        .float-chip i {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: var(--teal-tint);
+            color: var(--teal-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .float-chip strong {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--ink);
+        }
+
+        .float-chip small {
+            color: var(--slate);
+            font-size: 0.72rem;
+        }
+
+        /* ==========================================================================
+   Trust strip
+   ========================================================================== */
+
+        .trust-strip {
+            padding: 46px 0;
+            background: var(--surface);
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .trust-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 0 12px;
+            border-inline-start: 1px solid var(--line);
+        }
+
+        .stat:first-child {
+            border-inline-start: none;
+        }
+
+        .stat b {
+            display: block;
+            font-family: var(--font-display);
+            font-size: clamp(1.6rem, 3vw, 2.3rem);
+            color: var(--teal-dark);
+            font-weight: 800;
+        }
+
+        .stat span {
+            font-size: 0.85rem;
+            color: var(--slate);
+        }
+
+        .badge-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .badge-pill {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            background: var(--paper);
+            border: 1px dashed var(--slate-soft);
+            padding: 10px 18px;
+            border-radius: var(--radius-pill);
+            font-size: 0.78rem;
+            color: var(--slate);
+            font-weight: 600;
+        }
+
+        .badge-pill i {
+            color: var(--gold-dark);
+        }
+
+        /* ==========================================================================
+   Category grid
+   ========================================================================== */
+
+        .cat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .cat-card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            padding: 28px 24px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .cat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .cat-card.wide {
+            grid-column: span 1;
+        }
+
+        .cat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 15px;
+            background: var(--teal-tint);
+            color: var(--teal-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 18px;
+        }
+
+        .cat-card h3 {
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+        }
+
+        .cat-card p {
+            color: var(--slate);
+            font-size: 0.87rem;
+        }
+
+        /* ==========================================================================
+   Process
+   ========================================================================== */
+
+        .process-wrap {
+            position: relative;
+        }
+
+        .process-tabs {
+            display: inline-flex;
+            background: var(--paper-deep);
+            border-radius: var(--radius-pill);
+            padding: 5px;
+            margin-bottom: 44px;
+            gap: 4px;
+        }
+
+        .process-tabs button {
+            padding: 10px 22px;
+            border-radius: var(--radius-pill);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--slate);
+        }
+
+        .process-tabs button.active {
+            background: var(--surface);
+            color: var(--teal-dark);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+            position: relative;
+        }
+
+        .steps::before {
+            content: "";
+            position: absolute;
+            top: 26px;
+            right: 12%;
+            left: 12%;
+            height: 2px;
+            background: repeating-linear-gradient(to left, var(--line) 0 8px, transparent 8px 14px);
+            z-index: 0;
+        }
+
+        .step {
+            position: relative;
+            z-index: 1;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            padding: 24px 20px;
+        }
+
+        .step-num {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--ink);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 800;
+            margin-bottom: 18px;
+            border: 4px solid var(--paper);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .step h4 {
+            font-size: 0.98rem;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            font-size: 0.83rem;
+            color: var(--slate);
+        }
+
+        /* ==========================================================================
+   USP
+   ========================================================================== */
+
+        .usp-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .usp-card {
+            background: var(--ink);
+            color: var(--ink-inverse);
+            border-radius: var(--radius-md);
+            padding: 28px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .usp-card:nth-child(2n) {
+            background: var(--teal-dark);
+        }
+
+        .usp-card::after {
+            content: "";
+            position: absolute;
+            inset: auto -30% -60% auto;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .usp-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 1.15rem;
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .usp-card h3 {
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .usp-card p {
+            font-size: 0.85rem;
+            color: #cddce7;
+            position: relative;
+        }
+
+        /* ==========================================================================
+   Testimonials
+   ========================================================================== */
+
+        .testi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .testi-card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            padding: 26px 24px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .testi-stars {
+            color: var(--gold);
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+        }
+
+        .testi-card p {
+            font-size: 0.9rem;
+            color: var(--ink-soft);
+        }
+
+        .testi-person {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: auto;
+        }
+
+        .testi-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--teal-tint);
+            color: var(--teal-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+        }
+
+        .testi-person strong {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--ink);
+        }
+
+        .testi-person small {
+            color: var(--slate);
+            font-size: 0.75rem;
+        }
+
+        /* ==========================================================================
+   FAQ
+   ========================================================================== */
+
+        .faq-list {
+            max-width: 760px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .faq-item {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        .faq-q {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            text-align: right;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--ink);
+        }
+
+        .faq-q i {
+            color: var(--teal);
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+            margin-inline-start: 14px;
+        }
+
+        .faq-item.open .faq-q i {
+            transform: rotate(45deg);
+        }
+
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.25s ease;
+        }
+
+        .faq-a p {
+            padding: 0 24px 22px;
+            color: var(--slate);
+            font-size: 0.87rem;
+        }
+
+        /* ==========================================================================
+   Final CTA
+   ========================================================================== */
+
+        .final-cta {
+            background: var(--ink);
+            border-radius: var(--radius-lg);
+            padding: 56px;
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 0.9fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .final-cta::before {
+            content: "";
+            position: absolute;
+            inset: -30% auto auto -10%;
+            width: 420px;
+            height: 420px;
+            background: radial-gradient(circle, rgba(184, 134, 47, 0.22), transparent 65%);
+        }
+
+        .final-cta::after {
+            content: "";
+            position: absolute;
+            inset: auto -10% -40% auto;
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(42, 111, 143, 0.35), transparent 65%);
+        }
+
+        .final-copy {
+            position: relative;
+            color: #fff;
+        }
+
+        .final-copy h2 {
+            color: #fff;
+            font-size: clamp(1.5rem, 2.6vw, 2rem);
+            margin-bottom: 16px;
+        }
+
+        .final-copy p {
+            color: #bfd0dd;
+            font-size: 0.95rem;
+            max-width: 420px;
+            margin-bottom: 26px;
+        }
+
+        .final-trust {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .final-trust li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.82rem;
+            color: #d7e4ed;
+        }
+
+        .final-trust i {
+            color: var(--gold);
+        }
+
+        .cta-form {
+            position: relative;
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            padding: 28px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .cta-form .field {
+            margin-bottom: 14px;
+        }
+
+        .cta-form label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--ink-soft);
+            margin-bottom: 7px;
+        }
+
+        .cta-form input,
+        .cta-form select {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid var(--line);
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            color: var(--ink);
+            background: var(--paper);
+            outline: none;
+            font-family: inherit;
+        }
+
+        .cta-form input:focus,
+        .cta-form select:focus {
+            border-color: var(--teal);
+            background: #fff;
+        }
+
+        .cta-form-note {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.72rem;
+            color: var(--slate-soft);
+            margin-top: 12px;
+            justify-content: center;
+        }
+
+        /* ==========================================================================
+   Footer
+   ========================================================================== */
+
+        .site-footer {
+            background: var(--paper-deep);
+            padding-top: 64px;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1.3fr repeat(3, 1fr);
+            gap: 32px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .footer-brand p {
+            color: var(--slate);
+            font-size: 0.85rem;
+            margin-top: 14px;
+            max-width: 260px;
+        }
+
+        .footer-col h5 {
+            font-size: 0.85rem;
+            color: var(--ink);
+            margin-bottom: 16px;
+        }
+
+        .footer-col ul {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-col a {
+            font-size: 0.83rem;
+            color: var(--slate);
+            transition: color 0.15s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--teal-dark);
+        }
+
+        .footer-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 0;
+            font-size: 0.78rem;
+            color: var(--slate-soft);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 10px;
+        }
+
+        .footer-socials a {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--slate);
+        }
+
+        /* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+        @media (max-width: 980px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-visual {
+                order: -1;
+            }
+
+            .cat-grid,
+            .usp-grid,
+            .testi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps::before {
+                display: none;
+            }
+
+            .final-cta {
+                grid-template-columns: 1fr;
+                padding: 36px;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 720px) {
+
+            .main-nav,
+            .header-actions .btn-ghost {
+                display: none;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            section {
+                padding: 64px 0;
+            }
+
+            .trust-stats {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .stat {
+                border-inline-start: none;
+                border-top: 1px solid var(--line);
+                padding-top: 18px;
+            }
+
+            .stat:first-child {
+                border-top: none;
+                padding-top: 0;
+            }
+
+            .cat-grid,
+            .usp-grid,
+            .testi-grid,
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr;
+            }
+
+            .float-chip {
+                display: none;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+                animation: none !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+    <!-- ===================== Header ===================== -->
+    <header class="site-header">
+        <div class="container">
+            <a href="#" class="brand">
+                <span class="brand-mark"><i class="fa-solid fa-stamp"></i></span>
+                <span class="brand-text">کسب<span>یت</span></span>
+            </a>
+
+            <nav class="main-nav">
+                <a href="#categories">دارایی‌ها</a>
+                <a href="#process">فرآیند معامله</a>
+                <a href="#usp">چرا کسبیت</a>
+                <a href="#testimonials">تجربه کاربران</a>
+                <a href="#faq">سوالات متداول</a>
+            </nav>
+
+            <div class="header-actions">
+                <a href="#cta" class="btn btn-ghost">مشاهده فرصت‌ها</a>
+                <a href="#cta" class="btn btn-primary">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    شروع مشاوره رایگان
+                </a>
+                <button class="nav-toggle" id="navToggle" aria-label="باز کردن منو"><i
+                        class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================== Hero ===================== -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-copy">
+                <span class="eyebrow"><i class="fa-solid fa-shield-halved"></i> بازارگاه امن دارایی‌های دیجیتال
+                    ایران</span>
+                <h1>آماده‌ای کسب‌وکار آنلاینت رو با <em>خیال راحت</em> بفروشی؟</h1>
+                <p class="hero-sub">
+                    دیگر لازم نیست در گروه‌های تلگرامی چانه بزنی و به قول غریبه‌ها اعتماد کنی.
+                    کسبیت از کارشناسی و قیمت‌گذاری واقعی تا امضای قرارداد رسمی و دریافت وجه،
+                    همه‌چیز را زیر یک سقف امن و شفاف مدیریت می‌کند.
+                </p>
+                <div class="hero-cta">
+                    <a href="#cta" class="btn btn-primary">
+                        <i class="fa-solid fa-comments"></i>
+                        شروع مشاوره رایگان
+                    </a>
+                    <a href="#categories" class="btn btn-ghost">
+                        مشاهده فرصت‌های سرمایه‌گذاری
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </a>
+                </div>
+                <div class="hero-microline">
+                    <span class="avatars"><span>ع.ر</span><span>م.ک</span><span>س.ا</span></span>
+                    به بیش از ۲٬۰۰۰ کارآفرین ایرانی که قبلاً معامله‌شان را امن انجام داده‌اند بپیوندید
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="vault-card">
+                    <div class="vault-top">
+                        <span class="tag"><i class="fa-solid fa-circle"></i> حساب امانی فعال</span>
+                        <i class="fa-solid fa-lock" style="color:#9db2c6"></i>
+                    </div>
+                    <div class="vault-label">مبلغ در امانت برای خرید «فروشگاه کالای دیجیتال»</div>
+                    <div class="vault-amount">۳۲۰٬۰۰۰٬۰۰۰ <small>تومان</small></div>
+                    <div class="vault-progress"><i></i></div>
+                    <div class="vault-steps">
+                        <span><b>کارشناسی</b></span>
+                        <span><b>قرارداد</b></span>
+                        <span>انتقال دارایی</span>
+                        <span>تسویه نهایی</span>
+                    </div>
+
+                    <div class="seal">
+                        <div class="seal-inner">
+                            <i class="fa-solid fa-check"></i>
+                            <span>تاییدشده<br />کسبیت</span>
+                        </div>
+                    </div>
+
+                    <div class="float-chip">
+                        <i class="fa-solid fa-file-contract"></i>
+                        <div>
+                            <strong>قرارداد الکترونیکی</strong>
+                            <small>مطابق قانون تجارت الکترونیک</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== Trust strip ===================== -->
+    <section class="trust-strip">
+        <div class="container">
+            <div class="trust-stats">
+                <div class="stat">
+                    <b>+۲٬۰۰۰</b>
+                    <span>کارآفرین به کسبیت اعتماد کرده‌اند</span>
+                </div>
+                <div class="stat">
+                    <b>+۴۵۰</b>
+                    <span>معامله موفق و تسویه‌شده</span>
+                </div>
+                <div class="stat">
+                    <b>٪۹۸</b>
+                    <span>رضایت طرفین از فرآیند معامله</span>
+                </div>
+            </div>
+
+            <div class="badge-row">
+                <span class="badge-pill"><i class="fa-solid fa-certificate"></i> نماد اعتماد الکترونیکی (به‌زودی)</span>
+                <span class="badge-pill"><i class="fa-solid fa-building-columns"></i> اتصال به درگاه بانکی شفاف</span>
+                <span class="badge-pill"><i class="fa-solid fa-people-group"></i> عضو اتحادیه کسب‌وکارهای مجازی (در حال
+                    بررسی)</span>
+                <span class="badge-pill"><i class="fa-solid fa-user-tie"></i> پشتیبانی حقوقی مستقل</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== Categories ===================== -->
+    <section id="categories">
+        <div class="container">
+            <div class="section-head center">
+                <span class="eyebrow"><i class="fa-solid fa-layer-group"></i> دارایی‌های قابل معامله</span>
+                <h2>چه دارایی‌هایی را می‌توانید در کسبیت معامله کنید؟</h2>
+                <p>هر دسته پیش از قرارگیری در بازارچه، از فیلتر کارشناسی فنی و مالی کسبیت عبور می‌کند.</p>
+            </div>
+
+            <div class="cat-grid">
+                <div class="cat-card">
+                    <span class="cat-icon"><i class="fa-solid fa-cart-shopping"></i></span>
+                    <h3>فروشگاه‌های اینترنتی</h3>
+                    <p>پنل‌های وردپرسی، ویترین‌های اختصاصی و فروشگاه‌های متصل به مارکت‌پلیس‌های داخلی مثل دیجی‌کالا.</p>
+                </div>
+                <div class="cat-card">
+                    <span class="cat-icon"><i class="fa-solid fa-newspaper"></i></span>
+                    <h3>وب‌سایت محتوایی و خبری</h3>
+                    <p>سایت‌های پربازدید با گردش مالی تبلیغاتی مشخص و ترافیک ارگانیک قابل استعلام.</p>
+                </div>
+                <div class="cat-card">
+                    <span class="cat-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
+                    <h3>کسب‌وکار نرم‌افزاری و اپلیکیشن</h3>
+                    <p>سرویس‌های SaaS و اپلیکیشن‌های اندروید و iOS با کاربر فعال و درآمد اثبات‌شده.</p>
+                </div>
+                <div class="cat-card">
+                    <span class="cat-icon"><i class="fa-brands fa-telegram"></i></span>
+                    <h3>کانال تلگرام و پیج اینستاگرام</h3>
+                    <p>صفحات با فالوور واقعی، نرخ تعامل بالا و گزارش ضدربات پیش از عرضه.</p>
+                </div>
+                <div class="cat-card">
+                    <span class="cat-icon"><i class="fa-solid fa-globe"></i></span>
+                    <h3>دامنه‌های ارزشمند</h3>
+                    <p>دامنه‌های .ir و .com با سابقه معتبر و امکان انتقال سریع و قانونی مالکیت.</p>
+                </div>
+                <div class="cat-card">
+                    <span class="cat-icon"><i class="fa-solid fa-headset"></i></span>
+                    <h3>مشاوره انتخاب دارایی</h3>
+                    <p>اگر مطمئن نیستید چه چیزی بخرید، تیم کسبیت بر اساس بودجه شما گزینه پیشنهاد می‌دهد.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== Process ===================== -->
+    <section id="process" class="section-alt">
+        <div class="container">
+            <div class="section-head center">
+                <span class="eyebrow"><i class="fa-solid fa-route"></i> فرآیند گام‌به‌گام</span>
+                <h2>از ثبت‌نام تا واریز نهایی، هر قدم شفاف است</h2>
+                <p>همین چهار مرحله، چه فروشنده باشید و چه خریدار، مسیر امن معامله را می‌سازد.</p>
+            </div>
+
+            <div class="process-wrap">
+                <div class="steps">
+                    <div class="step">
+                        <span class="step-num">۱</span>
+                        <h4>ثبت‌نام و احراز هویت</h4>
+                        <p>تایید هویت با شماره موبایل و کد ملی، برای شفافیت کامل بین طرفین معامله.</p>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">۲</span>
+                        <h4>درخواست کارشناسی</h4>
+                        <p>تیم کارشناسی ترافیک، درآمد، بک‌لینک و کدهای اختصاصی دارایی را بررسی و گزارش ارزش‌گذاری
+                            می‌دهد.</p>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">۳</span>
+                        <h4>قرارداد و پرداخت امن</h4>
+                        <p>پس از توافق، مبلغ در حساب امانی قفل می‌شود و قرارداد الکترونیکی معتبر تنظیم می‌گردد.</p>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">۴</span>
+                        <h4>انتقال و تسویه</h4>
+                        <p>پس از تایید انتقال کامل دارایی، مبلغ نهایی به حساب فروشنده واریز و کارمزد کسر می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== USP ===================== -->
+    <section id="usp">
+        <div class="container">
+            <div class="section-head center">
+                <span class="eyebrow"><i class="fa-solid fa-award"></i> مزایای انحصاری برای بازار ایران</span>
+                <h2>ساخته‌شده برای دغدغه‌های واقعی کارآفرین ایرانی</h2>
+                <p>هر ویژگی، پاسخی مستقیم به یکی از نگرانی‌های رایج خرید و فروش آنلاین در ایران است.</p>
+            </div>
+
+            <div class="usp-grid">
+                <div class="usp-card">
+                    <span class="usp-icon"><i class="fa-solid fa-coins"></i></span>
+                    <h3>تسویه به تومان یا تتر</h3>
+                    <p>دریافت وجه معامله به ریال یا ارز دیجیتال پایدار، برای مصون ماندن از نوسان قیمت لحظه‌ای.</p>
+                </div>
+                <div class="usp-card">
+                    <span class="usp-icon"><i class="fa-solid fa-scale-balanced"></i></span>
+                    <h3>پشتیبانی حقوقی از الف تا ی</h3>
+                    <p>مشاوره با وکلای پایه یک دادگستری درباره مالکیت معنوی، مالیات و متن قرارداد.</p>
+                </div>
+                <div class="usp-card">
+                    <span class="usp-icon"><i class="fa-solid fa-file-shield"></i></span>
+                    <h3>محرمانگی کامل</h3>
+                    <p>پیش از افشای هرگونه اطلاعات مالی دارایی، قرارداد محرمانگی (NDA) امضا می‌شود.</p>
+                </div>
+                <div class="usp-card">
+                    <span class="usp-icon"><i class="fa-solid fa-right-left"></i></span>
+                    <h3>انتقال امن دامنه‌های داخلی</h3>
+                    <p>هماهنگی مستقیم با ثبت‌کنندگان دامنه .ir برای انتقال سریع و بدون دردسر مالکیت.</p>
+                </div>
+                <div class="usp-card">
+                    <span class="usp-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></span>
+                    <h3>کارشناسی فنی بومی</h3>
+                    <p>بررسی تراکنش‌های بانکی داخلی و بازدید واقعی، بدون احتساب ترافیک ربات.</p>
+                </div>
+                <div class="usp-card">
+                    <span class="usp-icon"><i class="fa-solid fa-headset"></i></span>
+                    <h3>همراهی تا لحظه تسویه</h3>
+                    <p>یک کارشناس ثابت، از اولین مکالمه تا واریز نهایی، پاسخگوی شما خواهد بود.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== Testimonials ===================== -->
+    <section id="testimonials" class="section-alt">
+        <div class="container">
+            <div class="section-head center">
+                <span class="eyebrow"><i class="fa-solid fa-message"></i> نظرات و تجربیات کاربران</span>
+                <h2>حرف کسانی که معامله‌شان را از کسبیت گذرانده‌اند</h2>
+            </div>
+
+            <div class="testi-grid">
+                <div class="testi-card">
+                    <div class="testi-stars">★★★★★</div>
+                    <p>«فکر می‌کردم فروشگاهم رو حداکثر ۸۰ میلیون بفروشم، اما بعد از گزارش کارشناسی کسبیت، خریدار با قیمت
+                        خیلی بالاتر پیشنهاد داد و کل مبلغ امن به حسابم اومد.»</p>
+                    <div class="testi-person">
+                        <span class="testi-avatar">ا.ر</span>
+                        <div>
+                            <strong>ا. رضایی</strong>
+                            <small>فروشنده فروشگاه اینترنتی پوشاک</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="testi-card">
+                    <div class="testi-stars">★★★★★</div>
+                    <p>«قبل از خرید، آمار بازدید و تعامل کانال به‌طور دقیق بررسی شد و مطمئن شدم فالوورها واقعی هستن، نه
+                        ربات. خیالم کاملاً راحت بود.»</p>
+                    <div class="testi-person">
+                        <span class="testi-avatar">م.ک</span>
+                        <div>
+                            <strong>م. کریمی</strong>
+                            <small>خریدار کانال تلگرامی آموزشی</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="testi-card">
+                    <div class="testi-stars">★★★★★</div>
+                    <p>«چیزی که کاربرها بیشتر از همه دوست دارن، شفافیت کامل مراحله و قفل شدن پول توی حساب امانیه؛ تا
+                        وقتی هر دو طرف مطمئن نشن، پول جابجا نمی‌شه.»</p>
+                    <div class="testi-person">
+                        <span class="testi-avatar">س.ا</span>
+                        <div>
+                            <strong>س. احمدی</strong>
+                            <small>کارشناس ارزش‌گذاری کسبیت</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== FAQ ===================== -->
+    <section id="faq">
+        <div class="container">
+            <div class="section-head center">
+                <span class="eyebrow"><i class="fa-solid fa-circle-question"></i> سوالات متداول</span>
+                <h2>هر آن‌چه پیش از شروع باید بدانید</h2>
+            </div>
+
+            <div class="faq-list" id="faqList">
+                <div class="faq-item open">
+                    <button class="faq-q">تفاوت این پلتفرم با گروه‌های تلگرامی در چیست؟
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <div class="faq-a">
+                        <p>در گروه‌های تلگرامی هیچ نهاد میانجی، قرارداد رسمی یا ضمانت پرداختی وجود ندارد. کسبیت با حساب
+                            امانی، احراز هویت طرفین و کارشناسی مستقل، ریسک کلاهبرداری را تقریباً حذف می‌کند.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">اگر فروشنده بعد از دریافت وجه، وب‌سایت را پس بگیرد چه ضمانتی وجود دارد؟
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <div class="faq-a">
+                        <p>مبلغ معامله تا زمان تایید نهایی انتقال کامل مالکیت (تغییر هاست، دسترسی ادمین، مالکیت دامنه)
+                            در حساب امانی کسبیت قفل می‌ماند و فقط پس از تایید خریدار به فروشنده واریز می‌شود.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">هزینه کارمزد و ارزش‌گذاری چقدر است؟
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <div class="faq-a">
+                        <p>گزارش ارزش‌گذاری اولیه رایگان است. کارمزد کسبیت درصدی از مبلغ معامله موفق است و فقط در صورت
+                            انجام کامل معامله دریافت می‌شود.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">آیا خرید و فروش پیج اینستاگرام با قوانین مغایرت دارد؟
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <div class="faq-a">
+                        <p>انتقال مالکیت صفحات و کانال‌ها (به‌شرط نداشتن محتوای غیرمجاز) یک قرارداد مدنی معمولی است و
+                            طبق قانون تجارت الکترونیک کشور قابل انجام است. تیم حقوقی کسبیت پیش از هر معامله محتوای صفحه
+                            را بررسی می‌کند.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">فرآیند انتقال فروشگاه وردپرسی با تمام محتواها چگونه است؟
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <div class="faq-a">
+                        <p>پس از تایید قرارداد، تیم فنی کسبیت مراحل انتقال هاست، دیتابیس، دامنه و پنل مدیریت را زیر نظر
+                            می‌گیرد تا هیچ داده و محتوایی گم نشود.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== Final CTA ===================== -->
+    <section id="cta">
+        <div class="container">
+            <div class="final-cta">
+                <div class="final-copy">
+                    <span class="eyebrow" style="background:rgba(255,255,255,0.1); color:#e9f0f5;"><i
+                            class="fa-solid fa-bolt"></i> شروع سریع و بدون هزینه</span>
+                    <h2>همین امروز ارزش واقعی کسب‌وکارت را رایگان بسنج</h2>
+                    <p>فرم زیر را پر کن تا کارشناس کسبیت ظرف چند ساعت با تو تماس بگیرد و مسیر معامله امن را برایت روشن
+                        کند.</p>
+                    <ul class="final-trust">
+                        <li><i class="fa-solid fa-lock"></i> پرداخت در حساب امانی</li>
+                        <li><i class="fa-solid fa-file-signature"></i> قرارداد قانونی</li>
+                        <li><i class="fa-solid fa-user-shield"></i> محرمانگی تضمین‌شده</li>
+                    </ul>
+                </div>
+
+                <form class="cta-form" onsubmit="return false;">
+                    <div class="field">
+                        <label for="fullname">نام و نام خانوادگی</label>
+                        <input type="text" id="fullname" placeholder="مثلاً علی رضایی" required />
+                    </div>
+                    <div class="field">
+                        <label for="mobile">شماره موبایل</label>
+                        <input type="tel" id="mobile" placeholder="۰۹۱۲۱۲۳۴۵۶۷" required />
+                    </div>
+                    <div class="field">
+                        <label for="role">من می‌خواهم...</label>
+                        <select id="role">
+                            <option>می‌خواهم بفروشم</option>
+                            <option>می‌خواهم بخرم</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-gold btn-block">
+                        ثبت درخواست و دریافت مشاوره فوری
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div class="cta-form-note"><i class="fa-solid fa-shield-halved"></i> اطلاعات شما فقط برای تماس
+                        کارشناسان کسبیت استفاده می‌شود.</div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== Footer ===================== -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="#" class="brand">
+                        <span class="brand-mark"><i class="fa-solid fa-stamp"></i></span>
+                        <span class="brand-text">کسب<span>یت</span></span>
+                    </a>
+                    <p>بازارگاه امن خرید و فروش کسب‌وکارهای آنلاین در ایران؛ از کارشناسی تا تسویه، همه زیر یک سقف
+                        قانونی.</p>
+                </div>
+                <div class="footer-col">
+                    <h5>دسترسی سریع</h5>
+                    <ul>
+                        <li><a href="#categories">دارایی‌ها</a></li>
+                        <li><a href="#process">فرآیند معامله</a></li>
+                        <li><a href="#testimonials">تجربه کاربران</a></li>
+                        <li><a href="#faq">سوالات متداول</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>قوانین</h5>
+                    <ul>
+                        <li><a href="#">قوانین و مقررات</a></li>
+                        <li><a href="#">حریم خصوصی</a></li>
+                        <li><a href="#">قرارداد نمونه</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>تماس با ما</h5>
+                    <ul>
+                        <li><a href="tel:+982100000000"><i class="fa-solid fa-phone"></i> ۰۲۱-۰۰۰۰۰۰۰۰</a></li>
+                        <li><a href="mailto:info@kasbit.ir"><i class="fa-solid fa-envelope"></i> info@kasbit.ir</a></li>
+                        <li><a href="#"><i class="fa-solid fa-location-dot"></i> تهران، خیابان ولیعصر</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <span>© ۱۴۰۴ کسبیت. تمامی حقوق محفوظ است.</span>
+                <div class="footer-socials">
+                    <a href="#" aria-label="اینستاگرام"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="تلگرام"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#" aria-label="لینکدین"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ accordion
+        (function () {
+            const items = document.querySelectorAll(".faq-item");
+            items.forEach((item) => {
+                const q = item.querySelector(".faq-q");
+                const a = item.querySelector(".faq-a");
+                if (item.classList.contains("open")) {
+                    a.style.maxHeight = a.scrollHeight + "px";
+                }
+                q.addEventListener("click", () => {
+                    const isOpen = item.classList.contains("open");
+                    items.forEach((other) => {
+                        other.classList.remove("open");
+                        other.querySelector(".faq-a").style.maxHeight = null;
+                    });
+                    if (!isOpen) {
+                        item.classList.add("open");
+                        a.style.maxHeight = a.scrollHeight + "px";
+                    }
+                });
+            });
+        })();
+
+        // Simple counter animation for trust stats
+        (function () {
+            const stats = document.querySelectorAll(".stat b");
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.opacity = 1;
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.4
+                }
+            );
+            stats.forEach((el) => {
+                el.style.transition = "opacity 0.6s ease";
+                el.style.opacity = 0.4;
+                observer.observe(el);
+            });
+        })();
+
+        // Mobile nav toggle -> smooth scroll to CTA as a simple fallback
+        document.getElementById("navToggle").addEventListener("click", () => {
+            document.querySelector(".main-nav").classList.toggle("open");
+        });
+    </script>
+
+</body>
+
+</html>

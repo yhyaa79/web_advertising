@@ -1,0 +1,4514 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+        <title>Multi-Line Stock · Chart.js</title>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+        <link rel="stylesheet" href="./style/main.css" />
+
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&family=Merriweather:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Ubuntu:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Bitter:wght@400;500;600;700&family=Josefin+Sans:wght@400;500;600;700&display=swap"
+        />
+
+        <script src="./chartjs_4.4.0.min.js"></script>
+        <script src="./config.js"></script>
+
+        <style>
+            
+
+            * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Roboto, system-ui, sans-serif;
+}
+
+h1 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    font-size: 1.9rem;
+    color: #1a2639;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid rgba(60, 80, 120, 0.1);
+    padding-bottom: 0.75rem;
+}
+
+h1 i {
+    color: #2a6f8f;
+    font-size: 2rem;
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 610px;
+    overflow: hidden;
+    border: 1px solid #e2eaf2;
+
+    background: white;
+    border-radius: 32px;
+
+    box-shadow: 0 6px 20px rgba(0, 20, 30, 0.08);
+    margin-bottom: 2rem;
+    margin: 20px 22px 18px;
+
+    background: #fff;
+    /* border: 1px solid #e3e6ea; */
+    border-radius: 15px;
+}
+
+.chart-html-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.chart-html-background * {
+    pointer-events: none;
+}
+
+#lineChartCanvas {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent;
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+    gap: 1.2rem;
+}
+
+.settings-section {
+    background: #fff;
+    border: 1px solid rgba(210, 220, 232, 0.8);
+    border-radius: 24px;
+    padding: 1.2rem;
+    box-shadow: 0 5px 14px rgba(0, 20, 30, 0.045);
+}
+
+.settings-section.full-width {
+    grid-column: 1 / -1;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e2b3c;
+    margin-bottom: 0.25rem;
+}
+
+.section-title i {
+    color: #2a6f8f;
+}
+
+.section-description {
+    font-size: 0.75rem;
+    color: #718197;
+    line-height: 1.45;
+    margin-bottom: 1rem;
+}
+
+.option {
+    margin-bottom: 1rem;
+}
+
+.option:last-child {
+    margin-bottom: 0;
+}
+
+.option-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #34465b;
+    margin-bottom: 0.2rem;
+}
+
+.option-help {
+    font-size: 0.68rem;
+    color: #8291a3;
+    line-height: 1.4;
+    margin-bottom: 0.45rem;
+}
+
+input[type="number"],
+input[type="text"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid #d4dce8;
+    border-radius: 12px;
+    background: white;
+    color: #26384d;
+    outline: none;
+    font-size: 0.8rem;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: monospace;
+    line-height: 1.45;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+    border-color: #7ca8c0;
+}
+
+input[type="color"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.color-swatch {
+    width: 42px;
+    height: 32px;
+    padding: 2px;
+    border-radius: 10px;
+    background: white;
+    border: 1px solid #d4dce8;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.color-swatch-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 7px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    display: block;
+}
+
+.color-picker-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(10, 20, 30, 0.28);
+    backdrop-filter: blur(3px);
+}
+
+.color-picker-overlay.open {
+    display: flex;
+}
+
+.color-picker-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.color-picker-dialog-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #26384d;
+}
+
+.color-picker-close {
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 50%;
+    background: #f0f3f7;
+    color: #5d6c7d;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.color-picker-native-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.color-picker-native {
+    position: static !important;
+    width: 64px !important;
+    height: 48px !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    padding: 2px !important;
+    border-radius: 12px !important;
+    border: 1px solid #d4dce8 !important;
+    cursor: pointer !important;
+    flex-shrink: 0;
+}
+
+.color-picker-preview {
+    flex: 1;
+    height: 48px;
+    border-radius: 12px;
+    border: 1px solid #d4dce8;
+}
+
+.color-picker-alpha-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #34465b;
+    margin-bottom: 7px;
+}
+
+.color-picker-alpha-value {
+    font-family: monospace;
+    color: #718197;
+}
+
+.color-picker-alpha {
+    width: 100%;
+    accent-color: #2a6f8f;
+    cursor: pointer;
+}
+
+.color-picker-hex {
+    width: 100%;
+    margin-top: 12px;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid #d4dce8;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #26384d;
+    font-family: monospace;
+    font-size: 0.78rem;
+    outline: none;
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 0.45rem;
+    border: 1px dashed #c8d4e1;
+    border-radius: 12px;
+    background: #f8fafc;
+    color: #52657a;
+    font-size: 0.72rem;
+    cursor: pointer;
+}
+
+.color-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.color-value {
+    cursor: pointer;
+
+    flex: 1;
+    padding: 0.5rem 0.65rem;
+    border-radius: 10px;
+    background: #f5f7fa;
+    color: #66768a;
+    font-size: 0.72rem;
+    font-family: monospace;
+}
+
+.four-column {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+}
+
+.four-column {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8rem;
+}
+
+.toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.toggle {
+    position: relative;
+    width: 42px;
+    height: 23px;
+    flex-shrink: 0;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    background: #c8d2de;
+    border-radius: 30px;
+    transition: 0.2s;
+}
+
+.toggle-slider:before {
+    content: "";
+    position: absolute;
+    width: 17px;
+    height: 17px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.2s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.toggle input:checked + .toggle-slider {
+    background: #2a6f8f;
+}
+
+.toggle input:checked + .toggle-slider:before {
+    transform: translateX(19px);
+}
+
+.dataset-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.dataset-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.7rem;
+}
+
+.dataset-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.dataset-meta {
+    font-size: 0.68rem;
+    color: #7c8da1;
+    margin-top: 0.45rem;
+}
+
+.dataset-divider {
+    height: 1px;
+    background: #e0e7ef;
+    margin: 1rem 0;
+}
+
+.dataset-subtitle {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #34465b;
+    margin-bottom: 0.25rem;
+}
+
+.dataset-subtitle i {
+    color: #2a6f8f;
+}
+
+.dataset-subdescription {
+    font-size: 0.68rem;
+    color: #8291a3;
+    line-height: 1.4;
+    margin-bottom: 0.7rem;
+}
+
+.data-count-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+}
+
+.count-stat {
+    background: white;
+    border: 1px solid #e0e7ef;
+    border-radius: 12px;
+    padding: 0.65rem;
+}
+
+.count-stat-label {
+    font-size: 0.64rem;
+    color: #8291a3;
+    margin-bottom: 0.2rem;
+}
+
+.count-stat-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #34465b;
+}
+
+.image-preview-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 0.65rem;
+}
+
+.image-preview {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #d4dce8;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-preview-empty {
+    font-size: 0.65rem;
+    color: #9aa8b8;
+    text-align: center;
+}
+
+.btn-remove {
+    background: #e74c6f;
+    color: white;
+    border: none;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.7rem;
+}
+
+.btn-remove:hover {
+    background: #c0392b;
+}
+
+.btn-add {
+    background: #2a6f8f;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 30px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.85rem;
+    width: 100%;
+}
+
+.btn-add:hover {
+    background: #1d5570;
+}
+
+.data-input-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 6000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(10, 20, 30, 0.35);
+    backdrop-filter: blur(4px);
+}
+
+.data-input-overlay.open {
+    display: flex;
+}
+
+.data-input-dialog {
+    width: min(760px, 100%);
+    max-height: min(88vh, 820px);
+    overflow: auto;
+    background: #fff;
+    border: 1px solid #dbe3ec;
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 24px 70px rgba(20, 35, 50, 0.22);
+}
+
+.data-input-dialog-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.data-input-dialog-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #26384d;
+}
+
+.data-input-dialog-help {
+    margin-top: 5px;
+    color: #7b8999;
+    font-size: 0.74rem;
+    line-height: 1.5;
+}
+
+.data-input-close {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    border: 0;
+    border-radius: 50%;
+    background: #f0f3f7;
+    color: #5d6c7d;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.data-input-example {
+    margin: 12px 0 16px;
+    padding: 12px;
+    border: 1px solid #dce6ee;
+    border-radius: 13px;
+    background: #f6f9fb;
+    color: #52657a;
+    font-size: 0.72rem;
+    line-height: 1.5;
+}
+
+.data-input-example code {
+    display: block;
+    margin-top: 7px;
+    white-space: pre-wrap;
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    color: #26384d;
+}
+
+.data-input-dialog textarea {
+    min-height: 200px;
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: 0.75rem;
+    line-height: 1.5;
+}
+
+.data-input-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.data-input-cancel,
+.data-input-confirm {
+    border: 0;
+    border-radius: 10px;
+    padding: 9px 15px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.data-input-cancel {
+    background: #eef1f4;
+    color: #5d6c7d;
+}
+
+.data-input-confirm {
+    background: #202631;
+    color: #fff;
+}
+
+.data-input-error {
+    min-height: 17px;
+    margin-top: 7px;
+    color: #c0392b;
+    font-size: 0.7rem;
+}
+
+.dataset-data-editor {
+    margin: 0.85rem 0 0.9rem;
+}
+
+.dataset-data-editor textarea {
+    min-height: 210px;
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: 0.72rem;
+    line-height: 1.45;
+}
+
+.dataset-data-help {
+    margin: 0 0 6px;
+    color: #9aa2ad;
+    font-size: 8px;
+    line-height: 1.45;
+}
+
+.custom-every-input {
+    display: none;
+}
+
+.custom-every-input.visible {
+    display: block;
+}
+
+.floating-animate:active {
+    transform: scale(0.96);
+}
+
+/*
+         * Endpoint Data Panel
+         *
+         * The actual visual appearance of the endpoint panel is now completely
+         * controlled by the HTML entered in the Endpoint HTML Template textarea.
+         *
+         * The outer .endpoint-info-card is only used as an invisible positioning
+         * anchor. The template itself controls the actual visual panel.
+         */
+.endpoint-info-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 20;
+    overflow: hidden;
+}
+
+.endpoint-info-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+    z-index: 1;
+    pointer-events: none;
+    transform: translate(-50%, -100%);
+}
+
+.endpoint-marker-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 25;
+    overflow: hidden;
+}
+
+.endpoint-marker-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+    z-index: 1;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+}
+
+/*
+         * This wrapper allows a user-provided HTML template to be rendered
+         * without forcing the old hard-coded panel design onto it.
+         */
+.endpoint-template-root {
+    pointer-events: none;
+    display: block;
+}
+
+/*
+         * Preset previews/examples can use their own CSS.
+         * The textarea is intentionally large because the HTML template is
+         * intended to be edited directly by the user.
+         */
+#endpointInfoHtml {
+    min-height: 360px;
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: 0.74rem;
+    line-height: 1.5;
+    white-space: pre;
+    tab-size: 2;
+}
+
+.endpoint-template-help {
+    background: #f3f7fa;
+    border: 1px solid #dce6ee;
+    border-radius: 14px;
+    padding: 0.85rem;
+    margin-top: 0.7rem;
+    color: #607286;
+    font-size: 0.72rem;
+    line-height: 1.55;
+}
+
+.endpoint-template-help code {
+    background: #e5edf3;
+    padding: 2px 5px;
+    border-radius: 5px;
+    font-family: monospace;
+    color: #26384d;
+}
+
+.google-font-custom {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #e1e7ef;
+}
+
+.google-font-description {
+    margin-top: 4px;
+    line-height: 1.5;
+}
+
+.google-font-description a {
+    color: #5267d9;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.google-font-description a:hover {
+    text-decoration: underline;
+}
+
+.google-font-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-top: 9px;
+}
+
+.google-font-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid #d4dce8;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #26384d;
+    font-family: inherit;
+    font-size: 0.78rem;
+    outline: none;
+}
+
+.google-font-input:focus {
+    border-color: #6b7cff;
+    box-shadow: 0 0 0 2px rgba(107, 124, 255, 0.12);
+}
+
+.google-font-button:hover {
+    filter: brightness(0.96);
+}
+
+.google-font-status {
+    min-height: 15px;
+    margin-top: 5px;
+    color: #718197;
+    font-size: 0.68rem;
+}
+
+.chart-font-picker {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+}
+
+.chart-font-radio {
+    flex: 0 0 auto;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #aeb9c8;
+    border-radius: 50%;
+    position: relative;
+}
+
+.chart-font-preview-wrap {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.chart-font-preview {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    line-height: 1.15;
+    color: #26384d;
+    width: fit-content;
+}
+
+.chart-font-name {
+    display: block;
+    margin-top: 2px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-family: "Segoe UI", Roboto, system-ui, sans-serif;
+    font-size: 10px;
+    color: #718197;
+}
+
+@media (max-width: 700px) {
+    .dataset-section-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .dataset-add-header-btn {
+        width: 100%;
+    }
+
+    .google-font-row {
+        flex-direction: column;
+    }
+
+    .google-font-button {
+        width: 100%;
+    }
+
+    .chart-font-picker {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-font-option {
+        min-height: 56px;
+    }
+}
+
+@media (max-width: 700px) {
+    body {
+        padding: 0.7rem;
+    }
+
+    .card {
+        padding: 1rem;
+        border-radius: 24px;
+    }
+
+    .chart-wrapper {
+        height: 350px;
+    }
+
+    .two-column {
+        grid-template-columns: 1fr;
+    }
+
+    .data-count-box {
+        grid-template-columns: 1fr;
+    }
+
+    .floating-animate {
+        right: 15px;
+        bottom: 15px;
+    }
+
+    #endpointInfoHtml {
+        min-height: 300px;
+    }
+}
+
+/* ============================================================
+           CHART STUDIO REDESIGN
+           Visual-only layer. Existing controls, IDs and chart logic remain intact.
+           ============================================================ */
+
+:root {
+    --studio-bg: #eef0f3;
+    --studio-surface: #ffffff;
+    --studio-soft: #f5f6f8;
+    --studio-line: #e2e5e9;
+    --studio-text: #202631;
+    --studio-muted: #7d8794;
+    --studio-accent: #df6545;
+    --studio-accent-soft: #fff0eb;
+    --studio-blue: #7897b5;
+    --studio-shadow: 0 18px 45px rgba(33, 42, 54, 0.08);
+}
+
+html {
+    background: var(--studio-bg);
+}
+
+body {
+    background: linear-gradient(145deg, #f7f9fc 0%, #eef1f5 100%);
+    min-height: 100vh;
+    color: #1a2639;
+
+    background:
+        radial-gradient(circle at 10% 0%, rgba(255, 255, 255, 0.95) 0, rgba(255, 255, 255, 0) 32%), linear-gradient(135deg, #f4f5f7 0%, #e9ebef 100%);
+    color: var(--studio-text);
+}
+
+.card {
+    padding: 0;
+    overflow: hidden;
+    background: rgba(246, 247, 249, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow:
+        0 35px 80px rgba(30, 38, 48, 0.13),
+        0 8px 22px rgba(30, 38, 48, 0.06);
+    backdrop-filter: blur(18px);
+}
+
+.app-header {
+    min-height: 92px;
+    padding: 20px 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.76);
+    border-bottom: 1px solid rgba(219, 223, 229, 0.82);
+}
+
+.brand-lockup {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.brand-mark {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    background: #202631;
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(32, 38, 49, 0.16);
+    font-size: 18px;
+}
+
+.brand-eyebrow,
+.preview-kicker {
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #9aa2ad;
+}
+
+.app-header h1 {
+    display: block;
+    margin: 4px 0 2px;
+    padding: 0;
+    border: 0;
+    font-size: 19px;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #202631;
+}
+
+.app-header p {
+    margin: 0;
+    font-size: 11px;
+    color: #89929d;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.header-status,
+.header-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 34px;
+    padding: 0 12px;
+    border: 1px solid #e0e3e8;
+    border-radius: 999px;
+    background: #fff;
+    color: #5d6773;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.header-status span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #62a27c;
+    box-shadow: 0 0 0 4px rgba(98, 162, 124, 0.12);
+}
+
+.header-chip i {
+    font-size: 9px;
+    color: #8a95a2;
+}
+
+.preview-topline {
+    min-height: 26px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 0 6px;
+}
+
+.preview-topline strong {
+    display: block;
+    margin-top: 5px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #252b34;
+}
+
+.preview-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border-radius: 9px;
+    background: #f6f7f8;
+    color: #89929d;
+    font-size: 9px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.preview-meta i {
+    font-size: 11px;
+    color: var(--studio-accent);
+}
+
+#progressDisplay {
+    font-size: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+
+    padding: 5px 8px;
+    border: 1px solid #eceef1;
+    border-radius: 999px;
+    background: #fafafa;
+    font-size: 9px;
+    color: #69727d;
+}
+
+.color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+
+    width: 7px;
+    height: 7px;
+}
+
+/* Fixed preview stage: the selected aspect ratio changes the chart
+           canvas size INSIDE this area instead of changing page height. */
+.chart-stage {
+    position: relative;
+    width: 100%;
+    height: 560px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+}
+
+.chart-stage .chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.chart-stage .chart-wrapper #lineChartCanvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* ---------------------------------------------------------------
+               Chart Data Display
+               Date Tracker and Dataset Values are independent displays.
+               Each can be positioned, offset, and styled separately.
+               --------------------------------------------------------------- */
+.chart-data-display,
+.chart-data-display * {
+    font-family: var(--chart-font-family, "Segoe UI", Roboto, system-ui, sans-serif) !important;
+}
+.chart-data-display {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: none;
+    z-index: 12;
+    pointer-events: none;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+.chart-data-display.is-visible {
+    display: flex;
+}
+.chart-data-display.position-top {
+    top: var(--display-offset, 20px);
+}
+.chart-data-display.position-bottom {
+    bottom: var(--display-offset, 20px);
+}
+.chart-data-display-inner {
+    width: fit-content;
+    max-width: calc(100% - 24px);
+    margin-inline: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+.chart-values-display {
+    --value-tracker-gap: 14px;
+}
+.chart-date-tracker {
+    box-sizing: border-box;
+}
+.chart-values-display {
+    box-sizing: border-box;
+    width: fit-content;
+    max-width: 100%;
+}
+.chart-date-tracker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: max-content;
+    max-width: 100%;
+    padding: 6px 0;
+    background: var(--display-bg, transparent);
+}
+.chart-date-range {
+    color: var(--date-font-color, #5f6975);
+    font-size: var(--date-font-size, 11px);
+    font-weight: 750;
+    letter-spacing: 0.045em;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+.chart-date-progress {
+    width: 100%;
+    height: 2px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--date-track, #e6e9ee);
+}
+.chart-date-progress-fill {
+    width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--date-start, #df6545), var(--date-end, #ff9a72));
+    transition: width 0.08s linear;
+}
+.chart-values-display {
+    padding: 5px 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    column-gap: var(--value-tracker-gap, 14px);
+    row-gap: 10px;
+    flex-wrap: wrap;
+    background: var(--display-bg, transparent);
+}
+.chart-value-item {
+    width: 110px;
+    min-width: 110px;
+    max-width: 110px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.chart-value-media {
+    width: var(--value-media-size, 30px);
+    height: var(--value-media-size, 30px);
+    flex: 0 0 var(--value-media-size, 30px);
+    border-radius: 50%;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: var(--value-media-bg, transparent);
+}
+.chart-value-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.chart-value-copy {
+    min-width: 0;
+    flex: 0 1 auto;
+}
+.chart-value-name,
+.chart-value-number {
+    display: block;
+    white-space: nowrap;
+}
+
+.chart-values-display.show-full-value-text .chart-value-name,
+.chart-values-display.show-full-value-text .chart-value-number {
+    overflow: visible;
+    text-overflow: clip;
+}
+/* Tracker Gap is the space between dataset items; item widths are content-driven so media size does not create phantom spacing. */
+.chart-value-name {
+    color: var(--value-font-color, #69727d);
+    font-size: var(--value-font-size, 11px);
+    font-weight: 700;
+    line-height: 1.25;
+}
+.chart-value-number {
+    margin-top: 1px;
+    color: var(--value-font-color, #202631);
+    font-size: var(--value-font-size, 11px);
+    font-weight: 850;
+    line-height: 1.25;
+}
+
+/* Actual display styles use backgrounds only — no borders or shadows. */
+.chart-data-display.style-minimal .chart-date-tracker {
+    width: max-content;
+    max-width: 100%;
+    padding: 4px 0;
+    gap: 5px;
+    background: var(--display-bg, transparent);
+}
+.chart-data-display.style-minimal .chart-values-display {
+    padding: 7px 0;
+    background: var(--display-bg, transparent);
+    width: fit-content;
+    max-width: 100%;
+}
+.chart-data-display.style-minimal .chart-value-item {
+    gap: 9px;
+}
+
+.chart-data-display.style-glass .chart-date-tracker {
+    width: max-content;
+    max-width: 100%;
+    padding: 9px 14px 10px;
+    gap: 8px;
+    border-radius: 16px;
+    background: var(--display-bg, transparent);
+    backdrop-filter: blur(12px) saturate(1.2);
+}
+.chart-data-display.style-stacked .chart-values-display {
+    padding: 8px 6px;
+    border-radius: 16px;
+    background: var(--display-bg, transparent);
+    backdrop-filter: blur(12px) saturate(1.2);
+    column-gap: var(--value-tracker-gap, 14px);
+    row-gap: 9px;
+    align-items: flex-start;
+}
+.chart-data-display.style-stacked .chart-value-item {
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+}
+.chart-data-display.style-stacked .chart-value-copy {
+    width: 100%;
+}
+.chart-data-display.style-stacked .chart-value-name {
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-size: var(--value-font-size, 11px);
+}
+.chart-data-display.style-stacked .chart-value-number {
+    font-size: var(--value-font-size, 11px);
+    letter-spacing: -0.02em;
+    margin-top: 3px;
+}
+
+.chart-data-display.style-spotlight .chart-date-tracker {
+    width: max-content;
+    max-width: 100%;
+    padding: 4px 0;
+    gap: 5px;
+    background: var(--display-bg, transparent);
+}
+.chart-data-display.style-spotlight .chart-date-progress {
+    height: 2px;
+    border-radius: 0;
+}
+.chart-data-display.style-ticker .chart-values-display {
+    padding: 8px 6px;
+    border-radius: 20px;
+    background: var(--display-bg, transparent);
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.chart-data-display.style-ticker .chart-value-item {
+    min-width: 0;
+    width: max-content;
+    max-width: none;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 6px;
+    align-self: center;
+}
+
+.chart-data-display.style-ticker .chart-value-number {
+    display: inline-block;
+    width: 55px;
+    text-align: left;
+}
+.chart-data-display.style-ticker .chart-value-media {
+    flex-basis: var(--value-media-size, 30px);
+}
+.chart-data-display.style-ticker .chart-value-copy {
+    width: 100%;
+}
+.chart-data-display.style-ticker .chart-value-name {
+    font-size: var(--value-font-size, 11px);
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+}
+.chart-data-display.style-ticker .chart-value-number {
+    margin-top: 2px;
+    font-size: var(--value-font-size, 11px);
+    letter-spacing: -0.03em;
+}
+
+.display-position-switch {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    max-width: 190px;
+    height: 30px;
+    margin-top: 8px;
+    padding: 2px;
+    border: 1px solid #dfe3e8;
+    border-radius: 8px;
+    background: #f2f4f6;
+    box-sizing: border-box;
+}
+.display-position-option {
+    appearance: none;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #8a929d;
+    font: inherit;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
+}
+.display-position-option:hover {
+    color: #3f4853;
+}
+.display-position-option.active {
+    background: #fff;
+    color: #202631;
+    box-shadow:
+        0 1px 4px rgba(32, 38, 49, 0.12),
+        0 0 0 1px rgba(32, 38, 49, 0.03);
+}
+.display-offset-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 9px;
+}
+.display-offset-grid .option {
+    margin: 0;
+}
+.display-color-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+.display-color-grid .option {
+    margin: 0;
+}
+.display-color-grid input[type="color"] {
+    width: 100%;
+    height: 34px;
+    padding: 3px;
+    border: 1px solid #dfe3e8;
+    border-radius: 9px;
+    background: #fff;
+    cursor: pointer;
+}
+.style-choice-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 9px;
+}
+.style-choice {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 8px;
+    border: 1px solid #e1e4e8;
+    border-radius: 11px;
+    background: #fafbfc;
+    color: #5f6975;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.16s ease;
+}
+.style-choice:hover {
+    background: #fff;
+    border-color: #d4d9df;
+    transform: translateY(-1px);
+}
+.style-choice.active {
+    border-color: #c9ced5;
+    background: #fff;
+    box-shadow:
+        0 5px 14px rgba(32, 38, 49, 0.08),
+        0 0 0 2px rgba(32, 38, 49, 0.035);
+}
+.style-choice-preview {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 36px;
+    overflow: hidden;
+    border-radius: 7px;
+}
+.style-choice-preview i,
+.style-choice-preview b {
+    position: absolute;
+    display: block;
+}
+.date-preview-minimal {
+    background: #f1f3f5;
+}
+.date-preview-minimal i {
+    left: 12%;
+    right: 12%;
+    top: 11px;
+    height: 5px;
+    border-radius: 9px;
+    background: linear-gradient(90deg, #df6545 62%, #dfe3e8 62%);
+}
+.date-preview-minimal b {
+    left: 30%;
+    top: 5px;
+    width: 40%;
+    height: 2px;
+    border-radius: 3px;
+    background: #5f6975;
+}
+.date-preview-glass {
+    background: linear-gradient(135deg, #fff, #e9edf2);
+    box-shadow: inset 0 1px 0 #fff;
+}
+.date-preview-glass i {
+    left: 10%;
+    right: 10%;
+    top: 13px;
+    height: 6px;
+    border-radius: 9px;
+    background: linear-gradient(90deg, #df6545, #ff9a72);
+    box-shadow: 0 2px 6px rgba(223, 101, 69, 0.3);
+}
+.date-preview-glass b {
+    left: 25%;
+    top: 6px;
+    width: 50%;
+    height: 3px;
+    border-radius: 3px;
+    background: #79828d;
+}
+.date-preview-spotlight {
+    background: radial-gradient(circle at 50% 0%, #fff, #e9edf2);
+    box-shadow: 0 4px 10px rgba(32, 38, 49, 0.14);
+}
+.date-preview-spotlight i {
+    left: 9%;
+    right: 9%;
+    top: 22px;
+    height: 5px;
+    border-radius: 9px;
+    background: linear-gradient(90deg, #df6545, #ff9a72);
+}
+.date-preview-spotlight b {
+    left: 25%;
+    top: 8px;
+    width: 50%;
+    height: 5px;
+    border-radius: 3px;
+    background: #202631;
+}
+.values-preview-minimal {
+    background: #f1f3f5;
+}
+.values-preview-minimal i {
+    left: 12px;
+    top: 9px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #df6545;
+}
+.values-preview-minimal b {
+    left: 33px;
+    right: 12px;
+    top: 12px;
+    height: 5px;
+    border-radius: 3px;
+    background: #69727d;
+    box-shadow: 0 9px 0 #c8cdd3;
+}
+.values-preview-glass {
+    background: linear-gradient(135deg, #fff, #e9edf2);
+}
+.values-preview-glass i {
+    left: 10px;
+    top: 9px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #4f8fb4;
+    box-shadow: 0 4px 8px rgba(79, 143, 180, 0.3);
+}
+.values-preview-glass b {
+    left: 34px;
+    right: 10px;
+    top: 10px;
+    height: 6px;
+    border-radius: 3px;
+    background: #4d5661;
+    box-shadow: 0 10px 0 #aeb5bd;
+}
+.values-preview-spotlight {
+    background: linear-gradient(145deg, #fff, #e8ebef);
+    box-shadow: 0 5px 10px rgba(32, 38, 49, 0.12);
+}
+.values-preview-spotlight i {
+    left: 9px;
+    top: 8px;
+    width: 18px;
+    height: 18px;
+    border-radius: 7px;
+    background: #df6545;
+}
+.values-preview-spotlight b {
+    left: 35px;
+    right: 9px;
+    top: 10px;
+    height: 7px;
+    border-radius: 3px;
+    background: #202631;
+    box-shadow: 0 11px 0 #9ca4ad;
+}
+.style-choice strong {
+    display: block;
+    color: #3e4752;
+    font-size: 8px;
+    line-height: 1.2;
+}
+.style-choice small {
+    display: block;
+    margin-top: 2px;
+    color: #9aa2ad;
+    font-size: 7px;
+    line-height: 1.2;
+}
+
+@media (max-width: 620px) {
+    .chart-data-display-inner {
+        width: fit-content;
+        max-width: calc(100% - 16px);
+        margin-inline: auto;
+    }
+    .chart-values-display {
+        gap: 10px var(--value-tracker-gap, 14px);
+    }
+    .chart-value-item {
+        min-width: 76px;
+        max-width: 150px;
+        gap: 5px;
+    }
+}
+
+.chart-footer {
+    margin-top: 0.6rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #496078;
+    padding: 0 0.2rem;
+    flex-wrap: wrap;
+
+    margin-top: 8px;
+    padding: 0 5px;
+    color: #8a939e;
+    font-size: 9px;
+}
+
+/* ---------------------------------------------------------------
+           Quick visual controls beside the live chart
+           --------------------------------------------------------------- */
+.preview-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(270px, 1fr);
+    gap: 14px;
+    margin: 20px 22px 18px;
+    align-items: stretch;
+}
+
+.quick-design-panel {
+    min-width: 0;
+    padding: 15px;
+    border: 1px solid #e3e6ea;
+    border-radius: 15px;
+    background: #ffffff;
+}
+
+.quick-panel-kicker {
+    display: block;
+    color: #a0a7b0;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+}
+
+.template-section {
+    padding-top: 14px;
+}
+.quick-section-heading {
+    padding-bottom: 14px;
+}
+.template-section {
+    margin-top: 14px;
+    padding-top: 15px;
+    border-top: 1px solid #e7e9ec;
+}
+
+.quick-section-title,
+.quick-section-help {
+    display: block;
+}
+
+.quick-section-title {
+    color: #505a66;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.quick-section-help {
+    margin-top: 3px;
+    color: #9aa2ad;
+    font-size: 8px;
+    line-height: 1.35;
+}
+
+.aspect-ratio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+}
+
+.aspect-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    padding: 8px;
+    border: 1px solid #e0e3e7;
+    border-radius: 11px;
+    background: #fff;
+    color: #69727d;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.16s ease;
+}
+
+.aspect-option:hover {
+    border-color: #cfd5db;
+    transform: translateY(-1px);
+}
+
+.aspect-option.active {
+    border-color: #d8a18e;
+    background: #fff8f5;
+    box-shadow: 0 0 0 2px rgba(223, 101, 69, 0.08);
+}
+
+.aspect-option strong,
+.aspect-option small {
+    display: block;
+}
+
+.aspect-option strong {
+    color: #404954;
+    font-size: 9px;
+}
+
+.aspect-option small {
+    margin-top: 2px;
+    color: #9aa2ad;
+    font-size: 7px;
+    white-space: nowrap;
+}
+
+.ratio-preview {
+    flex: 0 0 auto;
+    display: block;
+    border: 1.5px solid #b9c0c8;
+    border-radius: 3px;
+    background: linear-gradient(135deg, #f0f2f4, #fff);
+}
+.ratio-full {
+    width: 30px;
+    height: 16px;
+    border-style: dashed;
+}
+
+.ratio-16-9 {
+    width: 28px;
+    height: 16px;
+}
+.ratio-1-1 {
+    width: 20px;
+    height: 20px;
+}
+.ratio-4-5 {
+    width: 17px;
+    height: 21px;
+}
+.ratio-9-16 {
+    width: 14px;
+    height: 24px;
+}
+
+.template-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.template-card {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) 15px;
+    align-items: center;
+    gap: 9px;
+    padding: 7px;
+    border: 1px solid #e0e3e7;
+    border-radius: 12px;
+    background: #fff;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.16s ease;
+}
+
+.template-card:hover {
+    border-color: #cfd5db;
+    transform: translateY(-1px);
+    box-shadow: 0 7px 16px rgba(32, 38, 49, 0.05);
+}
+
+.template-card.active {
+    border-color: #d8a18e;
+    background: #fffaf8;
+    box-shadow: 0 0 0 2px rgba(223, 101, 69, 0.07);
+}
+
+.template-preview {
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 12px;
+}
+
+.template-editorial {
+    background: linear-gradient(135deg, #fff, #f0f3f5);
+    color: #df6545;
+}
+.template-soft {
+    background: linear-gradient(135deg, #f9fbfd, #e5edf4);
+    color: #4d8cb0;
+}
+.template-dark {
+    background: linear-gradient(135deg, #111b26, #263849);
+    color: #74c7ff;
+}
+.template-bold {
+    background: linear-gradient(135deg, #fff, #f0f0f0);
+    color: #111827;
+}
+.template-neon {
+    background: linear-gradient(135deg, #111827, #30205d);
+    color: #78f5d0;
+}
+
+.template-copy {
+    min-width: 0;
+}
+
+.template-copy strong,
+.template-copy small {
+    display: block;
+}
+
+.template-copy strong {
+    overflow: hidden;
+    color: #4b5561;
+    font-size: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.template-copy small {
+    margin-top: 3px;
+    overflow: hidden;
+    color: #9aa2ad;
+    font-size: 7px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.template-check {
+    color: var(--studio-accent);
+    font-size: 8px;
+    opacity: 0;
+}
+
+.template-card.active .template-check {
+    opacity: 1;
+}
+
+.settings-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0.5rem 0 1rem;
+    color: #1e2b3c;
+
+    display: none;
+
+    display: none;
+}
+
+.workspace-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    margin: 0 22px 14px;
+    padding: 2px 5px;
+}
+
+.workspace-heading h2 {
+    margin: 7px 0 4px;
+    font-size: 22px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #202631;
+}
+
+.workspace-heading p {
+    margin: 0;
+    color: #8a939e;
+    font-size: 11px;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #9aa2ad;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--studio-accent);
+    box-shadow: 0 0 0 4px rgba(223, 101, 69, 0.11);
+}
+
+.settings-workspace {
+    display: grid;
+    grid-template-columns: 244px minmax(0, 1fr);
+    gap: 14px;
+    margin: 0 22px 28px;
+
+    border-radius: 15px;
+    background: rgba(241, 243, 246, 0.8);
+    box-shadow: 0 12px 28px rgba(32, 38, 49, 0.05);
+}
+
+.settings-sidebar {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 19px;
+    background: #e9ebee;
+    border: 1px solid #dfe2e6;
+}
+
+.sidebar-label {
+    padding: 5px 8px 9px;
+    color: #9aa2ad;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
+.settings-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.settings-tab {
+    width: 100%;
+    min-height: 59px;
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) 16px;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 8px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    background: transparent;
+    color: #626c78;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.18s ease;
+}
+
+.settings-tab:hover {
+    background: rgba(255, 255, 255, 0.62);
+    color: #313945;
+}
+
+.settings-tab.active {
+    background: #fff;
+    border-color: #e0e3e7;
+    color: #202631;
+    box-shadow: 0 6px 15px rgba(32, 38, 49, 0.07);
+}
+
+.settings-tab-icon {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 11px;
+    background: #f3f4f6;
+    color: #7f8995;
+    font-size: 12px;
+    transition: 0.18s ease;
+}
+
+.settings-tab.active .settings-tab-icon {
+    background: var(--studio-accent-soft);
+    color: var(--studio-accent);
+}
+
+.settings-tab-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.settings-tab-copy strong {
+    font-size: 11px;
+    line-height: 1.1;
+    font-weight: 700;
+    color: inherit;
+}
+
+.settings-tab-copy small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #9aa2ad;
+    font-size: 8px;
+    line-height: 1.2;
+}
+
+.settings-tab-arrow {
+    color: #b0b6be;
+    font-size: 8px;
+    opacity: 0;
+    transform: translateX(-3px);
+    transition: 0.18s ease;
+}
+
+.settings-tab.active .settings-tab-arrow {
+    opacity: 1;
+    transform: none;
+    color: #9a7b70;
+}
+
+.sidebar-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin: auto 2px 2px;
+    padding: 11px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    display: none;
+}
+
+.sidebar-tip-icon {
+    width: 25px;
+    height: 25px;
+    flex: 0 0 25px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: #f8e8e2;
+    color: var(--studio-accent);
+    font-size: 10px;
+}
+
+.sidebar-tip strong,
+.sidebar-tip small {
+    display: block;
+}
+
+.sidebar-tip strong {
+    margin-bottom: 3px;
+    font-size: 9px;
+    color: #59636f;
+}
+
+.sidebar-tip small {
+    font-size: 8px;
+    line-height: 1.4;
+    color: #9aa2ad;
+}
+
+.settings-section[data-panel] {
+    width: 100%;
+    margin: 0;
+    padding: 10px 18px 20px;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 18px;
+    box-shadow: 0 8px 22px rgba(32, 38, 49, 0.045);
+}
+
+.settings-section[data-panel] {
+    display: none;
+}
+
+.settings-section[data-panel].active {
+    display: block;
+    animation: panelIn 0.22s ease both;
+}
+
+@keyframes panelIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.settings-section[data-panel].full-width {
+    grid-column: auto;
+}
+
+.dataset-section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 17px;
+}
+
+.dataset-section-header .section-description {
+    margin-bottom: 0;
+}
+
+.dataset-add-header-btn {
+    width: auto;
+    min-width: 118px;
+    flex: 0 0 auto;
+    margin-top: 0;
+}
+
+.data-input-error.success {
+    color: #2f8a5b;
+}
+
+.data-input-error.error {
+    color: #c0392b;
+}
+
+.settings-section .section-title {
+    min-height: 28px;
+    gap: 9px;
+    margin-bottom: 3px;
+    color: #252b34;
+    font-size: 14px;
+    font-weight: 750;
+}
+
+.settings-section > .section-title:first-child i {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: #f7e9e4;
+    color: var(--studio-accent);
+    font-size: 11px;
+}
+
+.settings-section .section-description {
+    max-width: 700px;
+    color: #9199a4;
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+.settings-section > .dataset-divider {
+    height: 1px;
+    background: #eceef1;
+    margin: 18px 0;
+}
+
+.settings-section .option {
+    margin-bottom: 13px;
+}
+
+.settings-section .option:last-child {
+    margin-bottom: 0;
+}
+
+.settings-section .option-label {
+    margin-bottom: 5px;
+    color: #515b67;
+    font-size: 9px;
+    font-weight: 750;
+    letter-spacing: 0.01em;
+}
+
+.settings-section .option-help {
+    margin-bottom: 6px;
+    color: #9aa2ad;
+    font-size: 8px;
+    line-height: 1.45;
+}
+
+.settings-section input[type="number"],
+.settings-section input[type="text"],
+.settings-section select,
+.settings-section textarea {
+    min-height: 34px;
+    padding: 8px 10px;
+    border: 1px solid #dfe3e7;
+    border-radius: 9px;
+    background: #fafbfc;
+    color: #39424e;
+    font-size: 10px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    transition: 0.15s ease;
+}
+
+.settings-section textarea {
+    min-height: 130px;
+}
+
+.settings-section input[type="number"]:hover,
+.settings-section input[type="text"]:hover,
+.settings-section select:hover,
+.settings-section textarea:hover {
+    border-color: #cbd1d8;
+    background: #fff;
+}
+
+.settings-section input[type="number"]:focus,
+.settings-section input[type="text"]:focus,
+.settings-section select:focus,
+.settings-section textarea:focus {
+    border-color: #d79683;
+    box-shadow: 0 0 0 3px rgba(223, 101, 69, 0.09);
+}
+
+.settings-section .toggle-slider {
+    background: #cfd4da;
+}
+
+.settings-section .toggle input:checked + .toggle-slider {
+    background: var(--studio-accent);
+}
+
+.settings-section .color-value {
+    background: #f5f6f8;
+    border: 1px solid #e5e7ea;
+    color: #7d8793;
+    border-radius: 9px;
+    font-size: 8px;
+}
+
+.settings-section .color-swatch {
+    border-color: #dfe3e7;
+    border-radius: 9px;
+}
+
+.settings-section .dataset-list {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 9px;
+}
+
+.settings-section .dataset-card {
+    padding: 12px;
+    border: 1px solid #e2e5e9;
+    border-radius: 14px;
+    transition: 0.18s ease;
+}
+
+.settings-section .dataset-name {
+    font-size: 10px;
+}
+
+.settings-section .dataset-meta {
+    font-size: 8px;
+}
+
+.settings-section .count-stat {
+    padding: 8px;
+    background: #fff;
+    border-color: #e4e7ea;
+    border-radius: 9px;
+}
+
+.settings-section .count-stat-label {
+    font-size: 7px;
+}
+
+.settings-section .count-stat-value {
+    font-size: 10px;
+}
+
+.settings-section .btn-add {
+    margin-top: 9px;
+    min-height: 38px;
+    background: #202631;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    box-shadow: 0 7px 15px rgba(32, 38, 49, 0.13);
+}
+
+.settings-section .btn-add:hover {
+    background: #343b47;
+}
+
+.google-font-button {
+    flex: 0 0 auto;
+    border: 1px solid #6b7cff;
+    border-radius: 10px;
+    background: #6b7cff;
+    color: #fff;
+    padding: 0.55rem 0.85rem;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    background: #202631;
+    border-color: #202631;
+    border-radius: 9px;
+}
+
+.chart-font-option {
+    min-width: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 10px;
+    border: 1px solid #d4dce8;
+    border-radius: 10px;
+    background: #f8fafc;
+    cursor: pointer;
+    transition:
+        border-color 0.15s ease,
+        background 0.15s ease,
+        box-shadow 0.15s ease;
+
+    border-color: #e1e4e8;
+    background: #fafbfc;
+    border-radius: 11px;
+}
+
+.chart-font-option:hover {
+    background: #f1f5f9;
+
+    background: #fff;
+    border-color: #d6dbe1;
+}
+
+.chart-font-option.selected {
+    border-color: #6b7cff;
+    background: #eef1ff;
+    box-shadow: 0 0 0 2px rgba(107, 124, 255, 0.12);
+
+    border-color: #dfaa99;
+    background: #fff7f4;
+    box-shadow: 0 0 0 2px rgba(223, 101, 69, 0.08);
+}
+
+.chart-font-option.selected .chart-font-radio {
+    border-color: #6b7cff;
+
+    border-color: var(--studio-accent);
+}
+
+.chart-font-option.selected .chart-font-radio::after {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    left: 2px;
+    top: 2px;
+    border-radius: 50%;
+    background: #6b7cff;
+
+    background: var(--studio-accent);
+}
+
+.floating-animate {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 1000;
+    border: none;
+    background: #1d3b4f;
+    color: white;
+    padding: 0.9rem 1.5rem;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    cursor: pointer;
+    box-shadow: 0 10px 28px rgba(20, 45, 65, 0.3);
+    transition: 0.2s;
+
+    right: 36px;
+    bottom: 30px;
+    min-height: 44px;
+    padding: 0 27px;
+    background: #202631;
+    box-shadow: 0 14px 30px rgba(32, 38, 49, 0.22);
+    font-size: 10px;
+    letter-spacing: 0.01em;
+}
+
+.floating-animate:hover {
+    background: #10303f;
+    transform: translateY(-2px);
+
+    background: #343b47;
+    transform: translateY(-2px);
+}
+
+.color-picker-dialog {
+    width: min(360px, 100%);
+    background: #fff;
+    border: 1px solid #dbe3ec;
+    border-radius: 22px;
+    box-shadow: 0 24px 70px rgba(0, 20, 30, 0.25);
+    padding: 18px;
+
+    border-radius: 18px;
+    border-color: #e0e4e8;
+    box-shadow: 0 28px 70px rgba(30, 38, 48, 0.22);
+}
+
+@media (max-width: 1100px) {
+    .preview-workspace {
+        grid-template-columns: minmax(0, 1fr) 250px;
+    }
+}
+
+@media (max-width: 850px) {
+    .preview-workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-design-panel {
+        display: grid;
+        grid-template-columns: 1fr 1.4fr;
+        gap: 16px;
+    }
+
+    .template-section {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: 0;
+    }
+}
+
+@media (max-width: 950px) {
+    body {
+        padding: 16px;
+    }
+
+    .settings-workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .settings-sidebar {
+        padding: 8px;
+    }
+
+    .settings-tabs {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .sidebar-tip {
+        display: none;
+    }
+
+    .settings-tab {
+        grid-template-columns: 30px minmax(0, 1fr);
+        min-height: 52px;
+    }
+
+    .settings-tab-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .settings-tab-arrow {
+        display: none;
+    }
+}
+
+@media (max-width: 700px) {
+    body {
+        padding: 8px;
+    }
+
+    .card {
+        border-radius: 23px;
+    }
+
+    .app-header {
+        align-items: flex-start;
+        padding: 17px;
+    }
+
+    .header-actions {
+        display: none;
+    }
+
+    .preview-workspace {
+        margin: 10px;
+        gap: 9px;
+    }
+
+    .quick-design-panel {
+        display: block;
+        padding: 12px;
+        border-radius: 19px;
+    }
+
+    .template-section {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid #e7e9ec;
+    }
+
+    .preview-topline {
+        padding: 0 3px;
+    }
+
+    .chart-stage {
+        border-radius: 14px;
+    }
+
+    .chart-stage .chart-wrapper {
+        border-radius: 14px;
+    }
+
+    .workspace-heading {
+        margin: 0 12px 10px;
+    }
+
+    .workspace-heading h2 {
+        font-size: 18px;
+    }
+
+    .settings-workspace {
+        margin: 0 10px 18px;
+        padding: 8px;
+        border-radius: 18px;
+    }
+
+    .settings-tabs {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        scrollbar-width: none;
+        padding-bottom: 2px;
+    }
+
+    .settings-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .settings-tab {
+        min-width: 145px;
+        flex: 0 0 145px;
+        grid-template-columns: 30px minmax(0, 1fr);
+    }
+
+    .settings-section[data-panel] {
+        padding: 14px;
+        border-radius: 15px;
+    }
+
+    .two-column {
+        grid-template-columns: 1fr;
+    }
+
+    .floating-animate {
+        right: 17px;
+        bottom: 17px;
+        min-height: 42px;
+    }
+}
+
+/* ============================================================
+           WEBSITE-STYLE APP HEADER
+           Scalable navigation: brand + chart hover menu + pricing + account.
+           ============================================================ */
+.app-header {
+    min-height: 72px;
+    height: 72px;
+    padding: 0 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    background: rgba(255, 255, 255, 0.97);
+    border-bottom: 1px solid #e2e5e9;
+    position: relative;
+    z-index: 100;
+}
+
+.header-left {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.brand-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: inherit;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.brand-mark {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    border-radius: 11px;
+    display: grid;
+    place-items: center;
+    background: #202631;
+    color: #fff;
+    font-size: 15px;
+}
+
+.brand-copy {
+    min-width: 0;
+}
+
+.brand-eyebrow {
+    display: none;
+}
+
+.app-header h1 {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 750;
+    color: #202631;
+    white-space: nowrap;
+}
+
+.app-header p {
+    display: none;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+}
+
+.nav-link {
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: transparent;
+    color: #69727d;
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: 0.16s ease;
+}
+
+.nav-link:hover {
+    background: #f5f6f8;
+    color: #252b34;
+}
+
+.chart-menu {
+    position: relative;
+}
+
+.chart-menu-trigger {
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 13px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: transparent;
+    color: #69727d;
+    font: inherit;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.16s ease;
+}
+
+.chart-menu-trigger i:first-child {
+    font-size: 10px;
+    color: #8b949f;
+}
+
+.chart-menu-trigger .menu-chevron {
+    font-size: 8px;
+    color: #9aa2ad;
+    transition: transform 0.16s ease;
+}
+
+.chart-menu:hover .chart-menu-trigger,
+.chart-menu:focus-within .chart-menu-trigger {
+    background: #f5f6f8;
+    color: #252b34;
+    border-color: #e6e8eb;
+}
+
+.chart-menu:hover .menu-chevron,
+.chart-menu:focus-within .menu-chevron {
+    transform: rotate(180deg);
+}
+
+.chart-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 250px;
+    padding: 7px;
+    border: 1px solid #e1e4e8;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 18px 40px rgba(32, 38, 49, 0.14);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px);
+    transition: 0.16s ease;
+}
+
+.chart-menu:hover .chart-dropdown,
+.chart-menu:focus-within .chart-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.chart-dropdown-title {
+    padding: 7px 9px 8px;
+    color: #9aa2ad;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.chart-dropdown-link {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr) 12px;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    padding: 9px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: #69727d;
+    text-decoration: none;
+    text-align: left;
+    transition: 0.16s ease;
+}
+
+.chart-dropdown-link:hover,
+.chart-dropdown-link.active {
+    background: #f8f1ee;
+    color: #252b34;
+}
+
+.chart-dropdown-icon {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: #f3f4f6;
+    color: #7f8995;
+    font-size: 10px;
+}
+
+.chart-dropdown-link.active .chart-dropdown-icon {
+    background: #fff0eb;
+    color: var(--studio-accent);
+}
+
+.chart-dropdown-copy strong,
+.chart-dropdown-copy small {
+    display: block;
+}
+
+.chart-dropdown-copy strong {
+    font-size: 9px;
+    font-weight: 750;
+    color: inherit;
+}
+
+.chart-dropdown-copy small {
+    margin-top: 2px;
+    color: #9aa2ad;
+    font-size: 7px;
+}
+
+.chart-dropdown-arrow {
+    color: #b0b6be;
+    font-size: 8px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.account-menu {
+    position: relative;
+}
+
+.account-button {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 3px 9px 3px 4px;
+    border: 1px solid #e0e3e8;
+    border-radius: 12px;
+    background: #fff;
+    color: #4e5864;
+    cursor: pointer;
+    font: inherit;
+    transition: 0.16s ease;
+}
+
+.account-button:hover,
+.account-menu.open .account-button {
+    border-color: #d5d9de;
+    background: #f8f9fa;
+}
+
+.account-avatar {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: #202631;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.account-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.account-copy strong {
+    font-size: 9px;
+    line-height: 1;
+    color: #3f4853;
+}
+
+.account-copy small {
+    font-size: 7px;
+    line-height: 1;
+    color: #9aa2ad;
+}
+
+.account-button > i {
+    margin-left: 2px;
+    font-size: 8px;
+    color: #9aa2ad;
+    transition: transform 0.16s ease;
+}
+
+.account-menu.open .account-button > i {
+    transform: rotate(180deg);
+}
+
+.account-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 190px;
+    padding: 6px;
+    border: 1px solid #e1e4e8;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: 0 18px 40px rgba(32, 38, 49, 0.14);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px);
+    transition: 0.16s ease;
+}
+
+.account-menu.open .account-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.account-dropdown-header {
+    padding: 8px 9px 9px;
+    border-bottom: 1px solid #eceef1;
+    margin-bottom: 4px;
+}
+
+.account-dropdown-header strong {
+    display: block;
+    color: #303944;
+    font-size: 9px;
+}
+
+.account-dropdown-header small {
+    display: block;
+    margin-top: 3px;
+    color: #9aa2ad;
+    font-size: 7px;
+}
+
+.account-dropdown-link {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #69727d;
+    text-decoration: none;
+    font-size: 8px;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+}
+
+.account-dropdown-link:hover {
+    background: #f5f6f8;
+    color: #252b34;
+}
+
+.account-dropdown-link i {
+    width: 14px;
+    color: #929ba5;
+    text-align: center;
+}
+
+.account-dropdown-divider {
+    height: 1px;
+    margin: 4px 3px;
+    background: #eceef1;
+}
+
+@media (max-width: 900px) {
+    .app-header {
+        padding: 0 17px;
+        gap: 12px;
+    }
+
+    .header-left {
+        gap: 12px;
+    }
+
+    .account-copy {
+        display: none;
+    }
+
+    .account-button {
+        padding-right: 6px;
+    }
+}
+
+@media (max-width: 700px) {
+    .app-header {
+        min-height: 64px;
+        height: auto;
+        padding: 10px 12px;
+    }
+
+    .header-left {
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    .brand-copy {
+        display: none;
+    }
+
+    .main-nav {
+        flex-shrink: 0;
+    }
+
+    .chart-dropdown {
+        position: fixed;
+        top: 58px;
+        left: 12px;
+        width: min(250px, calc(100vw - 24px));
+    }
+
+    .nav-link,
+    .chart-menu-trigger {
+        min-height: 34px;
+        padding: 0 9px;
+    }
+
+    .header-actions {
+        flex-shrink: 0;
+    }
+}
+
+/* ============================================================
+               TEXT SIZE PASS
+               CSS-only readability adjustment. No JavaScript changes.
+               ============================================================ */
+
+/* Main preview/header text */
+.app-header h1 {
+    font-size: 15px;
+}
+.nav-link,
+.chart-menu-trigger {
+    font-size: 12px;
+}
+.chart-menu-trigger i:first-child {
+    font-size: 11px;
+}
+.header-status,
+.header-chip {
+    font-size: 12px;
+}
+.header-chip i {
+    font-size: 10px;
+}
+.preview-kicker {
+    font-size: 15px;
+}
+.preview-topline strong {
+    font-size: 15px;
+}
+.preview-meta {
+    font-size: 11px;
+}
+#progressDisplay {
+    font-size: 11px;
+}
+.preview-meta i {
+    font-size: 12px;
+}
+.legend-item {
+    font-size: 11px;
+}
+.chart-footer {
+    font-size: 10px;
+}
+
+/* Quick design panel */
+.quick-panel-kicker {
+    font-size: 10px;
+}
+.quick-section-title {
+    font-size: 12px;
+}
+.quick-section-help {
+    font-size: 10px;
+}
+.aspect-option strong {
+    font-size: 11px;
+}
+.aspect-option small {
+    font-size: 9px;
+}
+.template-copy strong {
+    font-size: 11px;
+}
+.template-copy small {
+    font-size: 9px;
+}
+
+/* Chart configuration */
+.workspace-heading h2 {
+    font-size: 23px;
+}
+.workspace-heading p {
+    font-size: 12px;
+}
+.eyebrow {
+    font-size: 10px;
+}
+.sidebar-label {
+    font-size: 11px;
+}
+.settings-tab-copy strong {
+    font-size: 12px;
+}
+.settings-tab-copy small {
+    font-size: 10px;
+}
+.settings-section .section-title {
+    font-size: 15px;
+}
+.settings-section .section-description {
+    font-size: 11px;
+}
+.settings-section .option-label {
+    font-size: 11px;
+}
+.settings-section .option-help {
+    font-size: 10px;
+}
+.settings-section input[type="number"],
+.settings-section input[type="text"],
+.settings-section select,
+.settings-section textarea {
+    font-size: 12px;
+}
+.settings-section .color-value {
+    font-size: 10px;
+}
+.settings-section .dataset-name {
+    font-size: 12px;
+}
+.settings-section .dataset-meta {
+    font-size: 10px;
+}
+.settings-section .count-stat-label {
+    font-size: 9px;
+}
+.settings-section .count-stat-value {
+    font-size: 12px;
+}
+.settings-section .btn-add {
+    font-size: 12px;
+}
+
+/* Header menus and account */
+.chart-dropdown-title {
+    font-size: 10px;
+}
+.chart-dropdown-copy strong {
+    font-size: 11px;
+}
+.chart-dropdown-copy small {
+    font-size: 9px;
+}
+.account-copy strong {
+    font-size: 11px;
+}
+.account-copy small {
+    font-size: 9px;
+}
+.account-dropdown-header strong {
+    font-size: 11px;
+}
+.account-dropdown-header small {
+    font-size: 9px;
+}
+.account-dropdown-link {
+    font-size: 10px;
+}
+
+/* Small supporting text */
+.settings-tab-arrow {
+    font-size: 9px;
+}
+.sidebar-tip strong {
+    font-size: 10px;
+}
+.sidebar-tip small {
+    font-size: 9px;
+}
+.dataset-data-help {
+    font-size: 10px;
+}
+.google-font-status {
+    font-size: 9px;
+}
+
+
+
+        </style>
+    </head>
+
+    <body>
+        <div class="card">
+            <header class="app-header">
+                <div class="header-left">
+                    <a class="brand-link" href="index.html" aria-label="Chart Studio home">
+                        <div class="brand-mark"><i class="fas fa-chart-line"></i></div>
+                        <div class="brand-copy">
+                            <h1>Chart Studio</h1>
+                        </div>
+                    </a>
+
+                    <nav class="main-nav" aria-label="Main navigation">
+                        <div class="chart-menu">
+                            <button type="button" class="chart-menu-trigger" aria-haspopup="true">
+                                <i class="fas fa-chart-column"></i>
+                                <span>Charts</span>
+                                <i class="fas fa-chevron-down menu-chevron"></i>
+                            </button>
+
+                            <div class="chart-dropdown">
+                                <div class="chart-dropdown-title">Choose a chart</div>
+
+                                <a class="chart-dropdown-link active" href="line-chart.html" aria-current="page">
+                                    <span class="chart-dropdown-icon"><i class="fas fa-chart-line"></i></span>
+                                    <span class="chart-dropdown-copy">
+                                        <strong>Line chart</strong>
+                                        <small>Trends over time</small>
+                                    </span>
+                                    <i class="fas fa-arrow-right chart-dropdown-arrow"></i>
+                                </a>
+
+                                <a class="chart-dropdown-link" href="bar-chart.html">
+                                    <span class="chart-dropdown-icon"><i class="fas fa-chart-column"></i></span>
+                                    <span class="chart-dropdown-copy">
+                                        <strong>Bar chart</strong>
+                                        <small>Compare categories</small>
+                                    </span>
+                                    <i class="fas fa-arrow-right chart-dropdown-arrow"></i>
+                                </a>
+
+                                <a class="chart-dropdown-link" href="area-chart.html">
+                                    <span class="chart-dropdown-icon"><i class="fas fa-chart-area"></i></span>
+                                    <span class="chart-dropdown-copy">
+                                        <strong>Area chart</strong>
+                                        <small>Show magnitude and trends</small>
+                                    </span>
+                                    <i class="fas fa-arrow-right chart-dropdown-arrow"></i>
+                                </a>
+
+                                <a class="chart-dropdown-link" href="scatter-chart.html">
+                                    <span class="chart-dropdown-icon"><i class="fas fa-braille"></i></span>
+                                    <span class="chart-dropdown-copy">
+                                        <strong>Scatter plot</strong>
+                                        <small>Explore relationships</small>
+                                    </span>
+                                    <i class="fas fa-arrow-right chart-dropdown-arrow"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <a class="nav-link" href="pricing.html">
+                            <i class="fas fa-tag"></i>
+                            <span>Pricing</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="header-actions">
+                    <div class="account-menu" id="accountMenu">
+                        <button type="button" class="account-button" id="accountButton" aria-expanded="false" aria-haspopup="true">
+                            <span class="account-avatar"><i class="fas fa-user"></i></span>
+                            <span class="account-copy">
+                                <strong>Account</strong>
+                                <small>Chart Studio</small>
+                            </span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+
+                        <div class="account-dropdown" id="accountDropdown">
+                            <div class="account-dropdown-header">
+                                <strong>Your account</strong>
+                                <small>Manage your Chart Studio workspace</small>
+                            </div>
+                            <a class="account-dropdown-link" href="#">
+                                <i class="fas fa-user"></i>
+                                <span>Profile</span>
+                            </a>
+                            <a class="account-dropdown-link" href="#">
+                                <i class="fas fa-gear"></i>
+                                <span>Account settings</span>
+                            </a>
+                            <div class="account-dropdown-divider"></div>
+                            <a class="account-dropdown-link" href="#">
+                                <i class="fas fa-arrow-right-from-bracket"></i>
+                                <span>Sign out</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="preview-workspace">
+                <div class="chart-container">
+                    <div class="preview-topline">
+                        <div>
+                            <span class="preview-kicker">LIVE PREVIEW</span>
+                        </div>
+                        <span class="preview-meta"><i class="fas fa-chart-area"></i><span id="progressDisplay">0%</span></span>
+                    </div>
+
+                    <div class="chart-stage">
+                        <div class="chart-wrapper">
+                            <div class="chart-html-background" id="chartHtmlBackground"></div>
+                            <canvas id="lineChartCanvas"></canvas>
+                            <div class="chart-data-display" id="chartDateDisplay" aria-live="polite">
+                                <div class="chart-data-display-inner">
+                                    <div class="chart-date-tracker" id="chartDateTracker">
+                                        <div class="chart-date-range" id="chartDateRange"></div>
+                                        <div class="chart-date-progress" aria-hidden="true">
+                                            <div class="chart-date-progress-fill" id="chartDateProgressFill"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                id="chartCustomTextsTop"
+                                style="
+                                    position: absolute;
+                                    top: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: center;
+                                    z-index: 5;
+                                "
+                            ></div>
+                            <div
+                                id="chartCustomTextsBottom"
+                                style="
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: center;
+                                    z-index: 5;
+                                "
+                            ></div>
+                            <div class="chart-data-display" id="chartValuesDisplayContainer" aria-live="polite">
+                                <div class="chart-data-display-inner"><div class="chart-values-display" id="chartValuesDisplay"></div></div>
+                            </div>
+                            <div class="endpoint-info-container" id="endpointInfoContainer"></div>
+                            <div class="endpoint-marker-container" id="endpointMarkerContainer"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="quick-design-panel" aria-label="Chart templates and aspect ratio">
+                    <section class="aspect-ratio-section">
+                        <div class="quick-section-heading">
+                            <div>
+                                <span class="quick-section-title">Aspect Ratio</span>
+                                <span class="quick-section-help">Choose a canvas shape for export.</span>
+                            </div>
+                        </div>
+                        <div class="aspect-ratio-grid" id="aspectRatioGrid">
+                            <button type="button" class="aspect-option active" data-ratio="full">
+                                <span class="ratio-preview ratio-full"></span><span><strong>Full Width</strong><small>Full preview</small></span>
+                            </button>
+                            <button type="button" class="aspect-option" data-ratio="landscape" data-width="16" data-height="9">
+                                <span class="ratio-preview ratio-16-9"></span><span><strong>16:9</strong><small>Landscape</small></span>
+                            </button>
+                            <button type="button" class="aspect-option" data-ratio="square" data-width="1" data-height="1">
+                                <span class="ratio-preview ratio-1-1"></span><span><strong>1:1</strong><small>Instagram</small></span>
+                            </button>
+                            <button type="button" class="aspect-option" data-ratio="portrait" data-width="4" data-height="5">
+                                <span class="ratio-preview ratio-4-5"></span><span><strong>4:5</strong><small>Portrait</small></span>
+                            </button>
+                            <button type="button" class="aspect-option" data-ratio="reels" data-width="9" data-height="16">
+                                <span class="ratio-preview ratio-9-16"></span><span><strong>9:16</strong><small>Reels / Story</small></span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <section class="template-section">
+                        <div class="quick-section-heading">
+                            <div>
+                                <span class="quick-section-title">Chart Templates</span>
+                                <span class="quick-section-help">One click applies a complete visual preset.</span>
+                            </div>
+                        </div>
+                        <div class="template-list" id="chartTemplateList">
+                            <button type="button" class="template-card" data-template="editorial">
+                                <span class="template-preview template-editorial"><i class="fas fa-chart-line"></i></span>
+                                <span class="template-copy"><strong>Editorial</strong><small>Clean & balanced</small></span>
+                                <i class="fas fa-check template-check"></i>
+                            </button>
+                            <button type="button" class="template-card" data-template="softFinance">
+                                <span class="template-preview template-soft"><i class="fas fa-chart-area"></i></span>
+                                <span class="template-copy"><strong>Soft Finance</strong><small>Airy dashboard</small></span>
+                                <i class="fas fa-check template-check"></i>
+                            </button>
+                            <button type="button" class="template-card" data-template="darkTerminal">
+                                <span class="template-preview template-dark"><i class="fas fa-terminal"></i></span>
+                                <span class="template-copy"><strong>Dark Terminal</strong><small>Trading desk</small></span>
+                                <i class="fas fa-check template-check"></i>
+                            </button>
+                            <button type="button" class="template-card" data-template="boldMarket">
+                                <span class="template-preview template-bold"><i class="fas fa-arrow-trend-up"></i></span>
+                                <span class="template-copy"><strong>Bold Market</strong><small>Strong & minimal</small></span>
+                                <i class="fas fa-check template-check"></i>
+                            </button>
+                            <button type="button" class="template-card" data-template="neonPulse">
+                                <span class="template-preview template-neon"><i class="fas fa-bolt"></i></span>
+                                <span class="template-copy"><strong>Neon Pulse</strong><small>High contrast</small></span>
+                                <i class="fas fa-check template-check"></i>
+                            </button>
+                        </div>
+                    </section>
+                </aside>
+            </div>
+
+            <div class="settings-title">Chart Settings</div>
+
+            <div class="settings-title">Chart Settings</div>
+
+            <div class="workspace-heading">
+                <div>
+                    <h2>Chart Configuration</h2>
+                    <p>Fine-tune the visual system without changing how your chart works.</p>
+                </div>
+            </div>
+
+            <div class="settings-workspace">
+                <aside class="settings-sidebar" aria-label="Chart settings sections">
+                    <div class="sidebar-label">Sections</div>
+                    <nav class="settings-tabs">
+                        <button type="button" class="settings-tab active" data-tab="datasets" aria-selected="true">
+                            <span class="settings-tab-icon"><i class="fas fa-database"></i></span>
+                            <span class="settings-tab-copy"><strong>Data Sets</strong><small>Manage chart data & series</small></span>
+                            <span class="settings-tab-arrow"><i class="fas fa-chevron-right"></i></span>
+                        </button>
+                        <button type="button" class="settings-tab" data-tab="general" aria-selected="false">
+                            <span class="settings-tab-icon"><i class="fas fa-sliders-h"></i></span>
+                            <span class="settings-tab-copy"><strong>Chart General</strong><small>Overall chart settings</small></span>
+                            <span class="settings-tab-arrow"><i class="fas fa-chevron-right"></i></span>
+                        </button>
+                        <button type="button" class="settings-tab" data-tab="data-display" aria-selected="false">
+                            <span class="settings-tab-icon"><i class="fas fa-tag"></i></span>
+                            <span class="settings-tab-copy"><strong>Data Display</strong><small>Live dates & dataset values</small></span>
+                            <span class="settings-tab-arrow"><i class="fas fa-chevron-right"></i></span>
+                        </button>
+                        <button type="button" class="settings-tab" data-tab="text-display" aria-selected="false">
+                            <span class="settings-tab-icon"><i class="fas fa-heading"></i></span>
+                            <span class="settings-tab-copy"><strong>Text Display</strong><small>Custom chart titles & text</small></span>
+                            <span class="settings-tab-arrow"><i class="fas fa-chevron-right"></i></span>
+                        </button>
+                        <button type="button" class="settings-tab" data-tab="axes" aria-selected="false">
+                            <span class="settings-tab-icon"><i class="fas fa-arrows-alt-v"></i></span>
+                            <span class="settings-tab-copy"><strong>Axes</strong><small>Ticks, labels & axis lines</small></span>
+                            <span class="settings-tab-arrow"><i class="fas fa-chevron-right"></i></span>
+                        </button>
+                        <button type="button" class="settings-tab" data-tab="fonts" aria-selected="false">
+                            <span class="settings-tab-icon"><i class="fas fa-font"></i></span>
+                            <span class="settings-tab-copy"><strong>Fonts</strong><small>Chart typography</small></span>
+                            <span class="settings-tab-arrow"><i class="fas fa-chevron-right"></i></span>
+                        </button>
+                        <button type="button" class="settings-tab" data-tab="grid" aria-selected="false">
+                            <span class="settings-tab-icon"><i class="fas fa-border-all"></i></span>
+                            <span class="settings-tab-copy"><strong>Grid</strong><small>Guide lines & styling</small></span>
+                            <span class="settings-tab-arrow"><i class="fas fa-chevron-right"></i></span>
+                        </button>
+                    </nav>
+                    <div class="sidebar-tip">
+                        <span class="sidebar-tip-icon"><i class="fas fa-wand-magic-sparkles"></i></span>
+                        <div>
+                            <strong>Build your style</strong>
+                            <small>Changes update the preview while you work.</small>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="settings-section full-width" data-panel="datasets">
+                    <div class="dataset-section-header">
+                        <div>
+                            <div class="section-title">
+                                <i class="fas fa-database"></i>
+                                Data Sets
+                            </div>
+
+                            <div class="section-description">
+                                Add stock data. Each dataset has independent appearance, glow, fill, and reduction settings.
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn-add dataset-add-header-btn" id="addDatasetBtn">
+                            <i class="fas fa-plus"></i>
+                            Add Data
+                        </button>
+                    </div>
+
+                    <div id="datasetsContainer" class="dataset-list"></div>
+                </div>
+
+                <div class="settings-section" data-panel="general">
+                    <div class="section-title">
+                        <i class="fas fa-sliders-h"></i>
+                        Chart General
+                    </div>
+
+                    <div class="section-description">
+                        Overall chart settings, including animation, date formatting, background, and canvas spacing.
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; gap: 13px">
+                        <div class="option" style="width: 100%">
+                            <div class="option-label">Duration (seconds)</div>
+
+                            <div class="option-help">Total time for the full animation.</div>
+
+                            <input type="number" id="durationInput" value="20" min="0.5" step="0.5" />
+
+                            <div class="option" style="margin-top: 35px">
+                                <div class="option-label">Point Spread Count</div>
+                                <div class="option-help">Number of chart positions used before points stay at the right edge.</div>
+                                <input type="number" id="pointSpreadCount" value="10" min="2" max="1000" step="1" />
+                            </div>
+                        </div>
+
+                        <div class="option" style="width: 100%">
+                            <div class="option-label">Smoothness</div>
+
+                            <div class="option-help">How smoothly the axes follow growing data.</div>
+
+                            <input type="range" id="smoothnessInput" value="0.55" min="0.01" max="1" step="0.001" />
+
+                            <div class="option" style="margin-top: 1rem">
+                                <div class="option-label">Y-Axis Breathing Room (%)</div>
+                                <div class="option-help">Extra dynamic space around the visible data range.</div>
+
+                                <div class="two-column">
+                                    <div class="option">
+                                        <div class="option-label">Top</div>
+                                        <input type="number" id="yAxisBreathingRoomTop" value="14" min="0" max="100" step="0.5" />
+                                    </div>
+
+                                    <div class="option">
+                                        <div class="option-label">Bottom</div>
+                                        <input type="number" id="yAxisBreathingRoomBottom" value="1" min="0" max="100" step="0.5" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="option">
+                        <div class="option-label">Speed Ramp</div>
+
+                        <div class="option-help">Start speed multiplier → End speed multiplier (e.g., 1 → 3).</div>
+
+                        <div class="two-column">
+                            <input type="number" id="speedStart" value="1.0" min="0.1" max="10" step="0.1" placeholder="Start" />
+
+                            <input type="number" id="speedEnd" value="1.0" min="0.1" max="10" step="0.1" placeholder="End" />
+                        </div>
+                    </div>
+
+                    <div class="option">
+                        <div class="option-label">Canvas Edge Padding (px)</div>
+
+                        <div class="option-help">Space between the canvas edge and the chart plotting area.</div>
+
+                        <div class="four-column">
+                            <div class="option">
+                                <div class="option-label">Top</div>
+                                <input type="number" id="canvasPaddingTop" value="42" min="0" max="200" step="1" />
+                            </div>
+
+                            <div class="option">
+                                <div class="option-label">Right</div>
+                                <input type="number" id="canvasPaddingRight" value="62" min="0" max="200" step="1" />
+                            </div>
+
+                            <div class="option">
+                                <div class="option-label">Bottom</div>
+                                <input type="number" id="canvasPaddingBottom" value="42" min="0" max="200" step="1" />
+                            </div>
+
+                            <div class="option">
+                                <div class="option-label">Left</div>
+                                <input type="number" id="canvasPaddingLeft" value="32" min="0" max="200" step="1" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        Date Formatting
+                    </div>
+
+                    <div class="option">
+                        <div class="option-label">Axis Date Format</div>
+                        <div class="option-help">Controls how dates are displayed on the chart axis.</div>
+                        <select id="axisDateFormat">
+                            <option value="year">2026</option>
+                            <option value="year-month">2026-02</option>
+                            <option value="year-month-day">2026-02-15</option>
+                            <option value="slash-ymd">2026/02/15</option>
+                            <option value="slash-ydm">2026/15/02</option>
+                            <option value="month-day-year">Feb 15 2026</option>
+                            <option value="month-year" selected>Feb 2026</option>
+                        </select>
+                    </div>
+
+                    <div class="dataset-divider"></div>
+
+                    <div class="section-title">
+                        <i class="fas fa-palette"></i>
+                        Chart Background
+                    </div>
+
+                    <div class="section-description">Choose a solid background or a 2–4 color gradient and control its angle.</div>
+
+                    <div class="option">
+                        <div class="option-label">Background Type</div>
+
+                        <select id="chartBackgroundType">
+                            <option value="solid">Solid Color</option>
+
+                            <option value="gradient">Gradient</option>
+
+                            <option value="html">HTML / CSS</option>
+                        </select>
+                    </div>
+
+                    <div id="chartBackgroundSolidOption" class="option">
+                        <div class="option-label">Background Color</div>
+
+                        <div class="color-row">
+                            <input type="color" id="chartBackgroundColor" value="#fafdff" data-color-title="Chart Background" />
+
+                            <span class="color-value" id="chartBackgroundColorValue"> #fafdff · 100% </span>
+                        </div>
+                    </div>
+
+                    <div id="chartBackgroundGradientOption" style="display: none">
+                        <div class="two-column">
+                            <div class="option">
+                                <div class="option-label">Color 1</div>
+
+                                <div class="color-row">
+                                    <input type="color" id="chartGradientColor1" value="#fafdff" data-color-title="Gradient Color 1" />
+
+                                    <span class="color-value" id="chartGradientColor1Value"> #fafdff · 100% </span>
+                                </div>
+                            </div>
+
+                            <div class="option">
+                                <div class="option-label">Color 2</div>
+
+                                <div class="color-row">
+                                    <input type="color" id="chartGradientColor2" value="#eef5fa" data-color-title="Gradient Color 2" />
+
+                                    <span class="color-value" id="chartGradientColor2Value"> #eef5fa · 100% </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="option">
+                            <div class="toggle-row">
+                                <div>
+                                    <div class="option-label">Use Third Color</div>
+
+                                    <div class="option-help">Adds a middle color stop at 50%.</div>
+                                </div>
+
+                                <label class="toggle">
+                                    <input type="checkbox" id="chartGradientUseThird" />
+
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="chartGradientThirdOption" class="option" style="display: none">
+                            <div class="option-label">Color 3</div>
+
+                            <div class="color-row">
+                                <input type="color" id="chartGradientColor3" value="#dcecf5" data-color-title="Gradient Color 3" />
+
+                                <span class="color-value" id="chartGradientColor3Value"> #dcecf5 · 100% </span>
+                            </div>
+                        </div>
+
+                        <div id="chartGradientFourthToggleOption" class="option" style="display: none">
+                            <div class="toggle-row">
+                                <div>
+                                    <div class="option-label">Use Fourth Color</div>
+
+                                    <div class="option-help">Adds a fourth color stop at 67%.</div>
+                                </div>
+
+                                <label class="toggle">
+                                    <input type="checkbox" id="chartGradientUseFourth" />
+
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="chartGradientFourthOption" class="option" style="display: none">
+                            <div class="option-label">Color 4</div>
+
+                            <div class="color-row">
+                                <input type="color" id="chartGradientColor4" value="#c7dce8" data-color-title="Gradient Color 4" />
+
+                                <span class="color-value" id="chartGradientColor4Value"> #c7dce8 · 100% </span>
+                            </div>
+                        </div>
+
+                        <div class="option">
+                            <div class="option-label">
+                                Gradient Angle
+                                <span id="chartGradientAngleValue"> 90° </span>
+                            </div>
+
+                            <input type="number" id="chartGradientAngle" value="90" min="0" max="360" step="1" />
+                        </div>
+                    </div>
+
+                    <div id="chartBackgroundHtmlOption" class="option" style="display: none">
+                        <div class="option-label">HTML Background Preset</div>
+
+                        <div class="option-help">
+                            Choose a starting point, then edit the HTML/CSS directly. The HTML sits behind the chart canvas.
+                        </div>
+
+                        <select id="chartBackgroundHtmlPreset">
+                            <option value="white">1. Solid White</option>
+                            <option value="soft">2. Soft Center Glow</option>
+                            <option value="radialBlue">3. Circular Blue Gradient</option>
+                            <option value="radialSunset">4. Circular Sunset Gradient</option>
+                            <option value="aurora">5. Aurora</option>
+                        </select>
+
+                        <textarea id="chartBackgroundHtml" spellcheck="false" style="margin-top: 0.6rem; min-height: 220px"></textarea>
+                    </div>
+                    <div class="dataset-divider"></div>
+
+                    <div class="section-title">
+                        <i class="fas fa-wave-square"></i>
+                        Line Appearance
+                    </div>
+
+                    <div class="section-description">Control the chart line itself: thickness, curve, fill, border, and shadow.</div>
+
+                    <div class="two-column">
+                        <div class="option">
+                            <div class="option-label">Chart Line Thickness</div>
+                            <div class="option-help">Controls the stroke width of every plotted line.</div>
+                            <input type="range" id="lineWidth" value="2.5" min="0.5" max="10" step="0.5" />
+                        </div>
+
+                        <div class="option">
+                            <div class="option-label">Line Curve</div>
+                            <div class="option-help">Controls how rounded the line joins are.</div>
+                            <input type="range" id="lineTension" value="0.20" min="0.025" max="1" step="0.025" />
+                        </div>
+                    </div>
+
+                    <div class="dataset-divider"></div>
+
+                    <div class="section-title">
+                        <i class="fas fa-border-style"></i>
+                        Line Border
+                    </div>
+
+                    <div class="section-description">
+                        Add an outline around every plotted line. The border automatically uses each data set's line color.
+                    </div>
+
+                    <div class="option">
+                        <div class="toggle-row">
+                            <div>
+                                <div class="option-label">Enable Line Border</div>
+                                <div class="option-help">Draws the border behind the main line so the line remains clearly defined.</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="lineBorderEnabled" />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="two-column">
+                        <div class="option">
+                            <div class="option-label">Border Opacity</div>
+                            <div class="option-help">Uses the current data set line color.</div>
+                            <input type="range" id="lineBorderOpacity" value="100" min="0" max="100" step="1" />
+                        </div>
+                        <div class="option">
+                            <div class="option-label">Border Thickness</div>
+                            <div class="option-help">Controls how much wider the border is than the main line.</div>
+                            <input type="range" id="lineBorderWidth" value="2" min="0.5" max="20" step="0.5" />
+                        </div>
+                    </div>
+
+                    <div class="dataset-divider"></div>
+
+                    <div class="section-title">
+                        <i class="fas fa-cloud"></i>
+                        Line Shadow
+                    </div>
+
+                    <div class="section-description">
+                        Add a soft shadow using the same line color as each data set. Gradient mode changes opacity horizontally, so colors never mix
+                        between different hues.
+                    </div>
+
+                    <div class="option">
+                        <div class="toggle-row">
+                            <div>
+                                <div class="option-label">Enable Line Shadow</div>
+                                <div class="option-help">Shadow color always follows the selected line color for each data set.</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="lineShadowEnabled" />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="two-column">
+                        <div class="option">
+                            <div class="option-label">Shadow Type</div>
+                            <div class="option-help">Solid color or gradiant.</div>
+                            <select id="lineShadowType">
+                                <option value="solid">Solid</option>
+                                <option value="gradient">Horizontal Gradient</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <div class="option-label">Shadow Opacity</div>
+                            <div class="option-help">Used for solid mode.</div>
+                            <input type="range" id="lineShadowOpacity" value="35" min="0" max="100" step="1" />
+                        </div>
+                    </div>
+
+                    <div id="lineShadowGradientOption" style="display: none">
+                        <div class="option-help" style="margin-bottom: 0.6rem">
+                            Choose up to four shadow colors from left to right. Each color can be enabled or disabled and has its own opacity.
+                        </div>
+                        <div class="four-column">
+                            <div class="option">
+                                <div class="toggle-row">
+                                    <div class="option-label">Color 1</div>
+                                    <label class="toggle"
+                                        ><input type="checkbox" id="lineShadowGradientUse1" checked /><span class="toggle-slider"></span
+                                    ></label>
+                                </div>
+                                <div class="color-row">
+                                    <input type="color" id="lineShadowGradientColor1" value="#bf75ff" data-color-title="Shadow Gradient Color 1" />
+                                    <span class="color-value">#bf75ff · 100%</span>
+                                </div>
+                                <input type="number" id="lineShadowGradientOpacity1" value="100" min="0" max="100" step="1" />
+                            </div>
+                            <div class="option">
+                                <div class="toggle-row">
+                                    <div class="option-label">Color 2</div>
+                                    <label class="toggle"
+                                        ><input type="checkbox" id="lineShadowGradientUse2" checked /><span class="toggle-slider"></span
+                                    ></label>
+                                </div>
+                                <div class="color-row">
+                                    <input type="color" id="lineShadowGradientColor2" value="#ff57a0" data-color-title="Shadow Gradient Color 2" />
+                                    <span class="color-value">#ff57a0 · 100%</span>
+                                </div>
+                                <input type="number" id="lineShadowGradientOpacity2" value="100" min="0" max="100" step="1" />
+                            </div>
+                            <div class="option">
+                                <div class="toggle-row">
+                                    <div class="option-label">Color 3</div>
+                                    <label class="toggle"
+                                        ><input type="checkbox" id="lineShadowGradientUse3" /><span class="toggle-slider"></span
+                                    ></label>
+                                </div>
+                                <div class="color-row">
+                                    <input type="color" id="lineShadowGradientColor3" value="#ff4d4d" data-color-title="Shadow Gradient Color 3" />
+                                    <span class="color-value">#ff4d4d · 100%</span>
+                                </div>
+                                <input type="number" id="lineShadowGradientOpacity3" value="100" min="0" max="100" step="1" />
+                            </div>
+                            <div class="option">
+                                <div class="toggle-row">
+                                    <div class="option-label">Color 4</div>
+                                    <label class="toggle"
+                                        ><input type="checkbox" id="lineShadowGradientUse4" /><span class="toggle-slider"></span
+                                    ></label>
+                                </div>
+                                <div class="color-row">
+                                    <input type="color" id="lineShadowGradientColor4" value="#ff7b24" data-color-title="Shadow Gradient Color 4" />
+                                    <span class="color-value">#ff7b24 · 100%</span>
+                                </div>
+                                <input type="number" id="lineShadowGradientOpacity4" value="100" min="0" max="100" step="1" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="two-column">
+                        <div class="option">
+                            <div class="option-label">Shadow Blur</div>
+                            <input type="range" id="lineShadowBlur" value="10" min="0" max="80" step="1" />
+                        </div>
+                        <div class="option">
+                            <div class="option-label">Offset X</div>
+                            <input type="number" id="lineShadowOffsetX" value="0" min="-100" max="100" step="1" />
+                        </div>
+                    </div>
+                    <div class="option">
+                        <div class="option-label">Offset Y</div>
+                        <input type="number" id="lineShadowOffsetY" value="4" min="-100" max="100" step="1" />
+                    </div>
+                </div>
+
+                <div class="settings-section chart-data-display-config-section" data-panel="data-display">
+                    <div class="section-title"><i class="fas fa-tag"></i> Chart Data Display</div>
+                    <div class="section-description">
+                        Show the chart's current date progress or live dataset values above or below the chart. Each display works independently.
+                    </div>
+
+                    <div class="option">
+                        <div class="option-label">Date Tracker</div>
+                        <div class="option-help">Show the live date range and progress as the chart animates.</div>
+                        <div class="display-position-switch" id="chartDateDisplayPosition" role="group" aria-label="Date tracker display position">
+                            <button type="button" class="display-position-option" data-position="top">Top</button>
+                            <button type="button" class="display-position-option active" data-position="none">Hidden</button>
+                            <button type="button" class="display-position-option" data-position="bottom">Bottom</button>
+                        </div>
+                        <div class="display-offset-grid">
+                            <div class="option">
+                                <div class="option-label">Top Offset (px)</div>
+                                <input type="number" id="chartDateDisplayTopOffset" value="20" min="0" max="200" step="1" />
+                            </div>
+                            <div class="option">
+                                <div class="option-label">Bottom Offset (px)</div>
+                                <input type="number" id="chartDateDisplayBottomOffset" value="20" min="0" max="200" step="1" />
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="option-label">Style</div>
+                            <div class="style-choice-grid" id="chartDateDisplayStyleChoices">
+                                <button type="button" class="style-choice active" data-style="minimal">
+                                    <span class="style-choice-preview date-preview-minimal"><i></i><b></b></span
+                                    ><span><strong>Editorial</strong><small>Clean type + progress</small></span>
+                                </button>
+                                <button type="button" class="style-choice" data-style="glass">
+                                    <span class="style-choice-preview date-preview-glass"><i></i><b></b></span
+                                    ><span><strong>Glass</strong><small>Soft translucent panel</small></span>
+                                </button>
+                                <button type="button" class="style-choice" data-style="spotlight">
+                                    <span class="style-choice-preview date-preview-spotlight"><i></i><b></b></span
+                                    ><span><strong>Spotlight</strong><small>Bold focal display</small></span>
+                                </button>
+                            </div>
+                            <input type="hidden" id="chartDateDisplayStyle" value="minimal" />
+                        </div>
+                        <div class="two-column">
+                            <div class="option">
+                                <div class="option-label">Font Size (px)</div>
+                                <input type="number" id="chartDateDisplayFontSize" value="11" min="6" max="40" step="1" />
+                            </div>
+                            <div class="option">
+                                <div class="option-label">Font Color</div>
+                                <div class="color-row">
+                                    <input type="color" id="chartDateDisplayFontColor" value="#5f6975" /><span class="color-value">#5f6975</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="display-color-grid">
+                            <div class="option">
+                                <div class="option-label">Track Color</div>
+                                <input type="color" id="chartDateProgressTrackColor" value="#e6e9ee" />
+                            </div>
+                            <div class="option">
+                                <div class="option-label">Progress Start</div>
+                                <input type="color" id="chartDateProgressStartColor" value="#df6545" />
+                            </div>
+                            <div class="option">
+                                <div class="option-label">Progress End</div>
+                                <input type="color" id="chartDateProgressEndColor" value="#ff9a72" />
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="option-label">Background</div>
+                            <div class="color-row">
+                                <input type="color" id="chartDateDisplayBgColor" value="#ffffff" /><label class="toggle"
+                                    ><input type="checkbox" id="chartDateDisplayBgEnabled" /><span class="toggle-slider"></span
+                                ></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dataset-divider"></div>
+
+                    <div class="dataset-divider"></div>
+
+                    <div class="option">
+                        <div class="option-label">
+                            <span>Value Tracker</span>
+                        </div>
+                        <div class="option-help">Show the live value for every dataset, using its uploaded endpoint image when available.</div>
+                        <div
+                            class="display-position-switch"
+                            id="chartValuesDisplayPosition"
+                            role="group"
+                            aria-label="Dataset values display position"
+                        >
+                            <button type="button" class="display-position-option" data-position="top">Top</button>
+                            <button type="button" class="display-position-option active" data-position="none">Hidden</button>
+                            <button type="button" class="display-position-option" data-position="bottom">Bottom</button>
+                        </div>
+                        <div class="display-offset-grid">
+                            <div class="option">
+                                <div class="option-label">Top Offset (px)</div>
+                                <input type="number" id="chartValuesDisplayTopOffset" value="20" min="0" max="200" step="1" />
+                            </div>
+                            <div class="option">
+                                <div class="option-label">Bottom Offset (px)</div>
+                                <input type="number" id="chartValuesDisplayBottomOffset" value="20" min="0" max="200" step="1" />
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="option-label">Style</div>
+                            <div class="style-choice-grid" id="chartValuesDisplayStyleChoices">
+                                <button type="button" class="style-choice active" data-style="minimal">
+                                    <span class="style-choice-preview values-preview-minimal"><i></i><b></b></span
+                                    ><span><strong>Editorial</strong><small>Quiet inline metrics</small></span>
+                                </button>
+                                <button type="button" class="style-choice" data-style="stacked">
+                                    <span class="style-choice-preview values-preview-glass"><i></i><b></b></span
+                                    ><span><strong>Stacked</strong><small>Centered media + metric</small></span>
+                                </button>
+                                <button type="button" class="style-choice" data-style="ticker">
+                                    <span class="style-choice-preview values-preview-spotlight"><i></i><b></b></span
+                                    ><span><strong>Ticker</strong><small>Compact high-density strip</small></span>
+                                </button>
+                            </div>
+                            <input type="hidden" id="chartValuesDisplayStyle" value="minimal" />
+                        </div>
+                        <div class="two-column">
+                            <div class="option">
+                                <div class="option-label">Font Size (px)</div>
+                                <input type="number" id="chartValuesDisplayFontSize" value="11" min="6" max="40" step="1" />
+                            </div>
+                            <div class="option">
+                                <div class="option-label">Font Color</div>
+                                <div class="color-row">
+                                    <input type="color" id="chartValuesDisplayFontColor" value="#202631" /><span class="color-value">#202631</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="two-column">
+                            <div class="option">
+                                <div class="option-label">Image / Circle Size (px)</div>
+                                <input type="number" id="chartValuesDisplayMediaSize" value="30" min="10" max="80" step="1" />
+                            </div>
+                            <div class="option">
+                                <div class="option-label">Tracker Gap (px)</div>
+                                <input type="number" id="chartValuesDisplayGap" value="14" min="0" max="250" step="1" />
+                            </div>
+                            <div class="option">
+                                <div class="option-label">Background</div>
+                                <div class="color-row">
+                                    <input type="color" id="chartValuesDisplayBgColor" value="#ffffff" /><label class="toggle"
+                                        ><input type="checkbox" id="chartValuesDisplayBgEnabled" /><span class="toggle-slider"></span
+                                    ></label>
+                                </div>
+                            </div>
+                            <div class="option">
+                                <div class="option-label">Display Value Numbers</div>
+                                <div class="color-row">
+                                    <label class="toggle">
+                                        <input type="checkbox" id="chartValuesDisplayShowNumber" checked />
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section" data-panel="text-display">
+                    <div class="section-title">
+                        <i class="fas fa-heading"></i>
+                        Text Display
+                    </div>
+
+                    <div class="section-description">
+                        Add custom titles or text lines above or below the chart. Each text has independent display and styling settings.
+                    </div>
+
+                    <div class="option">
+                        <div class="option-label">Text Display</div>
+                        <div class="option-help">Add custom titles or text lines above or below the chart. Each text block has its own styling.</div>
+                        <div class="option">
+                            <input type="text" id="chartTextInput" placeholder="Example: Company Performance" />
+                            <button type="button" class="btn-add" id="addChartTextBtn" style="margin-top: 10px">
+                                <i class="fas fa-plus"></i> Add Text
+                            </button>
+                        </div>
+                        <div id="chartTextsContainer"></div>
+                    </div>
+                </div>
+
+                <div class="settings-section" data-panel="axes">
+                    <div class="section-title">
+                        <i class="fas fa-arrows-alt-v"></i>
+                        Axes
+                    </div>
+
+                    <div class="section-description">Configure axis labels, padding, and line appearance.</div>
+
+                    <div class="two-column">
+                        <div class="option">
+                            <div class="option-label">X-Axis Ticks</div>
+                            <input type="number" id="xTickCount" value="6" min="2" max="20" />
+                        </div>
+
+                        <div class="option">
+                            <div class="option-label">Y-Axis Ticks</div>
+                            <input type="number" id="yTickCount" value="5" min="2" max="20" />
+                        </div>
+                    </div>
+
+                    <div class="two-column">
+                        <div class="option">
+                            <div class="option-label">X Font Size</div>
+
+                            <input type="number" id="xFontSize" value="8" min="1" max="30" />
+                        </div>
+
+                        <div class="option">
+                            <div class="option-label">X Font Weight</div>
+
+                            <input type="number" id="xFontWeight" value="400" min="100" max="900" step="100" />
+                        </div>
+                    </div>
+
+                    <div class="two-column">
+                        <div class="option">
+                            <div class="option-label">Y Font Size</div>
+
+                            <input type="number" id="yFontSize" value="8" min="1" max="30" />
+                        </div>
+
+                        <div class="option">
+                            <div class="option-label">Y Font Weight</div>
+
+                            <input type="number" id="yFontWeight" value="400" min="100" max="900" step="100" />
+                        </div>
+                    </div>
+
+                    <div class="dataset-divider"></div>
+
+                    <!--
+                CHANGED:
+                Y-Axis Padding is now expressed in PIXELS, just like
+                Right Chart Padding below.
+
+                Previously this was a multiplier such as 1.1.
+                That made the control confusing because 1.1 actually
+                represented "110% of the current maximum", rather than
+                a physical amount of chart space.
+
+                The JavaScript converts this pixel value into the
+                appropriate Y-axis maximum based on the chart height.
+            -->
+
+                    <div class="two-column">
+                        <div class="option">
+                            <div class="option-label">Y-Axis Padding (px)</div>
+
+                            <div class="option-help">Extra vertical space above the highest visible value.</div>
+
+                            <input type="number" id="yPadding" value="40" min="0" max="500" step="1" />
+                        </div>
+
+                        <div class="option">
+                            <div class="option-label">Right Chart Padding (px)</div>
+
+                            <div class="option-help">Extra horizontal space after the current endpoint.</div>
+
+                            <input type="number" id="rightPadding" value="20" min="0" max="500" step="1" />
+                        </div>
+                    </div>
+
+                    <div class="dataset-divider"></div>
+
+                    <div class="section-title">
+                        <i class="fas fa-grip-lines"></i>
+                        Axis Lines
+                    </div>
+
+                    <div class="option">
+                        <div class="toggle-row">
+                            <div>
+                                <div class="option-label">X Axis Line</div>
+
+                                <div class="option-help">Show the main X axis line.</div>
+                            </div>
+
+                            <label class="toggle">
+                                <input type="checkbox" id="xAxisLineEnabled" checked />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="option">
+                        <div class="option-label">X Axis Line Color</div>
+
+                        <div class="color-row">
+                            <input type="color" id="xAxisLineColor" value="#cccccc" />
+
+                            <span class="color-value" id="xAxisLineColorValue"> #cccccc </span>
+                        </div>
+                    </div>
+
+                    <div class="option">
+                        <div class="toggle-row">
+                            <div>
+                                <div class="option-label">Y Axis Line</div>
+
+                                <div class="option-help">Show the main Y axis line.</div>
+                            </div>
+
+                            <label class="toggle">
+                                <input type="checkbox" id="yAxisLineEnabled" checked />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="option">
+                        <div class="option-label">Y Axis Line Color</div>
+
+                        <div class="color-row">
+                            <input type="color" id="yAxisLineColor" value="#cccccc" />
+
+                            <span class="color-value" id="yAxisLineColorValue"> #cccccc </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section" data-panel="fonts">
+                    <div class="section-title">
+                        <i class="fas fa-font"></i>
+                        Fonts
+                    </div>
+
+                    <div class="section-description">Choose one font for all chart text. Each option below shows a live preview.</div>
+
+                    <div id="chartFontPicker" class="chart-font-picker"></div>
+                    <input type="hidden" id="chartFontFamily" value="Inter, sans-serif" />
+
+                    <div class="google-font-custom">
+                        <div class="option-label">Use a Google Font</div>
+                        <div class="section-description google-font-description">
+                            Want a font that is not listed above? Go to
+                            <a href="https://fonts.google.com/" target="_blank" rel="noopener noreferrer">fonts.google.com</a>, find the font you
+                            want, and copy its font name. Paste the name below. The chart will load that font from Google Fonts and use it for all
+                            chart text.
+                        </div>
+                        <div class="google-font-row">
+                            <input
+                                type="text"
+                                id="googleFontName"
+                                class="google-font-input"
+                                placeholder="Example: Space Grotesk"
+                                autocomplete="off"
+                                spellcheck="false"
+                            />
+                            <button type="button" id="googleFontApply" class="google-font-button">Use Font</button>
+                        </div>
+                        <div id="googleFontStatus" class="google-font-status" aria-live="polite"></div>
+                    </div>
+                </div>
+
+                <div class="settings-section" data-panel="grid">
+                    <div class="section-title">
+                        <i class="fas fa-border-all"></i>
+                        Grid
+                    </div>
+
+                    <div class="section-description">Horizontal and vertical guide lines.</div>
+
+                    <div class="option">
+                        <div class="toggle-row">
+                            <div>
+                                <div class="option-label">X-Axis Grid</div>
+                            </div>
+
+                            <label class="toggle">
+                                <input type="checkbox" id="xGridEnabled" checked />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="option">
+                        <div class="toggle-row">
+                            <div>
+                                <div class="option-label">Y-Axis Grid</div>
+                            </div>
+
+                            <label class="toggle">
+                                <input type="checkbox" id="yGridEnabled" checked />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="two-column">
+                        <div class="option">
+                            <div class="option-label">X Grid Color</div>
+
+                            <div class="color-row">
+                                <input type="color" id="xGridColor" value="#d4dfeb" />
+
+                                <span class="color-value" id="xGridColorValue"> #d4dfeb </span>
+                            </div>
+                        </div>
+
+                        <div class="option">
+                            <div class="option-label">Y Grid Color</div>
+
+                            <div class="color-row">
+                                <input type="color" id="yGridColor" value="#d4dfeb" />
+
+                                <span class="color-value" id="yGridColorValue"> #d4dfeb </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="two-column">
+                        <div class="option">
+                            <div class="option-label">Grid Width (px)</div>
+
+                            <input type="number" id="gridWidth" value="1" min="0.5" max="10" step="0.5" />
+                        </div>
+
+                        <div class="option">
+                            <div class="option-label">Grid Style</div>
+
+                            <select id="gridStyle">
+                                <option value="solid">Solid</option>
+                                <option value="dashed">Dashed</option>
+                                <option value="dotted">Dotted</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="option">
+                        <div class="option-label">Grid Line Smoothness (seconds)</div>
+
+                        <div class="option-help">Controls how gently newly appearing X/Y grid lines fade in. 0 means instant.</div>
+
+                        <input type="number" id="gridFadeSmoothness" value="0.35" min="0" max="5" step="0.05" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-input-overlay" id="dataInputOverlay" aria-hidden="true">
+            <div class="data-input-dialog" role="dialog" aria-modal="true" aria-labelledby="dataInputTitle">
+                <div class="data-input-dialog-header">
+                    <div>
+                        <div class="data-input-dialog-title" id="dataInputTitle">Add Data</div>
+                        <div class="data-input-dialog-help">Paste a dataset below. You can use any series name — it does not need to be a stock.</div>
+                    </div>
+                    <button type="button" class="data-input-close" id="dataInputClose" aria-label="Close">&times;</button>
+                </div>
+
+                <div class="option">
+                    <div class="option-label">Dataset Name</div>
+                    <input type="text" id="dataInputName" value="" placeholder="e.g. AAPL, Revenue, Users" />
+                </div>
+
+                <div class="data-input-example">
+                    <strong>How the data should look</strong><br />
+                    Use an array of <strong>[date, value]</strong> pairs. Dates should be written as <strong>YYYY-MM-DD</strong> and values should be
+                    numbers.
+                    <code>[ ["2024-06-07", 196.88999938964844], ["2024-06-14", 212.49000549316406], ["2024-06-21", 207.49000549316406] ]</code>
+                </div>
+
+                <div class="option">
+                    <div class="option-label">Data</div>
+                    <textarea id="dataInputText" spellcheck="false" placeholder='[["2024-06-07", 196.89], ["2024-06-14", 212.49]]'></textarea>
+                    <div class="data-input-error" id="dataInputError" aria-live="polite"></div>
+                </div>
+
+                <div class="data-input-actions">
+                    <button type="button" class="data-input-cancel" id="dataInputCancel">Cancel</button>
+                    <button type="button" class="data-input-confirm" id="dataInputConfirm">Add Data</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="floating-animate" id="generateBtn">
+            <i class="fas fa-play"></i>
+            Animate Chart
+        </button>
+
+        <!-- ================================================================
+     COLOR PICKER
+     ================================================================ -->
+
+        <div class="color-picker-overlay" id="colorPickerOverlay">
+            <div class="color-picker-dialog" role="dialog" aria-modal="true">
+                <div class="color-picker-dialog-header">
+                    <div class="color-picker-dialog-title" id="colorPickerDialogTitle">Choose Color</div>
+
+                    <button type="button" class="color-picker-close" id="colorPickerClose">×</button>
+                </div>
+
+                <div class="color-picker-native-wrap">
+                    <input type="color" class="color-picker-native" id="colorPickerNative" value="#cccccc" />
+
+                    <div class="color-picker-preview" id="colorPickerPreview"></div>
+                </div>
+
+                <div class="color-picker-alpha-label">
+                    <span> Opacity </span>
+
+                    <span class="color-picker-alpha-value" id="colorPickerAlphaValue"> 100% </span>
+                </div>
+
+                <input type="range" class="color-picker-alpha" id="colorPickerAlpha" min="0" max="100" step="1" value="100" />
+
+                <input type="text" class="color-picker-hex" id="colorPickerHex" value="#cccccc" maxlength="7" spellcheck="false" />
+            </div>
+        </div>
+    </body>
+</html>
