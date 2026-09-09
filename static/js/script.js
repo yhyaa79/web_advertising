@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const dropBtn = document.getElementById('moreMenuBtn');
     const dropdown = document.getElementById('moreDropdown');
 
+    if (!dropBtn || !dropdown) return;
     // باز و بسته کردن منو با کلیک روی دکمه
     dropBtn.addEventListener('click', function (event) {
         event.preventDefault(); // جلوگیری از پرش صفحه به بالا
@@ -183,37 +184,50 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function checkContentHeight(cardId, closeHeightNumber, openHeight, defaultState = 'closed') {
     const aboutplatformCard = document.getElementById(`box-text-${cardId}`);
-    if (!aboutplatformCard) return; // اگر عنصر وجود ندارد، کار را متوقف کن
-
     const moreBtn = document.getElementById(`more-height-btn-${cardId}`);
     const myTextElement = document.getElementById(`text-more-card-${cardId}`);
     const BootStrap = document.getElementById(`bootstrap-${cardId}`);
 
+    // پیدا کردن هدر به صورت داینامیک برای حذف قابلیت کلیک
     const cardContainer = aboutplatformCard.closest('.aboutplatform-card');
     const headerElement = cardContainer ? cardContainer.querySelector('.aboutplatform-card-h3') : null;
 
-    if (aboutplatformCard.scrollHeight <= closeHeightNumber) {
-        if (myTextElement) myTextElement.style.display = 'none';
-        if (BootStrap) BootStrap.style.display = 'none';
-        if (moreBtn) moreBtn.style.display = 'none';
-        if (headerElement) {
-            headerElement.onclick = null;
-            headerElement.style.cursor = 'unset';
-        }
-        if (myTextElement) myTextElement.onclick = null;
-        aboutplatformCard.style.maxHeight = 'none';
-    } else {
-        if (defaultState === 'open') {
-            aboutplatformCard.classList.add('expanded');
-            if (moreBtn) moreBtn.classList.add('open');
-            aboutplatformCard.style.maxHeight = aboutplatformCard.scrollHeight + 'px';
-            if (myTextElement) myTextElement.innerText = '';
+    if (aboutplatformCard) {
+        // بررسی اینکه آیا ارتفاع واقعی متن از ارتفاع مجاز حالت بسته کمتر یا مساوی است؟
+        if (aboutplatformCard.scrollHeight <= closeHeightNumber) {
+            // مخفی کردن دکمه ها و هاله رنگی
+            if (myTextElement) myTextElement.style.display = 'none';
             if (BootStrap) BootStrap.style.display = 'none';
+            if (moreBtn) moreBtn.style.display = 'none';
+
+            // حذف قابلیت کلیک برای جلوگیری از باز و بسته شدن
+            if (headerElement) {
+                headerElement.onclick = null;
+                headerElement.style.cursor = 'unset';
+            }
+            if (myTextElement) myTextElement.onclick = null;
+
+            // برداشتن محدودیت ارتفاع
+            aboutplatformCard.style.maxHeight = 'none';
         } else {
-            aboutplatformCard.style.maxHeight = closeHeightNumber + 'px';
+            // تنظیم وضعیت پیش‌فرض برای زمانی که متن طولانی است
+            if (defaultState === 'open') {
+                aboutplatformCard.classList.add('expanded');
+                if (moreBtn) moreBtn.classList.add('open');
+
+                // استفاده از ارتفاع واقعی به جای openHeight ثابت
+                aboutplatformCard.style.maxHeight = aboutplatformCard.scrollHeight + 'px';
+
+                if (myTextElement) myTextElement.innerText = '';
+                if (BootStrap) BootStrap.style.display = 'none';
+            } else {
+                aboutplatformCard.style.maxHeight = closeHeightNumber + 'px';
+            }
         }
     }
 }
+
+
 
 /* نمایش فقط ۴ تا از لینک در نوار دوم  */
 /*     document.addEventListener('DOMContentLoaded', function () {
@@ -305,10 +319,11 @@ balanceNavbarLinks();
 /*  اعمال فیلتر به صورت انی روی لیست اگهی ها */
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("filterForm");
-    if (!form) return; // اگر فرم فیلتر وجود ندارد، از تابع خارج شو
+    let debounceTimer;
 
     form.querySelectorAll("input, select").forEach(function (el) {
-        const eventType = (el.type === "checkbox" || el.tagName === "SELECT") ? "change" : "input";
+        const eventType = (el.type === "checkbox" || el.tagName === "SELECT") ? "change" :
+            "input";
 
         el.addEventListener(eventType, function () {
             if (el.type === "number" || el.type === "range") {
@@ -324,6 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+
 /*  نمایش رنج فیلتر ها */
 document.querySelectorAll('.range-slider').forEach(slider => {
     const minInput = slider.querySelector('.range-min');
@@ -331,8 +347,6 @@ document.querySelectorAll('.range-slider').forEach(slider => {
     const fill = slider.querySelector('.range-fill');
     const minLabel = slider.querySelector('.range-val-min');
     const maxLabel = slider.querySelector('.range-val-max');
-    if (!minInput || !maxInput || !fill || !minLabel || !maxLabel) return;
-
     const min = +slider.dataset.min;
     const max = +slider.dataset.max;
 
@@ -355,6 +369,7 @@ document.querySelectorAll('.range-slider').forEach(slider => {
         maxLabel.textContent = fmt(hi);
     }
 
+    // جلوگیری از عبور حداقل از حداکثر
     minInput.addEventListener('input', (e) => {
         if (parseInt(minInput.value) >= parseInt(maxInput.value)) {
             minInput.value = maxInput.value;
@@ -362,6 +377,7 @@ document.querySelectorAll('.range-slider').forEach(slider => {
         update();
     });
 
+    // جلوگیری از عبور حداکثر از حداقل
     maxInput.addEventListener('input', (e) => {
         if (parseInt(maxInput.value) <= parseInt(minInput.value)) {
             maxInput.value = minInput.value;
@@ -930,33 +946,3 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch(e) { console.error(e); }
     }
 });
-
-
-
-
-
-
-
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const navbar = document.getElementById('navbar');
-
-        // یک تابع می‌سازیم که وضعیت نوار را بر اساس موقعیت اسکرول تنظیم کند
-        function updateNavbar() {
-            if (window.scrollY > 50) {
-                // حالت اسکرول شده: نوار باید روشن باشد
-                navbar.classList.add('navbar-scrolled');
-                navbar.classList.remove('navbar-top');
-            } else {
-                // حالت بالای صفحه: نوار باید تیره باشد
-                navbar.classList.add('navbar-top');
-                navbar.classList.remove('navbar-scrolled');
-            }
-        }
-
-        // ۱. بلافاصله بعد از لود شدن یا رفرش صفحه وضعیت را چک کن
-        updateNavbar();
-
-        // ۲. هنگام اسکرول کردن هم وضعیت را آپدیت کن
-        window.addEventListener('scroll', updateNavbar);
-    });
