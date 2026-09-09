@@ -1100,74 +1100,6 @@ section {
 }
 
 
-/* ── FOOTER ── */
-footer {
-    background: #fff;
-    padding: 60px 5% 30px;
-    border-top: 1px solid #e2e8f0;
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 40px;
-    max-width: 1100px;
-    margin: 0 auto 40px;
-}
-
-.footer-brand p {
-    color: #64748b;
-    font-size: .9rem;
-    margin-top: 12px;
-    max-width: 260px;
-}
-
-.footer-col h4 {
-    color: #111827;
-    font-size: .9rem;
-    font-weight: 700;
-    margin-bottom: 16px;
-}
-
-.footer-col ul {
-    list-style: none;
-    padding: 0;
-}
-
-.footer-col li {
-    margin-bottom: 10px;
-}
-
-.footer-col a {
-    color: #64748b;
-    text-decoration: none;
-    font-size: .85rem;
-    transition: color .3s;
-}
-
-.footer-col a:hover {
-    color: var(--primary, #6c47ff);
-}
-
-.footer-bottom {
-    border-top: 1px solid #e2e8f0;
-    padding-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-.footer-bottom p {
-    color: #94a3b8;
-    font-size: .8rem;
-    margin: 0;
-}
-
-
 
 
 /* ══════════════════════════════════════════════
@@ -1175,31 +1107,8 @@ footer {
    استایل‌های بازطراحی شده صفحه اصلی
    ══════════════════════════════════════════════ */
 
-:root {
-    --primary: #4F6EF7;
-    --primary-dark: #3A56D4;
-    --primary-light: #EEF1FF;
-    --accent: #10B981;
-    --accent-light: #D1FAE5;
-    --danger: #EF4444;
-    --danger-light: #FEE2E2;
-    --warning: #F59E0B;
-    --warning-light: #FEF3C7;
-    --dark: #111827;
-    --gray-700: #374151;
-    --gray-500: #6B7280;
-    --gray-300: #D1D5DB;
-    --gray-100: #F3F4F6;
-    --border: #E5E7EB;
-    --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
-    --shadow-md: 0 4px 6px rgba(0,0,0,.07);
-    --shadow-lg: 0 10px 15px rgba(0,0,0,.1);
-    --radius: 12px;
-    --radius-lg: 16px;
-    --transition: .3s ease;
-}
 
-/* ── عمومی ── */
+   /* ── عمومی ── */
 .container {
     max-width: 1200px;
     margin: 0 auto;

@@ -409,5 +409,71 @@ nav .nav-cta .btn-ghost {
     color: #721c24;
 }
 
-/* ── FOOTER (در صورت موجود بودن استایل در فایل‌های دیگر) ── */
-/* در کد ارائه‌شده استایل فوتر یافت نشد. لطفاً استایل‌های مربوط به footer را از common.css یا فایل دیگر کپی کنید. */
+
+/* ── FOOTER ── */
+footer {
+    background: #fff;
+    padding: 60px 5% 30px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto 40px;
+}
+
+.footer-brand p {
+    color: #64748b;
+    font-size: .9rem;
+    margin-top: 12px;
+    max-width: 260px;
+}
+
+.footer-col h4 {
+    color: #111827;
+    font-size: .9rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col li {
+    margin-bottom: 10px;
+}
+
+.footer-col a {
+    color: #64748b;
+    text-decoration: none;
+    font-size: .85rem;
+    transition: color .3s;
+}
+
+.footer-col a:hover {
+    color: var(--primary, #6c47ff);
+}
+
+.footer-bottom {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.footer-bottom p {
+    color: #94a3b8;
+    font-size: .8rem;
+    margin: 0;
+}
+
