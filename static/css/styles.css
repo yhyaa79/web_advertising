@@ -187,7 +187,7 @@
 
 
     /* سایه‌ها */
-    --card-shadow: 0 2px 10px rgba(0, 0, 0, .03);
+    --card-shadow: 0 3px 6px rgb(0 0 0 / 12%);
     --hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     --modal-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
@@ -330,7 +330,7 @@ option {
     position: fixed;
     top: 0;
     width: 100%;
-    height: 60px;
+    height: 70px;
     z-index: 1000;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -353,7 +353,7 @@ option {
 .navbar-scrolled {
     background-color: #ffffff;
     transition: background-color 0.3s ease;
-    box-shadow: 0 2px 10px 0 #00000048;
+    box-shadow: 0 2px 10px 0 #00000018;
 }
 
 /* تغییر رنگ لینک‌ها در حالت روشن (اختیاری) */
@@ -1565,7 +1565,7 @@ option {
    ======================================== */
 .card {
     background: var(--white-bg);
-    border-radius: var(--border-radius-sm-md);
+    border-radius: var(--border-radius-md);
     border: 1px solid #dee2e6 !important;
     box-shadow: var(--card-shadow);
     margin-bottom: var(--spacing-xl);
@@ -1577,7 +1577,7 @@ option {
 
 .card-listing {
     background: var(--white-bg);
-    border-radius: var(--border-radius-sm-md);
+    border-radius: var(--border-radius-lg);
     border: 1.3px solid #eaeef1 !important;
     box-shadow: var(--card-shadow);
     margin-bottom: var(--spacing-xl);
@@ -2126,7 +2126,7 @@ option {
     height: 185px;
     width: 285px;
     object-fit: cover;
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius-md);
 }
 
 .div-card-img-proof {
@@ -2955,13 +2955,13 @@ hr {
 
 .btn-outline-secondary {
     background: transparent;
-    border: 1.5px solid var(--border-color);
+    border: 1.1px solid var(--border-color);
     color: var(--text-secondary);
 }
 
 .btn-outline-secondary:hover {
     background-color: #7f898a38;
-    border: 1.5px solid var(--border-color);
+    border: 1.1px solid var(--border-color);
 }
 
 
@@ -3038,7 +3038,7 @@ hr {
 .btn-secondary {
     background-color: #9ca3a3b5;
     color: var(--white-bg);
-    border: 1.5px solid var(--border-color);
+    border: 1.1px solid var(--border-color);
 }
 
 .btn-outline-primary {
@@ -3134,7 +3134,7 @@ form select,
 form textarea {
     width: 100%;
     padding: 8px 12px;
-    border: 1.5px solid var(--border-color);
+    border: 1.1px solid var(--border-color);
     border-radius: var(--border-radius-md);
     font-size: var(--font-size-xl);
     transition: var(--transition-base);
@@ -3268,7 +3268,7 @@ form textarea {
     width: fit-content;
     min-width: 70px;
     background: #dfe9f3;
-    /* border: 1.5px solid #9baaae; */
+    /* border: 1.1px solid #9baaae; */
 }
 
 
@@ -3730,7 +3730,7 @@ form textarea {
 
 .serch-home {
     padding: 1px;
-    border: 1.5px solid var(--border-color);
+    border: 1.1px solid var(--border-color);
     border-radius: var(--border-radius-999);
     transition: var(--transition-base);
     margin: 0 auto;
@@ -4869,7 +4869,7 @@ form textarea {
     /* height: 50%; */
     font-size: var(--font-size-xl);
     font-weight: 500;
-    border: 1.5px solid #e5e7eb;
+    border: 1.1px solid #e5e7eb;
     align-items: center;
     background: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -6441,10 +6441,11 @@ footer {
 .form-textarea {
     width: 100%;
     padding: 6px;
-    border: 1.5px solid var(--border);
+    border: 1.1px solid var(--border);
     border-radius: var(--radius-sm);
     font-family: var(--font);
-    font-size: var(--font-size-lg);;
+    font-size: var(--font-size-lg);
+    ;
     color: var(--text-primary);
     background: var(--surface);
     transition: border-color var(--transition), box-shadow var(--transition);
@@ -6606,7 +6607,7 @@ footer {
     gap: 12px;
     cursor: pointer;
     padding: 14px 16px;
-    border: 1.5px solid var(--border);
+    border: 1.1px solid var(--border);
     border-radius: var(--radius-sm);
     transition: border-color var(--transition), background var(--transition);
 }
@@ -6685,7 +6686,7 @@ footer {
     gap: 8px;
     cursor: pointer;
     padding: 9px 16px;
-    border: 1.5px solid var(--border);
+    border: 1.1px solid var(--border);
     border-radius: var(--radius-sm);
     font-size: .875rem;
     transition: all var(--transition);
@@ -6892,7 +6893,7 @@ footer {
 .btn-prev {
     background: var(--surface);
     color: var(--text-secondary);
-    border: 1.5px solid var(--border);
+    border: 1.1px solid var(--border);
 }
 
 .btn-prev:hover {
@@ -7207,7 +7208,7 @@ body {
 .field select,
 .field textarea {
     width: 100%;
-    border: 1.5px solid var(--border);
+    border: 1.1px solid var(--border);
     border-radius: 7px;
     padding: 9px 12px;
     font-family: inherit;
@@ -7384,7 +7385,7 @@ body {
 
 .chart-point-row input {
     width: 100%;
-    border: 1.5px solid var(--border);
+    border: 1.1px solid var(--border);
     border-radius: 6px;
     padding: 7px 10px;
     font-family: inherit;
@@ -7440,7 +7441,7 @@ body {
 }
 
 .html-editor {
-    border: 1.5px solid var(--border);
+    border: 1.1px solid var(--border);
     border-top: none;
     border-radius: 0 0 7px 7px;
     min-height: 150px;
@@ -7460,7 +7461,7 @@ body {
 }
 
 .html-preview {
-    border: 1.5px solid var(--border);
+    border: 1.1px solid var(--border);
     border-radius: 7px;
     min-height: 120px;
     padding: 14px;
@@ -7556,7 +7557,7 @@ body {
     align-items: center;
     gap: 6px;
     padding: 5px 12px;
-    border: 1.5px solid var(--border);
+    border: 1.1px solid var(--border);
     border-radius: 20px;
     font-size: var(--font-size-lg);
     cursor: pointer;
@@ -7598,7 +7599,7 @@ body {
     align-items: center;
     gap: 8px;
     padding: 8px 12px;
-    border: 1.5px solid var(--border);
+    border: 1.1px solid var(--border);
     border-radius: 7px;
     cursor: pointer;
     font-size: var(--font-size-xl);
@@ -8157,7 +8158,7 @@ body {
 
 /* ─── Results Bar ─── */
 .results-bar {
-    border-top: 0.5px solid rgba(0, 0, 0, .08);
+    border-top: 0.5px solid rgba(0, 0, 0, .18);
     padding: 10px 25px;
     display: flex;
     align-items: center;
@@ -8185,6 +8186,3 @@ body {
     border-radius: 6px;
     padding: 3px 10px;
 }
-
-
-
