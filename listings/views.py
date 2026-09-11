@@ -146,10 +146,32 @@ def listing_list(request):
     if platform_type:
         listings = listings.filter(category__platform=platform_type)
 
+    # فیلتر دسته کلیِ پلتفرم (همه زیرمجموعه‌های آن دسته)
+    main_platform_type = request.GET.get('main_platform_type')
+    if main_platform_type and not platform_type:
+        sub_slugs = []
+        for slug, label, subs in Category.PLATFORM_CATEGORIES:
+            if slug == main_platform_type:
+                sub_slugs = [s for s, _ in subs]
+                break
+        if sub_slugs:
+            listings = listings.filter(category__platform__in=sub_slugs)
+
     # فیلتر حوزه فعالیت
     areas_activity = request.GET.get('areas_activity')
     if areas_activity:
         listings = listings.filter(areas_activity=areas_activity)
+
+    # فیلتر دسته کلیِ حوزه فعالیت (همه زیرمجموعه‌های آن دسته)
+    main_activity = request.GET.get('main_activity')
+    if main_activity and not areas_activity:
+        sub_slugs = []
+        for slug, label, subs in Listing.ACTIVITY_CATEGORIES:
+            if slug == main_activity:
+                sub_slugs = [s for s, _ in subs]
+                break
+        if sub_slugs:
+            listings = listings.filter(areas_activity__in=sub_slugs)
 
     # فیلتر نوع فروش
     sale_type = request.GET.get('sale_type')
@@ -365,7 +387,9 @@ def listing_list(request):
         request.GET.get('category'),
         request.GET.get('sort_by'),
         request.GET.get('platform_type'),
+        request.GET.get('main_platform_type'),
         request.GET.get('areas_activity'),
+        request.GET.get('main_activity'),
         request.GET.get('sale_type'),
         price_min_val > 0 or price_max_val < 10000000000,
         min_age_val > 0 or max_age_val < 20,
@@ -400,7 +424,9 @@ def listing_list(request):
 
     # انتخاب‌های حوزه فعالیت و نوع فروش برای فیلتر
     areas_activity_choices = Listing.ACTIVITY_CHOICES
+    activity_categories = Listing.ACTIVITY_CATEGORIES
     sale_type_choices = Listing.SALE_TYPE_CHOICES
+    platform_categories = Category.PLATFORM_CATEGORIES
 
     context = {
         'boosted_listings': boosted_listings,
@@ -420,6 +446,8 @@ def listing_list(request):
 
         # انتخاب‌های فیلتر جدید
         'areas_activity_choices': areas_activity_choices,
+        'activity_categories': activity_categories,
+        'platform_categories': platform_categories,
         'sale_type_choices': sale_type_choices,
     }
 

@@ -5,17 +5,104 @@ from django.conf import settings
 
 
 class Category(models.Model):
+    # ═══════ دسته‌بندی اصلی + زیرمجموعه (نوع دارایی دیجیتال) ═══════
+    PLATFORM_CATEGORIES = [
+        ('website', 'وب‌سایت', [
+            ('website_blog', 'وبلاگ / بلاگ محتوایی'),
+            ('website_news_magazine', 'خبری و مجله آنلاین'),
+            ('website_forum_community', 'انجمن و جامعه آنلاین (فروم)'),
+            ('website_directory', 'دایرکتوری و نیازمندی'),
+            ('website_portal', 'پرتال چندمنظوره'),
+            ('website_review', 'وبسایت بررسی و ریویو'),
+            ('website_landing_page', 'لندینگ پیج / صفحه فروش'),
+            ('website_corporate', 'وبسایت شرکتی و معرفی کسب‌وکار'),
+            ('website_educational', 'وبسایت آموزشی / دوره آنلاین'),
+            ('website_job_board', 'کاریابی و آگهی استخدام'),
+            ('website_dating', 'وبسایت آشنایی و دوستیابی'),
+            ('website_real_estate', 'وبسایت آگهی املاک'),
+            ('website_classifieds', 'وبسایت نیازمندی و آگهی عمومی'),
+            ('website_other', 'سایر وبسایت‌ها'),
+        ]),
+        ('ecommerce', 'فروشگاه اینترنتی', [
+            ('ecommerce_woocommerce', 'فروشگاه ووکامرس (WordPress)'),
+            ('ecommerce_shopify', 'فروشگاه شاپیفای'),
+            ('ecommerce_opencart_prestashop', 'فروشگاه اوپن‌کارت / پرستاشاپ'),
+            ('ecommerce_custom', 'فروشگاه با کدنویسی اختصاصی'),
+            ('ecommerce_marketplace_shop', 'فروشگاه داخل مارکت‌پلیس (دیجی‌کالا، باسلام و ...)'),
+            ('ecommerce_dropship', 'فروشگاه دراپ‌شیپینگ'),
+            ('ecommerce_digital_products', 'فروش محصولات دیجیتال'),
+            ('ecommerce_physical_products', 'فروش محصولات فیزیکی'),
+            ('ecommerce_subscription_box', 'اشتراک دوره‌ای محصول (Subscription Box)'),
+            ('ecommerce_other', 'سایر فروشگاه‌های اینترنتی'),
+        ]),
+        ('app', 'اپلیکیشن', [
+            ('app_android', 'اپلیکیشن اندروید'),
+            ('app_ios', 'اپلیکیشن iOS'),
+            ('app_cross_platform', 'اپلیکیشن کراس‌پلتفرم (Flutter / React Native)'),
+            ('app_pwa', 'وب‌اپلیکیشن (PWA)'),
+            ('app_desktop', 'نرم‌افزار دسکتاپ'),
+            ('app_game_mobile', 'بازی موبایل'),
+            ('app_game_pc_console', 'بازی PC / کنسول'),
+            ('app_saas', 'اپلیکیشن / سرویس SaaS'),
+            ('app_browser_extension', 'اکستنشن مرورگر'),
+            ('app_telegram_bot', 'ربات تلگرام'),
+            ('app_other', 'سایر اپلیکیشن‌ها'),
+        ]),
+        ('social_media', 'شبکه‌های اجتماعی', [
+            ('social_instagram', 'پیج اینستاگرام'),
+            ('social_telegram_channel', 'کانال تلگرام'),
+            ('social_telegram_group', 'گروه تلگرام'),
+            ('social_youtube', 'کانال یوتیوب'),
+            ('social_aparat', 'کانال آپارات'),
+            ('social_twitter_x', 'پیج توییتر / X'),
+            ('social_facebook', 'پیج فیسبوک'),
+            ('social_linkedin', 'پیج لینکدین'),
+            ('social_tiktok', 'پیج تیک‌تاک'),
+            ('social_pinterest', 'پیج پینترست'),
+            ('social_threads', 'پیج تردز (Threads)'),
+            ('social_clubhouse', 'اکانت کلاب‌هاوس'),
+            ('social_other', 'سایر شبکه‌های اجتماعی'),
+        ]),
+        ('content_media', 'رسانه و محتوا', [
+            ('content_podcast', 'پادکست'),
+            ('content_newsletter', 'خبرنامه ایمیلی (Newsletter)'),
+            ('content_adsense_channel', 'کانال درآمد از تبلیغات (AdSense / YPP)'),
+            ('content_streaming', 'سرویس پخش زنده / استریمینگ'),
+            ('content_ebook_course', 'کتاب الکترونیک و دوره ضبط‌شده'),
+            ('content_stock_media', 'فروش عکس/ویدیو استوک'),
+            ('content_other', 'سایر محتوا و رسانه'),
+        ]),
+        ('domain', 'دامنه', [
+            ('domain_com', 'دامنه .com'),
+            ('domain_ir', 'دامنه .ir'),
+            ('domain_international_other', 'سایر دامنه‌های بین‌المللی (.net, .org, ...)'),
+            ('domain_brandable', 'دامنه برندی / کوتاه'),
+            ('domain_keyword', 'دامنه کلمه کلیدی (Exact Match)'),
+            ('domain_portfolio', 'مجموعه دامنه (Domain Portfolio)'),
+        ]),
+        ('service_business', 'کسب‌وکار خدماتی آنلاین', [
+            ('service_agency', 'آژانس / تیم خدماتی (طراحی، سئو، مارکتینگ)'),
+            ('service_freelance_platform', 'پلتفرم فریلنسری'),
+            ('service_consulting', 'مشاوره و کوچینگ آنلاین'),
+            ('service_membership_site', 'سایت عضویت / اشتراک ویژه'),
+            ('service_marketplace', 'مارکت‌پلیس واسط خرید و فروش'),
+            ('service_booking', 'سیستم رزرو و نوبت‌دهی آنلاین'),
+            ('service_other', 'سایر کسب‌وکارهای خدماتی'),
+        ]),
+        ('other', 'سایر', [
+            ('other_misc', 'متفرقه'),
+        ]),
+    ]
+
+    # فلت‌شده برای استفاده در فیلد مدل (choices)
     PLATFORM_CHOICES = [
-        ('website', 'وبسایت'),
-        ('instagram', 'اینستاگرام'),
-        ('telegram', 'تلگرام'),
-        ('youtube', 'یوتیوب'),
-        ('aparat', 'آپارات'),
-        ('other', 'سایر'),
+        (sub_slug, sub_label)
+        for _, _, subs in PLATFORM_CATEGORIES
+        for sub_slug, sub_label in subs
     ]
 
     name = models.CharField(max_length=100, verbose_name='نام')
-    platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES, verbose_name='پلتفرم')
+    platform = models.CharField(max_length=40, choices=PLATFORM_CHOICES, verbose_name='نوع پلتفرم (زیرمجموعه)')
     description = models.TextField(blank=True, verbose_name='توضیحات')
 
     class Meta:
@@ -25,6 +112,21 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.name} ({self.get_platform_display()})"
 
+    def get_platform_main_category(self):
+        """برگرداندن (slug, label) دسته کلیِ این دسته‌بندی"""
+        for slug, label, subs in self.PLATFORM_CATEGORIES:
+            if any(sub_slug == self.platform for sub_slug, _ in subs):
+                return slug, label
+        return None, None
+
+    @classmethod
+    def get_platform_category_map(cls):
+        """نگاشت هر زیرمجموعه به دسته کلی خودش"""
+        mapping = {}
+        for slug, label, subs in cls.PLATFORM_CATEGORIES:
+            for sub_slug, sub_label in subs:
+                mapping[sub_slug] = (slug, label)
+        return mapping
 
 class Listing(models.Model):
 
@@ -37,24 +139,154 @@ class Listing(models.Model):
         ('deleted',  'حذف شده'),
     ]
 
-    # ─── حوزه فعالیت ─────────────────────────────────────────
+    # ─── حوزه فعالیت (دسته کلی + زیرمجموعه، الگوبرداری از Flippa) ─────
+    ACTIVITY_CATEGORIES = [
+        ('automotive', 'خودرو و وسایل نقلیه', [
+            ('automotive_cars', 'خودرو'),
+            ('automotive_motorcycles', 'موتورسیکلت'),
+            ('automotive_other', 'سایر خودرویی'),
+        ]),
+        ('business', 'کسب‌وکار', [
+            ('business_finance', 'مالی'),
+            ('business_forex', 'فارکس'),
+            ('business_insurance', 'بیمه'),
+            ('business_jobs', 'استخدام و کاریابی'),
+            ('business_law', 'حقوقی'),
+            ('business_productivity', 'بهره‌وری و مدیریت'),
+            ('business_real_estate', 'املاک و مستغلات'),
+            ('business_sales_marketing', 'فروش و بازاریابی'),
+            ('business_shopping', 'خرید و فروشگاهی'),
+            ('business_other', 'سایر کسب‌وکار'),
+        ]),
+        ('technology', 'فناوری و نرم‌افزار', [
+            ('tech_saas', 'سرویس ابری و SaaS'),
+            ('tech_apps', 'اپلیکیشن و موبایل'),
+            ('tech_ai', 'هوش مصنوعی'),
+            ('tech_cybersecurity', 'امنیت سایبری'),
+            ('tech_blockchain_crypto', 'بلاک‌چین و ارز دیجیتال'),
+            ('tech_dev_tools', 'ابزارهای توسعه‌دهندگان'),
+            ('tech_other', 'سایر فناوری'),
+        ]),
+        ('design_style', 'طراحی و سبک', [
+            ('design_art', 'هنر'),
+            ('design_fashion', 'مد و فشن'),
+            ('design_jewelry', 'جواهرات'),
+            ('design_logos', 'طراحی لوگو'),
+            ('design_photography', 'عکاسی'),
+            ('design_tattoos', 'تتو'),
+            ('design_other', 'سایر طراحی و سبک'),
+        ]),
+        ('education', 'آموزش', [
+            ('education_colleges_courses', 'دانشگاه و دوره‌های آموزشی'),
+            ('education_languages', 'آموزش زبان'),
+            ('education_scholarships', 'بورسیه تحصیلی'),
+            ('education_guides_tutorials', 'راهنما و آموزش‌های تخصصی'),
+            ('education_other', 'سایر آموزشی'),
+        ]),
+        ('electronics', 'الکترونیک', [
+            ('electronics_cameras', 'دوربین'),
+            ('electronics_mobile', 'موبایل'),
+            ('electronics_computers', 'کامپیوتر'),
+            ('electronics_tablets', 'تبلت و ای‌ریدر'),
+            ('electronics_tv', 'تلویزیون'),
+            ('electronics_other', 'سایر الکترونیک'),
+        ]),
+        ('entertainment', 'سرگرمی و رسانه', [
+            ('entertainment_books', 'کتاب'),
+            ('entertainment_celebrities', 'سلبریتی‌ها'),
+            ('entertainment_events', 'رویدادها'),
+            ('entertainment_film', 'فیلم و سینما'),
+            ('entertainment_humor', 'طنز و سرگرمی'),
+            ('entertainment_music', 'موسیقی'),
+            ('entertainment_tv', 'تلویزیون و سریال'),
+            ('entertainment_other', 'سایر سرگرمی'),
+        ]),
+        ('food_drink', 'غذا و نوشیدنی', [
+            ('food_cooking_recipes', 'آشپزی و دستور پخت'),
+            ('food_drinks', 'نوشیدنی'),
+            ('food_general', 'غذا'),
+            ('food_other', 'سایر غذا و نوشیدنی'),
+        ]),
+        ('general_knowledge', 'دانش عمومی', [
+            ('gk_news_affairs', 'اخبار و رویدادهای جاری'),
+            ('gk_politics_history', 'سیاست و تاریخ'),
+            ('gk_religion_spirituality', 'مذهب و معنویت'),
+            ('gk_science_nature', 'علم و طبیعت'),
+            ('gk_other', 'سایر دانش عمومی'),
+        ]),
+        ('health_beauty', 'سلامت و زیبایی', [
+            ('health_beauty_general', 'زیبایی'),
+            ('health_bodybuilding', 'بدنسازی'),
+            ('health_mental', 'افسردگی و اضطراب'),
+            ('health_diet_nutrition', 'رژیم و تغذیه'),
+            ('health_fitness', 'تناسب اندام'),
+            ('health_hair', 'مو و ریزش مو'),
+            ('health_medical', 'پزشکی'),
+            ('health_pregnancy', 'بارداری'),
+            ('health_skin', 'پوست'),
+            ('health_sleep', 'خواب و خروپف'),
+            ('health_smoking', 'ترک سیگار'),
+            ('health_teeth', 'دندان'),
+            ('health_weight_loss', 'کاهش وزن'),
+            ('health_other', 'سایر سلامت و زیبایی'),
+        ]),
+        ('hobbies_games', 'سرگرمی‌ها و بازی', [
+            ('hobbies_gambling', 'شرط‌بندی'),
+            ('hobbies_board_games', 'بازی‌های فکری'),
+            ('hobbies_gaming', 'گیمینگ'),
+            ('hobbies_other', 'سایر سرگرمی‌ها'),
+        ]),
+        ('home_garden', 'خانه و باغ', [
+            ('home_diy', 'کارهای دستی (DIY)'),
+            ('home_furniture', 'مبلمان'),
+            ('home_gardening', 'باغبانی'),
+            ('home_pets', 'حیوانات خانگی'),
+            ('home_toys', 'اسباب‌بازی'),
+            ('home_other', 'سایر خانه و باغ'),
+        ]),
+        ('internet', 'اینترنت و آنلاین', [
+            ('internet_auctions', 'حراجی آنلاین'),
+            ('internet_coupons_deals', 'تخفیف و کوپن'),
+            ('internet_domaining', 'دامنه و دامنه‌داری'),
+            ('internet_marketing', 'بازاریابی اینترنتی'),
+            ('internet_community', 'انجمن و جامعه آنلاین'),
+            ('internet_seo', 'سئو'),
+            ('internet_social_media', 'شبکه‌های اجتماعی'),
+            ('internet_traffic', 'جذب ترافیک'),
+            ('internet_web_dev', 'وب دولوپمنت'),
+            ('internet_web_design', 'طراحی وب‌سایت'),
+            ('internet_other', 'سایر اینترنتی'),
+        ]),
+        ('lifestyle', 'سبک زندگی', [
+            ('lifestyle_baby', 'نوزاد'),
+            ('lifestyle_children', 'کودکان'),
+            ('lifestyle_dating', 'آشنایی و دوستیابی'),
+            ('lifestyle_wedding', 'عروسی'),
+            ('lifestyle_other', 'سایر سبک زندگی'),
+        ]),
+        ('sports_outdoor', 'ورزش و فضای باز', [
+            ('sports_boating', 'قایقرانی'),
+            ('sports_camping', 'کمپینگ'),
+            ('sports_cycling', 'دوچرخه‌سواری'),
+            ('sports_football', 'فوتبال'),
+            ('sports_golf', 'گلف'),
+            ('sports_hunting', 'شکار'),
+            ('sports_other', 'سایر ورزشی'),
+        ]),
+        ('travel', 'سفر و گردشگری', [
+            ('travel_flights_aviation', 'پرواز و هوانوردی'),
+            ('travel_guides', 'راهنمای سفر'),
+            ('travel_hotels', 'هتل'),
+            ('travel_vacation_resorts', 'تعطیلات و تفریح'),
+            ('travel_other', 'سایر سفر'),
+        ]),
+    ]
+
+    # فلت‌شده برای استفاده در فیلد مدل (choices)
     ACTIVITY_CHOICES = [
-        ('shopping_commerce',                'فروشگاهی و تجارت الکترونیک'),
-        ('technology_software',              'تکنولوژی و نرم‌افزار'),
-        ('education_learning',               'آموزش و یادگیری'),
-        ('health_medicine_beauty',           'سلامت، پزشکی و زیبایی'),
-        ('news_magazines_portals',           'خبری، مجله و پورتال'),
-        ('finance_stock_exchange_cryptocurrency', 'مالی، بورس و ارز دیجیتال'),
-        ('entertainment_games_movies',       'سرگرمی، بازی و فیلم'),
-        ('lifestyle_fashion_fashion',        'سبک زندگی، مد و فشن'),
-        ('travel_tourism_immigration',       'سفر، گردشگری و مهاجرت'),
-        ('real_estate',                      'املاک و مستغلات'),
-        ('corporate_B2B_services',           'خدمات شرکتی و B2B'),
-        ('sports_fitness',                   'ورزشی و تناسب اندام'),
-        ('food_cooking_restaurants',         'غذا، آشپزی و رستوران'),
-        ('home_decoration_architecture',     'خانه، دکوراسیون و معماری'),
-        ('pets',                             'حیوانات خانگی'),
-        ('other',                            'سایر'),
+        (sub_slug, sub_label)
+        for _, _, subs in ACTIVITY_CATEGORIES
+        for sub_slug, sub_label in subs
     ]
 
     # ─── دلیل واگذاری ────────────────────────────────────────
@@ -305,6 +537,22 @@ class Listing(models.Model):
         if self.avg_monthly_profit and self.avg_monthly_profit > 0:
             return round(self.get_final_price() / self.avg_monthly_profit, 1)
         return None
+
+    def get_activity_main_category(self):
+        """برگرداندن (slug, label) دسته کلیِ حوزه فعالیت این آگهی"""
+        for slug, label, subs in self.ACTIVITY_CATEGORIES:
+            if any(sub_slug == self.areas_activity for sub_slug, _ in subs):
+                return slug, label
+        return None, None
+
+    @classmethod
+    def get_activity_category_map(cls):
+        """نگاشت هر زیرمجموعه به دسته کلی خودش، برای استفاده سریع در ویو/تمپلیت"""
+        mapping = {}
+        for slug, label, subs in cls.ACTIVITY_CATEGORIES:
+            for sub_slug, sub_label in subs:
+                mapping[sub_slug] = (slug, label)
+        return mapping
 
 
 # ── بقیه مدل‌ها بدون تغییر ───────────────────────────────────

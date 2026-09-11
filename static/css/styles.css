@@ -532,19 +532,317 @@ a.navbar-a {
 
 .navbar-listing-list {
     display: flex;
-    position: fixed;
+    align-items: center;
+    position: absolute;
     padding: 0 30px;
-    margin-top: 60px;
+    margin-top: 70px;
     width: 100%;
-    height: 80px;
+    height: 50px;
     z-index: 999;
     background-color: #ffffff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    justify-content: space-between;
-    border-top: 1px solid #dee2e6;
-    border-bottom: 1px solid #dee2e6;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    justify-content: flex-start;
+    gap: 40px;
+    border-bottom: 1px solid var(--border-color);
 }
 
+/* ========================================
+   دسته‌بندی‌های هدر (Category Header)
+   ======================================== */
+
+.category-header-list {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    list-style: none;
+    height: 100%;
+    flex-wrap: nowrap;
+}
+
+.category-header-item {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.category-header-link {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 14px;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.category-header-link:hover {
+    color: var(--blu-color);
+}
+
+.category-header-item.active > .category-header-link {
+    color: var(--blu-color);
+    border-bottom-color: var(--blu-color);
+    font-weight: 600;
+}
+
+.category-header-item.hover-open > .category-header-link {
+    color: var(--blu-color);
+}
+
+.category-header-caret {
+    font-size: 11px;
+    transition: transform 0.25s ease;
+    color: var(--text-muted);
+}
+
+.category-header-item.hover-open .category-header-caret {
+    transform: rotate(180deg);
+    color: var(--blu-color);
+}
+
+/* --- پنل زیرمجموعه --- */
+.category-dropdown-card {
+    display: none;
+    position: absolute;
+    top: calc(100% - 8px);
+    right: 0;
+    min-width: 220px;
+    max-width: 320px;
+    background-color: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    padding: 10px;
+    z-index: 1001;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.category-dropdown-card.show {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* فلش کوچک بالای پنل */
+/* .category-dropdown-card::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    right: 20px;
+    width: 12px;
+    height: 12px;
+    background-color: #ffffff;
+    border-right: 1px solid var(--border-light);
+    border-top: 1px solid var(--border-light);
+    transform: rotate(-45deg);
+} */
+
+.category-dropdown-link {
+    display: block;
+    padding: 8px 12px;
+    border-radius: var(--border-radius-sm-md);
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+    text-decoration: none;
+    text-align: right;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.category-dropdown-link:hover {
+    background-color: var(--light-serch-bg);
+    color: var(--blu-color);
+}
+
+.category-dropdown-link.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* ریسپانسیو موبایل */
+@media (max-width: 768px) {
+    .navbar-listing-list {
+        height: auto;
+        padding: 8px 12px;
+    }
+
+    .category-header-list {
+        gap: 4px;
+    }
+
+    .category-header-link {
+        padding: 8px 10px;
+        font-size: var(--font-size-sm);
+    }
+
+    .category-dropdown-card {
+        left: 0;
+        right: auto;
+        min-width: 180px;
+    }
+}
+
+
+/* ========================================
+   مگامنوی حوزه فعالیت (Activity Mega Nav)
+   ======================================== */
+
+.activity-mega-nav {
+    position: relative;
+    margin-bottom: var(--spacing-lg);
+    background-color: var(--white-bg);
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--card-shadow);
+    padding: 6px 10px;
+}
+
+.activity-mega-nav-scroll {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 4px 2px;
+}
+
+.activity-mega-nav-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.activity-main-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-999);
+    padding: 9px 12px;
+    font-size: var(--font-size-lg);
+    font-weight: 400;
+    color: var(--text-primary);
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: var(--transition-base);
+}
+
+.activity-main-pill:hover {
+    background-color: var(--light-serch-bg);
+    color: var(--blu-color);
+}
+
+.activity-main-pill.active {
+    background-color: var(--blu-color);
+    border-color: var(--blu-color);
+    color: #ffffff;
+}
+
+.activity-main-pill.active:hover {
+    background-color: var(--blu-durk-color);
+    color: #ffffff;
+}
+
+.activity-main-pill.menu-open {
+    background-color: var(--light-serch-bg);
+    color: var(--blu-color);
+}
+
+.activity-caret {
+    font-size: 10px;
+    transition: transform 0.25s ease;
+    color: inherit;
+}
+
+.activity-main-pill.menu-open .activity-caret {
+    transform: rotate(180deg);
+}
+
+/* --- پنل زیرمجموعه (تمام‌عرض، زیر نوار پیل‌ها) --- */
+.activity-submenu-panel {
+    display: none;
+    flex-wrap: wrap;
+    gap: 8px;
+    background-color: var(--light-card-bg);
+    border-top: 1px solid var(--border-light);
+    border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+    padding: 14px 16px;
+    margin: 6px -10px -6px -10px;
+
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.activity-submenu-panel.show {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.activity-sub-chip {
+    display: inline-flex;
+    align-items: center;
+    background-color: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius-999);
+    padding: 7px 16px;
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: var(--transition-base);
+}
+
+.activity-sub-chip:hover {
+    border-color: var(--blu-color);
+    color: var(--blu-color);
+    background-color: var(--home-bg-1);
+}
+
+.activity-sub-chip.active {
+    background-color: var(--blu-color);
+    border-color: var(--blu-color);
+    color: #ffffff;
+}
+
+.activity-sub-chip-all {
+    font-weight: 600;
+    border-style: dashed;
+}
+
+/* ریسپانسیو موبایل */
+@media (max-width: 768px) {
+    .activity-main-pill {
+        padding: 8px 14px;
+        font-size: var(--font-size-xs);
+    }
+
+    .activity-submenu-panel {
+        padding: 12px;
+        gap: 6px;
+    }
+
+    .activity-sub-chip {
+        padding: 6px 12px;
+    }
+}
 
 
 .scroll-link {
@@ -558,7 +856,7 @@ a.navbar-a {
 
 .scroll-link-save-share {
     display: flex;
-    gap: 10px;
+    gap: 20px;
     align-items: center;
 }
 

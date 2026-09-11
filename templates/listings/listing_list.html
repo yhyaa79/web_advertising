@@ -8,11 +8,65 @@
 
 {% block title %}لیست آگهی‌ها{% endblock %}
 
-
+{% block nav_class %}navbar-top-dark{% endblock %}
 
 {% block content %}
 
-<div class="container">
+
+
+
+<div class="navbar-listing-list">
+    <ul class="category-header-list">
+        <li class="category-header-item {% if not request.GET.main_platform_type %}active{% endif %}">
+            <a href="{% url 'listings:listing_list' %}" class="category-header-link">همه دسته‌بندی‌ها</a>
+        </li>
+        {% for slug, label, subs in platform_categories %}
+        <li class="category-header-item {% if request.GET.main_platform_type == slug %}active{% endif %}"
+            data-hover-item>
+            <a href="?main_platform_type={{ slug }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+                class="category-header-link">
+                {{ label }}
+                <i class="bi bi-chevron-down category-header-caret"></i>
+            </a>
+            <div class="category-dropdown-card">
+                {% for sub_slug, sub_label in subs %}
+                <a href="?main_platform_type={{ slug }}&platform_type={{ sub_slug }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+                    class="category-dropdown-link {% if request.GET.platform_type == sub_slug %}active{% endif %}">
+                    {{ sub_label }}
+                </a>
+                {% endfor %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+<!--     <ul class="category-header-list">
+        <li class="category-header-item {% if not request.GET.main_activity %}active{% endif %}">
+            <a href="{% url 'listings:listing_list' %}" class="category-header-link">همه حوزه‌های فعالیت</a>
+        </li>
+        {% for slug, label, subs in activity_categories %}
+        <li class="category-header-item {% if request.GET.main_activity == slug %}active{% endif %}" data-hover-item>
+            <a href="?main_activity={{ slug }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+                class="category-header-link">
+                {{ label }}
+                <i class="bi bi-chevron-down category-header-caret"></i>
+            </a>
+            <div class="category-dropdown-card">
+                {% for sub_slug, sub_label in subs %}
+                <a href="?main_activity={{ slug }}&areas_activity={{ sub_slug }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+                    class="category-dropdown-link {% if request.GET.areas_activity == sub_slug %}active{% endif %}">
+                    {{ sub_label }}
+                </a>
+                {% endfor %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+ -->
+</div>
+
+
+<div class="container" style="padding-top: 160px;">
     <div class="heder-listing-list">
         {% if is_similar_view %}
         <div class="alert alert-info text-center mb-3"
@@ -34,7 +88,6 @@
             {% endif %}
         </h2>
 
-
         <div class="row mb-4 serch-home">
             <div class="serch-bar-home">
                 <form method="get" class="d-flex">
@@ -45,27 +98,53 @@
             </div>
         </div>
 
-        <div class="row mb-5">
-            <div class="col-md-12">
-                <h4>دسته‌بندی ها:</h4>
-
-                <div class="buttom-category">
-                    <!-- دکمه "همه" : اگر هیچ دسته‌بندی انتخاب نشده بود، پررنگ می‌شود -->
-                    <a href="{% url 'listings:listing_list' %}"
-                        class="btn btn-medium {% if not request.GET.category %}btn-secondary btn-medium btn-width-fit{% else %}btn-outline-secondary{% endif %}">
-                        همه
-                    </a>
-
-                    <!-- لیست دسته‌بندی‌ها -->
-                    {% for category in categories %}
-                    <a href="?category={{ category.id }}"
-                        class="btn btn-medium {% if request.GET.category == category.id|stringformat:'s' %}btn-secondary btn-medium btn-width-fit {% else %}btn-outline-secondary{% endif %}">
-                        {{ category.name }}
-                    </a>
-                    {% endfor %}
-                </div>
-            </div>
+        <!-- ═══════ تایتل و توضیح داینامیک دسته‌بندی ═══════ -->
+        <div class="category-intro" id="categoryIntro">
+            <h3 class="category-intro-title" id="categoryIntroTitle">
+                بازاری از فرصت‌های واقعی برای کسب‌وکار آنلاین شما
+            </h3>
+            <p class="category-intro-desc" id="categoryIntroDesc">
+                از فروشگاه‌های اینترنتی گرفته تا اپلیکیشن و سایت‌های خدماتی، اینجا هر حوزه‌ای که دنبالشی رو پیدا می‌کنی.
+                کافیه یک دسته رو انتخاب کنی تا بهترین آگهی‌های همون حوزه رو ببینی.
+            </p>
         </div>
+        <!-- ══════════════════════════════════════════════ -->
+
+        <!-- ═══════ هدر دوم: مگامنوی حوزه فعالیت (سبک Flippa) ═══════ -->
+        <div class="activity-mega-nav" id="activityMegaNav">
+            <div class="activity-mega-nav-scroll">
+                <a href="{% url 'listings:listing_list' %}"
+                   class="activity-main-pill {% if not request.GET.main_activity %}active{% endif %}">
+                    همه حوزه‌ها
+                </a>
+                {% for slug, label, subs in activity_categories %}
+                <button type="button"
+                        class="activity-main-pill {% if request.GET.main_activity == slug %}active{% endif %}"
+                        data-activity-slug="{{ slug }}">
+                    <span>{{ label }}</span>
+                    <i class="bi bi-chevron-down activity-caret"></i>
+                </button>
+                {% endfor %}
+            </div>
+
+            {% for slug, label, subs in activity_categories %}
+            <div class="activity-submenu-panel" id="activity-panel-{{ slug }}">
+                <a href="?main_activity={{ slug }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+                   class="activity-sub-chip activity-sub-chip-all {% if request.GET.main_activity == slug and not request.GET.areas_activity %}active{% endif %}">
+                    همه {{ label }}
+                </a>
+                {% for sub_slug, sub_label in subs %}
+                <a href="?main_activity={{ slug }}&areas_activity={{ sub_slug }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+                   class="activity-sub-chip {% if request.GET.areas_activity == sub_slug %}active{% endif %}">
+                    {{ sub_label }}
+                </a>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        <!-- ═══════════════════════════════════════════════════════ -->
+
+
         <div class="results-bar">
             <p class="r-text">
                 نمایش
@@ -995,6 +1074,92 @@
             });
         });
     });
+
+
+
+
+    // هدر دسته‌بندی‌ها — باز شدن با تاخیر ۱۰ میلی‌ثانیه، بسته شدن با تاخیر ۵۰ میلی‌ثانیه
+    document.querySelectorAll('.category-header-item[data-hover-item]').forEach(function (item) {
+        let openTimer = null;
+        let closeTimer = null;
+        const card = item.querySelector('.category-dropdown-card');
+        if (!card) return;
+
+        function openCard() {
+            clearTimeout(closeTimer);
+            clearTimeout(openTimer);
+            openTimer = setTimeout(function () {
+                document.querySelectorAll('.category-dropdown-card.show').forEach(function (c) {
+                    if (c !== card) c.classList.remove('show');
+                });
+                document.querySelectorAll('.category-header-item.hover-open').forEach(function (i) {
+                    if (i !== item) i.classList.remove('hover-open');
+                });
+                card.classList.add('show');
+                item.classList.add('hover-open');
+            }, 100); // تاخیر باز شدن: ۱۰ میلی‌ثانیه
+        }
+
+        function closeCard() {
+            clearTimeout(openTimer);
+            clearTimeout(closeTimer);
+            closeTimer = setTimeout(function () {
+                card.classList.remove('show');
+                item.classList.remove('hover-open');
+            }, 50); // تاخیر بسته شدن: ۵۰ میلی‌ثانیه
+        }
+
+        // هاور روی خودِ آیتم (لینک اصلی دسته)
+        item.addEventListener('mouseenter', openCard);
+        item.addEventListener('mouseleave', closeCard);
+
+        // هاور روی خودِ پنل، تا وقتی موس داخل پنل است بسته نشود
+        card.addEventListener('mouseenter', openCard);
+        card.addEventListener('mouseleave', closeCard);
+    });
+
+    // بستن دراپ‌داون‌های باز با کلیک بیرون از هدر (برای حالت لمسی/موبایل)
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.category-header-item')) {
+            document.querySelectorAll('.category-dropdown-card.show').forEach(c => c.classList.remove('show'));
+            document.querySelectorAll('.category-header-item.hover-open').forEach(i => i.classList.remove('hover-open'));
+        }
+    });
+
+
+
+
+    // مگامنوی حوزه فعالیت — فقط با کلیک باز/بسته می‌شود، هاور تاثیری ندارد
+    (function () {
+        const nav = document.getElementById('activityMegaNav');
+        if (!nav) return;
+
+        const pills = Array.from(nav.querySelectorAll('.activity-main-pill[data-activity-slug]'));
+        let activePanel = null;
+        let activePill = null;
+
+        pills.forEach(function (pill) {
+            const slug = pill.getAttribute('data-activity-slug');
+            const panel = document.getElementById('activity-panel-' + slug);
+            if (!panel) return;
+
+            pill.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // اگر همین پنل از قبل باز است، کاری نکن (طبق درخواست: فقط با انتخاب گزینه‌ی دیگر بسته شود)
+                if (activePanel === panel) return;
+
+                // بستن پنل فعلی (در صورت وجود) و باز کردن پنل جدید
+                if (activePanel) activePanel.classList.remove('show');
+                if (activePill) activePill.classList.remove('menu-open');
+
+                panel.classList.add('show');
+                pill.classList.add('menu-open');
+                activePanel = panel;
+                activePill = pill;
+            });
+        });
+    })();
 </script>
 
 
