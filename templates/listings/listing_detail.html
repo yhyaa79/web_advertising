@@ -69,6 +69,10 @@
     <div class="scroll-link-save-share">
         <div class="scroll-link-navbar">
 
+            {% if listing.sale_type %}
+            <a href="#sales-type" class="text-link-scroll">نوع فروش</a>
+            {% endif %}
+
             {% if listing.faqs.all %}
             <a href="#section-faq" class="text-link-scroll">پرسش و پاسخ</a>
             {% endif %}
@@ -188,8 +192,223 @@
                     {% endif %}
                 </div>
 
+
+                {% if has_access %}
+                <div class="description-detail">
+                    <p>{{ listing.description }}</p>
+                </div>
+                <div class="all-badge-card-detail">
+                    {% if listing.is_private %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge-card-detail bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> خصوصی
+                        </span>
+                    </div>
+                    {% endif %}
+
+                    {% if listing.is_income %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge-card-detail bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> درامد اگهی
+                        </span>
+                    </div>
+                    {% endif %}
+
+
+                    {% if listing.is_verified %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge-card-detail bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
+                        </span>
+                    </div>
+                    {% endif %}
+
+
+                    {% if listing.premier %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge-card-detail bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> اگهی برتر
+
+                            <svg class="premier-star" width="18" height="18" viewBox="0 0 24 24" fill="#FFD700"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                            </svg>
+
+                        </span>
+                    </div>
+                    {% elif listing.boost %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge-card-detail bg-warning text-dark">
+                            <i class="bi bi-lock-fill"></i> اگهی پیشرفته
+                        </span>
+                    </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="specifications-detail">
+
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">تعداد دنبال‌کننده:</strong>
+                        <p>{{ listing.followers_count|split_number }}</p>
+                    </div>
+
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">درآمد ماهانه:</strong>
+                        <p>{{ listing.monthly_income|split_number }} تومان</p>
+                    </div>
+
+                    <div class="inf-card-detail">
+                        {% if listing.monthly_income and listing.monthly_income > 0 %}
+                        {% with total_price=listing.discount_price|default:listing.price %}
+                        {% if total_price %}
+                        <strong class="strong-inf-detail">برگشت سرمایه:</strong>
+                        <p>
+                            {% widthratio total_price listing.monthly_income 1 %} ماه
+                        </p>
+                        {% endif %}
+                        {% endwith %}
+                        {% endif %}
+                    </div>
+
+
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">سن پلتفرم:</strong>
+                        <p>{{ listing.platform_age|floatformat:0 }} سال</p>
+                    </div>
+
+                    {% if listing.location %}
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">موقعیت مکانی:</strong>
+                        <p>{{ listing.location }}</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="inf-card-detail">
+                        {% if listing.most_like %}
+                        <strong class="strong-inf-detail">بیشترین لایک:</strong>
+                        <p>{{ listing.most_like|split_number }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="inf-card-detail">
+                        {% if listing.most_view %}
+                        <strong class="strong-inf-detail">بیشترین بازدید:</strong>
+                        <p>{{ listing.most_view|split_number }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="inf-card-detail">
+                        {% if listing.most_comment %}
+                        <strong class="strong-inf-detail">بیشترین کامنت:</strong>
+                        <p>{{ listing.most_comment|split_number }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">حوزه‌ فعالیت :</strong>
+                        <p>{{ listing.get_areas_activity_display }}</p>
+                    </div>
+
+                    <div class="inf-card-detail">
+                        <strong class="strong-inf-detail">آدرس پلتفرم:</strong>
+                        <p><a href="{{ listing.platform_url }}" target="_blank">{{ listing.platform_url }}</a></p>
+                    </div> 
+
+                </div>
+
+
+
+                {% if listing.listing_analyst %}
+                <div id="section-analyst" class="card card-body analyst-card">
+                    <div class="analyst-card-h3 cursor-card">
+                        <h3 class="titel-card">تحلیلگر و مشاور</h3>
+                    </div>
+                    <hr>
+                    <div class="analyst-det">
+                        <div class="img-specifications-analyst">
+
+                            {% if listing.listing_analyst.analyst_image %}
+                            <div class="img-analyst">
+                                <img src="{{ listing.listing_analyst.analyst_image.url }}"
+                                    alt="{{ listing.listing_analyst.analyst_name }}">
+                            </div>
+                            {% endif %}
+
+
+                            <div class="specifications-analyst">
+
+                                {% if listing.listing_analyst.analyst_name %}
+                                <div class="inf-card-analyst">
+                                    <strong class="strong-inf-analyst">نام تحلیلگر:</strong>
+                                    <p>{{ listing.listing_analyst.analyst_name }}</p>
+                                </div>
+                                {% endif %}
+
+                                {% if listing.listing_analyst.analyst_expertise %}
+                                <div class="inf-card-analyst">
+                                    <strong class="strong-inf-analyst">تخصص:</strong>
+                                    <p>{{ listing.listing_analyst.analyst_expertise }}</p>
+                                </div>
+                                {% endif %}
+
+                                {% if listing.listing_analyst.analyst_education %}
+                                <div class="inf-card-analyst">
+                                    <strong class="strong-inf-analyst">تحصیلات:</strong>
+                                    <p>{{ listing.listing_analyst.analyst_education }}</p>
+                                </div>
+                                {% endif %}
+
+                                {% if listing.listing_analyst.analyst_record %}
+                                <div class="inf-card-analyst">
+                                    <strong class="strong-inf-analyst">سابقه:</strong>
+                                    <p>{{ listing.listing_analyst.analyst_record }}</p>
+                                </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+                        {% if listing.listing_analyst.analyst_description %}
+                        <div class="analyst-detail">
+                            <p>{{ listing.listing_analyst.analyst_description|linebreaks }}</p>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+                {% endif %}
+
+
+
+                {% if listing.about_platform %}
+                <div id="section-about" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('2', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">درباره پلتفرم</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-2" class="more-height-btn"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-2" class="aboutplatform-text  expanded">
+                        <div class="aboutplatform-detail">
+                            <hr>
+                            <div class="about-platform-detail">
+                                <p class="aboutplatform-detail-p">{{ listing.about_platform | safe }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--                 <div id="bootstrap-2" class="bootstrap"></div>
+                <p id="text-more-card-2" class="text-aboutplatform-card" onclick="toggleHeight('2', 0)">
+                    مشاهده بیشتر</p> -->
+                </div>
+                {% endif %}
+
+
+
                 {% if listing.sale_type %}
-                <div class="rsd-ps-card rsd-ps-sale-box">
+                <div id="sales-type" class="card card-body mt-3">
                     <div class="rsd-ps-sale-box__head">
                         <div class="rsd-ps-sale-box__title-wrap">
                             <span class="rsd-ps-sale-box__label">نوع فروش</span>
@@ -389,220 +608,6 @@
                 </div>
                 {% endif %}
 
-
-
-                {% if has_access %}
-                <div class="description-detail">
-                    <p>{{ listing.description }}</p>
-                </div>
-                <div class="all-badge-card-detail">
-                    {% if listing.is_private %}
-                    <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge-card-detail bg-warning text-dark">
-                            <i class="bi bi-lock-fill"></i> خصوصی
-                        </span>
-                    </div>
-                    {% endif %}
-
-                    {% if listing.is_income %}
-                    <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge-card-detail bg-warning text-dark">
-                            <i class="bi bi-lock-fill"></i> درامد اگهی
-                        </span>
-                    </div>
-                    {% endif %}
-
-
-                    {% if listing.is_verified %}
-                    <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge-card-detail bg-warning text-dark">
-                            <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
-                        </span>
-                    </div>
-                    {% endif %}
-
-
-                    {% if listing.premier %}
-                    <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge-card-detail bg-warning text-dark">
-                            <i class="bi bi-lock-fill"></i> اگهی برتر
-
-                            <svg class="premier-star" width="18" height="18" viewBox="0 0 24 24" fill="#FFD700"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                            </svg>
-
-                        </span>
-                    </div>
-                    {% elif listing.boost %}
-                    <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge-card-detail bg-warning text-dark">
-                            <i class="bi bi-lock-fill"></i> اگهی پیشرفته
-                        </span>
-                    </div>
-                    {% endif %}
-
-                </div>
-
-
-                <div class="specifications-detail">
-
-                    <div class="inf-card-detail">
-                        <strong class="strong-inf-detail">حوزه‌ فعالیت :</strong>
-                        <p>{{ listing.get_areas_activity_display }}</p>
-                    </div>
-
-
-                    <div class="inf-card-detail">
-                        <strong class="strong-inf-detail">تعداد دنبال‌کننده:</strong>
-                        <p>{{ listing.followers_count|split_number }}</p>
-                    </div>
-
-                    <div class="inf-card-detail">
-                        <strong class="strong-inf-detail">درآمد ماهانه:</strong>
-                        <p>{{ listing.monthly_income|split_number }} تومان</p>
-                    </div>
-
-                    <div class="inf-card-detail">
-                        {% if listing.monthly_income and listing.monthly_income > 0 %}
-                        {% with total_price=listing.discount_price|default:listing.price %}
-                        {% if total_price %}
-                        <strong class="strong-inf-detail">برگشت سرمایه:</strong>
-                        <p>
-                            {% widthratio total_price listing.monthly_income 1 %} ماه
-                        </p>
-                        {% endif %}
-                        {% endwith %}
-                        {% endif %}
-                    </div>
-
-
-                    <div class="inf-card-detail">
-                        <strong class="strong-inf-detail">سن پلتفرم:</strong>
-                        <p>{{ listing.platform_age|floatformat:0 }} سال</p>
-                    </div>
-
-                    {% if listing.location %}
-                    <div class="inf-card-detail">
-                        <strong class="strong-inf-detail">موقعیت مکانی:</strong>
-                        <p>{{ listing.location }}</p>
-                    </div>
-                    {% endif %}
-
-                    <div class="inf-card-detail">
-                        {% if listing.most_like %}
-                        <strong class="strong-inf-detail">بیشترین لایک:</strong>
-                        <p>{{ listing.most_like|split_number }}</p>
-                        {% endif %}
-                    </div>
-
-                    <div class="inf-card-detail">
-                        {% if listing.most_view %}
-                        <strong class="strong-inf-detail">بیشترین بازدید:</strong>
-                        <p>{{ listing.most_view|split_number }}</p>
-                        {% endif %}
-                    </div>
-
-                    <div class="inf-card-detail">
-                        {% if listing.most_comment %}
-                        <strong class="strong-inf-detail">بیشترین کامنت:</strong>
-                        <p>{{ listing.most_comment|split_number }}</p>
-                        {% endif %}
-                    </div>
-
-                    <!-- <div class="inf-card-detail">
-                        <strong class="strong-inf-detail">آدرس پلتفرم:</strong>
-                        <p><a href="{{ listing.platform_url }}" target="_blank">{{ listing.platform_url }}</a></p>
-                    </div> -->
-
-                </div>
-
-
-
-                {% if listing.listing_analyst %}
-                <div id="section-analyst" class="card card-body analyst-card">
-                    <div class="analyst-card-h3 cursor-card">
-                        <h3 class="titel-card">تحلیلگر و مشاور</h3>
-                    </div>
-                    <hr>
-                    <div class="analyst-det">
-                        <div class="img-specifications-analyst">
-
-                            {% if listing.listing_analyst.analyst_image %}
-                            <div class="img-analyst">
-                                <img src="{{ listing.listing_analyst.analyst_image.url }}"
-                                    alt="{{ listing.listing_analyst.analyst_name }}">
-                            </div>
-                            {% endif %}
-
-
-                            <div class="specifications-analyst">
-
-                                {% if listing.listing_analyst.analyst_name %}
-                                <div class="inf-card-analyst">
-                                    <strong class="strong-inf-analyst">نام تحلیلگر:</strong>
-                                    <p>{{ listing.listing_analyst.analyst_name }}</p>
-                                </div>
-                                {% endif %}
-
-                                {% if listing.listing_analyst.analyst_expertise %}
-                                <div class="inf-card-analyst">
-                                    <strong class="strong-inf-analyst">تخصص:</strong>
-                                    <p>{{ listing.listing_analyst.analyst_expertise }}</p>
-                                </div>
-                                {% endif %}
-
-                                {% if listing.listing_analyst.analyst_education %}
-                                <div class="inf-card-analyst">
-                                    <strong class="strong-inf-analyst">تحصیلات:</strong>
-                                    <p>{{ listing.listing_analyst.analyst_education }}</p>
-                                </div>
-                                {% endif %}
-
-                                {% if listing.listing_analyst.analyst_record %}
-                                <div class="inf-card-analyst">
-                                    <strong class="strong-inf-analyst">سابقه:</strong>
-                                    <p>{{ listing.listing_analyst.analyst_record }}</p>
-                                </div>
-                                {% endif %}
-
-                            </div>
-                        </div>
-
-                        {% if listing.listing_analyst.analyst_description %}
-                        <div class="analyst-detail">
-                            <p>{{ listing.listing_analyst.analyst_description|linebreaks }}</p>
-                        </div>
-                        {% endif %}
-
-                    </div>
-                </div>
-                {% endif %}
-
-
-
-                {% if listing.about_platform %}
-                <div id="section-about" class="card card-body aboutplatform-card">
-                    <div onclick="toggleHeight('2', 0)" class="aboutplatform-card-h3 cursor-card">
-                        <h3 class="titel-card">درباره پلتفرم</h3>
-                        <div class="btn-aboutplatform-card">
-                            <button id="more-height-btn-2" class="more-height-btn"></button>
-                        </div>
-                    </div>
-                    <div id="box-text-2" class="aboutplatform-text  expanded">
-                        <div class="aboutplatform-detail">
-                            <hr>
-                            <div class="about-platform-detail">
-                                <p class="aboutplatform-detail-p">{{ listing.about_platform | safe }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!--                 <div id="bootstrap-2" class="bootstrap"></div>
-                <p id="text-more-card-2" class="text-aboutplatform-card" onclick="toggleHeight('2', 0)">
-                    مشاهده بیشتر</p> -->
-                </div>
-                {% endif %}
 
 
 
@@ -1668,7 +1673,7 @@
 
                     <div>
                         <a href="{% url 'listings:user_profile' listing.seller.username %}"
-                            class="btn btn-sm text-link-scroll">
+                            class="btn btn-md text-link-scroll">
                             مشاهده پروفایل
                         </a>
                     </div>
@@ -1898,15 +1903,11 @@
             <div class="card mt-3">
                 <div class="card-body pad-10">
                     <h5>گزارش تخلف</h5>
-
                     <hr>
-
-                    <p>
-                        دیده‌بان جامعه
-                        آیا این آگهی، شرایط و ضوابط Flippa را نقض می‌کند؟
+                    <p class="report-violation">
+                        دیده‌بان جامعه آیا این آگهی، شرایط و ضوابط Flippa را نقض می‌کند؟
                     </p>
-
-                    <p>
+                    <p class="report-violation">
                         در این صورت، آن را
                         <a href="{% url 'tickets:ticket_create' %}?category={{ 1 }}&subject={{ 'تخلف%20اگهی' }}"
                             class="text-link-scroll" target="_blank">
