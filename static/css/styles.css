@@ -608,7 +608,7 @@ a.navbar-a {
 
 /* --- پنل زیرمجموعه --- */
 .category-dropdown-card {
-    display: none;
+    display: flex; 
     position: absolute;
     top: calc(100% - 8px);
     right: 0;
@@ -696,6 +696,107 @@ a.navbar-a {
         min-width: 180px;
     }
 }
+
+
+
+/* ════════════════════════════════════════════════════════════════════════════
+   CSS برای قسمت توضیح (Description Card) دسته‌بندی انتخاب‌شده
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.section-description-card {
+    animation: slideInDown 0.4s ease-out;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 40px;
+    padding: 10px 80px;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section-description-card h2 {
+    color: var(--text-primary);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.section-description-card p {
+    color: var(--text-primary);
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+/* تگ فیلتر در داخل کارت توضیح */
+.section-description-card .filter-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.section-description-card .filter-badge:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.section-description-card .filter-badge .close-btn {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2rem;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.section-description-card .filter-badge .close-btn:hover {
+    opacity: 1;
+}
+
+/* ریسپانسیو برای موبایل */
+@media (max-width: 768px) {
+    .section-description-card {
+        padding: 20px 15px;
+    }
+
+    .section-description-card h2 {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+    }
+
+    .section-description-card p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+}
+
+/* انیمیشن برای تغییر دسته‌بندی */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.section-description-card {
+    animation: fadeInScale 0.3s ease-out;
+}
+
 
 
 /* ========================================

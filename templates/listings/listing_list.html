@@ -5,6 +5,7 @@
 
 {% load custom_tags %}
 {% load date_filters %}
+{% load filter_tags %}
 
 {% block title %}لیست آگهی‌ها{% endblock %}
 
@@ -39,38 +40,14 @@
         </li>
         {% endfor %}
     </ul>
-
-<!--     <ul class="category-header-list">
-        <li class="category-header-item {% if not request.GET.main_activity %}active{% endif %}">
-            <a href="{% url 'listings:listing_list' %}" class="category-header-link">همه حوزه‌های فعالیت</a>
-        </li>
-        {% for slug, label, subs in activity_categories %}
-        <li class="category-header-item {% if request.GET.main_activity == slug %}active{% endif %}" data-hover-item>
-            <a href="?main_activity={{ slug }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
-                class="category-header-link">
-                {{ label }}
-                <i class="bi bi-chevron-down category-header-caret"></i>
-            </a>
-            <div class="category-dropdown-card">
-                {% for sub_slug, sub_label in subs %}
-                <a href="?main_activity={{ slug }}&areas_activity={{ sub_slug }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
-                    class="category-dropdown-link {% if request.GET.areas_activity == sub_slug %}active{% endif %}">
-                    {{ sub_label }}
-                </a>
-                {% endfor %}
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
- -->
 </div>
+
 
 
 <div class="container" style="padding-top: 160px;">
     <div class="heder-listing-list">
         {% if is_similar_view %}
-        <div class="alert alert-info text-center mb-3"
-            style="background-color: #e7f3ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 15px;">
+        <div class="alert alert-info text-center mb-3">
             <i class="bi bi-info-circle" style="font-size: 1.2rem; color: #0066cc;"></i>
             <strong>آگهی‌های مشابه به:</strong> {{ base_listing.title }}
             <a href="{% url 'listings:listing_list' %}" class="btn btn-sm btn-outline-primary me-2"
@@ -79,7 +56,8 @@
             </a>
         </div>
         {% endif %}
-
+ 
+        <!-- عنوان آگهی‌های فعال -->
         <h2 class="mb-4" style="text-align: center;">
             {% if is_similar_view %}
             آگهی‌های مشابه
@@ -87,39 +65,60 @@
             آگهی‌های فعال
             {% endif %}
         </h2>
-
+ 
+        <!-- بار جستجو -->
         <div class="row mb-4 serch-home">
             <div class="serch-bar-home">
                 <form method="get" class="d-flex">
-                    <input type="text" name="search" class="form-control-home me-2" placeholder="جستجو..."
-                        value="{{ request.GET.search }}">
+                    <input type="text" name="search" class="form-control-home me-2" 
+                        placeholder="جستجو..." value="{{ request.GET.search }}">
+                    
+                    <input type="hidden" name="main_platform_type" value="{{ selected_main_platform }}">
+                    <input type="hidden" name="platform_type" value="{{ selected_platform_sub }}">
+                    
+                    <input type="hidden" name="main_activity" value="{{ selected_main_activity }}">
+                    <input type="hidden" name="areas_activity" value="{{ selected_activity_sub }}">
+                    
                     <button type="submit" class="btn btn-success btm-serch-bar">جستجو</button>
                 </form>
             </div>
         </div>
 
-        <!-- ═══════ تایتل و توضیح داینامیک دسته‌بندی ═══════ -->
-        <div class="category-intro" id="categoryIntro">
-            <h3 class="category-intro-title" id="categoryIntroTitle">
-                بازاری از فرصت‌های واقعی برای کسب‌وکار آنلاین شما
-            </h3>
-            <p class="category-intro-desc" id="categoryIntroDesc">
-                از فروشگاه‌های اینترنتی گرفته تا اپلیکیشن و سایت‌های خدماتی، اینجا هر حوزه‌ای که دنبالشی رو پیدا می‌کنی.
-                کافیه یک دسته رو انتخاب کنی تا بهترین آگهی‌های همون حوزه رو ببینی.
+
+        <!-- ═══════════════════════════════════════════════════════════════════════ -->
+
+        {% if section_description %}
+        <div class="section-description-card" >
+            
+            <!-- تایتل -->
+            <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 12px; 
+                       line-height: 1.4;">
+                {{ section_description.title }}
+            </h2>
+            
+            <!-- توضیح -->
+            <p style="font-size: 1rem; line-height: 1.7; margin-bottom: 0; 
+                      opacity: 0.95;">
+                {{ section_description.description }}
             </p>
         </div>
-        <!-- ══════════════════════════════════════════════ -->
-
-        <!-- ═══════ هدر دوم: مگامنوی حوزه فعالیت (سبک Flippa) ═══════ -->
+        {% endif %}
+ 
+        <!-- ═══════════════════════════════════════════════════════════════════════ -->
+ 
+ 
+   
+        
+        <!-- مگامنوی حوزه فعالیت -->
         <div class="activity-mega-nav" id="activityMegaNav">
             <div class="activity-mega-nav-scroll">
-                <a href="{% url 'listings:listing_list' %}"
-                   class="activity-main-pill {% if not request.GET.main_activity %}active{% endif %}">
+                <a href="{% filter_url main_activity='' areas_activity='' %}"
+                class="activity-main-pill {% if not selected_main_activity and not selected_activity_sub %}active{% endif %}">
                     همه حوزه‌ها
                 </a>
                 {% for slug, label, subs in activity_categories %}
                 <button type="button"
-                        class="activity-main-pill {% if request.GET.main_activity == slug %}active{% endif %}"
+                        class="activity-main-pill {% if selected_main_activity == slug %}active{% endif %}"
                         data-activity-slug="{{ slug }}">
                     <span>{{ label }}</span>
                     <i class="bi bi-chevron-down activity-caret"></i>
@@ -129,20 +128,20 @@
 
             {% for slug, label, subs in activity_categories %}
             <div class="activity-submenu-panel" id="activity-panel-{{ slug }}">
-                <a href="?main_activity={{ slug }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
-                   class="activity-sub-chip activity-sub-chip-all {% if request.GET.main_activity == slug and not request.GET.areas_activity %}active{% endif %}">
+                <a href="{% filter_url main_activity=slug areas_activity='' %}"
+                class="activity-sub-chip activity-sub-chip-all {% if selected_main_activity == slug and not selected_activity_sub %}active{% endif %}">
                     همه {{ label }}
                 </a>
                 {% for sub_slug, sub_label in subs %}
-                <a href="?main_activity={{ slug }}&areas_activity={{ sub_slug }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
-                   class="activity-sub-chip {% if request.GET.areas_activity == sub_slug %}active{% endif %}">
+                <a href="{% filter_url main_activity=slug areas_activity=sub_slug %}"
+                class="activity-sub-chip {% if selected_activity_sub == sub_slug %}active{% endif %}">
                     {{ sub_label }}
                 </a>
                 {% endfor %}
             </div>
             {% endfor %}
         </div>
-        <!-- ═══════════════════════════════════════════════════════ -->
+
 
 
         <div class="results-bar">
@@ -177,8 +176,9 @@
 
                         <div class="div-btn-delet">
                             {% if has_active_filters %}
-                            <a href="{% url 'listings:listing_list' %}" class="btn btn-delet btn-small btn-width-fit">
-                                <i class="bi bi-x-circle"></i> حذف
+                            <a href="{% filter_url search='' sort_by='' min_price='' max_price='' min_age='' max_age='' min_followers='' max_followers='' min_income='' max_income='' min_profit_margin='' max_profit_margin='' min_views='' max_views='' min_roi_months='' max_roi_months='' sale_type='' filter_private='' filter_income='' filter_verified='' filter_preferment='' filter_premier='' filter_suggested_price='' %}" 
+                            class="btn btn-delet btn-small btn-width-fit">
+                                <i class="bi bi-x-circle"></i> حذف فیلترها
                             </a>
                             {% endif %}
                             <i class="bi bi-chevron-down ms-2 toggle-icon"></i>
@@ -194,6 +194,10 @@
                         {% if request.GET.category %}
                         <input type="hidden" name="category" value="{{ request.GET.category }}">
                         {% endif %}
+
+                        <!-- ✅✅✅ این دو خط رو اضافه کن: -->
+                        <input type="hidden" name="main_platform_type" value="{{ selected_main_platform }}">
+                        <input type="hidden" name="main_activity" value="{{ selected_main_activity }}">
 
                         <div class="filter-label">
 
@@ -248,35 +252,6 @@
                                 </div>
                             </div>
 
-                            <!-- نوع پلتفرم -->
-                            <div class="filter-group">
-                                <label class="form-label">نوع پلتفرم:</label>
-                                <div class="compact-filter-card-items">
-                                    <select name="platform_type" class="form-select form-select-sm">
-                                        <option value="">همه پلتفرم‌ها</option>
-                                        <option value="website"
-                                            {% if request.GET.platform_type == 'website' %}selected{% endif %}>وبسایت
-                                        </option>
-                                        <option value="instagram"
-                                            {% if request.GET.platform_type == 'instagram' %}selected{% endif %}>
-                                            اینستاگرام
-                                        </option>
-                                        <option value="telegram"
-                                            {% if request.GET.platform_type == 'telegram' %}selected{% endif %}>تلگرام
-                                        </option>
-                                        <option value="youtube"
-                                            {% if request.GET.platform_type == 'youtube' %}selected{% endif %}>یوتیوب
-                                        </option>
-                                        <option value="aparat"
-                                            {% if request.GET.platform_type == 'aparat' %}selected{% endif %}>آپارات
-                                        </option>
-                                        <option value="other"
-                                            {% if request.GET.platform_type == 'other' %}selected{% endif %}>سایر
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-
                             <!-- حوزه فعالیت -->
                             <div class="filter-group">
                                 <label class="form-label">حوزه فعالیت:</label>
@@ -285,7 +260,7 @@
                                         <option value="">همه حوزه‌ها</option>
                                         {% for value, label in areas_activity_choices %}
                                         <option value="{{ value }}"
-                                            {% if request.GET.areas_activity == value %}selected{% endif %}>
+                                            {% if selected_activity_sub == value %}selected{% endif %}>
                                             {{ label }}
                                         </option>
                                         {% endfor %}
@@ -1078,88 +1053,83 @@
 
 
 
-    // هدر دسته‌بندی‌ها — باز شدن با تاخیر ۱۰ میلی‌ثانیه، بسته شدن با تاخیر ۵۰ میلی‌ثانیه
-    document.querySelectorAll('.category-header-item[data-hover-item]').forEach(function (item) {
-        let openTimer = null;
-        let closeTimer = null;
-        const card = item.querySelector('.category-dropdown-card');
-        if (!card) return;
+// هدر دسته‌بندی‌ها — باز شدن با تاخیر، بسته شدن با تاخیر
+document.querySelectorAll('.category-header-item[data-hover-item]').forEach(function (item) {
+    let openTimer = null;
+    let closeTimer = null;
+    const card = item.querySelector('.category-dropdown-card');
+    if (!card) return;
 
-        function openCard() {
-            clearTimeout(closeTimer);
-            clearTimeout(openTimer);
-            openTimer = setTimeout(function () {
-                document.querySelectorAll('.category-dropdown-card.show').forEach(function (c) {
-                    if (c !== card) c.classList.remove('show');
-                });
-                document.querySelectorAll('.category-header-item.hover-open').forEach(function (i) {
-                    if (i !== item) i.classList.remove('hover-open');
-                });
-                card.classList.add('show');
-                item.classList.add('hover-open');
-            }, 100); // تاخیر باز شدن: ۱۰ میلی‌ثانیه
-        }
-
-        function closeCard() {
-            clearTimeout(openTimer);
-            clearTimeout(closeTimer);
-            closeTimer = setTimeout(function () {
-                card.classList.remove('show');
-                item.classList.remove('hover-open');
-            }, 50); // تاخیر بسته شدن: ۵۰ میلی‌ثانیه
-        }
-
-        // هاور روی خودِ آیتم (لینک اصلی دسته)
-        item.addEventListener('mouseenter', openCard);
-        item.addEventListener('mouseleave', closeCard);
-
-        // هاور روی خودِ پنل، تا وقتی موس داخل پنل است بسته نشود
-        card.addEventListener('mouseenter', openCard);
-        card.addEventListener('mouseleave', closeCard);
-    });
-
-    // بستن دراپ‌داون‌های باز با کلیک بیرون از هدر (برای حالت لمسی/موبایل)
-    document.addEventListener('click', function (e) {
-        if (!e.target.closest('.category-header-item')) {
-            document.querySelectorAll('.category-dropdown-card.show').forEach(c => c.classList.remove('show'));
-            document.querySelectorAll('.category-header-item.hover-open').forEach(i => i.classList.remove('hover-open'));
-        }
-    });
-
-
-
-
-    // مگامنوی حوزه فعالیت — فقط با کلیک باز/بسته می‌شود، هاور تاثیری ندارد
-    (function () {
-        const nav = document.getElementById('activityMegaNav');
-        if (!nav) return;
-
-        const pills = Array.from(nav.querySelectorAll('.activity-main-pill[data-activity-slug]'));
-        let activePanel = null;
-        let activePill = null;
-
-        pills.forEach(function (pill) {
-            const slug = pill.getAttribute('data-activity-slug');
-            const panel = document.getElementById('activity-panel-' + slug);
-            if (!panel) return;
-
-            pill.addEventListener('click', function (e) {
-                e.preventDefault();
-
-                // اگر همین پنل از قبل باز است، کاری نکن (طبق درخواست: فقط با انتخاب گزینه‌ی دیگر بسته شود)
-                if (activePanel === panel) return;
-
-                // بستن پنل فعلی (در صورت وجود) و باز کردن پنل جدید
-                if (activePanel) activePanel.classList.remove('show');
-                if (activePill) activePill.classList.remove('menu-open');
-
-                panel.classList.add('show');
-                pill.classList.add('menu-open');
-                activePanel = panel;
-                activePill = pill;
+    function openCard() {
+        clearTimeout(closeTimer);
+        clearTimeout(openTimer);
+        openTimer = setTimeout(function () {
+            // بستن بقیه پنل‌ها
+            document.querySelectorAll('.category-dropdown-card.show').forEach(function (c) {
+                if (c !== card) c.classList.remove('show');
             });
+            document.querySelectorAll('.category-header-item.hover-open').forEach(function (i) {
+                if (i !== item) i.classList.remove('hover-open');
+            });
+            card.classList.add('show');
+            item.classList.add('hover-open');
+        }, 100);
+    }
+
+    function closeCard() {
+        clearTimeout(openTimer);
+        clearTimeout(closeTimer);
+        closeTimer = setTimeout(function () {
+            card.classList.remove('show');
+            item.classList.remove('hover-open');
+        }, 50);
+    }
+
+    // فقط روی item گوش بده — چون card فرزند item هست،
+    // حرکت موس بین لینک و پنل باعث mouseleave روی item نمی‌شه
+    item.addEventListener('mouseenter', openCard);
+    item.addEventListener('mouseleave', closeCard);
+});
+
+
+
+// مگامنوی حوزه فعالیت — فقط با کلیک باز/بسته می‌شود + حفظ وضعیت پس از رفرش
+(function () {
+    const nav = document.getElementById('activityMegaNav');
+    if (!nav) return;
+
+    const pills = Array.from(nav.querySelectorAll('.activity-main-pill[data-activity-slug]'));
+    let activePanel = null;
+    let activePill = null;
+
+    pills.forEach(function (pill) {
+        const slug = pill.getAttribute('data-activity-slug');
+        const panel = document.getElementById('activity-panel-' + slug);
+        if (!panel) return;
+
+        // ✅ اگر این حوزه در URL انتخاب شده بود، پنلش را از ابتدا باز نگه دار
+        if (pill.classList.contains('active')) {
+            panel.classList.add('show');
+            pill.classList.add('menu-open');
+            activePanel = panel;
+            activePill = pill;
+        }
+
+        pill.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            if (activePanel === panel) return;
+
+            if (activePanel) activePanel.classList.remove('show');
+            if (activePill) activePill.classList.remove('menu-open');
+
+            panel.classList.add('show');
+            pill.classList.add('menu-open');
+            activePanel = panel;
+            activePill = pill;
         });
-    })();
+    });
+})();
 </script>
 
 
