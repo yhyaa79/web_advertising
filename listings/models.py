@@ -112,6 +112,23 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.name} ({self.get_platform_display()})"
 
+    def get_platform_display_safe(self):
+        """
+        نمایش برچسب فارسیِ پلتفرم، حتی اگر به‌جای اسلاگ زیردسته،
+        اسلاگ دسته‌ی اصلی ذخیره شده باشد (fallback امن).
+        """
+        choices_dict = dict(self.PLATFORM_CHOICES)
+        if self.platform in choices_dict:
+            return choices_dict[self.platform]
+
+        # اگر مقدار ذخیره‌شده یک "دسته اصلی" باشد نه زیردسته
+        for slug, label, subs in self.PLATFORM_CATEGORIES:
+            if slug == self.platform:
+                return label
+
+        # آخرین راه: خود مقدار خام را برگردان تا صفحه نشکند
+        return self.platform
+
     def get_platform_main_category(self):
         """برگرداندن (slug, label) دسته کلیِ این دسته‌بندی"""
         for slug, label, subs in self.PLATFORM_CATEGORIES:
@@ -342,8 +359,7 @@ class Listing(models.Model):
     is_verified    = models.BooleanField(default=False, verbose_name='اطلاعات مورد تایید است')
     is_private     = models.BooleanField(default=False, verbose_name='آگهی خصوصی')
 
-    areas_activity = models.CharField(max_length=60, choices=ACTIVITY_CHOICES,
-                                      verbose_name='حوزه‌ فعالیت')
+    areas_activity = models.CharField(max_length=60, choices=ACTIVITY_CHOICES, verbose_name='حوزه‌ فعالیت')
 
     status           = models.CharField(max_length=20, choices=STATUS_CHOICES,
                                         default='pending', verbose_name='وضعیت')
@@ -505,6 +521,21 @@ class Listing(models.Model):
         if user == self.seller:
             return True
         return self.visit_requests.filter(requester=user, status='approved').exists()
+
+    def get_areas_activity_display_safe(self):
+        """
+        نمایش برچسب فارسیِ حوزه فعالیت، حتی اگر اسلاگ دسته‌ی اصلی
+        (نه زیردسته) ذخیره شده باشد.
+        """
+        choices_dict = dict(self.ACTIVITY_CHOICES)
+        if self.areas_activity in choices_dict:
+            return choices_dict[self.areas_activity]
+
+        for slug, label, subs in self.ACTIVITY_CATEGORIES:
+            if slug == self.areas_activity:
+                return label
+
+        return self.areas_activity
 
     def get_income_chart_data(self):
         income_points = self.income_data_points.all().order_by('date')

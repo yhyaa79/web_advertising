@@ -535,6 +535,7 @@ a.navbar-a {
     display: flex;
     align-items: center;
     position: absolute;
+    justify-content: space-between;
     padding: 0 30px;
     margin-top: 70px;
     width: 100%;
@@ -542,7 +543,6 @@ a.navbar-a {
     z-index: 999;
     background-color: var(--bg);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    justify-content: flex-start;
     gap: 40px;
     border-bottom: 1px solid var(--border-color);
 }
@@ -735,7 +735,7 @@ a.navbar-a {
 
 .section-description-card p {
     color: var(--text-secondary);
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-xl);
     line-height: 1.7;
     margin-bottom: 3px;
     margin-bottom: 0;
@@ -3527,7 +3527,7 @@ hr {
 
 .btn-md {
     padding: 5px var(--spacing-md);
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-xl);
 }
 
 .btn-lg {

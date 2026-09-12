@@ -12,9 +12,29 @@ from .models import (
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display  = ('name', 'platform')
+    list_display  = ('name', 'get_platform_display_safe', 'get_main_category_display')
     list_filter   = ('platform',)
     search_fields = ('name',)
+
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        if db_field.name == 'platform':
+            kwargs['choices'] = [
+                (
+                    main_label,
+                    [(sub_slug, sub_label) for sub_slug, sub_label in subs],
+                )
+                for _main_slug, main_label, subs in Category.PLATFORM_CATEGORIES
+            ]
+        return super().formfield_for_choice_field(db_field, request, **kwargs)
+
+    @admin.display(description='برچسب پلتفرم')
+    def get_platform_display_safe(self, obj):
+        return obj.get_platform_display_safe()
+
+    @admin.display(description='دسته اصلی')
+    def get_main_category_display(self, obj):
+        _, label = obj.get_platform_main_category()
+        return label or '-'
 
 
 # ── Inlines ──────────────────────────────────────────────────
@@ -207,7 +227,6 @@ class ListingAdmin(admin.ModelAdmin):
         ('دلیل واگذاری', {
             'fields': ('sale_reason', 'sale_reason_description'),
         }),
-        # ── نوع فروش ──────────────────────────────────────────
         ('نوع فروش', {
             'fields': ('sale_type',),
         }),
@@ -246,7 +265,6 @@ class ListingAdmin(admin.ModelAdmin):
             ),
             'classes': ('collapse',),
         }),
-        # ──────────────────────────────────────────────────────
         ('درآمد و هزینه', {
             'fields': (
                 'total_revenue', 'total_profit',
