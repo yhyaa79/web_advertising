@@ -151,7 +151,7 @@
             <div class="">
                 <div class="d-flex">
                     <h2 style="margin-bottom: 5px;">{{ listing.title }}</h2>
-                    <span class="badge bg-info-detail">{{ listing.category.get_platform_display }}</span>
+                    <span class="badge bg-info-detail">{{ listing.get_category_display_safe }}</span>
                 </div>
 
                 <div class="inf-created-views-username">
@@ -1847,7 +1847,7 @@
                             <!-- راست: بخش تصویر و نشان پلتفرم -->
                             <div class="ad-item__media">
                                 <span
-                                    class="ad-badge ad-badge--platform">{{ listing.category.get_platform_display }}</span>
+                                    class="ad-badge ad-badge--platform">{{ listing.get_category_display_safe }}</span>
                                 {% if listing.main_image %}
                                 <div class="ad-item__image-wrap">
                                     <img src="{{ listing.main_image.url }}" class="ad-item__image"

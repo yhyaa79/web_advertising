@@ -584,7 +584,7 @@
 
                                 <a href="{% url 'listings:listing_detail' listing.pk %}" class="in-card-img">
                                     <div class="img-badge">
-                                        <span class="badge bg-info">{{ listing.category.get_platform_display_safe }}</span>
+                                        <span class="badge bg-info">{{ listing.get_category_display_safe }}</span>
                                         {% if listing.main_image %}
                                         <div class="card-img">
                                             <img src="{{ listing.main_image.url }}" class="card-img-top">
@@ -813,7 +813,7 @@
 
                             <a href="{% url 'listings:listing_detail' listing.pk %}" class="in-card-img">
                                 <div class="img-badge">
-                                    <span class="badge bg-info">{{ listing.category.get_platform_display_safe }}</span>
+                                    <span class="badge bg-info">{{ listing.get_category_display_safe }}</span>
                                     {% if listing.main_image %}
                                     <div class="card-img">
                                         <img src="{{ listing.main_image.url }}" class="card-img-top">

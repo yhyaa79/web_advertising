@@ -1,5 +1,3 @@
-# listings/models.py
-
 from django.db import models
 from django.conf import settings
 
@@ -330,8 +328,10 @@ class Listing(models.Model):
     # ─── فیلدهای مشترک ───────────────────────────────────────
     seller   = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                  related_name='listings', verbose_name='فروشنده')
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL,
-                                 null=True, blank=True, verbose_name='دسته‌بندی')
+
+    category = models.CharField(max_length=40, choices=Category.PLATFORM_CHOICES,
+                                null=True, blank=True, verbose_name='دسته‌بندی')
+    asset_details = models.JSONField(default=dict, blank=True, verbose_name='اطلاعات اختصاصی دارایی')
     title       = models.CharField(max_length=200, verbose_name='عنوان')
     description = models.TextField(verbose_name='توضیحات')
     location    = models.CharField(max_length=200, null=True, blank=True, verbose_name='موقعیت')
@@ -521,6 +521,22 @@ class Listing(models.Model):
         if user == self.seller:
             return True
         return self.visit_requests.filter(requester=user, status='approved').exists()
+
+    def get_category_display_safe(self):
+        """
+        نمایش برچسب فارسیِ دسته‌بندی پلتفرم، حتی اگر به‌جای اسلاگ زیردسته،
+        اسلاگ دسته‌ی اصلی ذخیره شده باشد (fallback امن).
+        """
+        choices_dict = dict(Category.PLATFORM_CHOICES)
+        if self.category in choices_dict:
+            return choices_dict[self.category]
+
+        # اگر مقدار ذخیره‌شده یک "دسته اصلی" باشد نه زیردسته
+        for slug, label, subs in Category.PLATFORM_CATEGORIES:
+            if slug == self.category:
+                return label
+
+        return self.category or ''
 
     def get_areas_activity_display_safe(self):
         """

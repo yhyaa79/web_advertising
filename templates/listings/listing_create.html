@@ -79,8 +79,12 @@
           <label>دسته‌بندی <span class="opt">(اختیاری)</span></label>
           <select name="category" id="f-category">
             <option value="">-- انتخاب دسته‌بندی --</option>
-            {% for cat in categories %}
-              <option value="{{ cat.id }}">{{ cat }}</option>
+            {% for cat_slug, cat_label, subs in platform_categories %}
+              <optgroup label="{{ cat_label }}">
+                {% for sub_slug, sub_label in subs %}
+                  <option value="{{ sub_slug }}">{{ sub_label }}</option>
+                {% endfor %}
+              </optgroup>
             {% endfor %}
           </select>
         </div>
@@ -88,22 +92,13 @@
           <label>حوزه فعالیت <span class="req">*</span></label>
           <select name="areas_activity" id="f-areas">
             <option value="">-- انتخاب حوزه --</option>
-            <option value="shopping_commerce">فروشگاهی و تجارت الکترونیک</option>
-            <option value="technology_software">تکنولوژی و نرم‌افزار</option>
-            <option value="education_learning">آموزش و یادگیری</option>
-            <option value="health_medicine_beauty">سلامت، پزشکی و زیبایی</option>
-            <option value="news_magazines_portals">خبری، مجله و پورتال</option>
-            <option value="finance_stock_exchange_cryptocurrency">مالی، بورس و ارز دیجیتال</option>
-            <option value="entertainment_games_movies">سرگرمی، بازی و فیلم</option>
-            <option value="lifestyle_fashion_fashion">سبک زندگی، مد و فشن</option>
-            <option value="travel_tourism_immigration">سفر، گردشگری و مهاجرت</option>
-            <option value="real_estate">املاک و مستغلات</option>
-            <option value="corporate_B2B_services">خدمات شرکتی و B2B</option>
-            <option value="sports_fitness">ورزشی و تناسب اندام</option>
-            <option value="food_cooking_restaurants">غذا، آشپزی و رستوران</option>
-            <option value="home_decoration_architecture">خانه، دکوراسیون و معماری</option>
-            <option value="pets">حیوانات خانگی</option>
-            <option value="other">سایر</option>
+            {% for act_slug, act_label, subs in activity_categories %}
+              <optgroup label="{{ act_label }}">
+                {% for sub_slug, sub_label in subs %}
+                  <option value="{{ sub_slug }}">{{ sub_label }}</option>
+                {% endfor %}
+              </optgroup>
+            {% endfor %}
           </select>
           <div class="field-err-msg" id="e-areas">حوزه فعالیت الزامی است</div>
         </div>

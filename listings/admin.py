@@ -168,14 +168,14 @@ class TechnologyUsedAdminForm(forms.ModelForm):
     def _clean_list(self, key):
         return list(self.cleaned_data.get(key, []))
 
-    def clean_technology_cms(self):           return self._clean_list('technology_cms')
-    def clean_technology_backend(self):       return self._clean_list('technology_backend')
-    def clean_technology_frontend(self):      return self._clean_list('technology_frontend')
-    def clean_technology_database(self):      return self._clean_list('technology_database')
-    def clean_technology_infrastructure(self):return self._clean_list('technology_infrastructure')
-    def clean_technology_mobile(self):        return self._clean_list('technology_mobile')
-    def clean_technology_devops(self):        return self._clean_list('technology_devops')
-    def clean_technology_third_party(self):   return self._clean_list('technology_third_party')
+    def clean_technology_cms(self):            return self._clean_list('technology_cms')
+    def clean_technology_backend(self):        return self._clean_list('technology_backend')
+    def clean_technology_frontend(self):       return self._clean_list('technology_frontend')
+    def clean_technology_database(self):       return self._clean_list('technology_database')
+    def clean_technology_infrastructure(self): return self._clean_list('technology_infrastructure')
+    def clean_technology_mobile(self):         return self._clean_list('technology_mobile')
+    def clean_technology_devops(self):         return self._clean_list('technology_devops')
+    def clean_technology_third_party(self):    return self._clean_list('technology_third_party')
 
 
 class TechnologyUsedInline(admin.StackedInline):
@@ -285,7 +285,8 @@ class ListingAdmin(admin.ModelAdmin):
     )
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('seller', 'category')
+        # ⚠️ category یک CharField است، نه ForeignKey → نباید در select_related باشد
+        return super().get_queryset(request).select_related('seller')
 
 
 @admin.register(VisitRequest)
