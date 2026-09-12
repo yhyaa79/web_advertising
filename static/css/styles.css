@@ -154,7 +154,7 @@
     --home-bg-1: #e7f0ff;
     --home-bg-2: #f0f5ff;
     --home-bg-3: #e7f0ff;
-    --bg: #f9fafb;
+    --bg: #fcfdfd;
     --white-bg: #ffffff;
 
     /* رنگ‌های متن */
@@ -431,10 +431,11 @@ a.navbar-a {
 .dropdown-toggle {
     color: #bfbfc9;
     text-decoration: none;
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-3xl);
     font-weight: 500;
     transition: color .2s;
 }
+
 
 .navbar-a:hover,
 .notification-link:hover,
@@ -539,7 +540,7 @@ a.navbar-a {
     width: 100%;
     height: 50px;
     z-index: 999;
-    background-color: #ffffff;
+    background-color: var(--bg);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     justify-content: flex-start;
     gap: 40px;
@@ -585,13 +586,13 @@ a.navbar-a {
     color: var(--blu-color);
 }
 
-.category-header-item.active > .category-header-link {
+.category-header-item.active>.category-header-link {
     color: var(--blu-color);
     border-bottom-color: var(--blu-color);
     font-weight: 600;
 }
 
-.category-header-item.hover-open > .category-header-link {
+.category-header-item.hover-open>.category-header-link {
     color: var(--blu-color);
 }
 
@@ -608,7 +609,7 @@ a.navbar-a {
 
 /* --- پنل زیرمجموعه --- */
 .category-dropdown-card {
-    display: flex; 
+    display: flex;
     position: absolute;
     top: calc(100% - 8px);
     right: 0;
@@ -708,7 +709,7 @@ a.navbar-a {
     border-radius: 12px;
     overflow: hidden;
     margin-bottom: 40px;
-    padding: 10px 80px;
+    padding: 10px 40px;
 }
 
 @keyframes slideInDown {
@@ -716,6 +717,7 @@ a.navbar-a {
         opacity: 0;
         transform: translateY(-15px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -726,12 +728,17 @@ a.navbar-a {
     color: var(--text-primary);
     font-weight: 800;
     letter-spacing: -0.5px;
+    font-size: var(--font-size-4xl);
+    margin-bottom: 12px;
+    line-height: 1.4;
 }
 
 .section-description-card p {
-    color: var(--text-primary);
-    font-size: 1rem;
+    color: var(--text-secondary);
+    font-size: var(--font-size-2xl);
     line-height: 1.7;
+    margin-bottom: 3px;
+    margin-bottom: 0;
 }
 
 /* تگ فیلتر در داخل کارت توضیح */
@@ -787,6 +794,7 @@ a.navbar-a {
         opacity: 0;
         transform: scale(0.98);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -805,12 +813,12 @@ a.navbar-a {
 
 .activity-mega-nav {
     position: relative;
-    margin-bottom: var(--spacing-lg);
-    background-color: var(--white-bg);
+    background-color: var(--bg);
     border: 1px solid var(--border-light);
     border-radius: var(--border-radius-lg);
-    box-shadow: var(--card-shadow);
+    box-shadow: var(--shadow-sm);
     padding: 6px 10px;
+    margin: 0 40px var(--spacing-lg);
 }
 
 .activity-mega-nav-scroll {
@@ -5432,8 +5440,8 @@ nav .nav-cta .btn-ghost {
 
 .rounded-circle-profile-nav {
     border-radius: 999px;
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
     object-fit: cover;
     border: 2px solid var(--border-light);
     background: #e4e4e4;
