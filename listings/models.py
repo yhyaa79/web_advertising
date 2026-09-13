@@ -345,7 +345,7 @@ class Listing(models.Model):
     about_platform = models.TextField(null=True, blank=True, verbose_name='درباره پلتفرم')
 
     platform_url    = models.URLField(blank=True, verbose_name='آدرس پلتفرم')
-    followers_count = models.IntegerField(default=0, blank=True, verbose_name='تعداد فالوور')
+    followers_count = models.IntegerField(default=0, blank=True, verbose_name='تعداد کاربر ها')
     monthly_income  = models.DecimalField(null=True, blank=True, max_digits=12,
                                           decimal_places=0, verbose_name='درآمد ماهانه')
     platform_age    = models.IntegerField(default=0, blank=True, verbose_name='سن پلتفرم (ماه)')

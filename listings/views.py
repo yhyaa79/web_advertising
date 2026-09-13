@@ -206,15 +206,16 @@ def listing_list(request):
     selected_main_platform = request.GET.get('main_platform_type', '')
     selected_platform_sub = request.GET.get('platform_type', '')
     selected_platform_display_name = ''
-    
+
     if selected_platform_sub:
-        listings = listings.filter(category__platform=selected_platform_sub)
-        # پیدا کردن نام دسته برای نمایش
+        # ✅ اصلاح: category خودش CharField است و اسلاگ زیردسته را نگه می‌دارد
+        listings = listings.filter(category=selected_platform_sub)
         for main_slug, main_label, subs in Category.PLATFORM_CATEGORIES:
             for sub_slug, sub_label in subs:
                 if sub_slug == selected_platform_sub:
                     selected_platform_display_name = sub_label
                     break
+
     elif selected_main_platform:
         sub_slugs = []
         for slug, label, subs in Category.PLATFORM_CATEGORIES:
@@ -223,7 +224,8 @@ def listing_list(request):
                 selected_platform_display_name = label
                 break
         if sub_slugs:
-            listings = listings.filter(category__platform__in=sub_slugs)
+            # ✅ اصلاح: از __in استفاده می‌کنیم نه join روی Category
+            listings = listings.filter(category__in=sub_slugs)
  
     # ╔══════════════════════════════════════════════════════════════════╗
     # ║  فیلتر حوزه فعالیت ACTIVITY (فقط در محدوده دسته‌بندی انتخاب‌شده) ║
@@ -644,9 +646,9 @@ def listing_create(request):
         return render(request, "listings/listing_create.html", {
             "platform_categories": platform_categories,
             "activity_categories": activity_categories,
-            # ← جدید: کانفیگ داینامیک برای جاوااسکریپت
             "category_config_json": _json.dumps(CATEGORY_FORM_CONFIG, ensure_ascii=False),
             "sections_config_json": _json.dumps(STEP_SECTIONS_CONFIG, ensure_ascii=False),
+            "total_steps": 8,  # ← اضافه شود
         })
 
     is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
