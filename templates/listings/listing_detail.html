@@ -319,6 +319,686 @@
 
                 </div>
 
+                
+                {% if listing.website_details %}
+                {% with d=listing.website_details %}
+                <div id="section-website-details" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('14', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">جزئیات وب‌سایت</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-14" class="more-height-btn open"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-14" class="social-media-text expanded">
+                        <hr>
+                        <div class="specifications-detail">
+
+                            {% if d.tech_stack %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تکنولوژی‌های سایت:</strong>
+                                <p>{{ d.tech_stack }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.monthly_visits %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">بازدید ماهانه:</strong>
+                                <p>{{ d.monthly_visits|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.unique_visitors %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">کاربران یکتای ماهانه:</strong>
+                                <p>{{ d.unique_visitors|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.page_views %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">بازدید صفحات ماهانه:</strong>
+                                <p>{{ d.page_views|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.pages_indexed %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">صفحات ایندکس‌شده گوگل:</strong>
+                                <p>{{ d.pages_indexed|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.domain_authority %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">Domain Authority:</strong>
+                                <p>{{ d.domain_authority }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.backlinks_count %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تعداد بک‌لینک:</strong>
+                                <p>{{ d.backlinks_count|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.content_count %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تعداد مقالات / پست‌ها:</strong>
+                                <p>{{ d.content_count|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.seo_score %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">امتیاز سئو:</strong>
+                                <p>{{ d.seo_score }} از ۱۰۰</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.bounce_rate %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">نرخ پرش:</strong>
+                                <p>{{ d.bounce_rate }}٪</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.avg_session_duration %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">میانگین مدت بازدید:</strong>
+                                <p>{{ d.avg_session_duration }} ثانیه</p>
+                            </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}
+                {% endif %}
+
+
+                {# ─────── 2. جزئیات فروشگاه اینترنتی ─────── #}
+                {% if listing.ecommerce_details %}
+                {% with d=listing.ecommerce_details %}
+                <div id="section-ecommerce-details" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('15', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">جزئیات فروشگاه اینترنتی</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-15" class="more-height-btn open"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-15" class="social-media-text expanded">
+                        <hr>
+                        <div class="specifications-detail">
+
+                            {% if d.products_count %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تعداد محصولات:</strong>
+                                <p>{{ d.products_count|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.orders_per_month %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">سفارش ماهانه:</strong>
+                                <p>{{ d.orders_per_month|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.aov %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">میانگین ارزش سفارش:</strong>
+                                <p>{{ d.aov|split_number }} تومان</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.conversion_rate %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">نرخ تبدیل:</strong>
+                                <p>{{ d.conversion_rate }}٪</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.returning_customers %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">مشتریان بازگشتی:</strong>
+                                <p>{{ d.returning_customers }}٪</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.shipping_partners %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">شرکت‌های حمل‌ونقل:</strong>
+                                <p>{{ d.shipping_partners }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.inventory_value %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">ارزش موجودی انبار:</strong>
+                                <p>{{ d.inventory_value|split_number }} تومان</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.cart_abandonment %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">نرخ رهاسازی سبد:</strong>
+                                <p>{{ d.cart_abandonment }}٪</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.suppliers_count %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تعداد تامین‌کنندگان:</strong>
+                                <p>{{ d.suppliers_count|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">دارای انبار فعال:</strong>
+                                <p>{% if d.has_inventory %}بله{% else %}خیر{% endif %}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}
+                {% endif %}
+
+
+                {# ─────── 3. جزئیات اپلیکیشن ─────── #}
+                {% if listing.app_details %}
+                {% with d=listing.app_details %}
+                <div id="section-app-details" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('16', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">جزئیات اپلیکیشن</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-16" class="more-height-btn open"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-16" class="social-media-text expanded">
+                        <hr>
+                        <div class="specifications-detail">
+
+                            {% if d.downloads %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تعداد کل دانلود:</strong>
+                                <p>{{ d.downloads|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.active_installs %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">نصب‌های فعال:</strong>
+                                <p>{{ d.active_installs|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.dau %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">کاربران فعال روزانه (DAU):</strong>
+                                <p>{{ d.dau|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.mau %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">کاربران فعال ماهانه (MAU):</strong>
+                                <p>{{ d.mau|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.rating %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">امتیاز:</strong>
+                                <p>{{ d.rating }} از ۵</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.reviews_count %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تعداد نظرات:</strong>
+                                <p>{{ d.reviews_count|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.retention_rate %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">نرخ نگهداشت:</strong>
+                                <p>{{ d.retention_rate }}٪</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.current_version %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">نسخه فعلی:</strong>
+                                <p>{{ d.current_version }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.last_update_date %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">آخرین بروزرسانی:</strong>
+                                <p>{{ d.last_update_date }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.crash_rate %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">نرخ کرش:</strong>
+                                <p>{{ d.crash_rate }}٪</p>
+                            </div>
+                            {% endif %}
+
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">خرید درون‌برنامه‌ای:</strong>
+                                <p>{% if d.has_in_app_purchase %}دارد{% else %}ندارد{% endif %}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}
+                {% endif %}
+
+
+                {# ─────── 4. جزئیات پیج/کانال شبکه اجتماعی ─────── #}
+                {% if listing.social_details %}
+                {% with d=listing.social_details %}
+                <div id="section-social-details" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('17', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">جزئیات پیج / کانال</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-17" class="more-height-btn open"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-17" class="social-media-text expanded">
+                        <hr>
+                        <div class="specifications-detail">
+
+                            {% if d.handle %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">نام کاربری (Handle):</strong>
+                                <p>{{ d.handle }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.followers %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تعداد فالوور:</strong>
+                                <p>{{ d.followers|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.following %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تعداد Following:</strong>
+                                <p>{{ d.following|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.posts_count %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تعداد پست‌ها:</strong>
+                                <p>{{ d.posts_count|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.engagement_rate %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">نرخ تعامل:</strong>
+                                <p>{{ d.engagement_rate }}٪</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.avg_reach %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">میانگین ریچ هر پست:</strong>
+                                <p>{{ d.avg_reach|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.avg_story_views %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">میانگین بازدید استوری:</strong>
+                                <p>{{ d.avg_story_views|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.post_frequency %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تعداد پست در هفته:</strong>
+                                <p>{{ d.post_frequency }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.audience_country %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">کشور اصلی مخاطبان:</strong>
+                                <p>{{ d.audience_country }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.audience_gender %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">جنسیت غالب مخاطبان:</strong>
+                                <p>{{ d.audience_gender }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.audience_age_range %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">بازه سنی مخاطبان:</strong>
+                                <p>{{ d.audience_age_range }}</p>
+                            </div>
+                            {% endif %}
+
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">مونتیزه شده:</strong>
+                                <p>{% if d.is_monetized %}بله{% else %}خیر{% endif %}</p>
+                            </div>
+
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تیک آبی:</strong>
+                                <p>{% if d.has_verification %}دارد{% else %}ندارد{% endif %}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}
+                {% endif %}
+
+
+                {# ─────── 5. جزئیات رسانه و محتوا ─────── #}
+                {% if listing.content_details %}
+                {% with d=listing.content_details %}
+                <div id="section-content-details" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('18', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">جزئیات رسانه و محتوا</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-18" class="more-height-btn open"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-18" class="social-media-text expanded">
+                        <hr>
+                        <div class="specifications-detail">
+
+                            {% if d.content_type %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">نوع محتوا:</strong>
+                                <p>{{ d.get_content_type_display }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.subscribers %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تعداد مشترکین:</strong>
+                                <p>{{ d.subscribers|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.monthly_audience %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">مخاطبان ماهانه:</strong>
+                                <p>{{ d.monthly_audience|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.episodes_count %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تعداد قسمت‌ها / شماره‌ها:</strong>
+                                <p>{{ d.episodes_count|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.publishing_frequency %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">دوره انتشار:</strong>
+                                <p>{{ d.publishing_frequency }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.avg_engagement %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">میانگین تعامل هر قسمت:</strong>
+                                <p>{{ d.avg_engagement|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.platforms %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">پلتفرم‌های انتشار:</strong>
+                                <p>{{ d.platforms }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.avg_downloads %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">میانگین دانلود / پخش هر قسمت:</strong>
+                                <p>{{ d.avg_downloads|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.open_rate %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">نرخ باز شدن ایمیل:</strong>
+                                <p>{{ d.open_rate }}٪</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.click_rate %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">نرخ کلیک:</strong>
+                                <p>{{ d.click_rate }}٪</p>
+                            </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}
+                {% endif %}
+
+
+                {# ─────── 6. جزئیات دامنه ─────── #}
+                {% if listing.domain_details %}
+                {% with d=listing.domain_details %}
+                <div id="section-domain-details" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('19', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">جزئیات دامنه</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-19" class="more-height-btn open"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-19" class="social-media-text expanded">
+                        <hr>
+                        <div class="specifications-detail">
+
+                            {% if d.domain_name %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">نام دامنه:</strong>
+                                <p>{{ d.domain_name }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.extension %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">پسوند:</strong>
+                                <p>{{ d.extension }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.registrar %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">ثبت‌کننده:</strong>
+                                <p>{{ d.registrar }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.expiry_date %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تاریخ انقضا:</strong>
+                                <p>{{ d.expiry_date|jalali_date }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.domain_age_years %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">سن دامنه:</strong>
+                                <p>{{ d.domain_age_years }} سال</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.monthly_type_in %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">ترافیک تایپ-این ماهانه:</strong>
+                                <p>{{ d.monthly_type_in|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.backlinks_count %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تعداد بک‌لینک:</strong>
+                                <p>{{ d.backlinks_count|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.keyword %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">کلمه کلیدی اصلی:</strong>
+                                <p>{{ d.keyword }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.search_volume %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">حجم جستجوی ماهانه:</strong>
+                                <p>{{ d.search_volume|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.cpc %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">CPC کلمه کلیدی:</strong>
+                                <p>{{ d.cpc|split_number }} تومان</p>
+                            </div>
+                            {% endif %}
+
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">برندی / کوتاه:</strong>
+                                <p>{% if d.is_brandable %}بله{% else %}خیر{% endif %}</p>
+                            </div>
+
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">Exact Match Domain:</strong>
+                                <p>{% if d.is_exact_match %}بله{% else %}خیر{% endif %}</p>
+                            </div>
+
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">سابقه سایت قبلی:</strong>
+                                <p>{% if d.has_history %}دارد{% else %}ندارد{% endif %}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}
+                {% endif %}
+
+
+                {# ─────── 7. جزئیات کسب‌وکار خدماتی ─────── #}
+                {% if listing.service_details %}
+                {% with d=listing.service_details %}
+                <div id="section-service-details" class="card card-body aboutplatform-card">
+                    <div onclick="toggleHeight('20', 0)" class="aboutplatform-card-h3 cursor-card">
+                        <h3 class="titel-card">جزئیات کسب‌وکار خدماتی</h3>
+                        <div class="btn-aboutplatform-card">
+                            <button id="more-height-btn-20" class="more-height-btn open"></button>
+                        </div>
+                    </div>
+                    <div id="box-text-20" class="social-media-text expanded">
+                        <hr>
+                        <div class="specifications-detail">
+
+                            {% if d.services_list %}
+                            <div class="inf-card-detail" style="display:block; width:100%;">
+                                <strong class="strong-inf-detail">خدمات ارائه‌شده:</strong>
+                                <p style="white-space: pre-line;">{{ d.services_list }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.team_size %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">اندازه تیم:</strong>
+                                <p>{{ d.team_size }} نفر</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.active_clients %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">مشتریان فعال:</strong>
+                                <p>{{ d.active_clients|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.total_clients %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">کل مشتریان:</strong>
+                                <p>{{ d.total_clients|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.avg_project_value %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">میانگین ارزش پروژه:</strong>
+                                <p>{{ d.avg_project_value|split_number }} تومان</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.monthly_projects %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">تعداد پروژه در ماه:</strong>
+                                <p>{{ d.monthly_projects|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.client_retention %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">نرخ حفظ مشتری:</strong>
+                                <p>{{ d.client_retention }}٪</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.contracts_count %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">قراردادهای فعال:</strong>
+                                <p>{{ d.contracts_count|split_number }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if d.recurring_revenue_pct %}
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">درصد درآمد تکرارشونده:</strong>
+                                <p>{{ d.recurring_revenue_pct }}٪</p>
+                            </div>
+                            {% endif %}
+
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">برند ثبت‌شده:</strong>
+                                <p>{% if d.has_registered_brand %}دارد{% else %}ندارد{% endif %}</p>
+                            </div>
+
+                            <div class="inf-card-detail">
+                                <strong class="strong-inf-detail">دفتر فیزیکی:</strong>
+                                <p>{% if d.has_physical_office %}دارد{% else %}ندارد{% endif %}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}
+                {% endif %}
 
 
                 {% if listing.listing_analyst %}

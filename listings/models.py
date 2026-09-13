@@ -1,3 +1,7 @@
+# listings/models.py
+
+
+
 from django.db import models
 from django.conf import settings
 
@@ -945,3 +949,213 @@ class TrafficSource(models.Model):
 
     def __str__(self):
         return f"{self.get_source_display()} - {self.percentage}%"
+
+
+
+
+# ═══════════════════════════════════════════════════════════════
+#  مدل‌های اختصاصی دسته‌بندی
+#  هر آگهی حداکثر یکی از این‌ها را دارد (بسته به category)
+# ═══════════════════════════════════════════════════════════════
+
+
+class WebsiteDetails(models.Model):
+    """جزئیات اختصاصی وب‌سایت."""
+    listing = models.OneToOneField(
+        Listing, on_delete=models.CASCADE,
+        related_name='website_details', verbose_name='آگهی'
+    )
+
+    tech_stack           = models.CharField(max_length=300, blank=True, verbose_name='تکنولوژی‌های سایت')
+    monthly_visits       = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='بازدید ماهانه')
+    unique_visitors      = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='کاربران یکتای ماهانه')
+    page_views           = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='بازدید صفحات ماهانه')
+    pages_indexed        = models.PositiveIntegerField(null=True, blank=True, verbose_name='صفحات ایندکس‌شده گوگل')
+    domain_authority     = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='Domain Authority')
+    backlinks_count      = models.PositiveIntegerField(null=True, blank=True, verbose_name='تعداد بک‌لینک')
+    content_count        = models.PositiveIntegerField(null=True, blank=True, verbose_name='تعداد مقالات / پست‌ها')
+    seo_score            = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='امتیاز سئو (0-100)')
+    bounce_rate          = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name='نرخ پرش (%)')
+    avg_session_duration = models.PositiveIntegerField(null=True, blank=True, verbose_name='میانگین مدت بازدید (ثانیه)')
+
+    class Meta:
+        verbose_name = 'جزئیات وب‌سایت'
+        verbose_name_plural = 'جزئیات وب‌سایت‌ها'
+
+    def __str__(self):
+        return f"وب‌سایت: {self.listing.title}"
+
+
+class EcommerceDetails(models.Model):
+    """جزئیات اختصاصی فروشگاه اینترنتی."""
+    listing = models.OneToOneField(
+        Listing, on_delete=models.CASCADE,
+        related_name='ecommerce_details', verbose_name='آگهی'
+    )
+
+    products_count       = models.PositiveIntegerField(null=True, blank=True, verbose_name='تعداد محصولات')
+    orders_per_month     = models.PositiveIntegerField(null=True, blank=True, verbose_name='سفارش ماهانه')
+    aov                  = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True, verbose_name='میانگین ارزش سفارش (تومان)')
+    conversion_rate      = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name='نرخ تبدیل (%)')
+    returning_customers  = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name='مشتریان بازگشتی (%)')
+    shipping_partners    = models.CharField(max_length=300, blank=True, verbose_name='شرکت‌های حمل‌ونقل')
+    inventory_value      = models.DecimalField(max_digits=14, decimal_places=0, null=True, blank=True, verbose_name='ارزش موجودی انبار (تومان)')
+    cart_abandonment     = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name='نرخ رهاسازی سبد (%)')
+    suppliers_count      = models.PositiveIntegerField(null=True, blank=True, verbose_name='تعداد تامین‌کنندگان')
+    has_inventory        = models.BooleanField(default=False, verbose_name='دارای انبار فعال')
+
+    class Meta:
+        verbose_name = 'جزئیات فروشگاه'
+        verbose_name_plural = 'جزئیات فروشگاه‌ها'
+
+    def __str__(self):
+        return f"فروشگاه: {self.listing.title}"
+
+
+class AppDetails(models.Model):
+    """جزئیات اختصاصی اپلیکیشن."""
+    listing = models.OneToOneField(
+        Listing, on_delete=models.CASCADE,
+        related_name='app_details', verbose_name='آگهی'
+    )
+
+    downloads            = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='تعداد کل دانلود')
+    active_installs      = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='نصب‌های فعال')
+    dau                  = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='کاربران فعال روزانه')
+    mau                  = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='کاربران فعال ماهانه')
+    rating               = models.DecimalField(max_digits=3, decimal_places=2, null=True, blank=True, verbose_name='امتیاز (از ۵)')
+    reviews_count        = models.PositiveIntegerField(null=True, blank=True, verbose_name='تعداد نظرات')
+    retention_rate       = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name='نرخ نگهداشت (%)')
+    current_version      = models.CharField(max_length=50, blank=True, verbose_name='نسخه فعلی')
+    last_update_date     = models.CharField(max_length=50, blank=True, verbose_name='آخرین بروزرسانی')
+    has_in_app_purchase  = models.BooleanField(default=False, verbose_name='خرید درون‌برنامه‌ای')
+    crash_rate           = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name='نرخ کرش (%)')
+
+    class Meta:
+        verbose_name = 'جزئیات اپلیکیشن'
+        verbose_name_plural = 'جزئیات اپلیکیشن‌ها'
+
+    def __str__(self):
+        return f"اپلیکیشن: {self.listing.title}"
+
+
+class SocialMediaDetails(models.Model):
+    """جزئیات اختصاصی پیج/کانال شبکه اجتماعی."""
+    listing = models.OneToOneField(
+        Listing, on_delete=models.CASCADE,
+        related_name='social_details', verbose_name='آگهی'
+    )
+
+    handle             = models.CharField(max_length=100, blank=True, verbose_name='نام کاربری / Handle')
+    followers          = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='تعداد فالوور')
+    following          = models.PositiveIntegerField(null=True, blank=True, verbose_name='تعداد Following')
+    posts_count        = models.PositiveIntegerField(null=True, blank=True, verbose_name='تعداد پست‌ها')
+    engagement_rate    = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name='نرخ تعامل (%)')
+    avg_reach          = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='میانگین ریچ هر پست')
+    avg_story_views    = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='میانگین بازدید استوری')
+    post_frequency     = models.PositiveIntegerField(null=True, blank=True, verbose_name='تعداد پست در هفته')
+    audience_country   = models.CharField(max_length=100, blank=True, verbose_name='کشور اصلی مخاطبان')
+    audience_gender    = models.CharField(max_length=50, blank=True, verbose_name='جنسیت غالب مخاطبان')
+    audience_age_range = models.CharField(max_length=50, blank=True, verbose_name='بازه سنی مخاطبان')
+    is_monetized       = models.BooleanField(default=False, verbose_name='مونتیزه شده')
+    has_verification   = models.BooleanField(default=False, verbose_name='دارای تیک آبی')
+
+    class Meta:
+        verbose_name = 'جزئیات پیج/کانال'
+        verbose_name_plural = 'جزئیات پیج‌ها/کانال‌ها'
+
+    def __str__(self):
+        return f"پیج: {self.listing.title}"
+
+
+class ContentMediaDetails(models.Model):
+    """جزئیات اختصاصی رسانه و محتوا."""
+    listing = models.OneToOneField(
+        Listing, on_delete=models.CASCADE,
+        related_name='content_details', verbose_name='آگهی'
+    )
+
+    CONTENT_TYPE_CHOICES = [
+        ('podcast',    'پادکست'),
+        ('newsletter', 'خبرنامه ایمیلی'),
+        ('youtube',    'کانال یوتیوب'),
+        ('blog',       'وبلاگ محتوایی'),
+        ('video',      'ویدیویی'),
+        ('ebook',      'کتاب الکترونیک'),
+        ('course',     'دوره آموزشی'),
+        ('other',      'سایر'),
+    ]
+
+    content_type         = models.CharField(max_length=20, choices=CONTENT_TYPE_CHOICES, blank=True, verbose_name='نوع محتوا')
+    subscribers          = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='تعداد مشترکین')
+    monthly_audience     = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='مخاطبان ماهانه')
+    episodes_count       = models.PositiveIntegerField(null=True, blank=True, verbose_name='تعداد قسمت‌ها/شماره‌ها')
+    publishing_frequency = models.CharField(max_length=50, blank=True, verbose_name='دوره انتشار')
+    avg_engagement       = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='میانگین تعامل هر قسمت')
+    platforms            = models.CharField(max_length=300, blank=True, verbose_name='پلتفرم‌های انتشار')
+    avg_downloads        = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='میانگین دانلود/پخش هر قسمت')
+    open_rate            = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name='نرخ باز شدن ایمیل (%)')
+    click_rate           = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name='نرخ کلیک (%)')
+
+    class Meta:
+        verbose_name = 'جزئیات رسانه'
+        verbose_name_plural = 'جزئیات رسانه‌ها'
+
+    def __str__(self):
+        return f"رسانه: {self.listing.title}"
+
+
+class DomainDetails(models.Model):
+    """جزئیات اختصاصی دامنه."""
+    listing = models.OneToOneField(
+        Listing, on_delete=models.CASCADE,
+        related_name='domain_details', verbose_name='آگهی'
+    )
+
+    domain_name       = models.CharField(max_length=255, blank=True, verbose_name='نام دامنه', db_index=True)
+    extension         = models.CharField(max_length=20, blank=True, verbose_name='پسوند')
+    registrar         = models.CharField(max_length=200, blank=True, verbose_name='ثبت‌کننده (Registrar)')
+    expiry_date       = models.DateField(null=True, blank=True, verbose_name='تاریخ انقضا')
+    domain_age_years  = models.DecimalField(max_digits=4, decimal_places=1, null=True, blank=True, verbose_name='سن دامنه (سال)')
+    monthly_type_in   = models.PositiveBigIntegerField(null=True, blank=True, verbose_name='ترافیک تایپ-این ماهانه')
+    backlinks_count   = models.PositiveIntegerField(null=True, blank=True, verbose_name='تعداد بک‌لینک')
+    keyword           = models.CharField(max_length=200, blank=True, verbose_name='کلمه کلیدی اصلی')
+    search_volume     = models.PositiveIntegerField(null=True, blank=True, verbose_name='حجم جستجوی ماهانه')
+    cpc               = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True, verbose_name='CPC کلمه کلیدی (تومان)')
+    is_brandable      = models.BooleanField(default=False, verbose_name='برندی / کوتاه')
+    is_exact_match    = models.BooleanField(default=False, verbose_name='Exact Match Domain')
+    has_history       = models.BooleanField(default=False, verbose_name='سابقه سایت قبلی دارد')
+
+    class Meta:
+        verbose_name = 'جزئیات دامنه'
+        verbose_name_plural = 'جزئیات دامنه‌ها'
+
+    def __str__(self):
+        return f"دامنه: {self.domain_name or self.listing.title}"
+
+
+class ServiceBusinessDetails(models.Model):
+    """جزئیات اختصاصی کسب‌وکار خدماتی آنلاین."""
+    listing = models.OneToOneField(
+        Listing, on_delete=models.CASCADE,
+        related_name='service_details', verbose_name='آگهی'
+    )
+
+    services_list         = models.TextField(blank=True, verbose_name='خدمات ارائه‌شده')
+    team_size             = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='اندازه تیم')
+    active_clients        = models.PositiveIntegerField(null=True, blank=True, verbose_name='مشتریان فعال')
+    total_clients         = models.PositiveIntegerField(null=True, blank=True, verbose_name='کل مشتریان')
+    avg_project_value     = models.DecimalField(max_digits=14, decimal_places=0, null=True, blank=True, verbose_name='میانگین ارزش پروژه (تومان)')
+    monthly_projects      = models.PositiveIntegerField(null=True, blank=True, verbose_name='تعداد پروژه در ماه')
+    client_retention      = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name='نرخ حفظ مشتری (%)')
+    contracts_count       = models.PositiveIntegerField(null=True, blank=True, verbose_name='قراردادهای فعال')
+    recurring_revenue_pct = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name='درصد درآمد تکرارشونده (%)')
+    has_registered_brand  = models.BooleanField(default=False, verbose_name='برند ثبت‌شده دارد')
+    has_physical_office   = models.BooleanField(default=False, verbose_name='دفتر فیزیکی دارد')
+
+    class Meta:
+        verbose_name = 'جزئیات کسب‌وکار خدماتی'
+        verbose_name_plural = 'جزئیات کسب‌وکارهای خدماتی'
+
+    def __str__(self):
+        return f"کسب‌وکار: {self.listing.title}"

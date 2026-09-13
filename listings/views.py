@@ -7,7 +7,12 @@ from django.contrib import messages
 from django.db.models import Q, F, Case, When, DecimalField, Count, Sum
 from django.utils import timezone
 from datetime import timedelta
-from .models import Listing, Category, IncomeProof, VisitRequest, ViewsDataPoint
+from .models import (
+    Listing, Category, IncomeProof, VisitRequest, ViewsDataPoint,
+    # ← جدید
+    WebsiteDetails, EcommerceDetails, AppDetails, SocialMediaDetails,
+    ContentMediaDetails, DomainDetails, ServiceBusinessDetails,
+)
 from .forms import (ListingForm, IncomeProofFormSet, VisitRequestForm,
                     IncomeDataPointFormSet, ViewsDataPointFormSet, FAQFormSet)
 import json
@@ -28,7 +33,14 @@ from django.views.decorators.http import require_http_methods
  
 from .models import Category, Listing
 from .category_descriptions import get_category_description
- 
+
+from .category_config import (
+    CATEGORY_FORM_CONFIG, STEP_SECTIONS_CONFIG,
+    get_main_category, get_fields_for_sub, get_sections_for_sub
+)
+import json as _json
+
+
 logger = logging.getLogger(__name__)
 
 User = get_user_model()
@@ -86,6 +98,71 @@ def format_number(num):
         return f"{num / 1_000:.1f}K"
     return str(int(num))
 
+
+# ═══════════════════════════════════════════════════════════════
+#  نگاشت دسته اصلی → مدل اختصاصی
+# ═══════════════════════════════════════════════════════════════
+CATEGORY_DETAIL_MODEL = {
+    'website':          WebsiteDetails,
+    'ecommerce':        EcommerceDetails,
+    'app':              AppDetails,
+    'social_media':     SocialMediaDetails,
+    'content_media':    ContentMediaDetails,
+    'domain':           DomainDetails,
+    'service_business': ServiceBusinessDetails,
+}
+
+
+def _save_category_details(listing, category_slug, post_data):
+    """
+    فیلدهای اختصاصی دسته را در مدل OneToOne مربوطه ذخیره می‌کند.
+    """
+    if not category_slug:
+        return
+
+    main_cat = get_main_category(category_slug)
+    model_cls = CATEGORY_DETAIL_MODEL.get(main_cat)
+    if not model_cls:
+        return
+
+    cfg = CATEGORY_FORM_CONFIG.get(main_cat)
+    if not cfg:
+        return
+
+    payload = {}
+    for f in cfg['fields']:
+        fname = f['name']
+        ftype = f.get('type', 'text')
+
+        if ftype == 'checkbox':
+            payload[fname] = (post_data.get(fname) == 'on')
+
+        elif ftype == 'number':
+            raw = post_data.get(fname, '').strip()
+            if raw == '':
+                payload[fname] = None
+            else:
+                try:
+                    # اگر عدد صحیح بود int، در غیر این صورت float
+                    payload[fname] = int(raw) if raw.isdigit() else float(raw)
+                except (ValueError, TypeError):
+                    payload[fname] = None
+
+        else:  # text / textarea
+            val = post_data.get(fname, '').strip()
+            payload[fname] = val or None
+
+    try:
+        model_cls.objects.create(listing=listing, **payload)
+        logger.info(
+            "_save_category_details: OK — listing=%s model=%s",
+            listing.pk, model_cls.__name__
+        )
+    except Exception as e:
+        logger.warning(
+            "_save_category_details: FAIL — listing=%s model=%s error=%s",
+            listing.pk, model_cls.__name__, e
+        )
 
 
 def listing_list(request):
@@ -567,6 +644,9 @@ def listing_create(request):
         return render(request, "listings/listing_create.html", {
             "platform_categories": platform_categories,
             "activity_categories": activity_categories,
+            # ← جدید: کانفیگ داینامیک برای جاوااسکریپت
+            "category_config_json": _json.dumps(CATEGORY_FORM_CONFIG, ensure_ascii=False),
+            "sections_config_json": _json.dumps(STEP_SECTIONS_CONFIG, ensure_ascii=False),
         })
 
     is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
@@ -584,6 +664,8 @@ def listing_create(request):
             {
                 "platform_categories": platform_categories,
                 "activity_categories": activity_categories,
+                "category_config_json": _json.dumps(CATEGORY_FORM_CONFIG, ensure_ascii=False),
+                "sections_config_json": _json.dumps(STEP_SECTIONS_CONFIG, ensure_ascii=False),
                 "error": msg,
                 "field_errors": field_errors,
             },
@@ -640,11 +722,40 @@ def listing_create(request):
         except (ValueError, TypeError, InvalidOperation):
             return None
 
-    # ✅ category حالا اسلاگ رشته‌ای ذخیره می‌شود (نه FK)
+    # ═══════════════════════════════════════════════════════════════
+    # ← جدید: بررسی معتبر بودن category (اسلاگ رشته‌ای)
+    # ═══════════════════════════════════════════════════════════════
     category = p.get("category", "").strip() or None
     valid_platform_slugs = {slug for slug, _ in Category.PLATFORM_CHOICES}
     if category and category not in valid_platform_slugs:
         category = None
+
+    # ═══════════════════════════════════════════════════════════════
+    # ← جدید: استخراج فیلدهای اختصاصی دسته و ذخیره در asset_details
+    # ═══════════════════════════════════════════════════════════════
+    asset_details = {}
+    if category:
+        main_cat = get_main_category(category)
+        cat_cfg = CATEGORY_FORM_CONFIG.get(main_cat, CATEGORY_FORM_CONFIG['other'])
+        for f in cat_cfg.get('fields', []):
+            fname = f['name']
+            ftype = f.get('type', 'text')
+
+            if ftype == 'checkbox':
+                asset_details[fname] = (p.get(fname) == 'on')
+            elif ftype == 'number':
+                raw = p.get(fname, '').strip()
+                if raw == '':
+                    asset_details[fname] = None
+                else:
+                    try:
+                        # اگر عدد صحیح بود، int ذخیره کن، وگرنه float
+                        asset_details[fname] = int(raw) if raw.isdigit() else float(raw)
+                    except (ValueError, TypeError):
+                        asset_details[fname] = None
+            else:  # text / textarea
+                val = p.get(fname, '').strip()
+                asset_details[fname] = val or None
 
     try:
         listing = Listing.objects.create(
@@ -704,6 +815,9 @@ def listing_create(request):
         )
 
         logger.info("listing_create: SUCCESS — id=%s title=%r user=%s", listing.pk, listing.title, request.user)
+
+        # ← جدید: ذخیره فیلدهای اختصاصی دسته در مدل OneToOne
+        _save_category_details(listing, category, p)
 
         from .models import (
             ListingFAQ, Expense, SaleInclude, License, SocialMedia,

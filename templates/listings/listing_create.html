@@ -313,51 +313,57 @@
       </div>
     </div>
   </div>
-
-  <div class="card">
-    <div class="card-head"><span class="icon">📈</span> آمار مالی</div>
-    <div class="card-body">
-      <div class="row-fields row-fields-2">
-        <div class="field"><label>درآمد ماهانه (تومان)</label><input type="number" name="monthly_income" min="0" placeholder="۰"></div>
-        <div class="field"><label>میانگین درآمد ماهانه</label><input type="number" name="avg_monthly_revenue" min="0" placeholder="۰"></div>
-      </div>
-      <div class="row-fields row-fields-2">
-        <div class="field"><label>میانگین سود ماهانه</label><input type="number" name="avg_monthly_profit" min="0" placeholder="۰"></div>
-        <div class="field"><label>حاشیه سود (درصد)</label><input type="number" name="profit_margin" min="0" max="100" step="0.01" placeholder="۰"></div>
-      </div>
-      <div class="row-fields row-fields-2">
-        <div class="field"><label>درآمد کل</label><input type="number" name="total_revenue" min="0" placeholder="۰"></div>
-        <div class="field"><label>سود کل</label><input type="number" name="total_profit" min="0" placeholder="۰"></div>
-      </div>
-      <div class="row-fields row-fields-2">
-        <div class="field"><label>ضریب سود</label><input type="number" name="profit_multiplier" min="0" step="0.01" placeholder="۰"></div>
-        <div class="field"><label>ضریب درآمد</label><input type="number" name="revenue_multiplier" min="0" step="0.01" placeholder="۰"></div>
+  
+  <div data-section="step2_income_stats">
+    <div class="card">
+      <div class="card-head"><span class="icon">📈</span> آمار مالی</div>
+      <div class="card-body">
+        <div class="row-fields row-fields-2">
+          <div class="field"><label>درآمد ماهانه (تومان)</label><input type="number" name="monthly_income" min="0" placeholder="۰"></div>
+          <div class="field"><label>میانگین درآمد ماهانه</label><input type="number" name="avg_monthly_revenue" min="0" placeholder="۰"></div>
+        </div>
+        <div class="row-fields row-fields-2">
+          <div class="field"><label>میانگین سود ماهانه</label><input type="number" name="avg_monthly_profit" min="0" placeholder="۰"></div>
+          <div class="field"><label>حاشیه سود (درصد)</label><input type="number" name="profit_margin" min="0" max="100" step="0.01" placeholder="۰"></div>
+        </div>
+        <div class="row-fields row-fields-2">
+          <div class="field"><label>درآمد کل</label><input type="number" name="total_revenue" min="0" placeholder="۰"></div>
+          <div class="field"><label>سود کل</label><input type="number" name="total_profit" min="0" placeholder="۰"></div>
+        </div>
+        <div class="row-fields row-fields-2">
+          <div class="field"><label>ضریب سود</label><input type="number" name="profit_multiplier" min="0" step="0.01" placeholder="۰"></div>
+          <div class="field"><label>ضریب درآمد</label><input type="number" name="revenue_multiplier" min="0" step="0.01" placeholder="۰"></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-head"><span class="icon">💸</span> هزینه‌ها</div>
-    <div class="card-body">
-      <div class="dyn-list" id="expenses-list"></div>
-      <button type="button" class="add-btn" onclick="addExpense()">+ افزودن هزینه</button>
+  <div data-section="step2_expenses">
+    <div class="card">
+      <div class="card-head"><span class="icon">💸</span> هزینه‌ها</div>
+      <div class="card-body">
+        <div class="dyn-list" id="expenses-list"></div>
+        <button type="button" class="add-btn" onclick="addExpense()">+ افزودن هزینه</button>
+      </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-head"><span class="icon">💳</span> روش‌های کسب درآمد</div>
-    <div class="card-body">
-      <div class="method-grid" id="monetization-grid">
-        <label class="method-item"><input type="checkbox" name="monetization_methods" value="banner_click_advertising"><span>تبلیغات بنری و کلیکی</span></label>
-        <label class="method-item"><input type="checkbox" name="monetization_methods" value="sponsored_posts"><span>پست‌های حمایت‌شده</span></label>
-        <label class="method-item"><input type="checkbox" name="monetization_methods" value="cooperation_sales"><span>همکاری در فروش</span></label>
-        <label class="method-item"><input type="checkbox" name="monetization_methods" value="special_subscription_sale"><span>فروش اشتراک ویژه</span></label>
-        <label class="method-item"><input type="checkbox" name="monetization_methods" value="selling_digital_products"><span>فروش محصولات دیجیتال</span></label>
-        <label class="method-item"><input type="checkbox" name="monetization_methods" value="selling_physical_products"><span>فروش محصولات فیزیکی</span></label>
-        <label class="method-item"><input type="checkbox" name="monetization_methods" value="receive_financial_support"><span>دریافت حمایت مالی</span></label>
-        <label class="method-item"><input type="checkbox" name="monetization_methods" value="holding_training_courses"><span>دوره‌های آموزشی و وبینار</span></label>
-        <label class="method-item"><input type="checkbox" name="monetization_methods" value="sell_backlinks"><span>فروش بک‌لینک</span></label>
-        <label class="method-item"><input type="checkbox" name="monetization_methods" value="providing_consulting_services"><span>خدمات مشاوره و فریلنسری</span></label>
+  <div data-section="step2_monetization">
+    <div class="card">
+      <div class="card-head"><span class="icon">💳</span> روش‌های کسب درآمد</div>
+      <div class="card-body">
+        <div class="method-grid" id="monetization-grid">
+          <label class="method-item"><input type="checkbox" name="monetization_methods" value="banner_click_advertising"><span>تبلیغات بنری و کلیکی</span></label>
+          <label class="method-item"><input type="checkbox" name="monetization_methods" value="sponsored_posts"><span>پست‌های حمایت‌شده</span></label>
+          <label class="method-item"><input type="checkbox" name="monetization_methods" value="cooperation_sales"><span>همکاری در فروش</span></label>
+          <label class="method-item"><input type="checkbox" name="monetization_methods" value="special_subscription_sale"><span>فروش اشتراک ویژه</span></label>
+          <label class="method-item"><input type="checkbox" name="monetization_methods" value="selling_digital_products"><span>فروش محصولات دیجیتال</span></label>
+          <label class="method-item"><input type="checkbox" name="monetization_methods" value="selling_physical_products"><span>فروش محصولات فیزیکی</span></label>
+          <label class="method-item"><input type="checkbox" name="monetization_methods" value="receive_financial_support"><span>دریافت حمایت مالی</span></label>
+          <label class="method-item"><input type="checkbox" name="monetization_methods" value="holding_training_courses"><span>دوره‌های آموزشی و وبینار</span></label>
+          <label class="method-item"><input type="checkbox" name="monetization_methods" value="sell_backlinks"><span>فروش بک‌لینک</span></label>
+          <label class="method-item"><input type="checkbox" name="monetization_methods" value="providing_consulting_services"><span>خدمات مشاوره و فریلنسری</span></label>
+        </div>
       </div>
     </div>
   </div>
@@ -367,6 +373,29 @@
     <button type="button" class="btn btn-success btn-medium btn-width-fit" onclick="nextStep()">مرحله بعد</button>
   </div>
 </div><!-- /step-2 -->
+
+
+<!-- ════════════════════════════════════
+     STEP 2.5 — اطلاعات اختصاصی دسته‌بندی (داینامیک)
+════════════════════════════════════ -->
+<div class="step-panel" id="step-cat">
+  <div class="card">
+    <div class="card-head">
+      <span class="icon" id="cat-form-icon">📋</span>
+      <span id="cat-form-title">اطلاعات اختصاصی دسته</span>
+    </div>
+    <div class="card-body">
+      <p id="cat-form-hint" style="font-size:12px;color:var(--muted);margin-bottom:14px">
+        ابتدا در مرحله ۱ دسته‌بندی را انتخاب کنید تا فیلدهای اختصاصی نمایش داده شود.
+      </p>
+      <div id="cat-specific-fields"></div>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <button type="button" class="btn btn-primary btn-medium btn-width-fit" onclick="prevStep()">مرحله قبل</button>
+    <button type="button" class="btn btn-success btn-medium btn-width-fit" onclick="nextStep()">مرحله بعد</button>
+  </div>
+</div><!-- /step-cat -->
 
 
 <!-- ════════════════════════════════════
@@ -453,51 +482,55 @@
 ════════════════════════════════════ -->
 <div class="step-panel" id="step-4">
 
-  <div class="card">
-    <div class="card-head"><span class="icon">📊</span> داده‌های نمودار</div>
-    <div class="card-body">
-      <p style="font-size:12px;color:var(--muted);margin-bottom:14px">برای هر نقطه، تاریخ و مقدار مورد نظر را وارد کنید. می‌توانید هر تعداد نقطه اضافه کنید.</p>
-      <div class="chart-builder-wrap">
+  <div data-section="step4_charts">
+    <div class="card">
+      <div class="card-head"><span class="icon">📊</span> داده‌های نمودار</div>
+      <div class="card-body">
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px">برای هر نقطه، تاریخ و مقدار مورد نظر را وارد کنید. می‌توانید هر تعداد نقطه اضافه کنید.</p>
+        <div class="chart-builder-wrap">
 
-        <!-- درآمد -->
-        <div>
-          <div class="chart-section-title">📈 نمودار درآمد</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:6px">
-            <span style="font-size:11px;color:var(--muted);font-weight:700">تاریخ</span>
-            <span style="font-size:11px;color:var(--muted);font-weight:700">مبلغ (تومان)</span>
-            <span></span>
+          <!-- درآمد -->
+          <div>
+            <div class="chart-section-title">📈 نمودار درآمد</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:6px">
+              <span style="font-size:11px;color:var(--muted);font-weight:700">تاریخ</span>
+              <span style="font-size:11px;color:var(--muted);font-weight:700">مبلغ (تومان)</span>
+              <span></span>
+            </div>
+            <div id="income-points"></div>
+            <button type="button" class="add-btn" style="margin-top:8px;font-size:12px" onclick="addIncomePoint()">+ افزودن نقطه</button>
           </div>
-          <div id="income-points"></div>
-          <button type="button" class="add-btn" style="margin-top:8px;font-size:12px" onclick="addIncomePoint()">+ افزودن نقطه</button>
-        </div>
 
-        <!-- بازدید -->
-        <div>
-          <div class="chart-section-title">👁️ نمودار بازدید</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:6px">
-            <span style="font-size:11px;color:var(--muted);font-weight:700">تاریخ</span>
-            <span style="font-size:11px;color:var(--muted);font-weight:700">تعداد بازدید</span>
-            <span></span>
+          <!-- بازدید -->
+          <div>
+            <div class="chart-section-title">👁️ نمودار بازدید</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:6px">
+              <span style="font-size:11px;color:var(--muted);font-weight:700">تاریخ</span>
+              <span style="font-size:11px;color:var(--muted);font-weight:700">تعداد بازدید</span>
+              <span></span>
+            </div>
+            <div id="views-points"></div>
+            <button type="button" class="add-btn" style="margin-top:8px;font-size:12px" onclick="addViewPoint()">+ افزودن نقطه</button>
           </div>
-          <div id="views-points"></div>
-          <button type="button" class="add-btn" style="margin-top:8px;font-size:12px" onclick="addViewPoint()">+ افزودن نقطه</button>
-        </div>
 
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-head"><span class="icon">📊</span> آمار پلتفرم</div>
-    <div class="card-body">
-      <div class="row-fields row-fields-3">
-        <div class="field"><label>تعداد فالوور</label><input type="number" name="followers_count" min="0" value="0"></div>
-        <div class="field"><label>سن پلتفرم (ماه)</label><input type="number" name="platform_age" min="0" value="0"></div>
-        <div class="field"><label>بیشترین لایک</label><input type="number" name="most_like" min="0" placeholder="۰"></div>
-      </div>
-      <div class="row-fields row-fields-2">
-        <div class="field"><label>بیشترین بازدید</label><input type="number" name="most_view" min="0" placeholder="۰"></div>
-        <div class="field"><label>بیشترین کامنت</label><input type="number" name="most_comment" min="0" placeholder="۰"></div>
+  <div data-section="step4_platform_stats">
+    <div class="card">
+      <div class="card-head"><span class="icon">📊</span> آمار پلتفرم</div>
+      <div class="card-body">
+        <div class="row-fields row-fields-3">
+          <div class="field"><label>تعداد فالوور</label><input type="number" name="followers_count" min="0" value="0"></div>
+          <div class="field"><label>سن پلتفرم (ماه)</label><input type="number" name="platform_age" min="0" value="0"></div>
+          <div class="field"><label>بیشترین لایک</label><input type="number" name="most_like" min="0" placeholder="۰"></div>
+        </div>
+        <div class="row-fields row-fields-2">
+          <div class="field"><label>بیشترین بازدید</label><input type="number" name="most_view" min="0" placeholder="۰"></div>
+          <div class="field"><label>بیشترین کامنت</label><input type="number" name="most_comment" min="0" placeholder="۰"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -515,41 +548,49 @@
 <div class="step-panel" id="step-5">
 
   <!-- Social Media -->
-  <div class="card">
-    <div class="card-head"><span class="icon">📱</span> رسانه‌های اجتماعی</div>
-    <div class="card-body">
-      <div class="dyn-list" id="social-list"></div>
-      <button type="button" class="add-btn" onclick="addSocial()">+ افزودن رسانه اجتماعی</button>
+  <div data-section="step5_social_media">
+    <div class="card">
+      <div class="card-head"><span class="icon">📱</span> رسانه‌های اجتماعی</div>
+      <div class="card-body">
+        <div class="dyn-list" id="social-list"></div>
+        <button type="button" class="add-btn" onclick="addSocial()">+ افزودن رسانه اجتماعی</button>
+      </div>
     </div>
   </div>
 
   <!-- Income Proofs -->
-  <div class="card">
-    <div class="card-head"><span class="icon">🧾</span> اثبات درآمد</div>
-    <div class="card-body">
-      <div class="dyn-list" id="income-proof-list"></div>
-      <button type="button" class="add-btn" onclick="addIncomeProof()">+ افزودن مدرک</button>
+  <div data-section="step5_income_proof">
+    <div class="card">
+      <div class="card-head"><span class="icon">🧾</span> اثبات درآمد</div>
+      <div class="card-body">
+        <div class="dyn-list" id="income-proof-list"></div>
+        <button type="button" class="add-btn" onclick="addIncomeProof()">+ افزودن مدرک</button>
+      </div>
     </div>
   </div>
 
   <!-- Attachments -->
-  <div class="card">
-    <div class="card-head"><span class="icon">📎</span> پیوست‌ها</div>
-    <div class="card-body">
-      <div class="dyn-list" id="attachments-list"></div>
-      <button type="button" class="add-btn" onclick="addAttachment()">+ افزودن پیوست</button>
+  <div data-section="step5_attachments">
+    <div class="card">
+      <div class="card-head"><span class="icon">📎</span> پیوست‌ها</div>
+      <div class="card-body">
+        <div class="dyn-list" id="attachments-list"></div>
+        <button type="button" class="add-btn" onclick="addAttachment()">+ افزودن پیوست</button>
+      </div>
     </div>
   </div>
 
   <!-- Traffic Sources -->
-  <div class="card">
-    <div class="card-head"><span class="icon">🚦</span> منابع ترافیک</div>
-    <div class="card-body">
-      <p style="font-size:12px;color:var(--muted);margin-bottom:10px">جمع درصدها باید ۱۰۰ باشد.</p>
-      <div class="dyn-list" id="traffic-list"></div>
-      <button type="button" class="add-btn" onclick="addTraffic()">+ افزودن منبع</button>
-      <div id="traffic-total-display" style="margin-top:8px"></div>
-      <div class="traffic-total-bar" id="traffic-bar"></div>
+  <div data-section="step5_traffic">
+    <div class="card">
+      <div class="card-head"><span class="icon">🚦</span> منابع ترافیک</div>
+      <div class="card-body">
+        <p style="font-size:12px;color:var(--muted);margin-bottom:10px">جمع درصدها باید ۱۰۰ باشد.</p>
+        <div class="dyn-list" id="traffic-list"></div>
+        <button type="button" class="add-btn" onclick="addTraffic()">+ افزودن منبع</button>
+        <div id="traffic-total-display" style="margin-top:8px"></div>
+        <div class="traffic-total-bar" id="traffic-bar"></div>
+      </div>
     </div>
   </div>
 
@@ -565,117 +606,121 @@
 ════════════════════════════════════ -->
 <div class="step-panel" id="step-6">
 
-  <div class="card">
-    <div class="card-head"><span class="icon">⚙️</span> تکنولوژی‌های استفاده‌شده</div>
-    <div class="card-body">
-      <p style="font-size:12px;color:var(--muted);margin-bottom:14px">روی هر تکنولوژی کلیک کنید تا انتخاب یا لغو انتخاب شود.</p>
-      <div class="tech-groups">
+  <div data-section="step6_technologies">
+    <div class="card">
+      <div class="card-head"><span class="icon">⚙️</span> تکنولوژی‌های استفاده‌شده</div>
+      <div class="card-body">
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px">روی هر تکنولوژی کلیک کنید تا انتخاب یا لغو انتخاب شود.</p>
+        <div class="tech-groups">
 
-        <div>
-          <div class="tech-group-title">🗂️ CMS و فروشگاه‌ساز</div>
-          <div class="tech-chips" id="tc-cms">
-            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="wordpress"><span>وردپرس</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="joomla"><span>جوملا</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="woocommerce"><span>ووکامرس</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="shopify"><span>شاپیفای</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="magento"><span>مجنتو</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="prestashop"><span>پرستاشاپ</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="ghost"><span>گوست</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_cms" value="custom_cms"><span>سیستم اختصاصی</span></label>
+          <div>
+            <div class="tech-group-title">🗂️ CMS و فروشگاه‌ساز</div>
+            <div class="tech-chips" id="tc-cms">
+              <label class="tech-chip"><input type="checkbox" name="tech_cms" value="wordpress"><span>وردپرس</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_cms" value="joomla"><span>جوملا</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_cms" value="woocommerce"><span>ووکامرس</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_cms" value="shopify"><span>شاپیفای</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_cms" value="magento"><span>مجنتو</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_cms" value="prestashop"><span>پرستاشاپ</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_cms" value="ghost"><span>گوست</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_cms" value="custom_cms"><span>سیستم اختصاصی</span></label>
+            </div>
           </div>
-        </div>
 
-        <div>
-          <div class="tech-group-title">🔧 Backend</div>
-          <div class="tech-chips">
-            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="laravel"><span>لاراول</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="django"><span>جنگو</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="fastapi"><span>FastAPI</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="nodejs"><span>Node.js</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="nestjs"><span>Nest.js</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="flask"><span>Flask</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="aspnet"><span>ASP.NET</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="springboot"><span>Spring Boot</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_backend" value="golang"><span>Go</span></label>
+          <div>
+            <div class="tech-group-title">🔧 Backend</div>
+            <div class="tech-chips">
+              <label class="tech-chip"><input type="checkbox" name="tech_backend" value="laravel"><span>لاراول</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_backend" value="django"><span>جنگو</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_backend" value="fastapi"><span>FastAPI</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_backend" value="nodejs"><span>Node.js</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_backend" value="nestjs"><span>Nest.js</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_backend" value="flask"><span>Flask</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_backend" value="aspnet"><span>ASP.NET</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_backend" value="springboot"><span>Spring Boot</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_backend" value="golang"><span>Go</span></label>
+            </div>
           </div>
-        </div>
 
-        <div>
-          <div class="tech-group-title">🎨 Frontend</div>
-          <div class="tech-chips">
-            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="reactjs"><span>React</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="nextjs"><span>Next.js</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="vuejs"><span>Vue.js</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="nuxtjs"><span>Nuxt.js</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="angular"><span>Angular</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="svelte"><span>Svelte</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="jquery"><span>jQuery</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="tailwind"><span>Tailwind</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="bootstrap"><span>Bootstrap</span></label>
+          <div>
+            <div class="tech-group-title">🎨 Frontend</div>
+            <div class="tech-chips">
+              <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="reactjs"><span>React</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="nextjs"><span>Next.js</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="vuejs"><span>Vue.js</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="nuxtjs"><span>Nuxt.js</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="angular"><span>Angular</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="svelte"><span>Svelte</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="jquery"><span>jQuery</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="tailwind"><span>Tailwind</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="bootstrap"><span>Bootstrap</span></label>
+            </div>
           </div>
-        </div>
 
-        <div>
-          <div class="tech-group-title">🗄️ Database</div>
-          <div class="tech-chips">
-            <label class="tech-chip"><input type="checkbox" name="tech_db" value="mysql"><span>MySQL</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_db" value="postgresql"><span>PostgreSQL</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_db" value="mongodb"><span>MongoDB</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_db" value="redis"><span>Redis</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_db" value="sqlite"><span>SQLite</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_db" value="firebase"><span>Firebase</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_db" value="elasticsearch"><span>Elasticsearch</span></label>
+          <div>
+            <div class="tech-group-title">🗄️ Database</div>
+            <div class="tech-chips">
+              <label class="tech-chip"><input type="checkbox" name="tech_db" value="mysql"><span>MySQL</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_db" value="postgresql"><span>PostgreSQL</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_db" value="mongodb"><span>MongoDB</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_db" value="redis"><span>Redis</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_db" value="sqlite"><span>SQLite</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_db" value="firebase"><span>Firebase</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_db" value="elasticsearch"><span>Elasticsearch</span></label>
+            </div>
           </div>
-        </div>
 
-        <div>
-          <div class="tech-group-title">☁️ زیرساخت</div>
-          <div class="tech-chips">
-            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="vps"><span>VPS</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="dedicated"><span>سرور اختصاصی</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="shared_hosting"><span>هاست اشتراکی</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="hetzner"><span>Hetzner</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="aws"><span>AWS</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="liara"><span>لیارا</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="arvancloud"><span>آروان‌کلاد</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="nginx"><span>Nginx</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_infra" value="docker"><span>Docker</span></label>
+          <div>
+            <div class="tech-group-title">☁️ زیرساخت</div>
+            <div class="tech-chips">
+              <label class="tech-chip"><input type="checkbox" name="tech_infra" value="vps"><span>VPS</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_infra" value="dedicated"><span>سرور اختصاصی</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_infra" value="shared_hosting"><span>هاست اشتراکی</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_infra" value="hetzner"><span>Hetzner</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_infra" value="aws"><span>AWS</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_infra" value="liara"><span>لیارا</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_infra" value="arvancloud"><span>آروان‌کلاد</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_infra" value="nginx"><span>Nginx</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_infra" value="docker"><span>Docker</span></label>
+            </div>
           </div>
-        </div>
 
-        <div>
-          <div class="tech-group-title">📱 موبایل</div>
-          <div class="tech-chips">
-            <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="flutter"><span>Flutter</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="react_native"><span>React Native</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="android_native"><span>Android Native</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="ios_native"><span>iOS Native</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="pwa"><span>PWA</span></label>
+          <div>
+            <div class="tech-group-title">📱 موبایل</div>
+            <div class="tech-chips">
+              <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="flutter"><span>Flutter</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="react_native"><span>React Native</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="android_native"><span>Android Native</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="ios_native"><span>iOS Native</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="pwa"><span>PWA</span></label>
+            </div>
           </div>
-        </div>
 
-        <div>
-          <div class="tech-group-title">🔌 سرویس‌های جانبی</div>
-          <div class="tech-chips">
-            <label class="tech-chip"><input type="checkbox" name="tech_third" value="zarinpal"><span>زرین‌پال</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_third" value="zibal"><span>زیبال</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_third" value="kavenegar"><span>کاوه‌نگار</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_third" value="ga4"><span>Google Analytics</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_third" value="mailchimp"><span>Mailchimp</span></label>
-            <label class="tech-chip"><input type="checkbox" name="tech_third" value="clarity"><span>MS Clarity</span></label>
+          <div>
+            <div class="tech-group-title">🔌 سرویس‌های جانبی</div>
+            <div class="tech-chips">
+              <label class="tech-chip"><input type="checkbox" name="tech_third" value="zarinpal"><span>زرین‌پال</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_third" value="zibal"><span>زیبال</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_third" value="kavenegar"><span>کاوه‌نگار</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_third" value="ga4"><span>Google Analytics</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_third" value="mailchimp"><span>Mailchimp</span></label>
+              <label class="tech-chip"><input type="checkbox" name="tech_third" value="clarity"><span>MS Clarity</span></label>
+            </div>
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Services Used -->
-  <div class="card">
-    <div class="card-head"><span class="icon">🛠️</span> خدمات مورد استفاده</div>
-    <div class="card-body">
-      <div class="dyn-list" id="services-list"></div>
-      <button type="button" class="add-btn" onclick="addService()">+ افزودن خدمت</button>
+  <div data-section="step6_services_used">
+    <div class="card">
+      <div class="card-head"><span class="icon">🛠️</span> خدمات مورد استفاده</div>
+      <div class="card-body">
+        <div class="dyn-list" id="services-list"></div>
+        <button type="button" class="add-btn" onclick="addService()">+ افزودن خدمت</button>
+      </div>
     </div>
   </div>
 
@@ -726,6 +771,22 @@
 </div><!-- /form-col -->
 </div>
 <script>
+
+  // ═══════════════════════════════════════════════════════════
+  //  کانفیگ دسته‌بندی‌ها (از Django تزریق شده)
+  // ═══════════════════════════════════════════════════════════
+  const CATEGORY_CONFIG = {{ category_config_json|safe }};
+  const SECTIONS_CONFIG = {{ sections_config_json|safe }};
+
+  // نگاشت زیردسته → دسته اصلی
+  const SUB_TO_MAIN = {
+    {% for slug, label, subs in platform_categories %}
+      {% for sub_slug, sub_label in subs %}
+        "{{ sub_slug }}": "{{ slug }}",
+      {% endfor %}
+    {% endfor %}
+  };
+
 // ═══════════════════════════
 //  Toast
 // ═══════════════════════════
@@ -751,9 +812,24 @@ var TOTAL_STEPS = 7;
 var currentStep = 1;
 
 function goStep(n) {
-  if (n < 1 || n > TOTAL_STEPS) return;
+  // نگاشت شماره مرحله به id پنل
+  var panelMap = {
+    1: 'step-1',
+    2: 'step-2',
+    3: 'step-cat',    // ← جدید
+    4: 'step-3',
+    5: 'step-4',
+    6: 'step-5',
+    7: 'step-6',
+    8: 'step-7'
+  };
+  var panelId = panelMap[n];
+  if (!panelId) return;
+
   document.querySelectorAll('.step-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.getElementById('step-' + n).classList.add('active');
+  var panel = document.getElementById(panelId);
+  if (panel) panel.classList.add('active');
+
   document.querySelectorAll('.step-item').forEach(function(el, i) {
     var s = i + 1;
     el.classList.remove('active', 'done');
@@ -761,9 +837,10 @@ function goStep(n) {
     else if (s < n) el.classList.add('done');
   });
   currentStep = n;
-  document.getElementById('top-step-label').textContent = 'مرحله ' + n + ' از ' + TOTAL_STEPS;
+  var lbl = document.getElementById('top-step-label');
+  if (lbl) lbl.textContent = 'مرحله ' + n + ' از ' + TOTAL_STEPS;
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (n === 7) buildReview();
+  if (n === TOTAL_STEPS) buildReview();
 }
 
 function nextStep() {
@@ -776,6 +853,72 @@ function nextStep() {
 }
 
 function prevStep() { goStep(currentStep - 1); }
+
+
+// ═══════════════════════════════════════════════════════════
+//  مدیریت داینامیک دسته‌بندی
+// ═══════════════════════════════════════════════════════════
+function getMainCategory() {
+  var sel = document.getElementById('f-category');
+  if (!sel || !sel.value) return null;
+  return SUB_TO_MAIN[sel.value] || 'other';
+}
+
+function renderCategoryFields() {
+  var main = getMainCategory();
+  var cfg = main ? CATEGORY_CONFIG[main] : null;
+  var container = document.getElementById('cat-specific-fields');
+  var titleEl = document.getElementById('cat-form-title');
+  var iconEl = document.getElementById('cat-form-icon');
+  var hintEl = document.getElementById('cat-form-hint');
+
+  if (!container) return;
+
+  if (!cfg) {
+    container.innerHTML = '';
+    if (titleEl) titleEl.textContent = 'اطلاعات اختصاصی دسته';
+    if (iconEl) iconEl.textContent = '📋';
+    if (hintEl) hintEl.textContent = 'ابتدا در مرحله ۱ دسته‌بندی را انتخاب کنید.';
+    return;
+  }
+
+  if (titleEl) titleEl.textContent = cfg.title;
+  if (iconEl) iconEl.textContent = cfg.icon;
+  if (hintEl) hintEl.textContent = 'فیلدهای زیر مخصوص دسته "' + cfg.label + '" هستند.';
+
+  var html = '';
+  cfg.fields.forEach(function(f) {
+    html += '<div class="field" style="margin-bottom:14px">';
+    html += '<label>' + f.label + '</label>';
+
+    if (f.type === 'textarea') {
+      html += '<textarea name="' + f.name + '" rows="3" placeholder="' +
+              (f.placeholder || '') + '"></textarea>';
+    } else if (f.type === 'checkbox') {
+      html += '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:400">' +
+              '<input type="checkbox" name="' + f.name + '"><span>بله</span></label>';
+    } else {
+      var step = f.step ? ' step="' + f.step + '"' : '';
+      var ltr = f.ltr ? ' style="direction:ltr;text-align:left"' : '';
+      html += '<input type="' + f.type + '" name="' + f.name + '"' + step + ltr +
+              ' placeholder="' + (f.placeholder || '') + '">';
+    }
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function applySectionVisibility() {
+  var main = getMainCategory();
+  var cfg = main ? SECTIONS_CONFIG[main] : null;
+
+  document.querySelectorAll('[data-section]').forEach(function(el) {
+    var key = el.dataset.section;
+    var visible = !cfg ? true : (cfg[key] !== false);
+    el.style.display = visible ? '' : 'none';
+  });
+}
 
 // ═══════════════════════════
 //  Validation per step
@@ -1296,6 +1439,20 @@ addSocial();
 addTraffic();
 addIncomePoint();
 addViewPoint();
+
+// ← جدید: اتصال دسته‌بندی
+(function() {
+  var catSelect = document.getElementById('f-category');
+  if (catSelect) {
+    catSelect.addEventListener('change', function() {
+      renderCategoryFields();
+      applySectionVisibility();
+    });
+  }
+  // اجرای اولیه (در صورت پیش‌فرض بودن)
+  renderCategoryFields();
+  applySectionVisibility();
+})();
 </script>
 
 {% endblock %}

@@ -7,6 +7,9 @@ from .models import (
     SaleInclude, License, ConfirmedInformation, ServiceUsed,
     MonetizationMethod, Expense, IncomeDataPoint, ViewsDataPoint,
     ListingImage, VisitRequest, TechnologyUsed,
+    # ← جدید: مدل‌های اختصاصی دسته‌بندی
+    WebsiteDetails, EcommerceDetails, AppDetails, SocialMediaDetails,
+    ContentMediaDetails, DomainDetails, ServiceBusinessDetails,
 )
 
 
@@ -123,6 +126,159 @@ class VisitRequestInline(admin.TabularInline):
         return False
 
 
+# ═══════════════════════════════════════════════════════════════
+#  Inlineهای اختصاصی دسته‌بندی (OneToOne)
+# ═══════════════════════════════════════════════════════════════
+
+class WebsiteDetailsInline(admin.StackedInline):
+    model   = WebsiteDetails
+    extra   = 0
+    max_num = 1
+    can_delete = False
+    classes = ('collapse',)
+    fieldsets = (
+        ('اطلاعات ترافیک', {
+            'fields': ('monthly_visits', 'unique_visitors', 'page_views',
+                       'bounce_rate', 'avg_session_duration')
+        }),
+        ('سئو', {
+            'fields': ('domain_authority', 'backlinks_count', 'pages_indexed',
+                       'seo_score')
+        }),
+        ('محتوا و تکنولوژی', {
+            'fields': ('tech_stack', 'content_count')
+        }),
+    )
+
+
+class EcommerceDetailsInline(admin.StackedInline):
+    model   = EcommerceDetails
+    extra   = 0
+    max_num = 1
+    can_delete = False
+    classes = ('collapse',)
+    fieldsets = (
+        ('فروش', {
+            'fields': ('products_count', 'orders_per_month', 'aov',
+                       'conversion_rate', 'cart_abandonment')
+        }),
+        ('مشتریان', {
+            'fields': ('returning_customers', 'suppliers_count')
+        }),
+        ('انبار و ارسال', {
+            'fields': ('inventory_value', 'has_inventory', 'shipping_partners')
+        }),
+    )
+
+
+class AppDetailsInline(admin.StackedInline):
+    model   = AppDetails
+    extra   = 0
+    max_num = 1
+    can_delete = False
+    classes = ('collapse',)
+    fieldsets = (
+        ('دانلودها', {
+            'fields': ('downloads', 'active_installs')
+        }),
+        ('کاربران', {
+            'fields': ('dau', 'mau', 'retention_rate')
+        }),
+        ('کیفیت', {
+            'fields': ('rating', 'reviews_count', 'crash_rate')
+        }),
+        ('نسخه و درآمد', {
+            'fields': ('current_version', 'last_update_date', 'has_in_app_purchase')
+        }),
+    )
+
+
+class SocialMediaDetailsInline(admin.StackedInline):
+    model   = SocialMediaDetails
+    extra   = 0
+    max_num = 1
+    can_delete = False
+    classes = ('collapse',)
+    fieldsets = (
+        ('اطلاعات پیج', {
+            'fields': ('handle', 'followers', 'following', 'posts_count',
+                       'has_verification')
+        }),
+        ('تعامل', {
+            'fields': ('engagement_rate', 'avg_reach', 'avg_story_views',
+                       'post_frequency')
+        }),
+        ('مخاطبان', {
+            'fields': ('audience_country', 'audience_gender', 'audience_age_range')
+        }),
+        ('درآمد', {
+            'fields': ('is_monetized',)
+        }),
+    )
+
+
+class ContentMediaDetailsInline(admin.StackedInline):
+    model   = ContentMediaDetails
+    extra   = 0
+    max_num = 1
+    can_delete = False
+    classes = ('collapse',)
+    fieldsets = (
+        ('اطلاعات محتوا', {
+            'fields': ('content_type', 'subscribers', 'monthly_audience',
+                       'episodes_count', 'publishing_frequency', 'platforms')
+        }),
+        ('تعامل', {
+            'fields': ('avg_engagement', 'avg_downloads', 'open_rate', 'click_rate')
+        }),
+    )
+
+
+class DomainDetailsInline(admin.StackedInline):
+    model   = DomainDetails
+    extra   = 0
+    max_num = 1
+    can_delete = False
+    classes = ('collapse',)
+    fieldsets = (
+        ('اطلاعات دامنه', {
+            'fields': ('domain_name', 'extension', 'registrar', 'expiry_date',
+                       'domain_age_years')
+        }),
+        ('سئو و کلمه کلیدی', {
+            'fields': ('keyword', 'search_volume', 'cpc', 'backlinks_count',
+                       'monthly_type_in')
+        }),
+        ('ویژگی‌ها', {
+            'fields': ('is_brandable', 'is_exact_match', 'has_history')
+        }),
+    )
+
+
+class ServiceBusinessDetailsInline(admin.StackedInline):
+    model   = ServiceBusinessDetails
+    extra   = 0
+    max_num = 1
+    can_delete = False
+    classes = ('collapse',)
+    fieldsets = (
+        ('خدمات', {
+            'fields': ('services_list', 'team_size')
+        }),
+        ('مشتریان', {
+            'fields': ('active_clients', 'total_clients', 'client_retention',
+                       'contracts_count')
+        }),
+        ('مالی', {
+            'fields': ('avg_project_value', 'monthly_projects',
+                       'recurring_revenue_pct')
+        }),
+        ('ویژگی‌ها', {
+            'fields': ('has_registered_brand', 'has_physical_office')
+        }),
+    )
+
+
 # ── TechnologyUsed Admin Form ────────────────────────────────
 
 class TechnologyUsedAdminForm(forms.ModelForm):
@@ -205,11 +361,29 @@ class ListingAdmin(admin.ModelAdmin):
     readonly_fields = ('views_count', 'created_at', 'updated_at')
 
     inlines = [
-        ListingAnalystInline, SocialMediaInline, AttachmentInline,
-        SaleIncludeInline, LicenseInline, ConfirmedInformationInline,
-        ServiceUsedInline, MonetizationMethodInline, ExpenseInline,
-        IncomeDataPointInline, ViewsDataPointInline, ListingImageInline,
-        VisitRequestInline, TechnologyUsedInline,
+        # ── inlines اصلی
+        ListingAnalystInline,
+        SocialMediaInline,
+        AttachmentInline,
+        SaleIncludeInline,
+        LicenseInline,
+        ConfirmedInformationInline,
+        ServiceUsedInline,
+        MonetizationMethodInline,
+        ExpenseInline,
+        IncomeDataPointInline,
+        ViewsDataPointInline,
+        ListingImageInline,
+        VisitRequestInline,
+        TechnologyUsedInline,
+        # ── inlines اختصاصی دسته‌بندی (فقط یکی پر می‌شود)
+        WebsiteDetailsInline,
+        EcommerceDetailsInline,
+        AppDetailsInline,
+        SocialMediaDetailsInline,
+        ContentMediaDetailsInline,
+        DomainDetailsInline,
+        ServiceBusinessDetailsInline,
     ]
 
     fieldsets = (
@@ -285,7 +459,7 @@ class ListingAdmin(admin.ModelAdmin):
     )
 
     def get_queryset(self, request):
-        # ⚠️ category یک CharField است، نه ForeignKey → نباید در select_related باشد
+        # category یک CharField است، نه ForeignKey
         return super().get_queryset(request).select_related('seller')
 
 
