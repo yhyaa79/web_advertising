@@ -244,7 +244,9 @@
 
 
     <script src="{% static 'js/chart.umd.min.js' %}"></script>
-    <script src="{% static 'js/script.js' %}"></script>
+    {% if request.resolver_match.url_name != 'listing_create' %}
+    <script src="{% static 'js/script.js' %}?v=20260913"></script>
+    {% endif %}
 
 
 </body>

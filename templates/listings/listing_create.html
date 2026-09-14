@@ -1,2296 +1,252 @@
-<!-- templates/listings/listing_create.html -->
 {% extends 'base.html' %}
 {% load static %}
-
-{% block title %}ثبت آگهی جدید{% endblock %}
+{% block title %}ثبت آگهی حرفه‌ای{% endblock %}
 
 {% block content %}
-<style>
-/* ═══════════════════════════════════════════════════
-   CSS اختصاصی Wizard — مکمل استایل‌های سراسری
-═══════════════════════════════════════════════════ */
-:root{
-  --wiz-bg:#f4f6fb;
-  --wiz-card:#ffffff;
-  --wiz-primary:#3b5bdb;
-  --wiz-primary-light:#edf2ff;
-  --wiz-primary-dark:#2f4bc0;
-  --wiz-success:#2f9e44;
-  --wiz-success-light:#ebfbee;
-  --wiz-warn:#f08c00;
-  --wiz-warn-light:#fff4e6;
-  --wiz-error:#c92a2a;
-  --wiz-error-light:#fff5f5;
-  --wiz-text:#212529;
-  --wiz-muted:#868e96;
-  --wiz-border:#e9ecef;
-  --wiz-shadow:0 1px 3px rgba(15,23,42,.06), 0 1px 2px rgba(15,23,42,.04);
-  --wiz-shadow-lg:0 10px 30px rgba(15,23,42,.08);
-}
 
-body{background:var(--wiz-bg)}
-
-/* ─── Hero header ─── */
-.wiz-hero{
-  background:linear-gradient(135deg,#3b5bdb 0%,#5c7cfa 55%,#748ffc 100%);
-  color:#fff;
-  padding:28px 32px 90px;
-  position:relative;
-  overflow:hidden;
-  border-radius:0 0 28px 28px;
-}
-.wiz-hero::before{
-  content:"";position:absolute;top:-60px;left:-40px;width:260px;height:260px;
-  background:rgba(255,255,255,.08);border-radius:50%;
-}
-.wiz-hero::after{
-  content:"";position:absolute;bottom:-120px;right:-60px;width:320px;height:320px;
-  background:rgba(255,255,255,.06);border-radius:50%;
-}
-.wiz-hero-inner{position:relative;z-index:2;max-width:1180px;margin:0 auto}
-.wiz-hero h1{font-size:26px;font-weight:800;margin:0;letter-spacing:-.3px}
-.wiz-hero p{margin:8px 0 0;font-size:13.5px;opacity:.9;line-height:1.6;max-width:640px}
-.wiz-hero-meta{
-  display:flex;gap:20px;flex-wrap:wrap;margin-top:18px;
-  font-size:12px;opacity:.9;
-}
-.wiz-hero-meta span{display:inline-flex;align-items:center;gap:6px}
-.wiz-hero-badge{
-  position:absolute;top:28px;left:32px;
-  background:rgba(255,255,255,.16);
-  border:1px solid rgba(255,255,255,.22);
-  padding:6px 12px;border-radius:20px;font-size:11.5px;font-weight:600;
-  backdrop-filter:blur(6px);
-}
-@media(max-width:720px){
-  .wiz-hero{padding:22px 18px 80px}
-  .wiz-hero h1{font-size:20px}
-  .wiz-hero-badge{position:static;display:inline-block;margin-bottom:12px}
-}
-
-/* ─── Progress bar (floating over hero) ─── */
-.wiz-progress-wrap{
-  max-width:1180px;margin:-70px auto 0;padding:0 20px;position:relative;z-index:10;
-}
-.wiz-progress{
-  background:#fff;border-radius:18px;box-shadow:var(--wiz-shadow-lg);
-  padding:18px 20px;
-}
-.wiz-progress-head{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:14px;font-size:12.5px;
-}
-.wiz-progress-head strong{color:var(--wiz-text);font-weight:700}
-.wiz-progress-head span{color:var(--wiz-muted)}
-.wiz-progress-bar{
-  height:6px;background:#eef1f5;border-radius:99px;overflow:hidden;margin-bottom:14px;
-}
-.wiz-progress-fill{
-  height:100%;background:linear-gradient(90deg,#3b5bdb,#748ffc);
-  border-radius:99px;transition:width .4s cubic-bezier(.4,0,.2,1);
-  width:12.5%;
-}
-.wiz-steps{
-  display:flex;justify-content:space-between;gap:2px;overflow-x:auto;
-  padding-bottom:4px;scrollbar-width:none;
-}
-.wiz-steps::-webkit-scrollbar{display:none}
-.wiz-step{
-  flex:1;min-width:64px;display:flex;flex-direction:column;align-items:center;
-  gap:6px;cursor:pointer;user-select:none;position:relative;
-  transition:transform .15s;
-}
-.wiz-step:hover{transform:translateY(-1px)}
-.wiz-step-dot{
-  width:30px;height:30px;border-radius:50%;
-  background:#eef1f5;color:var(--wiz-muted);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:12.5px;
-  transition:all .25s;position:relative;z-index:1;
-  border:2px solid transparent;
-}
-.wiz-step.active .wiz-step-dot{
-  background:var(--wiz-primary);color:#fff;
-  box-shadow:0 0 0 4px rgba(59,91,219,.16);
-  border-color:#fff;
-}
-.wiz-step.done .wiz-step-dot{
-  background:var(--wiz-success);color:#fff;
-}
-.wiz-step.done .wiz-step-dot::after{
-  content:"✓";position:absolute;font-size:13px;font-weight:800;
-}
-.wiz-step.done .wiz-step-dot span{display:none}
-.wiz-step-label{
-  font-size:10.5px;color:var(--wiz-muted);text-align:center;
-  line-height:1.3;font-weight:600;max-width:70px;
-}
-.wiz-step.active .wiz-step-label{color:var(--wiz-primary);font-weight:700}
-.wiz-step.done .wiz-step-label{color:var(--wiz-success)}
-
-/* ─── Main layout ─── */
-.wiz-layout{
-  max-width:1180px;margin:22px auto 60px;padding:0 20px;
-  display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:22px;
-  align-items:start;
-}
-@media(max-width:960px){
-  .wiz-layout{grid-template-columns:1fr}
-}
-
-/* ─── Form panel ─── */
-.wiz-panel{
-  display:none;
-  animation:wizFade .35s cubic-bezier(.4,0,.2,1);
-}
-.wiz-panel.active{display:block}
-@keyframes wizFade{
-  from{opacity:0;transform:translateY(12px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-.wiz-section{
-  background:#fff;border-radius:16px;box-shadow:var(--wiz-shadow);
-  overflow:hidden;margin-bottom:18px;
-  border:1px solid rgba(15,23,42,.04);
-}
-.wiz-section-head{
-  padding:16px 22px;
-  background:linear-gradient(180deg,#fafbfd,#f5f7fb);
-  border-bottom:1px solid var(--wiz-border);
-  display:flex;align-items:center;gap:12px;
-}
-.wiz-section-head .ico{
-  width:36px;height:36px;border-radius:10px;
-  background:var(--wiz-primary-light);color:var(--wiz-primary);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;flex-shrink:0;
-}
-.wiz-section-head h3{
-  margin:0;font-size:15px;font-weight:800;color:var(--wiz-text);
-  letter-spacing:-.2px;
-}
-.wiz-section-head p{
-  margin:2px 0 0;font-size:11.5px;color:var(--wiz-muted);font-weight:500;
-}
-.wiz-section-body{padding:20px 22px}
-
-/* ─── Fields improvements ─── */
-.wiz-field{position:relative}
-.wiz-field label{
-  display:block;font-size:12.5px;font-weight:700;color:#343a40;
-  margin-bottom:6px;letter-spacing:-.1px;
-}
-.wiz-field label .req{color:var(--wiz-error);margin-left:2px}
-.wiz-field label .opt{color:var(--wiz-muted);font-weight:500;font-size:11px}
-.wiz-field label .tooltip{
-  display:inline-flex;width:14px;height:14px;border-radius:50%;
-  background:#e9ecef;color:var(--wiz-muted);font-size:9px;font-weight:800;
-  align-items:center;justify-content:center;margin-right:4px;
-  cursor:help;
-}
-.wiz-field input,
-.wiz-field select,
-.wiz-field textarea{
-  width:100%;padding:10px 13px;border:1.4px solid #dee2e6;border-radius:9px;
-  font-family:inherit;font-size:13px;color:var(--wiz-text);background:#fff;
-  transition:border-color .15s,box-shadow .15s;
-  outline:none;direction:rtl;
-}
-.wiz-field input:focus,
-.wiz-field select:focus,
-.wiz-field textarea:focus{
-  border-color:var(--wiz-primary);
-  box-shadow:0 0 0 3.5px rgba(59,91,219,.12);
-}
-.wiz-field input.err,
-.wiz-field select.err,
-.wiz-field textarea.err{
-  border-color:var(--wiz-error);
-  box-shadow:0 0 0 3.5px rgba(201,42,42,.1);
-}
-.wiz-field .hint{
-  font-size:11px;color:var(--wiz-muted);margin-top:5px;line-height:1.5;
-}
-.wiz-field .err-msg{
-  font-size:11px;color:var(--wiz-error);margin-top:5px;
-  display:none;font-weight:600;
-}
-.wiz-field .err-msg.show{display:block}
-
-/* ─── Navigation ─── */
-.wiz-nav{
-  display:flex;justify-content:space-between;align-items:center;
-  background:#fff;border-radius:16px;padding:14px 18px;
-  box-shadow:var(--wiz-shadow);position:sticky;bottom:20px;
-  margin-top:18px;gap:12px;
-}
-.wiz-nav-info{
-  font-size:12px;color:var(--wiz-muted);flex:1;
-}
-.wiz-nav-info strong{color:var(--wiz-text);font-weight:700}
-
-/* ─── Buttons ─── */
-.wiz-btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:7px;
-  padding:10px 20px;border-radius:10px;border:none;font-family:inherit;
-  font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;
-  min-height:40px;white-space:nowrap;
-}
-.wiz-btn-primary{background:var(--wiz-primary);color:#fff}
-.wiz-btn-primary:hover{background:var(--wiz-primary-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(59,91,219,.25)}
-.wiz-btn-success{background:var(--wiz-success);color:#fff}
-.wiz-btn-success:hover{background:#276e34;transform:translateY(-1px);box-shadow:0 4px 12px rgba(47,158,68,.25)}
-.wiz-btn-ghost{background:#fff;color:var(--wiz-text);border:1.4px solid #dee2e6}
-.wiz-btn-ghost:hover{background:#f8f9fa;border-color:#adb5bd}
-.wiz-btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
-
-/* ─── Sidebar ─── */
-.wiz-side{
-  position:sticky;top:20px;display:flex;flex-direction:column;gap:14px;
-}
-.wiz-side-card{
-  background:#fff;border-radius:16px;box-shadow:var(--wiz-shadow);
-  padding:18px;border:1px solid rgba(15,23,42,.04);
-}
-.wiz-side-card h4{
-  margin:0 0 10px;font-size:12px;font-weight:800;color:var(--wiz-text);
-  text-transform:uppercase;letter-spacing:.5px;
-  display:flex;align-items:center;gap:6px;
-}
-.wiz-side-card p{margin:0;font-size:12px;color:#495057;line-height:1.75}
-.wiz-side-card ul{
-  margin:0;padding:0;list-style:none;
-  display:flex;flex-direction:column;gap:8px;
-}
-.wiz-side-card li{
-  font-size:11.5px;color:#495057;display:flex;gap:8px;line-height:1.6;
-}
-.wiz-side-card li::before{
-  content:"✓";color:var(--wiz-success);font-weight:800;flex-shrink:0;
-}
-.wiz-tip-card{
-  background:linear-gradient(135deg,#fff4e6,#fff8f0);
-  border:1px solid #ffd8a8;
-}
-.wiz-tip-card h4{color:#b35c00}
-.wiz-tip-card p{color:#7a3d00}
-.wiz-info-card{
-  background:linear-gradient(135deg,#edf2ff,#e7efff);
-  border:1px solid #bac8ff;
-}
-.wiz-info-card h4{color:var(--wiz-primary)}
-.wiz-info-card p{color:#2f4bc0}
-
-.wiz-checklist li{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:7px 0;border-bottom:1px solid #f1f3f5;
-  font-size:11.5px;
-}
-.wiz-checklist li:last-child{border-bottom:none}
-.wiz-checklist .ck{color:var(--wiz-muted);display:flex;align-items:center;gap:6px}
-.wiz-checklist .ck-ico{
-  width:14px;height:14px;border-radius:50%;border:1.5px solid #dee2e6;
-  display:inline-flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-}
-.wiz-checklist li.ok .ck{color:var(--wiz-success);font-weight:600}
-.wiz-checklist li.ok .ck-ico{background:var(--wiz-success);border-color:var(--wiz-success);color:#fff;font-size:9px;font-weight:800}
-.wiz-checklist li.ok .ck-ico::before{content:"✓"}
-.wiz-checklist li.ok .ck-ico span{display:none}
-
-/* ─── Image drop ─── */
-.wiz-drop{
-  border:2px dashed #ced4da;border-radius:14px;padding:28px 20px;
-  text-align:center;cursor:pointer;transition:all .2s;
-  background:#fafbfd;
-}
-.wiz-drop:hover{border-color:var(--wiz-primary);background:var(--wiz-primary-light)}
-.wiz-drop.has-file{border-style:solid;border-color:var(--wiz-success);background:var(--wiz-success-light)}
-.wiz-drop input{display:none}
-.wiz-drop .di{font-size:34px;margin-bottom:8px}
-.wiz-drop p{margin:0;font-size:13px;color:var(--wiz-text);font-weight:600}
-.wiz-drop small{color:var(--wiz-muted);font-size:11px}
-#main-img-preview{max-height:180px;border-radius:10px;margin-top:12px;display:none}
-
-/* ─── Tech chips ─── */
-.tech-chips{display:flex;flex-wrap:wrap;gap:7px}
-.tech-chip{
-  display:inline-flex;align-items:center;gap:6px;padding:6px 13px;
-  border:1.4px solid #dee2e6;border-radius:20px;background:#fff;
-  font-size:12px;font-weight:600;color:#495057;cursor:pointer;
-  transition:all .15s;user-select:none;
-}
-.tech-chip:hover{border-color:var(--wiz-primary);color:var(--wiz-primary);background:var(--wiz-primary-light)}
-.tech-chip.selected{
-  background:var(--wiz-primary);color:#fff;border-color:var(--wiz-primary);
-}
-.tech-chip input{display:none}
-.tech-group-title{
-  font-size:11.5px;font-weight:800;color:var(--wiz-muted);
-  text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;
-}
-
-/* ─── Monetization ─── */
-.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-@media(max-width:600px){.method-grid{grid-template-columns:1fr}}
-.method-item{
-  display:flex;align-items:center;gap:8px;padding:10px 14px;
-  border:1.4px solid #dee2e6;border-radius:9px;background:#fff;
-  font-size:12.5px;font-weight:600;color:#495057;cursor:pointer;
-  transition:all .15s;
-}
-.method-item:hover{border-color:var(--wiz-primary);background:var(--wiz-primary-light)}
-.method-item.selected{background:var(--wiz-primary-light);border-color:var(--wiz-primary);color:var(--wiz-primary)}
-.method-item input{display:none}
-
-/* ─── Dynamic items ─── */
-.dyn-item{
-  background:#f8f9fb;border:1px solid var(--wiz-border);
-  border-radius:10px;padding:14px;position:relative;margin-bottom:10px;
-}
-.dyn-item .remove-btn{
-  position:absolute;top:8px;left:8px;background:none;border:none;
-  cursor:pointer;color:var(--wiz-error);font-size:22px;line-height:1;
-  padding:2px 6px;border-radius:6px;transition:background .15s;
-}
-.dyn-item .remove-btn:hover{background:var(--wiz-error-light)}
-.add-btn{
-  display:inline-flex;align-items:center;gap:6px;
-  background:var(--wiz-primary-light);color:var(--wiz-primary);
-  border:1.5px dashed var(--wiz-primary);border-radius:9px;
-  padding:9px 16px;font-size:12.5px;font-weight:700;cursor:pointer;
-  font-family:inherit;transition:all .15s;
-}
-.add-btn:hover{background:var(--wiz-primary);color:#fff}
-
-/* ─── Chart builder ─── */
-.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:700px){.chart-grid{grid-template-columns:1fr}}
-.chart-block{
-  background:#f8f9fb;border-radius:10px;padding:14px;border:1px solid var(--wiz-border);
-}
-.chart-block-title{
-  font-size:13px;font-weight:800;color:var(--wiz-text);margin-bottom:10px;
-  display:flex;align-items:center;gap:6px;
-}
-.chart-point-row{
-  display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;
-  margin-bottom:8px;
-}
-.chart-point-row input{
-  width:100%;padding:8px 10px;border:1.4px solid #dee2e6;border-radius:7px;
-  font-family:inherit;font-size:12px;outline:none;
-}
-.chart-point-row input:focus{border-color:var(--wiz-primary)}
-.chart-remove{
-  background:none;border:none;cursor:pointer;color:var(--wiz-error);
-  font-size:20px;padding:4px 8px;border-radius:6px;line-height:1;
-}
-.chart-remove:hover{background:var(--wiz-error-light)}
-
-/* ─── HTML editor ─── */
-.html-toolbar{
-  display:flex;flex-wrap:wrap;gap:5px;padding:8px;
-  background:#f8f9fb;border:1px solid var(--wiz-border);
-  border-radius:9px 9px 0 0;
-}
-.html-toolbar button{
-  background:#fff;border:1px solid #dee2e6;border-radius:6px;
-  padding:5px 10px;font-size:11.5px;cursor:pointer;font-family:inherit;
-  font-weight:600;color:#495057;transition:all .15s;
-}
-.html-toolbar button:hover{background:var(--wiz-primary);color:#fff;border-color:var(--wiz-primary)}
-.html-editor{
-  width:100%;border:1.4px solid #dee2e6;border-top:none;
-  border-radius:0 0 9px 9px;min-height:150px;padding:12px;
-  font-family:'Courier New',monospace;font-size:12.5px;outline:none;
-  resize:vertical;direction:ltr;text-align:left;
-}
-.html-editor:focus{border-color:var(--wiz-primary)}
-.html-preview{
-  border:1.4px solid var(--wiz-border);border-radius:9px;
-  min-height:100px;padding:14px;margin-top:12px;background:#fff;
-  font-size:13px;line-height:1.9;
-}
-.html-preview h2{font-size:16px;margin:0 0 8px;color:var(--wiz-text)}
-.html-preview h3{font-size:14px;margin:0 0 6px;color:var(--wiz-text)}
-.html-preview p{margin:0 0 8px}
-.html-preview ul{margin:0 0 8px;padding-right:20px}
-
-/* ─── Review page ─── */
-.review-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:10px;
-}
-@media(max-width:600px){.review-grid{grid-template-columns:1fr}}
-.review-item{
-  padding:12px 14px;background:#f8f9fb;border-radius:10px;
-  border:1px solid var(--wiz-border);
-}
-.review-item .rl{font-size:10.5px;color:var(--wiz-muted);font-weight:700;letter-spacing:.3px}
-.review-item .rv{font-size:13px;font-weight:700;color:var(--wiz-text);margin-top:4px;line-height:1.5}
-.review-options{
-  display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;
-}
-.review-options label{
-  display:flex;align-items:center;gap:8px;cursor:pointer;
-  font-size:12.5px;font-weight:600;color:#495057;
-  padding:10px 14px;border:1.4px solid #dee2e6;border-radius:10px;
-  transition:all .15s;background:#fff;
-}
-.review-options label:hover{border-color:var(--wiz-primary);background:var(--wiz-primary-light)}
-.review-options input[type=checkbox]{
-  width:16px;height:16px;accent-color:var(--wiz-primary);
-}
-
-/* ─── Toast ─── */
-.toast-wrap{
-  position:fixed;top:20px;left:50%;transform:translateX(-50%);
-  z-index:9999;display:flex;flex-direction:column;gap:8px;
-  pointer-events:none;min-width:280px;max-width:420px;
-}
-.toast{
-  padding:12px 20px;border-radius:10px;font-size:13px;font-weight:700;
-  box-shadow:0 8px 24px rgba(0,0,0,.15);text-align:center;
-  animation:toastIn .3s ease;
-}
-@keyframes toastIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-.t-ok{background:#ebfbee;color:#2b8a3e;border:1px solid #b2f2bb}
-.t-err{background:#fff5f5;color:#c92a2a;border:1px solid #ffc9c9}
-.t-info{background:#edf2ff;color:#3b5bdb;border:1px solid #bac8ff}
-
-/* ─── Overlay ─── */
-#overlay{
-  display:none;position:fixed;inset:0;background:rgba(15,23,42,.5);
-  z-index:8000;align-items:center;justify-content:center;
-  flex-direction:column;gap:14px;backdrop-filter:blur(2px);
-}
-#overlay.show{display:flex}
-#overlay .spinner{
-  width:44px;height:44px;border:4px solid rgba(255,255,255,.25);
-  border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;
-}
-#overlay p{color:#fff;font-size:14px;font-weight:600}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ─── Conditional section ─── */
-.cond-section{display:none}
-.cond-section.show{display:block;animation:wizFade .3s ease}
-</style>
-
-
-
-
-<div class="toast-wrap" id="toast-wrap"></div>
-<div id="overlay"><div class="spinner"></div><p id="overlay-msg">در حال ارسال...</p></div>
-
-<!-- ══════════════════════════════════════════════════
-     HERO
-════════════════════════════════════════════════════ -->
-<header class="wiz-hero">
-  <div class="wiz-hero-badge">✦ نسخه حرفه‌ای</div>
-  <div class="wiz-hero-inner">
-    <h1>ثبت آگهی جدید</h1>
-    <p>با تکمیل {{ total_steps|default:8 }} مرحله ساده، آگهی شما برای هزاران خریدار بالقوه نمایش داده می‌شود. تمام اطلاعات شما به‌صورت خودکار ذخیره می‌شود.</p>
-    <div class="wiz-hero-meta">
-      <span>⏱️ زمان تقریبی: ۸ دقیقه</span>
-      <span>🔒 اطلاعات محرمانه</span>
-      <span>💾 ذخیره خودکار</span>
+<main class="lw-shell">
+  <header class="lw-hero"><div class="lw-hero-in"><h1>ثبت آگهی فروش دارایی دیجیتال</h1><p>یک مسیر کوتاه و هوشمند؛ سؤال‌ها بر اساس نوع دارایی شما تنظیم می‌شوند و اطلاعات مشابه فقط یک‌بار پرسیده می‌شود.</p></div></header>
+  <div class="lw-wrap">
+    <div class="lw-progress">
+      <div class="lw-progress-top"><b id="progress-title">مرحله ۱ — انتخاب دسته‌بندی</b><span id="progress-count">۱ از ۷</span></div>
+      <div class="lw-track"><div class="lw-fill" id="progress-fill"></div></div>
+      <div class="lw-steps" id="steps"></div>
     </div>
-  </div>
-</header>
 
-<!-- ══════════════════════════════════════════════════
-     PROGRESS
-════════════════════════════════════════════════════ -->
-<div class="wiz-progress-wrap">
-  <div class="wiz-progress">
-    <div class="wiz-progress-head">
-      <strong id="wiz-step-title">مرحله ۱ — اطلاعات پایه</strong>
-      <span id="wiz-step-counter">۱ از ۸</span>
-    </div>
-    <div class="wiz-progress-bar">
-      <div class="wiz-progress-fill" id="wiz-progress-fill"></div>
-    </div>
-    <div class="wiz-steps" id="wiz-steps">
-      <div class="wiz-step active" data-step="1" onclick="goStep(1)">
-        <div class="wiz-step-dot"><span>۱</span></div>
-        <div class="wiz-step-label">اطلاعات پایه</div>
-      </div>
-      <div class="wiz-step" data-step="2" onclick="goStep(2)">
-        <div class="wiz-step-dot"><span>۲</span></div>
-        <div class="wiz-step-label">مالی</div>
-      </div>
-      <div class="wiz-step" data-step="3" onclick="goStep(3)">
-        <div class="wiz-step-dot"><span>۳</span></div>
-        <div class="wiz-step-label">جزئیات دسته</div>
-      </div>
-      <div class="wiz-step" data-step="4" onclick="goStep(4)">
-        <div class="wiz-step-dot"><span>۴</span></div>
-        <div class="wiz-step-label">محتوا</div>
-      </div>
-      <div class="wiz-step" data-step="5" onclick="goStep(5)">
-        <div class="wiz-step-dot"><span>۵</span></div>
-        <div class="wiz-step-label">آمار</div>
-      </div>
-      <div class="wiz-step" data-step="6" onclick="goStep(6)">
-        <div class="wiz-step-dot"><span>۶</span></div>
-        <div class="wiz-step-label">رسانه</div>
-      </div>
-      <div class="wiz-step" data-step="7" onclick="goStep(7)">
-        <div class="wiz-step-dot"><span>۷</span></div>
-        <div class="wiz-step-label">فنی</div>
-      </div>
-      <div class="wiz-step" data-step="8" onclick="goStep(8)">
-        <div class="wiz-step-dot"><span>۸</span></div>
-        <div class="wiz-step-label">بازبینی</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════
-     MAIN LAYOUT
-════════════════════════════════════════════════════ -->
-<form id="main-form" enctype="multipart/form-data" novalidate>
-{% csrf_token %}
-<div class="wiz-layout">
-
-  <!-- ══════════════ FORM COLUMN ══════════════ -->
-  <div class="wiz-form-col">
-
-    <!-- ══════════════ STEP 1 — اطلاعات پایه ══════════════ -->
-    <section class="wiz-panel active" id="step-1">
-      <div class="wiz-section">
-        <div class="wiz-section-head">
-          <div class="ico">🏷️</div>
-          <div>
-            <h3>اطلاعات پایه آگهی</h3>
-            <p>موضوع و دسته‌بندی آگهی خود را مشخص کنید</p>
-          </div>
-        </div>
-        <div class="wiz-section-body">
-
-          <div class="wiz-field" style="margin-bottom:14px">
-            <label>عنوان آگهی <span class="req">*</span></label>
-            <input type="text" name="title" id="f-title"
-              placeholder="مثال: فروش وبسایت آموزشی با ۵۰۰۰ عضو فعال">
-            <div class="hint">عنوانی جذاب و دقیق بنویسید — این اولین چیزی است که خریدار می‌بیند.</div>
-            <div class="err-msg" id="e-title">عنوان الزامی است</div>
-          </div>
-
-          <div class="row-fields row-fields-2">
-            <div class="wiz-field">
-              <label>دسته‌بندی <span class="opt">(اختیاری)</span></label>
-              <select name="category" id="f-category">
-                <option value="">— انتخاب دسته‌بندی —</option>
-                {% for cat_slug, cat_label, subs in platform_categories %}
-                  <optgroup label="{{ cat_label }}">
-                    {% for sub_slug, sub_label in subs %}
-                      <option value="{{ sub_slug }}">{{ sub_label }}</option>
-                    {% endfor %}
-                  </optgroup>
+    <form id="listing-form" method="post" enctype="multipart/form-data" action="" novalidate>
+      {% csrf_token %}
+      <input type="hidden" name="category" id="category-input">
+      <div class="lw-grid">
+        <div class="lw-main">
+          <section class="lw-panel active" data-panel="category">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">🧭</div><div><h2>چه چیزی را برای فروش می‌گذارید؟</h2><p>این انتخاب، سؤال‌ها و مراحل بعدی را مشخص می‌کند.</p></div></div><div class="lw-card-body">
+              <div class="lw-main-cats">
+                {% for main_slug, main_label, subs in platform_categories %}
+                <button type="button" class="lw-main-cat" data-main="{{ main_slug }}"><span>{% if main_slug == 'website' %}🌐{% elif main_slug == 'ecommerce' %}🛒{% elif main_slug == 'app' %}📱{% elif main_slug == 'social_media' %}📣{% elif main_slug == 'content_media' %}🎙️{% elif main_slug == 'domain' %}🔗{% elif main_slug == 'service_business' %}💼{% else %}📦{% endif %}</span><b>{{ main_label }}</b></button>
                 {% endfor %}
-              </select>
-              <div class="hint">با انتخاب دسته، فیلدهای اختصاصی آن فعال می‌شود.</div>
-            </div>
-
-            <div class="wiz-field">
-              <label>حوزه فعالیت <span class="req">*</span></label>
-              <select name="areas_activity" id="f-areas">
-                <option value="">— انتخاب حوزه —</option>
-                {% for act_slug, act_label, subs in activity_categories %}
-                  <optgroup label="{{ act_label }}">
-                    {% for sub_slug, sub_label in subs %}
-                      <option value="{{ sub_slug }}">{{ sub_label }}</option>
-                    {% endfor %}
-                  </optgroup>
-                {% endfor %}
-              </select>
-              <div class="err-msg" id="e-areas">حوزه فعالیت الزامی است</div>
-            </div>
-          </div>
-
-          <div class="row-fields row-fields-2">
-            <div class="wiz-field">
-              <label>نوع فروش <span class="req">*</span></label>
-              <select name="sale_type" id="f-sale-type">
-                <option value="">— انتخاب نوع فروش —</option>
-                <option value="full_ownership">فروش مالکیت / انتقال کامل</option>
-                <option value="partial_ownership">فروش مالکیت بخشی / سهمی</option>
-                <option value="license">فروش مجوز / لایسنس</option>
-                <option value="revenue_share">فروش سهم از درآمد</option>
-                <option value="brand">فروش برند</option>
-              </select>
-              <div class="err-msg" id="e-sale-type">نوع فروش الزامی است</div>
-            </div>
-
-            <div class="wiz-field">
-              <label>آدرس پلتفرم <span class="opt">(اختیاری)</span></label>
-              <input type="url" name="platform_url" id="f-platform-url"
-                placeholder="https://example.com" style="direction:ltr;text-align:left">
-            </div>
-          </div>
-
-          <div class="row-fields row-fields-2">
-            <div class="wiz-field">
-              <label>موقعیت / شهر <span class="opt">(اختیاری)</span></label>
-              <input type="text" name="location" placeholder="تهران">
-            </div>
-            <div class="wiz-field">
-              <label>دلیل واگذاری <span class="opt">(اختیاری)</span></label>
-              <select name="sale_reason">
-                <option value="">— انتخاب کنید —</option>
-                <option value="focus_other_projects">تمرکز روی پروژه‌های دیگر</option>
-                <option value="lack_of_time">نداشتن زمان کافی</option>
-                <option value="need_capital">نیاز به سرمایه و پول نقد</option>
-                <option value="immigration">مهاجرت</option>
-                <option value="career_change">تغییر شغل / بازنشستگی</option>
-                <option value="partner_dispute">اختلاف با شرکا</option>
-                <option value="growth_ceiling">رسیدن به سقف رشد فردی</option>
-                <option value="personal_health">دلایل شخصی / سلامتی</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="wiz-field">
-            <label>توضیح دلیل واگذاری <span class="opt">(اختیاری)</span></label>
-            <textarea name="sale_reason_description" rows="2" placeholder="توضیحات بیشتر..."></textarea>
-          </div>
-
-          <!-- Conditional: full_ownership -->
-          <div class="cond-section" id="cond-full_ownership">
-            <hr style="border:none;border-top:1px solid var(--wiz-border);margin:18px 0">
-            <div class="wiz-section-head" style="background:none;border:none;padding:0 0 12px">
-              <div class="ico" style="background:#e7f5ff;color:#1971c2">📄</div>
-              <div><h3>جزئیات انتقال مالکیت</h3><p>شرایط و اسناد مرتبط</p></div>
-            </div>
-            <div class="row-fields row-fields-2">
-              <div class="wiz-field">
-                <label>وضعیت مالکیت / اسناد</label>
-                <input type="text" name="ownership_document_status" placeholder="مثال: ثبت‌شده در دیجیتال‌سیگنال">
               </div>
-              <div class="wiz-field">
-                <label>شرایط انتقال مالکیت</label>
-                <textarea name="ownership_transfer_conditions" rows="2" placeholder="شرایط خاص انتقال..."></textarea>
+              {% for main_slug, main_label, subs in platform_categories %}
+              <div class="lw-sub-wrap" data-subs="{{ main_slug }}"><div class="lw-sub-grid">
+                {% for sub_slug, sub_label in subs %}<label class="lw-sub"><input type="radio" name="category_choice" value="{{ sub_slug }}" data-label="{{ sub_label }}"><span>{{ sub_label }}</span></label>{% endfor %}
+              </div></div>
+              {% endfor %}
+              <div class="lw-field invalid" id="category-error" style="display:none;margin-top:14px"><div class="error">یک زیر‌دسته را انتخاب کنید.</div></div>
+            </div></div>
+            <nav class="lw-nav"><span></span><button class="lw-btn next" type="button" data-next>ادامه با این دسته ←</button></nav>
+          </section>
+
+          <section class="lw-panel" data-panel="basics">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">✍️</div><div><h2>معرفی دارایی</h2><p>اطلاعاتی که خریدار برای شناخت سریع آگهی نیاز دارد.</p></div></div><div class="lw-card-body"><div class="lw-fields">
+              <div class="lw-field full"><label>عنوان آگهی <span class="req">*</span></label><input name="title" id="title" required maxlength="200" placeholder="مثال: فروش فروشگاه تخصصی با مشتریان بازگشتی"><small>نوع دارایی و مهم‌ترین مزیت آن را کوتاه و دقیق بنویسید.</small><div class="error">عنوان آگهی را وارد کنید.</div></div>
+              <div class="lw-field"><label>حوزه فعالیت <span class="optional">اختیاری</span></label><select name="areas_activity" id="areas_activity"><option value="">انتخاب کنید</option>{% for slug,label,subs in activity_categories %}<optgroup label="{{ label }}">{% for value,text in subs %}<option value="{{ value }}">{{ text }}</option>{% endfor %}</optgroup>{% endfor %}</select><small>صنعت یا موضوع اصلی مخاطبان دارایی را مشخص می‌کند.</small></div>
+              <div class="lw-field" id="url-field"><label id="url-label">آدرس دارایی <span class="optional">اختیاری</span></label><input type="url" name="platform_url" id="platform_url" class="ltr" placeholder="https://example.com"><small>لینک عمومی و قابل بررسی دارایی را وارد کنید.</small><div class="error">آدرس واردشده معتبر نیست.</div></div>
+              <div class="lw-field" id="age-field"><label>عمر دارایی (ماه) <span class="optional">اختیاری</span></label><input type="number" name="platform_age" min="0" placeholder="مثال: ۲۴"><small>مدت فعالیت واقعی دارایی از زمان شروع بهره‌برداری.</small></div>
+              <div class="lw-field"><label>موقعیت / شهر <span class="optional">اختیاری</span></label><input name="location" placeholder="مثال: تهران"><small>فقط اگر مکان در انتقال یا عملیات کسب‌وکار اثر دارد.</small></div>
+              <div class="lw-field full"><label>شرح کامل آگهی <span class="req">*</span></label><textarea name="description" id="description" required minlength="80" rows="7" placeholder="تاریخچه، مزیت رقابتی، وضعیت فعلی و فرصت‌های رشد را شفاف توضیح دهید."></textarea><small>حداقل ۸۰ کاراکتر؛ اطلاعات مالی و آماری را اینجا تکرار نکنید.</small><div class="error">شرح آگهی باید حداقل ۸۰ کاراکتر باشد.</div></div>
+            </div></div></div>
+            <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn next" type="button" data-next>مشخصات تخصصی ←</button></nav>
+          </section>
+
+          <section class="lw-panel" data-panel="details">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon" id="details-icon">📊</div><div><h2 id="details-title">مشخصات تخصصی</h2><p>این سؤال‌ها فقط برای زیر‌دسته انتخاب‌شده نمایش داده می‌شوند.</p></div></div><div class="lw-card-body"><div class="lw-note">عددهای واقعی و قابل اثبات، اعتماد خریدار و کیفیت ارزیابی آگهی را بالا می‌برند.</div><div class="lw-fields" id="dynamic-fields"></div></div></div>
+            <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn next" type="button" data-next>مرحله بعد ←</button></nav>
+          </section>
+
+          <section class="lw-panel" data-panel="finance" data-feature="financial">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">💹</div><div><h2>عملکرد مالی</h2><p>فقط یک عدد مرجع برای هر شاخص دریافت می‌شود.</p></div></div><div class="lw-card-body">
+              <label class="lw-check"><input type="checkbox" name="is_income" id="is_income" checked><span>این دارایی در حال حاضر درآمد دارد</span></label>
+              <div class="lw-fields lw-finance-fields" id="finance-fields">
+                <div class="lw-field"><label>درآمد ماهانه (تومان) <span class="req">*</span></label><input type="number" name="monthly_income" min="0" data-income-required required><div class="error">درآمد ماهانه را وارد کنید.</div></div>
+                <div class="lw-field"><label>سود خالص ماهانه (تومان) <span class="optional">اختیاری</span></label><input type="number" name="avg_monthly_profit" min="0"></div>
+                <div class="lw-field"><label>کل درآمد از ابتدای فعالیت</label><input type="number" name="total_revenue" min="0"></div>
+                <div class="lw-field"><label>کل سود از ابتدای فعالیت</label><input type="number" name="total_profit" min="0"></div>
+                <div class="lw-field"><label>حاشیه سود (درصد) <span class="optional">اختیاری</span></label><input type="number" name="profit_margin" min="0" max="100" step="0.01"></div>
+                <div class="lw-field"><label>روند درآمد ۶ ماه اخیر</label><select name="financial_trend"><option value="stable">تقریباً ثابت</option><option value="growing">رو به رشد</option><option value="declining">کاهشی</option><option value="seasonal">فصلی</option></select></div>
               </div>
-            </div>
-          </div>
-
-          <!-- Conditional: partial_ownership -->
-          <div class="cond-section" id="cond-partial_ownership">
-            <hr style="border:none;border-top:1px solid var(--wiz-border);margin:18px 0">
-            <div class="wiz-section-head" style="background:none;border:none;padding:0 0 12px">
-              <div class="ico" style="background:#fff0f6;color:#c2255c">🤝</div>
-              <div><h3>جزئیات مالکیت سهمی</h3><p>درصد سهم و شرایط خروج</p></div>
-            </div>
-            <div class="row-fields row-fields-2">
-              <div class="wiz-field"><label>درصد سهم</label><input type="number" name="partial_ownership_percentage" min="0" max="100" step="0.01" placeholder="25.5"></div>
-              <div class="wiz-field"><label>روش ارزش‌گذاری</label><textarea name="partial_ownership_valuation_method" rows="2" placeholder="فرمول یا روش..."></textarea></div>
-            </div>
-            <div class="row-fields row-fields-2">
-              <div class="wiz-field"><label>حقوق خریدار</label><textarea name="partial_ownership_buyer_rights" rows="2" placeholder="حقوق و اختیارات خریدار..."></textarea></div>
-              <div class="wiz-field"><label>شرایط خروج</label><textarea name="partial_ownership_exit_conditions" rows="2" placeholder="شرایط فروش مجدد سهم..."></textarea></div>
-            </div>
-          </div>
-
-          <!-- Conditional: license -->
-          <div class="cond-section" id="cond-license">
-            <hr style="border:none;border-top:1px solid var(--wiz-border);margin:18px 0">
-            <div class="wiz-section-head" style="background:none;border:none;padding:0 0 12px">
-              <div class="ico" style="background:#fff9db;color:#e67700">🔑</div>
-              <div><h3>جزئیات مجوز / لایسنس</h3><p>مدت، محدوده و محدودیت‌ها</p></div>
-            </div>
-            <div class="row-fields row-fields-2">
-              <div class="wiz-field">
-                <label>نوع مدت مجوز</label>
-                <select name="license_duration_type" id="f-lic-dur-type">
-                  <option value="">— انتخاب —</option>
-                  <option value="permanent">دائمی</option>
-                  <option value="limited">مدت‌دار</option>
-                </select>
+              <div class="lw-subcard" id="finance-extras">
+                <div class="lw-subcard-head"><div><h3>هزینه‌ها</h3><p>هزینه‌های جاری یا دوره‌ای دارایی</p></div><button type="button" class="lw-add" data-add="expense">+ افزودن هزینه</button></div>
+                <div id="expense-list"></div><input type="hidden" name="expense_count" id="expense-count" value="0">
               </div>
-              <div class="wiz-field" id="lic-months-field" style="display:none">
-                <label>مدت مجوز (ماه)</label>
-                <input type="number" name="license_duration_months" min="1" placeholder="12">
-              </div>
-            </div>
-            <div class="row-fields row-fields-2">
-              <div class="wiz-field"><label>محدوده مجوز</label><textarea name="license_scope" rows="2" placeholder="چه استفاده‌هایی مجاز است..."></textarea></div>
-              <div class="wiz-field"><label>محدودیت‌های مجوز</label><textarea name="license_restrictions" rows="2" placeholder="چه استفاده‌هایی ممنوع است..."></textarea></div>
-            </div>
-          </div>
-
-          <!-- Conditional: revenue_share -->
-          <div class="cond-section" id="cond-revenue_share">
-            <hr style="border:none;border-top:1px solid var(--wiz-border);margin:18px 0">
-            <div class="wiz-section-head" style="background:none;border:none;padding:0 0 12px">
-              <div class="ico" style="background:#ebfbee;color:#2f9e44">💰</div>
-              <div><h3>جزئیات سهم از درآمد</h3><p>درصد، دوره و مبانی محاسبه</p></div>
-            </div>
-            <div class="row-fields row-fields-3">
-              <div class="wiz-field"><label>درصد سهم</label><input type="number" name="revenue_share_percentage" min="0" max="100" step="0.01" placeholder="20"></div>
-              <div class="wiz-field">
-                <label>مبنای محاسبه</label>
-                <select name="revenue_share_base">
-                  <option value="">—</option>
-                  <option value="gross">درآمد ناخالص</option>
-                  <option value="net">درآمد خالص</option>
-                </select>
-              </div>
-              <div class="wiz-field">
-                <label>دوره پرداخت</label>
-                <select name="revenue_share_payment_period">
-                  <option value="">—</option>
-                  <option value="weekly">هفتگی</option>
-                  <option value="monthly">ماهانه</option>
-                  <option value="quarterly">فصلی</option>
-                </select>
-              </div>
-            </div>
-            <div class="row-fields row-fields-2">
-              <div class="wiz-field"><label>مدت قرارداد (ماه)</label><input type="number" name="revenue_share_contract_duration" placeholder="24"></div>
-              <div class="wiz-field"><label>حداقل تضمینی ماهانه (تومان)</label><input type="number" name="revenue_share_minimum_guarantee" placeholder="0"></div>
-            </div>
-          </div>
-
-          <!-- Conditional: brand -->
-          <div class="cond-section" id="cond-brand">
-            <hr style="border:none;border-top:1px solid var(--wiz-border);margin:18px 0">
-            <div class="wiz-section-head" style="background:none;border:none;padding:0 0 12px">
-              <div class="ico" style="background:#f3f0ff;color:#6741d9">™️</div>
-              <div><h3>جزئیات فروش برند</h3><p>دارایی‌های منتقل‌شده و وضعیت حقوقی</p></div>
-            </div>
-            <div class="row-fields row-fields-2">
-              <div class="wiz-field"><label>اجزای برند منتقل‌شده</label><textarea name="brand_transferred_assets" rows="2" placeholder="لوگو، رنگ‌بندی، دامنه..."></textarea></div>
-              <div class="wiz-field">
-                <label>وضعیت حقوقی برند</label>
-                <select name="brand_legal_status">
-                  <option value="">—</option>
-                  <option value="registered">ثبت‌شده</option>
-                  <option value="in_progress">در حال ثبت</option>
-                  <option value="usage_right_only">فقط حق استفاده</option>
-                </select>
-              </div>
-            </div>
-            <div class="row-fields row-fields-2">
-              <div class="wiz-field"><label>محدودیت‌های کاربرد</label><textarea name="brand_usage_restrictions" rows="2"></textarea></div>
-              <div class="wiz-field"><label>حوزه / صنعت برند</label><input type="text" name="brand_industry_scope" placeholder="مثال: آموزش آنلاین"></div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- تصویر اصلی -->
-      <div class="wiz-section">
-        <div class="wiz-section-head">
-          <div class="ico">🖼️</div>
-          <div><h3>تصویر اصلی آگهی</h3><p>اولین تصویری که خریدار می‌بیند</p></div>
-        </div>
-        <div class="wiz-section-body">
-          <label class="wiz-drop" for="f-main-image" id="main-drop">
-            <div class="di">📁</div>
-            <p>برای آپلود کلیک کنید یا فایل را اینجا بکشید</p>
-            <small>JPG، PNG، WEBP — حداکثر ۵ مگابایت</small>
-            <input type="file" name="main_image" id="f-main-image" accept="image/*">
-            <img id="main-img-preview" alt="">
-          </label>
-          <div class="err-msg" id="e-main-image" style="display:none;margin-top:8px">تصویر اصلی الزامی است</div>
-        </div>
-      </div>
-
-      <div class="wiz-nav">
-        <div class="wiz-nav-info">مرحله <strong>۱ از ۸</strong> — اطلاعات پایه</div>
-        <button type="button" class="wiz-btn wiz-btn-success" onclick="nextStep()">
-          مرحله بعد
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-      </div>
-    </section>
-
-    <!-- ══════════════ STEP 2 — اطلاعات مالی ══════════════ -->
-    <section class="wiz-panel" id="step-2">
-      <div class="wiz-section">
-        <div class="wiz-section-head">
-          <div class="ico">💵</div>
-          <div><h3>قیمت‌گذاری</h3><p>قیمت و شرایط مالی آگهی را مشخص کنید</p></div>
-        </div>
-        <div class="wiz-section-body">
-          <div class="row-fields row-fields-2">
-            <div class="wiz-field">
-              <label>قیمت (تومان) <span class="req">*</span></label>
-              <input type="number" name="price" id="f-price" min="0" placeholder="۰">
-              <div class="hint">قیمتی منصفانه بر اساس درآمد و دارایی‌ها انتخاب کنید.</div>
-              <div class="err-msg" id="e-price">قیمت الزامی است</div>
-            </div>
-            <div class="wiz-field">
-              <label>قیمت با تخفیف (تومان) <span class="opt">(اختیاری)</span></label>
-              <input type="number" name="discount_price" min="0" placeholder="۰">
-            </div>
-          </div>
-          <div class="wiz-field">
-            <label>گزینه‌های آگهی</label>
-            <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:8px">
-              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12.5px;font-weight:600">
-                <input type="checkbox" name="suggested_price" style="width:16px;height:16px;accent-color:#3b5bdb"> امکان پیشنهاد قیمت
-              </label>
-              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12.5px;font-weight:600">
-                <input type="checkbox" name="is_income" id="f-is-income" checked style="width:16px;height:16px;accent-color:#3b5bdb"> آگهی درآمد دارد
-              </label>
-              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12.5px;font-weight:600">
-                <input type="checkbox" name="is_private" style="width:16px;height:16px;accent-color:#3b5bdb"> آگهی خصوصی
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div data-section="step2_income_stats">
-        <div class="wiz-section">
-          <div class="wiz-section-head">
-            <div class="ico">📈</div>
-            <div><h3>آمار مالی</h3><p>درآمد و سود کسب‌وکار</p></div>
-          </div>
-          <div class="wiz-section-body">
-            <div class="row-fields row-fields-2">
-              <div class="wiz-field"><label>درآمد ماهانه (تومان)</label><input type="number" name="monthly_income" min="0" placeholder="۰"></div>
-              <div class="wiz-field"><label>میانگین درآمد ماهانه</label><input type="number" name="avg_monthly_revenue" min="0" placeholder="۰"></div>
-            </div>
-            <div class="row-fields row-fields-2">
-              <div class="wiz-field"><label>میانگین سود ماهانه</label><input type="number" name="avg_monthly_profit" min="0" placeholder="۰"></div>
-              <div class="wiz-field"><label>حاشیه سود (درصد)</label><input type="number" name="profit_margin" min="0" max="100" step="0.01" placeholder="۰"></div>
-            </div>
-            <div class="row-fields row-fields-2">
-              <div class="wiz-field"><label>درآمد کل</label><input type="number" name="total_revenue" min="0" placeholder="۰"></div>
-              <div class="wiz-field"><label>سود کل</label><input type="number" name="total_profit" min="0" placeholder="۰"></div>
-            </div>
-            <div class="row-fields row-fields-2">
-              <div class="wiz-field"><label>ضریب سود</label><input type="number" name="profit_multiplier" min="0" step="0.01" placeholder="۰"></div>
-              <div class="wiz-field"><label>ضریب درآمد</label><input type="number" name="revenue_multiplier" min="0" step="0.01" placeholder="۰"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div data-section="step2_expenses">
-        <div class="wiz-section">
-          <div class="wiz-section-head">
-            <div class="ico">💸</div>
-            <div><h3>هزینه‌های ماهانه</h3><p>هزینه‌های جاری کسب‌وکار</p></div>
-          </div>
-          <div class="wiz-section-body">
-            <div class="dyn-list" id="expenses-list"></div>
-            <button type="button" class="add-btn" onclick="addExpense()">+ افزودن هزینه</button>
-          </div>
-        </div>
-      </div>
-
-      <div data-section="step2_monetization">
-        <div class="wiz-section">
-          <div class="wiz-section-head">
-            <div class="ico">💳</div>
-            <div><h3>روش‌های کسب درآمد</h3><p>مدل‌های درآمدی فعلی را انتخاب کنید</p></div>
-          </div>
-          <div class="wiz-section-body">
-            <div class="method-grid" id="monetization-grid">
-              <label class="method-item"><input type="checkbox" name="monetization_methods" value="banner_click_advertising"><span>تبلیغات بنری و کلیکی</span></label>
-              <label class="method-item"><input type="checkbox" name="monetization_methods" value="sponsored_posts"><span>پست‌های حمایت‌شده</span></label>
-              <label class="method-item"><input type="checkbox" name="monetization_methods" value="cooperation_sales"><span>همکاری در فروش</span></label>
-              <label class="method-item"><input type="checkbox" name="monetization_methods" value="special_subscription_sale"><span>فروش اشتراک ویژه</span></label>
-              <label class="method-item"><input type="checkbox" name="monetization_methods" value="selling_digital_products"><span>فروش محصولات دیجیتال</span></label>
-              <label class="method-item"><input type="checkbox" name="monetization_methods" value="selling_physical_products"><span>فروش محصولات فیزیکی</span></label>
-              <label class="method-item"><input type="checkbox" name="monetization_methods" value="receive_financial_support"><span>دریافت حمایت مالی</span></label>
-              <label class="method-item"><input type="checkbox" name="monetization_methods" value="holding_training_courses"><span>دوره‌های آموزشی و وبینار</span></label>
-              <label class="method-item"><input type="checkbox" name="monetization_methods" value="sell_backlinks"><span>فروش بک‌لینک</span></label>
-              <label class="method-item"><input type="checkbox" name="monetization_methods" value="providing_consulting_services"><span>خدمات مشاوره و فریلنسری</span></label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="wiz-nav">
-        <button type="button" class="wiz-btn wiz-btn-ghost" onclick="prevStep()">مرحله قبل</button>
-        <div class="wiz-nav-info" style="text-align:center">مرحله <strong>۲ از ۸</strong> — اطلاعات مالی</div>
-        <button type="button" class="wiz-btn wiz-btn-success" onclick="nextStep()">مرحله بعد</button>
-      </div>
-    </section>
-
-    <!-- ══════════════ STEP 3 — جزئیات دسته ══════════════ -->
-    <section class="wiz-panel" id="step-cat">
-      <div class="wiz-section">
-        <div class="wiz-section-head">
-          <div class="ico" id="cat-form-icon">📋</div>
-          <div>
-            <h3 id="cat-form-title">اطلاعات اختصاصی دسته</h3>
-            <p id="cat-form-hint">ابتدا در مرحله ۱ دسته‌بندی را انتخاب کنید.</p>
-          </div>
-        </div>
-        <div class="wiz-section-body">
-          <div id="cat-specific-fields"></div>
-        </div>
-      </div>
-
-      <div class="wiz-nav">
-        <button type="button" class="wiz-btn wiz-btn-ghost" onclick="prevStep()">مرحله قبل</button>
-        <div class="wiz-nav-info" style="text-align:center">مرحله <strong>۳ از ۸</strong> — جزئیات دسته</div>
-        <button type="button" class="wiz-btn wiz-btn-success" onclick="nextStep()">مرحله بعد</button>
-      </div>
-    </section>
-
-    <!-- ══════════════ STEP 4 — محتوا ══════════════ -->
-    <section class="wiz-panel" id="step-3">
-      <div class="wiz-section">
-        <div class="wiz-section-head">
-          <div class="ico">📝</div>
-          <div><h3>توضیحات اصلی</h3><p>کسب‌وکار خود را کامل معرفی کنید</p></div>
-        </div>
-        <div class="wiz-section-body">
-          <div class="wiz-field" style="margin-bottom:14px">
-            <label>توضیحات آگهی <span class="req">*</span></label>
-            <textarea name="description" id="f-description" rows="5"
-              placeholder="توضیح کامل و جامع درباره آگهی..."></textarea>
-            <div class="hint">حداقل ۱۰۰ کلمه — به تاریخچه، پتانسیل رشد، و مزایای رقابتی اشاره کنید.</div>
-            <div class="err-msg" id="e-description">توضیحات الزامی است</div>
-          </div>
-          <hr style="border:none;border-top:1px solid var(--wiz-border);margin:16px 0">
-          <div class="wiz-field">
-            <label>پشتیبانی پس از فروش <span class="opt">(اختیاری)</span></label>
-            <textarea name="post_sale_support" rows="3"
-              placeholder="چه پشتیبانی‌ای پس از فروش ارائه می‌دهید..."></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div class="wiz-section">
-        <div class="wiz-section-head">
-          <div class="ico">🌐</div>
-          <div><h3>درباره پلتفرم</h3><p>با پشتیبانی از HTML — ساختار حرفه‌ای بسازید</p></div>
-        </div>
-        <div class="wiz-section-body">
-          <p style="font-size:12px;color:var(--wiz-muted);margin:0 0 10px">
-            روی دکمه‌های زیر کلیک کنید تا تگ در موقعیت مکان‌نما درج شود:
-          </p>
-          <div class="html-toolbar">
-            <button type="button" onclick="insertTag('h2')">H2 تیتر</button>
-            <button type="button" onclick="insertTag('h3')">H3 زیرتیتر</button>
-            <button type="button" onclick="insertTag('p')">پاراگراف</button>
-            <button type="button" onclick="insertTag('strong')"><b>Bold</b></button>
-            <button type="button" onclick="insertTag('em')"><i>Italic</i></button>
-            <button type="button" onclick="insertTag('ul-li')">لیست</button>
-            <button type="button" onclick="insertTag('br')">خط جدید</button>
-            <button type="button" onclick="insertTag('hr')">خط جدا</button>
-            <button type="button" onclick="insertTag('span-highlight')">هایلایت</button>
-          </div>
-          <textarea class="html-editor" id="about-platform-editor" name="about_platform"
-            oninput="updateHtmlPreview()"
-            placeholder="<h2>درباره پلتفرم</h2>&#10;<p>توضیحات شما اینجا...</p>"></textarea>
-          <div style="font-size:11px;font-weight:800;color:var(--wiz-muted);margin:14px 0 6px;letter-spacing:.5px">
-            👁️ پیش‌نمایش زنده:
-          </div>
-          <div class="html-preview" id="about-platform-preview">
-            <span style="color:var(--wiz-muted);font-size:12px">متن خود را تایپ کنید تا پیش‌نمایش نمایش داده شود...</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="wiz-section">
-        <div class="wiz-section-head">
-          <div class="ico">❓</div>
-          <div><h3>پرسش و پاسخ</h3><p>سوالات پرتکرار خریداران را از قبل پاسخ دهید</p></div>
-        </div>
-        <div class="wiz-section-body">
-          <div class="dyn-list" id="faq-list"></div>
-          <button type="button" class="add-btn" onclick="addFaq()">+ افزودن پرسش و پاسخ</button>
-        </div>
-      </div>
-
-      <div class="wiz-section">
-        <div class="wiz-section-head">
-          <div class="ico">📦</div>
-          <div><h3>دارایی‌های فروش</h3><p>مواردی که همراه کسب‌وکار منتقل می‌شوند</p></div>
-        </div>
-        <div class="wiz-section-body">
-          <div class="dyn-list" id="sale-includes-list"></div>
-          <button type="button" class="add-btn" onclick="addSaleInclude()">+ افزودن دارایی</button>
-        </div>
-      </div>
-
-      <div class="wiz-section">
-        <div class="wiz-section-head">
-          <div class="ico">📜</div>
-          <div><h3>مجوزها</h3><p>مجوزهای قانونی کسب‌وکار</p></div>
-        </div>
-        <div class="wiz-section-body">
-          <div class="dyn-list" id="licenses-list"></div>
-          <button type="button" class="add-btn" onclick="addLicense()">+ افزودن مجوز</button>
-        </div>
-      </div>
-
-      <div class="wiz-nav">
-        <button type="button" class="wiz-btn wiz-btn-ghost" onclick="prevStep()">مرحله قبل</button>
-        <div class="wiz-nav-info" style="text-align:center">مرحله <strong>۴ از ۸</strong> — محتوا</div>
-        <button type="button" class="wiz-btn wiz-btn-success" onclick="nextStep()">مرحله بعد</button>
-      </div>
-    </section>
-
-    <!-- ══════════════ STEP 5 — آمار و نمودار ══════════════ -->
-    <section class="wiz-panel" id="step-4">
-      <div data-section="step4_charts">
-        <div class="wiz-section">
-          <div class="wiz-section-head">
-            <div class="ico">📊</div>
-            <div><h3>داده‌های نمودار</h3><p>روند درآمد و بازدید را نمایش دهید</p></div>
-          </div>
-          <div class="wiz-section-body">
-            <p style="font-size:12.5px;color:var(--wiz-muted);margin:0 0 16px;line-height:1.6">
-              نمودارهای دقیق، اعتماد خریدار را جلب می‌کند. هر تعداد نقطه می‌توانید اضافه کنید.
-            </p>
-            <div class="chart-grid">
-              <div class="chart-block">
-                <div class="chart-block-title">📈 نمودار درآمد</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:6px">
-                  <span style="font-size:10.5px;color:var(--wiz-muted);font-weight:800">تاریخ</span>
-                  <span style="font-size:10.5px;color:var(--wiz-muted);font-weight:800">مبلغ (تومان)</span>
-                  <span></span>
-                </div>
-                <div id="income-points"></div>
-                <button type="button" class="add-btn" style="font-size:11.5px;margin-top:8px" onclick="addIncomePoint()">+ افزودن نقطه</button>
-              </div>
-
-              <div class="chart-block">
-                <div class="chart-block-title">👁️ نمودار بازدید</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:6px">
-                  <span style="font-size:10.5px;color:var(--wiz-muted);font-weight:800">تاریخ</span>
-                  <span style="font-size:10.5px;color:var(--wiz-muted);font-weight:800">تعداد بازدید</span>
-                  <span></span>
-                </div>
-                <div id="views-points"></div>
-                <button type="button" class="add-btn" style="font-size:11.5px;margin-top:8px" onclick="addViewPoint()">+ افزودن نقطه</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div data-section="step4_platform_stats">
-        <div class="wiz-section">
-          <div class="wiz-section-head">
-            <div class="ico">📊</div>
-            <div><h3>آمار کلی پلتفرم</h3><p>ارقام کلیدی کسب‌وکار</p></div>
-          </div>
-          <div class="wiz-section-body">
-            <div class="row-fields row-fields-3">
-              <div class="wiz-field"><label>تعداد فالوور</label><input type="number" name="followers_count" min="0" value="0"></div>
-              <div class="wiz-field"><label>سن پلتفرم (ماه)</label><input type="number" name="platform_age" min="0" value="0"></div>
-              <div class="wiz-field"><label>بیشترین لایک</label><input type="number" name="most_like" min="0" placeholder="۰"></div>
-            </div>
-            <div class="row-fields row-fields-2">
-              <div class="wiz-field"><label>بیشترین بازدید</label><input type="number" name="most_view" min="0" placeholder="۰"></div>
-              <div class="wiz-field"><label>بیشترین کامنت</label><input type="number" name="most_comment" min="0" placeholder="۰"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="wiz-nav">
-        <button type="button" class="wiz-btn wiz-btn-ghost" onclick="prevStep()">مرحله قبل</button>
-        <div class="wiz-nav-info" style="text-align:center">مرحله <strong>۵ از ۸</strong> — آمار و نمودار</div>
-        <button type="button" class="wiz-btn wiz-btn-success" onclick="nextStep()">مرحله بعد</button>
-      </div>
-    </section>
-
-    <!-- ══════════════ STEP 6 — رسانه ══════════════ -->
-    <section class="wiz-panel" id="step-5">
-      <div data-section="step5_social_media">
-        <div class="wiz-section">
-          <div class="wiz-section-head">
-            <div class="ico">📱</div>
-            <div><h3>رسانه‌های اجتماعی</h3><p>حضور خود را در شبکه‌های اجتماعی نشان دهید</p></div>
-          </div>
-          <div class="wiz-section-body">
-            <div class="dyn-list" id="social-list"></div>
-            <button type="button" class="add-btn" onclick="addSocial()">+ افزودن رسانه اجتماعی</button>
-          </div>
-        </div>
-      </div>
-
-      <div data-section="step5_income_proof">
-        <div class="wiz-section">
-          <div class="wiz-section-head">
-            <div class="ico">🧾</div>
-            <div><h3>اثبات درآمد</h3><p>مدارک مالی برای جلب اعتماد خریدار</p></div>
-          </div>
-          <div class="wiz-section-body">
-            <div class="dyn-list" id="income-proof-list"></div>
-            <button type="button" class="add-btn" onclick="addIncomeProof()">+ افزودن مدرک</button>
-          </div>
-        </div>
-      </div>
-
-      <div data-section="step5_attachments">
-        <div class="wiz-section">
-          <div class="wiz-section-head">
-            <div class="ico">📎</div>
-            <div><h3>پیوست‌ها</h3><p>مدارک و فایل‌های تکمیلی</p></div>
-          </div>
-          <div class="wiz-section-body">
-            <div class="dyn-list" id="attachments-list"></div>
-            <button type="button" class="add-btn" onclick="addAttachment()">+ افزودن پیوست</button>
-          </div>
-        </div>
-      </div>
-
-      <div data-section="step5_traffic">
-        <div class="wiz-section">
-          <div class="wiz-section-head">
-            <div class="ico">🚦</div>
-            <div><h3>منابع ترافیک</h3><p>درصد ترافیک از هر منبع (جمع باید ۱۰۰ باشد)</p></div>
-          </div>
-          <div class="wiz-section-body">
-            <div class="dyn-list" id="traffic-list"></div>
-            <button type="button" class="add-btn" onclick="addTraffic()">+ افزودن منبع</button>
-            <div id="traffic-total-display" style="margin-top:10px;font-size:13px;font-weight:700"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="wiz-nav">
-        <button type="button" class="wiz-btn wiz-btn-ghost" onclick="prevStep()">مرحله قبل</button>
-        <div class="wiz-nav-info" style="text-align:center">مرحله <strong>۶ از ۸</strong> — رسانه</div>
-        <button type="button" class="wiz-btn wiz-btn-success" onclick="nextStep()">مرحله بعد</button>
-      </div>
-    </section>
-
-    <!-- ══════════════ STEP 7 — فنی ══════════════ -->
-    <section class="wiz-panel" id="step-6">
-      <div data-section="step6_technologies">
-        <div class="wiz-section">
-          <div class="wiz-section-head">
-            <div class="ico">⚙️</div>
-            <div><h3>تکنولوژی‌های استفاده‌شده</h3><p>استک فنی کسب‌وکار خود را مشخص کنید</p></div>
-          </div>
-          <div class="wiz-section-body">
-            <div class="tech-groups" style="display:flex;flex-direction:column;gap:16px">
-
-              <div>
-                <div class="tech-group-title">🗂️ CMS و فروشگاه‌ساز</div>
-                <div class="tech-chips">
-                  <label class="tech-chip"><input type="checkbox" name="tech_cms" value="wordpress"><span>وردپرس</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_cms" value="joomla"><span>جوملا</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_cms" value="woocommerce"><span>ووکامرس</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_cms" value="shopify"><span>شاپیفای</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_cms" value="magento"><span>مجنتو</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_cms" value="prestashop"><span>پرستاشاپ</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_cms" value="ghost"><span>گوست</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_cms" value="custom_cms"><span>اختصاصی</span></label>
+              <div class="lw-subcard feature-block" data-feature-block="monetization">
+                <div class="lw-subcard-head"><div><h3>روش‌های کسب درآمد</h3><p>مدل‌های درآمدی فعال را انتخاب کنید</p></div></div>
+                <div class="lw-methods">
+                  <label class="lw-check"><input type="checkbox" name="monetization_methods" value="banner_click_advertising"> تبلیغات بنری و کلیکی</label>
+                  <label class="lw-check"><input type="checkbox" name="monetization_methods" value="sponsored_posts"> محتوای اسپانسری</label>
+                  <label class="lw-check"><input type="checkbox" name="monetization_methods" value="cooperation_sales"> همکاری در فروش</label>
+                  <label class="lw-check"><input type="checkbox" name="monetization_methods" value="special_subscription_sale"> فروش اشتراک</label>
+                  <label class="lw-check"><input type="checkbox" name="monetization_methods" value="selling_digital_products"> محصولات دیجیتال</label>
+                  <label class="lw-check"><input type="checkbox" name="monetization_methods" value="selling_physical_products"> محصولات فیزیکی</label>
+                  <label class="lw-check"><input type="checkbox" name="monetization_methods" value="holding_training_courses"> دوره آموزشی</label>
+                  <label class="lw-check"><input type="checkbox" name="monetization_methods" value="providing_consulting_services"> خدمات و مشاوره</label>
                 </div>
               </div>
+            </div></div>
+            <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn next" type="button" data-next>نمودارها و ترافیک ←</button></nav>
+          </section>
 
-              <div>
-                <div class="tech-group-title">🔧 Backend</div>
-                <div class="tech-chips">
-                  <label class="tech-chip"><input type="checkbox" name="tech_backend" value="laravel"><span>لاراول</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_backend" value="django"><span>جنگو</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_backend" value="fastapi"><span>FastAPI</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_backend" value="nodejs"><span>Node.js</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_backend" value="nestjs"><span>Nest.js</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_backend" value="flask"><span>Flask</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_backend" value="aspnet"><span>ASP.NET</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_backend" value="springboot"><span>Spring Boot</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_backend" value="golang"><span>Go</span></label>
+          <section class="lw-panel" data-panel="analytics">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">📈</div><div><h2>نمودارها و منابع ورودی</h2><p>داده‌های دوره‌ای برای ارزیابی روند رشد</p></div></div><div class="lw-card-body">
+              <div class="lw-subcard feature-block" data-feature-block="financial"><div class="lw-subcard-head"><div><h3>نمودار درآمد</h3><p>حداقل سه ماه اخیر پیشنهاد می‌شود</p></div><button type="button" class="lw-add" data-add="income">+ نقطه درآمد</button></div><div id="income-list"></div><input type="hidden" name="income_point_count" id="income-count" value="0"></div>
+              <div class="lw-subcard"><div class="lw-subcard-head"><div><h3>نمودار بازدید / مخاطب</h3><p>تعداد بازدید یا کاربر در هر تاریخ</p></div><button type="button" class="lw-add" data-add="views">+ نقطه بازدید</button></div><div id="views-list"></div><input type="hidden" name="views_point_count" id="views-count" value="0"></div>
+              <div class="lw-subcard feature-block" data-feature-block="traffic"><div class="lw-subcard-head"><div><h3>منابع ترافیک <span class="optional">اختیاری</span></h3><p>اگر منبعی وارد می‌کنید، مجموع سهم منابع باید دقیقاً ۱۰۰٪ شود.</p></div><button type="button" class="lw-add" data-add="traffic">+ منبع ترافیک</button></div><div id="traffic-list"></div><div class="traffic-meter" id="traffic-meter"><span id="traffic-message">هنوز منبعی ثبت نشده است.</span><b id="traffic-total">۰٪</b></div><input type="hidden" name="traffic_count" id="traffic-count" value="0"></div>
+            </div></div>
+            <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn next" type="button" data-next>شرایط فروش ←</button></nav>
+          </section>
+
+          <section class="lw-panel" data-panel="sale">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">🤝</div><div><h2>قیمت و شرایط انتقال</h2><p>دقیقاً مشخص کنید خریدار چه چیزی دریافت می‌کند.</p></div></div><div class="lw-card-body"><div class="lw-fields">
+              <div class="lw-field"><label>قیمت پیشنهادی (تومان) <span class="req">*</span></label><input type="number" name="price" id="price" required min="1"><small>ارزش کل معامله را بدون جداکننده وارد کنید.</small><div class="error">قیمت باید بیشتر از صفر باشد.</div></div>
+              <div class="lw-field"><label>قیمت با تخفیف <span class="optional">اختیاری</span></label><input type="number" name="discount_price" min="1"><small>در صورت استفاده باید از قیمت اصلی کمتر باشد.</small></div>
+              <div class="lw-field"><label>نوع فروش <span class="req">*</span></label><select name="sale_type" id="sale_type" required><option value="">انتخاب کنید</option><option value="full_ownership">انتقال کامل مالکیت</option><option value="partial_ownership">فروش بخشی از مالکیت</option><option value="license">فروش مجوز / لایسنس</option><option value="revenue_share">سهم از درآمد</option><option value="brand">فروش برند</option></select><div class="error">نوع فروش را انتخاب کنید.</div></div>
+              <div class="lw-field"><label>دلیل واگذاری <span class="optional">اختیاری</span></label><select name="sale_reason"><option value="">انتخاب کنید</option><option value="focus_other_projects">تمرکز روی پروژه‌های دیگر</option><option value="lack_of_time">کمبود زمان</option><option value="need_capital">نیاز به سرمایه</option><option value="immigration">مهاجرت</option><option value="career_change">تغییر مسیر شغلی</option><option value="partner_dispute">اختلاف شرکا</option><option value="growth_ceiling">محدودیت رشد فردی</option><option value="personal_health">دلایل شخصی</option></select></div>
+              <div class="lw-field full"><label>فرایند و زمان‌بندی تحویل <span class="optional">اختیاری</span></label><textarea name="ownership_transfer_conditions" id="transfer" rows="4" placeholder="مثال: انتقال دسترسی‌ها طی ۳ روز کاری و تحویل نهایی پس از تأیید خریدار"></textarea><small>در این قسمت فقط روش، ترتیب و زمان تحویل را بنویسید؛ فهرست اقلام در مرحله «دارایی‌های فروش» ثبت می‌شود.</small></div>
+              <div class="lw-field full"><label>پشتیبانی پس از فروش <span class="optional">اختیاری</span></label><textarea name="post_sale_support" rows="3" placeholder="مثال: ۳۰ روز آموزش و رفع اشکال"></textarea><small>مدت، کانال ارتباطی و حدود تعهد پشتیبانی را مشخص کنید.</small></div>
+              <div class="lw-field full"><label class="lw-check"><input type="checkbox" name="suggested_price"><span>خریداران بتوانند قیمت دیگری پیشنهاد دهند</span></label></div>
+              <div class="lw-field full"><label class="lw-check"><input type="checkbox" name="is_private"><span>اطلاعات حساس فقط برای خریداران تأییدشده نمایش داده شود</span></label></div>
+            </div></div></div>
+            <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn next" type="button" data-next>معرفی کامل و اقلام فروش ←</button></nav>
+          </section>
+
+          <section class="lw-panel" data-panel="story">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">🧾</div><div><h2>درباره پلتفرم و اقلام معامله</h2><p>آنچه خریدار دریافت می‌کند و سؤال‌های متداول</p></div></div><div class="lw-card-body">
+              <div class="lw-field full"><label>درباره پلتفرم <span class="optional">اختیاری</span></label><small style="margin-bottom:9px">با HTML ساختار محتوا و با CSS ظاهر آن را تنظیم کنید. دکمه‌های آماده برای کاربران بدون دانش کدنویسی طراحی شده‌اند.</small>
+                <div class="rich-editor">
+                  <div class="rich-toolbar" aria-label="ابزارهای ویرایش HTML">
+                    <button type="button" class="rich-tool" data-html-snippet="<h2>عنوان اصلی</h2>">H2 عنوان</button>
+                    <button type="button" class="rich-tool" data-html-snippet="<h3>زیرعنوان</h3>">H3 زیرعنوان</button>
+                    <button type="button" class="rich-tool" data-wrap-tag="p">پاراگراف</button>
+                    <button type="button" class="rich-tool" data-wrap-tag="strong">متن پررنگ</button>
+                    <button type="button" class="rich-tool" data-wrap-tag="em">متن مورب</button>
+                    <button type="button" class="rich-tool" data-html-snippet="<ul>\n  <li>ویژگی اول</li>\n  <li>ویژگی دوم</li>\n</ul>">فهرست</button>
+                    <button type="button" class="rich-tool" data-html-snippet="<blockquote>نکته مهم درباره پلتفرم</blockquote>">نقل‌قول</button>
+                    <button type="button" class="rich-tool" data-html-snippet="<div class=&quot;info-card&quot;>\n  <h3>فرصت رشد</h3>\n  <p>توضیحات فرصت رشد را اینجا بنویسید.</p>\n</div>">کارت آماده</button>
+                    <button type="button" class="rich-tool" data-html-snippet="<a href=&quot;https://example.com&quot;>مشاهده لینک</a>">لینک</button>
+                  </div>
+                  <div class="rich-tabs"><button type="button" class="rich-tab active" data-rich-tab="html">HTML محتوا</button><button type="button" class="rich-tab" data-rich-tab="css">CSS سفارشی</button></div>
+                  <div class="rich-source" data-source="html"><textarea name="about_platform" id="about-html" placeholder="<h2>درباره کسب‌وکار</h2>&#10;<p>داستان، مدل فعالیت، مزیت رقابتی و فرصت‌های رشد را توضیح دهید.</p>"></textarea></div>
+                  <div class="rich-source is-hidden" data-source="css"><div class="rich-toolbar" style="padding:0 0 9px;background:transparent;border:0"><button type="button" class="rich-tool" data-css-snippet="h2 { color: #3157d5; font-size: 26px; }">استایل عنوان</button><button type="button" class="rich-tool" data-css-snippet=".info-card { background-color: #f2f5ff; padding: 20px; border-radius: 12px; }">استایل کارت</button><button type="button" class="rich-tool" data-css-snippet="p { line-height: 1.9; color: #374151; }">خوانایی متن</button></div><textarea name="about_platform_css" id="about-css" placeholder="h2 { color: #3157d5; }&#10;.info-card { background-color: #f2f5ff; padding: 20px; border-radius: 12px; }"></textarea><small>برای امنیت، فقط ویژگی‌های ظاهری امن ذخیره می‌شوند؛ URL، اسکریپت و position پذیرفته نمی‌شوند.</small></div>
                 </div>
+                <div class="rich-preview-wrap"><div class="rich-preview-head"><b>پیش‌نمایش زنده خروجی</b><span>خروجی در یک محیط جدا و امن نمایش داده می‌شود</span></div><iframe id="about-preview" class="rich-preview" sandbox="" title="پیش‌نمایش درباره پلتفرم"></iframe></div>
               </div>
+              <div class="lw-subcard"><div class="lw-subcard-head"><div><h3>دارایی‌های فروش</h3><p>هر قلم قابل انتقال را جداگانه ثبت کنید</p></div><button type="button" class="lw-add" data-add="saleAsset">+ افزودن دارایی</button></div><div id="sale-asset-list"></div><input type="hidden" name="sale_include_count" id="sale-asset-count" value="0"></div>
+              <div class="lw-subcard feature-block" data-feature-block="licenses"><div class="lw-subcard-head"><div><h3>مجوزها و دسترسی‌های رسمی</h3><p>مجوز کسب، لایسنس نرم‌افزار یا قرارداد قابل انتقال</p></div><button type="button" class="lw-add" data-add="license">+ افزودن مجوز</button></div><div id="license-list"></div><input type="hidden" name="license_item_count" id="license-count" value="0"></div>
+              <div class="lw-subcard"><div class="lw-subcard-head"><div><h3>پرسش و پاسخ</h3><p>پاسخ پرسش‌هایی که معمولاً خریداران می‌پرسند</p></div><button type="button" class="lw-add" data-add="faq">+ افزودن پرسش</button></div><div id="faq-list"></div><input type="hidden" name="faq_count" id="faq-count" value="0"></div>
+            </div></div>
+            <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn next" type="button" data-next>اکوسیستم و تکنولوژی ←</button></nav>
+          </section>
 
-              <div>
-                <div class="tech-group-title">🎨 Frontend</div>
-                <div class="tech-chips">
-                  <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="reactjs"><span>React</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="nextjs"><span>Next.js</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="vuejs"><span>Vue.js</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="nuxtjs"><span>Nuxt.js</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="angular"><span>Angular</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="svelte"><span>Svelte</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="jquery"><span>jQuery</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="tailwind"><span>Tailwind</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_frontend" value="bootstrap"><span>Bootstrap</span></label>
-                </div>
+          <section class="lw-panel" data-panel="ecosystem">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">🧩</div><div><h2>اکوسیستم، خدمات و تکنولوژی‌ها</h2><p>این بخش فقط برای دسته‌های مرتبط وارد مسیر می‌شود.</p></div></div><div class="lw-card-body">
+              <div class="lw-subcard feature-block" data-feature-block="social_links"><div class="lw-subcard-head"><div><h3>رسانه‌های اجتماعی وابسته</h3><p>برای خود دسته «شبکه اجتماعی» نمایش داده نمی‌شود تا داده تکراری نباشد</p></div><button type="button" class="lw-add" data-add="social">+ افزودن رسانه</button></div><div id="social-list"></div><input type="hidden" name="social_count" id="social-count" value="0"></div>
+              <div class="lw-subcard feature-block" data-feature-block="services"><div class="lw-subcard-head"><div><h3>خدمات مورد استفاده</h3><p>سرویس‌های اشتراکی، ابری، پیامکی، تحلیلی و عملیاتی</p></div><button type="button" class="lw-add" data-add="service">+ افزودن خدمت</button></div><div id="service-list"></div><input type="hidden" name="service_count" id="service-count" value="0"></div>
+              <div class="lw-subcard feature-block" data-feature-block="technical"><div class="lw-subcard-head"><div><h3>تکنولوژی‌ها</h3><p>همه گزینه‌های مورد استفاده را انتخاب کنید</p></div></div>
+                <p style="font-size:10.5px;font-weight:800">CMS و فروشگاه‌ساز</p><div class="lw-chip-grid"><label class="lw-chip"><input type="checkbox" name="tech_cms" value="wordpress">WordPress</label><label class="lw-chip"><input type="checkbox" name="tech_cms" value="woocommerce">WooCommerce</label><label class="lw-chip"><input type="checkbox" name="tech_cms" value="shopify">Shopify</label><label class="lw-chip"><input type="checkbox" name="tech_cms" value="opencart">OpenCart</label><label class="lw-chip"><input type="checkbox" name="tech_cms" value="custom_cms">اختصاصی</label></div>
+                <p style="font-size:10.5px;font-weight:800">Backend و Frontend</p><div class="lw-chip-grid"><label class="lw-chip"><input type="checkbox" name="tech_backend" value="django">Django</label><label class="lw-chip"><input type="checkbox" name="tech_backend" value="laravel">Laravel</label><label class="lw-chip"><input type="checkbox" name="tech_backend" value="nodejs">Node.js</label><label class="lw-chip"><input type="checkbox" name="tech_frontend" value="reactjs">React</label><label class="lw-chip"><input type="checkbox" name="tech_frontend" value="nextjs">Next.js</label><label class="lw-chip"><input type="checkbox" name="tech_frontend" value="vuejs">Vue</label></div>
+                <p style="font-size:10.5px;font-weight:800">دیتابیس، زیرساخت و موبایل</p><div class="lw-chip-grid"><label class="lw-chip"><input type="checkbox" name="tech_db" value="mysql">MySQL</label><label class="lw-chip"><input type="checkbox" name="tech_db" value="postgresql">PostgreSQL</label><label class="lw-chip"><input type="checkbox" name="tech_db" value="mongodb">MongoDB</label><label class="lw-chip"><input type="checkbox" name="tech_infra" value="vps">VPS</label><label class="lw-chip"><input type="checkbox" name="tech_infra" value="aws">AWS</label><label class="lw-chip"><input type="checkbox" name="tech_mobile" value="flutter">Flutter</label><label class="lw-chip"><input type="checkbox" name="tech_mobile" value="react_native">React Native</label></div>
+                <p style="font-size:10.5px;font-weight:800">DevOps و سرویس جانبی</p><div class="lw-chip-grid"><label class="lw-chip"><input type="checkbox" name="tech_devops" value="github">GitHub</label><label class="lw-chip"><input type="checkbox" name="tech_devops" value="docker">Docker</label><label class="lw-chip"><input type="checkbox" name="tech_devops" value="github_actions">GitHub Actions</label><label class="lw-chip"><input type="checkbox" name="tech_third" value="ga4">Google Analytics</label><label class="lw-chip"><input type="checkbox" name="tech_third" value="zarinpal">زرین‌پال</label><label class="lw-chip"><input type="checkbox" name="tech_third" value="kavenegar">کاوه‌نگار</label></div>
               </div>
+            </div></div>
+            <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn next" type="button" data-next>تصاویر و مدارک ←</button></nav>
+          </section>
 
-              <div>
-                <div class="tech-group-title">🗄️ Database</div>
-                <div class="tech-chips">
-                  <label class="tech-chip"><input type="checkbox" name="tech_db" value="mysql"><span>MySQL</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_db" value="postgresql"><span>PostgreSQL</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_db" value="mongodb"><span>MongoDB</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_db" value="redis"><span>Redis</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_db" value="sqlite"><span>SQLite</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_db" value="firebase"><span>Firebase</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_db" value="elasticsearch"><span>Elasticsearch</span></label>
-                </div>
-              </div>
+          <section class="lw-panel" data-panel="media">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">🖼️</div><div><h2>تصاویر و مدارک</h2><p>یک تصویر اصلی باکیفیت برای آگهی انتخاب کنید.</p></div></div><div class="lw-card-body">
+              <div class="lw-field"><label>تصویر اصلی <span class="req">*</span></label><label class="lw-upload"><span style="font-size:30px">☁️</span><strong id="upload-title">انتخاب تصویر اصلی</strong><small>JPG، PNG یا WEBP — حداکثر ۵ مگابایت</small><input type="file" name="main_image" id="main_image" required accept="image/jpeg,image/png,image/webp"><img class="lw-preview" id="image-preview" alt="پیش‌نمایش تصویر"></label><div class="error">تصویر اصلی را انتخاب کنید.</div></div>
+              <div class="lw-field" style="margin-top:18px"><label>تصاویر تکمیلی <span class="optional">اختیاری</span></label><input type="file" name="gallery_images" accept="image/jpeg,image/png,image/webp" multiple><small>صفحات مهم محصول یا داشبورد را بدون نمایش داده محرمانه اضافه کنید.</small></div>
+              <div class="lw-subcard feature-block" data-feature-block="income_proof"><div class="lw-subcard-head"><div><h3>اثبات مالی</h3><p>تصویر پنل پرداخت، گزارش فروش یا صورت‌حساب بدون اطلاعات حساس</p></div><button type="button" class="lw-add" data-add="proof">+ افزودن مدرک</button></div><div id="proof-list"></div><input type="hidden" name="income_proof_count" id="proof-count" value="0"></div>
+              <div class="lw-subcard"><div class="lw-subcard-head"><div><h3>پیوست‌ها</h3><p>گزارش PDF، قرارداد نمونه یا مستند تکمیلی</p></div><button type="button" class="lw-add" data-add="attachment">+ افزودن پیوست</button></div><div id="attachment-list"></div><input type="hidden" name="attachment_count" id="attachment-count" value="0"></div>
+            </div></div>
+            <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn next" type="button" data-next>بازبینی نهایی ←</button></nav>
+          </section>
 
-              <div>
-                <div class="tech-group-title">☁️ زیرساخت</div>
-                <div class="tech-chips">
-                  <label class="tech-chip"><input type="checkbox" name="tech_infra" value="vps"><span>VPS</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_infra" value="dedicated"><span>اختصاصی</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_infra" value="shared_hosting"><span>اشتراکی</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_infra" value="hetzner"><span>Hetzner</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_infra" value="aws"><span>AWS</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_infra" value="liara"><span>لیارا</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_infra" value="arvancloud"><span>آروان</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_infra" value="nginx"><span>Nginx</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_infra" value="docker"><span>Docker</span></label>
-                </div>
-              </div>
-
-              <div>
-                <div class="tech-group-title">📱 موبایل</div>
-                <div class="tech-chips">
-                  <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="flutter"><span>Flutter</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="react_native"><span>React Native</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="android_native"><span>Android</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="ios_native"><span>iOS</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_mobile" value="pwa"><span>PWA</span></label>
-                </div>
-              </div>
-
-              <div>
-                <div class="tech-group-title">🔌 سرویس‌های جانبی</div>
-                <div class="tech-chips">
-                  <label class="tech-chip"><input type="checkbox" name="tech_third" value="zarinpal"><span>زرین‌پال</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_third" value="zibal"><span>زیبال</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_third" value="kavenegar"><span>کاوه‌نگار</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_third" value="ga4"><span>GA4</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_third" value="mailchimp"><span>Mailchimp</span></label>
-                  <label class="tech-chip"><input type="checkbox" name="tech_third" value="clarity"><span>MS Clarity</span></label>
-                </div>
-              </div>
-
-            </div>
-          </div>
+          <section class="lw-panel" data-panel="review">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">✅</div><div><h2>بازبینی و ثبت آگهی</h2><p>پیش از ارسال، خلاصه اطلاعات را یک‌بار کنترل کنید.</p></div></div><div class="lw-card-body"><div class="review-grid" id="review-grid"></div><div class="lw-note" style="margin:18px 0 0;background:#eefaf3;color:#215f40">آگهی پس از ثبت با وضعیت «در انتظار تأیید» ذخیره می‌شود.</div></div></div>
+            <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn submit" id="submit-btn" type="submit">ثبت نهایی آگهی</button></nav>
+          </section>
         </div>
+
+        <aside class="lw-side">
+          <div class="lw-side-card"><h3>خلاصه آگهی</h3><ul class="lw-summary"><li><span>دسته</span><b id="sum-category">انتخاب نشده</b></li><li><span>عنوان</span><b id="sum-title">—</b></li><li><span>قیمت</span><b id="sum-price">—</b></li><li><span>تکمیل</span><b id="sum-progress">۱۴٪</b></li></ul></div>
+          <div class="lw-side-card"><h3 id="tip-title">چرا اول دسته‌بندی؟</h3><p id="tip-text">با انتخاب دقیق دسته، فقط اطلاعات مرتبط با همان دارایی از شما خواسته می‌شود.</p></div>
+          <div class="lw-side-card lw-safe"><h3>🔒 حریم خصوصی</h3><p>اطلاعات حساس را در توضیحات عمومی ننویسید؛ در صورت نیاز آگهی را خصوصی ثبت کنید.</p></div>
+        </aside>
       </div>
-
-      <div data-section="step6_services_used">
-        <div class="wiz-section">
-          <div class="wiz-section-head">
-            <div class="ico">🛠️</div>
-            <div><h3>خدمات مورد استفاده</h3><p>سرویس‌های بیرونی کسب‌وکار</p></div>
-          </div>
-          <div class="wiz-section-body">
-            <div class="dyn-list" id="services-list"></div>
-            <button type="button" class="add-btn" onclick="addService()">+ افزودن خدمت</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="wiz-nav">
-        <button type="button" class="wiz-btn wiz-btn-ghost" onclick="prevStep()">مرحله قبل</button>
-        <div class="wiz-nav-info" style="text-align:center">مرحله <strong>۷ از ۸</strong> — اطلاعات فنی</div>
-        <button type="button" class="wiz-btn wiz-btn-success" onclick="nextStep()">مرحله بعد</button>
-      </div>
-    </section>
-
-    <!-- ══════════════ STEP 8 — بازبینی ══════════════ -->
-    <section class="wiz-panel" id="step-7">
-      <div class="wiz-section">
-        <div class="wiz-section-head">
-          <div class="ico">✅</div>
-          <div><h3>بازبینی نهایی</h3><p>اطلاعات را بررسی و آگهی را ثبت کنید</p></div>
-        </div>
-        <div class="wiz-section-body">
-          <div id="review-content" style="font-size:13px;line-height:1.8">
-            <p style="color:var(--wiz-muted)">در حال آماده‌سازی خلاصه...</p>
-          </div>
-
-          <hr style="border:none;border-top:1px solid var(--wiz-border);margin:20px 0">
-
-          <div style="font-size:13px;font-weight:800;color:var(--wiz-text);margin-bottom:10px">
-            گزینه‌های ارتقای آگهی
-          </div>
-          <div class="review-options">
-            <label><input type="checkbox" name="boost"> 🚀 آگهی پیشرفته</label>
-            <label><input type="checkbox" name="premier"> 👑 آگهی برتر</label>
-            <label><input type="checkbox" name="is_verified"> ✓ اطلاعات تأیید شده</label>
-          </div>
-        </div>
-      </div>
-
-      <div class="wiz-nav">
-        <button type="button" class="wiz-btn wiz-btn-ghost" onclick="prevStep()">مرحله قبل</button>
-        <div class="wiz-nav-info" style="text-align:center">مرحله <strong>۸ از ۸</strong> — بازبینی و ثبت</div>
-        <button type="button" class="wiz-btn wiz-btn-success" id="submit-btn" onclick="submitForm()">
-          💾 ثبت نهایی آگهی
-        </button>
-      </div>
-    </section>
-
-  </div><!-- /form-col -->
-
-  <!-- ══════════════ SIDEBAR ══════════════ -->
-  <aside class="wiz-side" id="wiz-side">
-    <div class="wiz-side-card wiz-info-card">
-      <h4 id="side-title">📋 راهنمای مرحله</h4>
-      <p id="side-desc">اطلاعات پایه آگهی خود را وارد کنید. عنوان جذاب و دسته‌بندی دقیق، شانس دیده‌شدن آگهی شما را چند برابر می‌کند.</p>
-    </div>
-
-    <div class="wiz-side-card">
-      <h4>✅ چک‌لیست مرحله</h4>
-      <ul class="wiz-checklist" id="side-checklist">
-        <li><span class="ck"><span class="ck-ico"><span></span></span>عنوان آگهی</span></li>
-        <li><span class="ck"><span class="ck-ico"><span></span></span>حوزه فعالیت</span></li>
-        <li><span class="ck"><span class="ck-ico"><span></span></span>نوع فروش</span></li>
-        <li><span class="ck"><span class="ck-ico"><span></span></span>تصویر اصلی</span></li>
-      </ul>
-    </div>
-
-    <div class="wiz-side-card wiz-tip-card" id="side-tip-card">
-      <h4>💡 نکته حرفه‌ای</h4>
-      <p id="side-tip">از کلمات کلیدی مرتبط با حوزه کسب‌وکار خود در عنوان استفاده کنید تا در جستجوها بهتر دیده شوید.</p>
-    </div>
-
-    <div class="wiz-side-card">
-      <h4>📊 پیشرفت کلی</h4>
-      <div style="height:8px;background:#eef1f5;border-radius:99px;overflow:hidden;margin-bottom:8px">
-        <div id="side-progress-fill" style="height:100%;background:linear-gradient(90deg,#3b5bdb,#748ffc);width:12.5%;transition:width .4s;border-radius:99px"></div>
-      </div>
-      <p style="font-size:11px;color:var(--wiz-muted);margin:0">
-        <span id="side-progress-text">۱ از ۸ مرحله تکمیل شده</span>
-      </p>
-    </div>
-  </aside>
-
-</div><!-- /wiz-layout -->
-</form>
+    </form>
+  </div>
+</main>
+<div class="toast-wrap" id="toasts"></div>
 
 <script>
-// ═══════════════════════════════════════════════════════════
-//  کانفیگ دسته‌بندی‌ها (از Django تزریق شده)
-// ═══════════════════════════════════════════════════════════
-const CATEGORY_CONFIG = {{ category_config_json|safe }};
-const SECTIONS_CONFIG = {{ sections_config_json|safe }};
+(function(){
+  'use strict';
+  const CONFIG = JSON.parse('{{ category_config_json|escapejs }}');
+  const form = document.getElementById('listing-form');
+  const categoryInput = document.getElementById('category-input');
+  const labels = {category:'انتخاب دسته‌بندی', basics:'معرفی دارایی', details:'مشخصات تخصصی', finance:'درآمد و هزینه', analytics:'نمودار و ترافیک', sale:'شرایط فروش', story:'معرفی و اقلام', ecosystem:'اکوسیستم فنی', media:'تصاویر و مدارک', review:'بازبینی نهایی'};
+  const tips = {basics:'شفاف و مختصر بنویسید؛ آمار تخصصی را در مرحله بعد وارد کنید.',details:'این سؤال‌ها برای زیر‌دسته انتخابی شما تنظیم شده‌اند.',finance:'عددهای مالی باید با مدارک واقعی قابل اثبات باشند.',analytics:'نقاط زمانی باعث می‌شوند روند رشد به‌جای یک عدد ثابت دیده شود.',sale:'دارایی‌های منتقل‌شونده و تعهدات خود را بدون ابهام بنویسید.',story:'اقلام معامله و پرسش‌های پرتکرار را شفاف ثبت کنید.',ecosystem:'فقط سرویس‌ها و فناوری‌هایی را انتخاب کنید که واقعاً منتقل می‌شوند.',media:'از تصاویر خوانا و بدون اطلاعات محرمانه استفاده کنید.',review:'پیش از ارسال، عنوان، قیمت و دسته را کنترل کنید.'};
+  let selected = '', main = '', flow = [], index = 0, maxVisited = 0;
 
-// نگاشت زیردسته → دسته اصلی
-const SUB_TO_MAIN = {
-  {% for slug, label, subs in platform_categories %}
-    {% for sub_slug, sub_label in subs %}
-      "{{ sub_slug }}": "{{ slug }}",
-    {% endfor %}
-  {% endfor %}
-};
+  const esc = value => String(value == null ? '' : value).replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+  function toast(message, type=''){const el=document.createElement('div');el.className='toast '+type;el.textContent=message;document.getElementById('toasts').appendChild(el);setTimeout(()=>el.remove(),4500)}
+  function computeFlow(){const cfg=CONFIG[selected]||{};flow=['category','basics','details'];if(cfg.financial)flow.push('finance');if(cfg.charts)flow.push('analytics');flow.push('sale','story');if(cfg.technical||cfg.social_links||cfg.services)flow.push('ecosystem');flow.push('media','review')}
+  function drawSteps(){const wrap=document.getElementById('steps');wrap.innerHTML='';flow.forEach((key,i)=>{const b=document.createElement('button');b.type='button';b.className='lw-step '+(i===index?'active':i<index?'done':'locked');b.innerHTML='<i>'+(i<index?'✓':i+1)+'</i><span>'+labels[key]+'</span>';b.disabled=i>maxVisited;b.onclick=()=>show(i);wrap.appendChild(b)})}
+  function show(nextIndex){if(nextIndex<0||nextIndex>=flow.length)return;document.querySelectorAll('.lw-panel').forEach(p=>p.classList.toggle('active',p.dataset.panel===flow[nextIndex]));index=nextIndex;maxVisited=Math.max(maxVisited,index);drawSteps();const pct=Math.round((index+1)/flow.length*100);document.getElementById('progress-fill').style.width=pct+'%';document.getElementById('progress-title').textContent='مرحله '+(index+1)+' — '+labels[flow[index]];document.getElementById('progress-count').textContent=(index+1)+' از '+flow.length;document.getElementById('sum-progress').textContent=pct+'٪';document.getElementById('tip-title').textContent=labels[flow[index]];document.getElementById('tip-text').textContent=tips[flow[index]]||'انتخاب‌های خود را با دقت بازبینی کنید.';if(flow[index]==='review')buildReview();window.scrollTo({top:0,behavior:'smooth'})}
+  function currentPanel(){return document.querySelector('.lw-panel.active')}
+  function validatePanel(){let valid=true;currentPanel().querySelectorAll('[required]:not(:disabled)').forEach(el=>{const field=el.closest('.lw-field');let ok=el.type==='file'?el.files.length>0:el.checkValidity();if(!ok){valid=false;if(field)field.classList.add('invalid')}else if(field)field.classList.remove('invalid')});if(flow[index]==='category'&&!selected){valid=false;document.getElementById('category-error').style.display='block'}if(flow[index]==='analytics'){const state=trafficState();if(state.hasValues&&state.total!==100){valid=false;markTraffic(state.total)}}return valid}
+  document.querySelectorAll('[data-next]').forEach(b=>b.onclick=()=>{if(!validatePanel()){toast('لطفاً موارد مشخص‌شده را کامل کنید.','err');return}show(index+1)});
+  document.querySelectorAll('[data-prev]').forEach(b=>b.onclick=()=>show(index-1));
 
-// ═══════════════════════════════════════════════════════════
-//  محتوای راهنمای هر مرحله
-// ═══════════════════════════════════════════════════════════
-const STEP_META = {
-  1: {
-    title: '📋 اطلاعات پایه',
-    desc: 'عنوان جذاب، دسته‌بندی دقیق و تصویر اصلی باکیفیت، سه عامل کلیدی در جلب توجه خریدار هستند.',
-    tip: 'از کلمات کلیدی مرتبط با حوزه کسب‌وکار خود در عنوان استفاده کنید تا در جستجوها بهتر دیده شوید.',
-    checklist: ['عنوان آگهی', 'حوزه فعالیت', 'نوع فروش', 'تصویر اصلی'],
-    checkKeys: ['f-title', 'f-areas', 'f-sale-type', 'f-main-image']
-  },
-  2: {
-    title: '💰 اطلاعات مالی',
-    desc: 'شفافیت مالی، مهم‌ترین عامل اعتماد خریداران حرفه‌ای است. درآمد و هزینه‌ها را دقیق وارد کنید.',
-    tip: 'اگر درآمد ماهانه بالای ۱۰ میلیون تومان دارید، حتماً مدارک آن را در مرحله رسانه آپلود کنید.',
-    checklist: ['قیمت پایه'],
-    checkKeys: ['f-price']
-  },
-  3: {
-    title: '🎯 جزئیات دسته',
-    desc: 'فیلدهای اختصاصی این مرحله بر اساس دسته‌بندی انتخابی شما نمایش داده می‌شود.',
-    tip: 'هرچه اطلاعات تخصصی‌تر باشد، خریداران واقعی‌تر جذب می‌شوند.',
-    checklist: [],
-    checkKeys: []
-  },
-  4: {
-    title: '📝 محتوا و توضیحات',
-    desc: 'توضیحات جامع، سوالات متداول و معرفی دارایی‌ها به خریدار کمک می‌کند تصمیم بهتری بگیرد.',
-    tip: 'حداقل ۱۰۰ کلمه توضیح بنویسید و از HTML برای ساختاردهی استفاده کنید.',
-    checklist: ['توضیحات آگهی'],
-    checkKeys: ['f-description']
-  },
-  5: {
-    title: '📊 آمار و نمودار',
-    desc: 'نمودارهای درآمد و بازدید، تصویری حرفه‌ای از روند رشد کسب‌وکار ارائه می‌دهد.',
-    tip: 'حداقل ۶ نقطه داده در هر نمودار اضافه کنید تا روند به‌خوبی دیده شود.',
-    checklist: [],
-    checkKeys: []
-  },
-  6: {
-    title: '📸 رسانه و مدارک',
-    desc: 'شبکه‌های اجتماعی، مدارک درآمد و منابع ترافیک، اعتبار آگهی شما را بالا می‌برد.',
-    tip: 'مدارک درآمد را از پنل‌های رسمی (مثل درگاه پرداخت) اسکرین‌شات کنید.',
-    checklist: [],
-    checkKeys: []
-  },
-  7: {
-    title: '⚙️ اطلاعات فنی',
-    desc: 'استک فنی کسب‌وکار برای خریداران فنی و توسعه‌دهندگان اهمیت بالایی دارد.',
-    tip: 'اگر از تکنولوژی خاصی استفاده نمی‌کنید، این مرحله را می‌توانید رد کنید.',
-    checklist: [],
-    checkKeys: []
-  },
-  8: {
-    title: '✅ بازبینی نهایی',
-    desc: 'اطلاعات را یک بار دیگر بررسی کنید. پس از ثبت، امکان ویرایش محدود خواهد بود.',
-    tip: 'قبل از ثبت، پیش‌نمایش آگهی را در ذهن خود مرور کنید.',
-    checklist: [],
-    checkKeys: []
+  document.querySelectorAll('.lw-main-cat').forEach(button=>button.onclick=()=>{document.querySelectorAll('.lw-main-cat').forEach(x=>x.classList.remove('active'));button.classList.add('active');document.querySelectorAll('.lw-sub-wrap').forEach(x=>x.classList.toggle('show',x.dataset.subs===button.dataset.main));});
+  document.querySelectorAll('[name=category_choice]').forEach(radio=>radio.onchange=()=>{selected=radio.value;main=(CONFIG[selected]||{}).main||'';categoryInput.value=selected;document.querySelectorAll('.lw-sub').forEach(x=>x.classList.toggle('active',x.contains(radio)));document.getElementById('category-error').style.display='none';document.getElementById('sum-category').textContent=radio.dataset.label;renderFields();computeFlow();applyFeatureVisibility();index=0;maxVisited=0;drawSteps();updateCategoryAwareBasics()});
+
+  function attrs(spec){let out='';['min','max','step'].forEach(k=>{if(spec[k]!==undefined)out+=' '+k+'="'+esc(spec[k])+'"'});if(spec.required)out+=' required';if(spec.ltr)out+=' class="ltr"';return out}
+  function renderFields(){const cfg=CONFIG[selected];if(!cfg)return;document.getElementById('details-title').textContent=cfg.title;document.getElementById('details-icon').textContent=cfg.icon;document.getElementById('dynamic-fields').innerHTML=cfg.fields.map(spec=>{const req=spec.required?'<span class="req">*</span>':'<span class="optional">اختیاری</span>';const help='<small>'+esc(spec.help||'اختیاری؛ فقط در صورت دسترسی به اطلاعات دقیق وارد کنید.')+'</small>';let control='';if(spec.type==='textarea')control='<textarea name="'+esc(spec.name)+'" rows="4" placeholder="'+esc(spec.placeholder||'')+'"'+attrs(spec)+'></textarea>';else if(spec.type==='select')control='<select name="'+esc(spec.name)+'"'+attrs(spec)+'><option value="">انتخاب کنید</option>'+(spec.options||[]).map(o=>'<option value="'+esc(o[0])+'">'+esc(o[1])+'</option>').join('')+'</select>';else if(spec.type==='checkbox')return '<div class="lw-field full"><label class="lw-check"><input type="checkbox" name="'+esc(spec.name)+'"><span>'+esc(spec.label)+'</span></label>'+help+'</div>';else control='<input type="'+esc(spec.type||'text')+'" name="'+esc(spec.name)+'" placeholder="'+esc(spec.placeholder||'')+'"'+attrs(spec)+'>';return '<div class="lw-field"><label>'+esc(spec.label)+' '+req+'</label>'+control+help+'<div class="error">'+esc(spec.label)+' را وارد کنید.</div></div>'}).join('')}
+  function updateCategoryAwareBasics(){document.getElementById('age-field').classList.toggle('is-hidden',main==='domain');const map={domain:'آدرس صفحه معرفی دامنه',social_media:'لینک صفحه / کانال',app:'وب‌سایت یا صفحه استور',website:'آدرس وب‌سایت',ecommerce:'آدرس فروشگاه'};document.getElementById('url-label').innerHTML=(map[main]||'آدرس دارایی')+' <span class="optional">اختیاری</span>'}
+  function applyFeatureVisibility(){const cfg=CONFIG[selected]||{};document.querySelectorAll('[data-feature-block]').forEach(block=>{const key=block.dataset.featureBlock;let visible=!!cfg[key];if((key==='financial'||key==='income_proof')&&document.getElementById('is_income')&&!document.getElementById('is_income').checked)visible=false;block.classList.toggle('is-hidden',!visible)})}
+  document.getElementById('is_income').onchange=function(){document.getElementById('finance-fields').classList.toggle('is-hidden',!this.checked);document.getElementById('finance-extras').classList.toggle('is-hidden',!this.checked);document.querySelectorAll('[data-income-required]').forEach(x=>x.required=this.checked);applyFeatureVisibility()};
+
+  const aboutHtml=document.getElementById('about-html'),aboutCss=document.getElementById('about-css'),aboutPreview=document.getElementById('about-preview');
+  function insertText(editor,text,wrapTag=''){const start=editor.selectionStart,end=editor.selectionEnd,selectedText=editor.value.slice(start,end);let insertion=text;if(wrapTag)insertion='<'+wrapTag+'>'+(selectedText||'متن خود را اینجا بنویسید')+'</'+wrapTag+'>';editor.setRangeText(insertion,start,end,'end');editor.focus();updateAboutPreview()}
+  document.querySelectorAll('[data-html-snippet]').forEach(button=>button.onclick=()=>insertText(aboutHtml,button.dataset.htmlSnippet));
+  document.querySelectorAll('[data-wrap-tag]').forEach(button=>button.onclick=()=>insertText(aboutHtml,'',button.dataset.wrapTag));
+  document.querySelectorAll('[data-css-snippet]').forEach(button=>button.onclick=()=>insertText(aboutCss,'\n'+button.dataset.cssSnippet+'\n'));
+  document.querySelectorAll('[data-rich-tab]').forEach(button=>button.onclick=()=>{document.querySelectorAll('[data-rich-tab]').forEach(tab=>tab.classList.toggle('active',tab===button));document.querySelectorAll('.rich-source').forEach(source=>source.classList.toggle('is-hidden',source.dataset.source!==button.dataset.richTab))});
+  function safePreviewHtml(value){const parsed=new DOMParser().parseFromString(value||'','text/html');parsed.querySelectorAll('script,style,iframe,object,embed,svg,img,video,audio,link,meta,form,input,button').forEach(node=>node.remove());parsed.querySelectorAll('*').forEach(node=>Array.from(node.attributes).forEach(attr=>{const name=attr.name.toLowerCase(),val=attr.value.toLowerCase();if(name.startsWith('on')||name==='src'||(name==='href'&&val.startsWith('javascript:')))node.removeAttribute(attr.name)}));return parsed.body.innerHTML}
+  function safePreviewCss(value){return String(value||'').replace(/[<>]/g,'').replace(/@import/gi,'').replace(/url\s*\(/gi,'blocked(').replace(/expression\s*\(/gi,'blocked(').replace(/javascript\s*:/gi,'')}
+  let previewTimer;
+  function updateAboutPreview(){clearTimeout(previewTimer);previewTimer=setTimeout(()=>{const html=safePreviewHtml(aboutHtml.value)||'<p style="color:#8a93a3">با نوشتن محتوا، پیش‌نمایش اینجا نمایش داده می‌شود.</p>';aboutPreview.srcdoc='<!doctype html><html dir="rtl" lang="fa"><head><meta charset="utf-8"><style>body{margin:0;padding:24px;font-family:Tahoma,Arial,sans-serif;color:#172033;line-height:1.9}*{box-sizing:border-box}a{color:#3157d5}blockquote{border-right:4px solid #3157d5;margin:16px 0;padding:8px 16px;background:#f5f7fb}'+safePreviewCss(aboutCss.value)+'</style></head><body>'+html+'</body></html>'},180)}
+  aboutHtml.addEventListener('input',updateAboutPreview);aboutCss.addEventListener('input',updateAboutPreview);updateAboutPreview();
+
+  const counters={};
+  function addRow(type){
+    const definitions={
+      expense:{list:'expense-list',count:'expense-count',cls:'',html:i=>`<input name="exp_name_${i}" placeholder="عنوان هزینه"><input type="number" min="0" name="exp_amount_${i}" placeholder="مبلغ"><select name="exp_period_${i}"><option value="monthly">ماهانه</option><option value="yearly">سالانه</option><option value="one_time">یک‌بار</option></select>`},
+      income:{list:'income-list',count:'income-count',cls:'two',html:i=>`<input type="date" name="income_date_${i}"><input type="number" min="0" name="income_val_${i}" placeholder="درآمد (تومان)">`},
+      views:{list:'views-list',count:'views-count',cls:'two',html:i=>`<input type="date" name="views_date_${i}"><input type="number" min="0" name="views_val_${i}" placeholder="بازدید / کاربر">`},
+      traffic:{list:'traffic-list',count:'traffic-count',cls:'two',html:i=>`<select name="trf_source_${i}"><option value="">انتخاب منبع</option><option value="organic_search">جستجوی ارگانیک</option><option value="direct">مستقیم</option><option value="social_media">شبکه اجتماعی</option><option value="referral">ارجاعی</option><option value="paid_ads">تبلیغات پولی</option><option value="email_sms">ایمیل و پیامک</option></select><input type="number" min="0" max="100" name="trf_pct_${i}" placeholder="درصد">`},
+      saleAsset:{list:'sale-asset-list',count:'sale-asset-count',cls:'one',html:i=>`<input name="sale_include_${i}" placeholder="مثال: دامنه، سورس‌کد یا بانک محتوا">`},
+      license:{list:'license-list',count:'license-count',cls:'one',html:i=>`<input name="lic_name_${i}" placeholder="نام مجوز / لایسنس قابل انتقال">`},
+      faq:{list:'faq-list',count:'faq-count',cls:'two',html:i=>`<input name="faq_question_${i}" placeholder="پرسش"><textarea rows="1" name="faq_answer_${i}" placeholder="پاسخ"></textarea><input type="hidden" name="faq_order_${i}" value="${i}">`},
+      social:{list:'social-list',count:'social-count',cls:'',html:i=>`<select name="sm_platform_${i}"><option value="instagram">اینستاگرام</option><option value="telegram">تلگرام</option><option value="twitter">X / توییتر</option><option value="linkedin">لینکدین</option><option value="facebook">فیسبوک</option><option value="other">سایر</option></select><input name="sm_followers_${i}" placeholder="تعداد دنبال‌کننده"><input type="url" name="sm_url_${i}" placeholder="https://...">`},
+      service:{list:'service-list',count:'service-count',cls:'one',html:i=>`<input name="service_${i}" placeholder="نام سرویس مورد استفاده">`},
+      proof:{list:'proof-list',count:'proof-count',cls:'two',html:i=>`<input type="file" accept="image/jpeg,image/png,image/webp" name="income_proof_img_${i}"><input name="income_proof_desc_${i}" placeholder="بازه و منبع مدرک">`},
+      attachment:{list:'attachment-list',count:'attachment-count',cls:'one',html:i=>`<input type="file" name="attachment_${i}">`}
+    };
+    const def=definitions[type];if(!def)return;const i=counters[type]||0;counters[type]=i+1;document.getElementById(def.count).value=counters[type];const row=document.createElement('div');row.className='lw-repeat-row '+def.cls;row.dataset.row=type;row.innerHTML=def.html(i)+'<button type="button" class="lw-remove" aria-label="حذف">×</button>';row.querySelector('.lw-remove').onclick=()=>{row.remove();if(type==='traffic')updateTrafficTotal()};document.getElementById(def.list).appendChild(row);if(type==='traffic'){row.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',updateTrafficTotal));updateTrafficTotal()}
   }
-};
-
-// ═══════════════════════════════════════════════════════════
-//  Toast
-// ═══════════════════════════════════════════════════════════
-function toast(msg, type, ms) {
-  type = type || 'info';
-  ms = ms || 4000;
-  var wrap = document.getElementById('toast-wrap');
-  var t = document.createElement('div');
-  t.className = 'toast t-' + type;
-  t.textContent = msg;
-  wrap.appendChild(t);
-  setTimeout(function() {
-    t.style.opacity = '0';
-    t.style.transition = 'opacity .3s';
-    setTimeout(function() { t.remove(); }, 300);
-  }, ms);
-}
-
-// ═══════════════════════════════════════════════════════════
-//  Step management
-// ═══════════════════════════════════════════════════════════
-var TOTAL_STEPS = 8;
-var currentStep = 1;
-
-// نگاشت شماره مرحله → id پنل
-var PANEL_MAP = {
-  1: 'step-1',
-  2: 'step-2',
-  3: 'step-cat',
-  4: 'step-3',
-  5: 'step-4',
-  6: 'step-5',
-  7: 'step-6',
-  8: 'step-7'
-};
-
-function goStep(n) {
-  if (n < 1 || n > TOTAL_STEPS) return;
-
-  document.querySelectorAll('.wiz-panel').forEach(function(p) { p.classList.remove('active'); });
-  var panel = document.getElementById(PANEL_MAP[n]);
-  if (panel) panel.classList.add('active');
-
-  document.querySelectorAll('.wiz-step').forEach(function(el) {
-    var s = parseInt(el.dataset.step, 10);
-    el.classList.remove('active', 'done');
-    if (s === n) el.classList.add('active');
-    else if (s < n) el.classList.add('done');
-  });
-
-  currentStep = n;
-
-  // عنوان
-  var meta = STEP_META[n];
-  var titleEl = document.getElementById('wiz-step-title');
-  if (titleEl && meta) titleEl.textContent = 'مرحله ' + toFa(n) + ' — ' + meta.title.replace(/^[^\s]+\s/, '');
-
-  // شمارنده
-  var counter = document.getElementById('wiz-step-counter');
-  if (counter) counter.textContent = toFa(n) + ' از ' + toFa(TOTAL_STEPS);
-
-  // Progress bar
-  var fill = document.getElementById('wiz-progress-fill');
-  if (fill) fill.style.width = ((n / TOTAL_STEPS) * 100) + '%';
-
-  // Sidebar
-  updateSidebar(n);
-
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  if (n === TOTAL_STEPS) buildReview();
-}
-
-function updateSidebar(n) {
-  var meta = STEP_META[n];
-  if (!meta) return;
-
-  var titleEl = document.getElementById('side-title');
-  var descEl = document.getElementById('side-desc');
-  var tipEl = document.getElementById('side-tip');
-  var clEl = document.getElementById('side-checklist');
-  var sideFill = document.getElementById('side-progress-fill');
-  var sideText = document.getElementById('side-progress-text');
-
-  if (titleEl) titleEl.textContent = meta.title;
-  if (descEl) descEl.textContent = meta.desc;
-  if (tipEl) tipEl.textContent = meta.tip;
-
-  // چک‌لیست
-  if (clEl && meta.checklist) {
-    var html = '';
-    meta.checklist.forEach(function(item, idx) {
-      var key = meta.checkKeys[idx];
-      var isOk = checkFieldValue(key);
-      html += '<li class="' + (isOk ? 'ok' : '') + '" data-key="' + (key || '') + '">' +
-        '<span class="ck"><span class="ck-ico"><span></span></span>' + item + '</span>' +
-        '</li>';
-    });
-    clEl.innerHTML = html || '<li style="color:var(--wiz-muted);font-size:11px">این مرحله چک‌لیست ندارد</li>';
-  }
-
-  if (sideFill) sideFill.style.width = ((n / TOTAL_STEPS) * 100) + '%';
-  if (sideText) sideText.textContent = toFa(n) + ' از ' + toFa(TOTAL_STEPS) + ' مرحله';
-}
-
-function checkFieldValue(key) {
-  if (!key) return false;
-  var el = document.getElementById(key);
-  if (!el) return false;
-  if (el.type === 'file') return el.files && el.files.length > 0;
-  return el.value && el.value.trim().length > 0;
-}
-
-function nextStep() {
-  var errs = validateStep(currentStep);
-  if (errs.length) {
-    toast('لطفاً تکمیل کنید: ' + errs.join('، '), 'err', 5000);
-    return;
-  }
-  goStep(currentStep + 1);
-}
-
-function prevStep() { goStep(currentStep - 1); }
-
-// تبدیل عدد به فارسی
-function toFa(num) {
-  var fa = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
-  return String(num).replace(/\d/g, function(d) { return fa[+d]; });
-}
-
-// ═══════════════════════════════════════════════════════════
-//  مدیریت داینامیک دسته‌بندی
-// ═══════════════════════════════════════════════════════════
-function getMainCategory() {
-  var sel = document.getElementById('f-category');
-  if (!sel || !sel.value) return null;
-  return SUB_TO_MAIN[sel.value] || 'other';
-}
-
-function renderCategoryFields() {
-  var main = getMainCategory();
-  var cfg = main ? CATEGORY_CONFIG[main] : null;
-  var container = document.getElementById('cat-specific-fields');
-  var titleEl = document.getElementById('cat-form-title');
-  var iconEl = document.getElementById('cat-form-icon');
-  var hintEl = document.getElementById('cat-form-hint');
-
-  if (!container) return;
-
-  if (!cfg) {
-    container.innerHTML = '<p style="color:var(--wiz-muted);font-size:13px;text-align:center;padding:20px 0">' +
-      'ابتدا در مرحله ۱ دسته‌بندی را انتخاب کنید تا فیلدهای اختصاصی نمایش داده شود.</p>';
-    if (titleEl) titleEl.textContent = 'اطلاعات اختصاصی دسته';
-    if (iconEl) iconEl.textContent = '📋';
-    if (hintEl) hintEl.textContent = 'ابتدا در مرحله ۱ دسته‌بندی را انتخاب کنید.';
-    return;
-  }
-
-  if (titleEl) titleEl.textContent = cfg.title;
-  if (iconEl) iconEl.textContent = cfg.icon;
-  if (hintEl) hintEl.textContent = 'فیلدهای زیر مخصوص دسته "' + cfg.label + '" هستند.';
-
-  var html = '';
-  cfg.fields.forEach(function(f) {
-    html += '<div class="wiz-field" style="margin-bottom:14px">';
-    html += '<label>' + f.label + '</label>';
-    if (f.type === 'textarea') {
-      html += '<textarea name="' + f.name + '" rows="3" placeholder="' + (f.placeholder || '') + '"></textarea>';
-    } else if (f.type === 'checkbox') {
-      html += '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;padding:8px 0">' +
-              '<input type="checkbox" name="' + f.name + '" style="width:16px;height:16px;accent-color:#3b5bdb">' +
-              '<span>بله</span></label>';
-    } else {
-      var step = f.step ? ' step="' + f.step + '"' : '';
-      var ltr = f.ltr ? ' style="direction:ltr;text-align:left"' : '';
-      html += '<input type="' + f.type + '" name="' + f.name + '"' + step + ltr +
-              ' placeholder="' + (f.placeholder || '') + '">';
-    }
-    html += '</div>';
-  });
-
-  container.innerHTML = html;
-}
-
-function applySectionVisibility() {
-  var main = getMainCategory();
-  var cfg = main ? SECTIONS_CONFIG[main] : null;
-
-  var cb = document.getElementById('f-is-income');
-  var hasIncome = cb ? cb.checked : true;
-
-  document.querySelectorAll('[data-section]').forEach(function(el) {
-    var key = el.dataset.section;
-
-    // ۱. چک دسته‌بندی
-    var visibleByCategory = !cfg ? true : (cfg[key] !== false);
-
-    // ۲. چک درآمد (اگر بخش درآمدی است و تیک نخورده → مخفی)
-    var isIncomeSection = (INCOME_SECTIONS.indexOf(key) !== -1);
-    var visibleByIncome = !isIncomeSection || hasIncome;
-
-    el.style.display = (visibleByCategory && visibleByIncome) ? '' : 'none';
-  });
-
-  // مخفی‌کردن نمودار درآمد در Step 5
-  var incomeChartBlock = document.querySelector('#income-points');
-  if (incomeChartBlock) {
-    var block = incomeChartBlock.closest('.chart-block');
-    if (block) block.style.display = hasIncome ? '' : 'none';
-  }
-}
-
-// ═══════════════════════════════════════════════════════════
-//  Validation
-// ═══════════════════════════════════════════════════════════
-function validateStep(n) {
-  var errs = [];
-
-  function checkField(id, label) {
-    var el = document.getElementById(id);
-    if (!el) return;
-    var ok = el.value && el.value.trim();
-    if (!ok) {
-      errs.push(label);
-      el.classList.add('err');
-    } else {
-      el.classList.remove('err');
-    }
-    var errId = 'e-' + id.replace('f-', '');
-    var em = document.getElementById(errId);
-    if (em) em.classList.toggle('show', !ok);
-  }
-
-  if (n === 1) {
-    checkField('f-title', 'عنوان');
-    checkField('f-areas', 'حوزه فعالیت');
-    checkField('f-sale-type', 'نوع فروش');
-    var img = document.getElementById('f-main-image');
-    var eImg = document.getElementById('e-main-image');
-    if (!img.files.length) {
-      errs.push('تصویر اصلی');
-      if (eImg) eImg.style.display = 'block';
-    } else {
-      if (eImg) eImg.style.display = 'none';
-    }
-  }
-  if (n === 2) {
-    var p = document.getElementById('f-price');
-    if (!p.value || parseInt(p.value) <= 0) {
-      errs.push('قیمت');
-      p.classList.add('err');
-      var eP = document.getElementById('e-price');
-      if (eP) eP.classList.add('show');
-    } else {
-      p.classList.remove('err');
-      var eP = document.getElementById('e-price');
-      if (eP) eP.classList.remove('show');
-    }
-  }
-  if (n === 4) {
-    checkField('f-description', 'توضیحات');
-  }
-  return errs;
-}
-
-// ═══════════════════════════════════════════════════════════
-//  Conditional sale type
-// ═══════════════════════════════════════════════════════════
-var saleTypePanels = ['full_ownership', 'partial_ownership', 'license', 'revenue_share', 'brand'];
-
-document.getElementById('f-sale-type').addEventListener('change', function() {
-  var val = this.value;
-  saleTypePanels.forEach(function(id) {
-    var el = document.getElementById('cond-' + id);
-    if (el) el.classList.toggle('show', val === id);
-  });
-});
-
-document.getElementById('f-lic-dur-type').addEventListener('change', function() {
-  var mf = document.getElementById('lic-months-field');
-  if (mf) mf.style.display = this.value === 'limited' ? 'block' : 'none';
-});
-
-// ═══════════════════════════════════════════════════════════
-//  Image preview
-// ═══════════════════════════════════════════════════════════
-document.getElementById('f-main-image').addEventListener('change', function() {
-  var file = this.files[0];
-  if (!file) return;
-  if (file.size > 5 * 1024 * 1024) {
-    toast('حجم فایل بیش از ۵ مگابایت', 'err');
-    this.value = '';
-    return;
-  }
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var img = document.getElementById('main-img-preview');
-    img.src = e.target.result;
-    img.style.display = 'block';
-    document.getElementById('main-drop').classList.add('has-file');
-  };
-  reader.readAsDataURL(file);
-});
-
-// ═══════════════════════════════════════════════════════════
-//  Tech chips toggle
-// ═══════════════════════════════════════════════════════════
-document.querySelectorAll('.tech-chip').forEach(function(chip) {
-  chip.addEventListener('click', function(e) {
-    e.preventDefault();
-    var cb = this.querySelector('input[type=checkbox]');
-    cb.checked = !cb.checked;
-    this.classList.toggle('selected', cb.checked);
-  });
-});
-
-document.querySelectorAll('.method-item').forEach(function(item) {
-  item.addEventListener('click', function(e) {
-    e.preventDefault();
-    var cb = this.querySelector('input[type=checkbox]');
-    cb.checked = !cb.checked;
-    this.classList.toggle('selected', cb.checked);
-  });
-});
-
-// ═══════════════════════════════════════════════════════════
-//  HTML editor
-// ═══════════════════════════════════════════════════════════
-var lastCursorPos = 0;
-var htmlEditor = document.getElementById('about-platform-editor');
-
-htmlEditor.addEventListener('click', function() { lastCursorPos = htmlEditor.selectionStart; });
-htmlEditor.addEventListener('keyup', function() { lastCursorPos = htmlEditor.selectionStart; });
-
-function insertTag(tag) {
-  var textarea = htmlEditor;
-  var start = textarea.selectionStart;
-  var end = textarea.selectionEnd;
-  var pos = (start !== end) ? { start: start, end: end } : { start: lastCursorPos, end: lastCursorPos };
-  var selected = textarea.value.substring(pos.start, pos.end);
-
-  var tagMap = {
-    'h2': '<h2>' + (selected || 'تیتر اصلی') + '</h2>',
-    'h3': '<h3>' + (selected || 'زیرتیتر') + '</h3>',
-    'p':  '<p>' + (selected || 'پاراگراف جدید...') + '</p>',
-    'strong': '<strong>' + (selected || 'متن بولد') + '</strong>',
-    'em': '<em>' + (selected || 'متن ایتالیک') + '</em>',
-    'ul-li': '<ul>\n  <li>مورد اول</li>\n  <li>مورد دوم</li>\n</ul>',
-    'br': '<br>',
-    'hr': '<hr>',
-    'span-highlight': '<span style="background:#fff3cd;padding:2px 6px;border-radius:3px">' + (selected || 'متن هایلایت') + '</span>'
-  };
-
-  var insertion = tagMap[tag] || ('<' + tag + '>' + selected + '</' + tag + '>');
-  var before = textarea.value.substring(0, pos.start);
-  var after  = textarea.value.substring(pos.end);
-  textarea.value = before + insertion + after;
-  textarea.focus();
-  var newPos = pos.start + insertion.length;
-  textarea.setSelectionRange(newPos, newPos);
-  updateHtmlPreview();
-}
-
-function updateHtmlPreview() {
-  var val = htmlEditor.value;
-  var preview = document.getElementById('about-platform-preview');
-  if (!val.trim()) {
-    preview.innerHTML = '<span style="color:var(--wiz-muted);font-size:12px">متن خود را تایپ کنید تا پیش‌نمایش نمایش داده شود...</span>';
-    return;
-  }
-  preview.innerHTML = val;
-}
-
-// ═══════════════════════════════════════════════════════════
-//  Dynamic lists
-// ═══════════════════════════════════════════════════════════
-function mkRemove(callback) {
-  var btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'remove-btn';
-  btn.innerHTML = '×';
-  btn.onclick = function() {
-    this.closest('.dyn-item').remove();
-    if (callback) callback();
-  };
-  return btn;
-}
-
-// — FAQ —
-var faqIdx = 0;
-function addFaq() {
-  var list = document.getElementById('faq-list');
-  var idx = faqIdx++;
-  var item = document.createElement('div');
-  item.className = 'dyn-item';
-  item.innerHTML =
-    '<div class="wiz-field" style="margin-bottom:8px">' +
-      '<label>پرسش</label>' +
-      '<input type="text" name="faq_question_' + idx + '" placeholder="سوال کاربران...">' +
-    '</div>' +
-    '<div class="wiz-field">' +
-      '<label>پاسخ</label>' +
-      '<textarea name="faq_answer_' + idx + '" rows="2" placeholder="پاسخ شما..."></textarea>' +
-    '</div>' +
-    '<input type="hidden" name="faq_order_' + idx + '" value="' + idx + '">';
-  item.appendChild(mkRemove());
-  list.appendChild(item);
-}
-
-// — Expenses —
-var expIdx = 0;
-function addExpense() {
-  var list = document.getElementById('expenses-list');
-  var idx = expIdx++;
-  var item = document.createElement('div');
-  item.className = 'dyn-item';
-  item.innerHTML =
-    '<div class="row-fields row-fields-3">' +
-      '<div class="wiz-field"><label>نام هزینه</label><input type="text" name="exp_name_' + idx + '" placeholder="هاست، نیرو..."></div>' +
-      '<div class="wiz-field"><label>مبلغ (تومان)</label><input type="number" name="exp_amount_' + idx + '" min="0" placeholder="0"></div>' +
-      '<div class="wiz-field"><label>دوره</label>' +
-        '<select name="exp_period_' + idx + '">' +
-          '<option value="monthly">ماهانه</option>' +
-          '<option value="yearly">سالانه</option>' +
-          '<option value="one_time">یکبار</option>' +
-        '</select>' +
-      '</div>' +
-    '</div>';
-  item.appendChild(mkRemove());
-  list.appendChild(item);
-}
-
-// — Sale includes —
-var siIdx = 0;
-function addSaleInclude() {
-  var list = document.getElementById('sale-includes-list');
-  var idx = siIdx++;
-  var item = document.createElement('div');
-  item.className = 'dyn-item';
-  item.innerHTML = '<div class="wiz-field"><label>نام دارایی</label><input type="text" name="sale_include_' + idx + '" placeholder="سورس کد، دامنه، اکانت..."></div>';
-  item.appendChild(mkRemove());
-  list.appendChild(item);
-}
-
-// — Licenses —
-var licIdx = 0;
-function addLicense() {
-  var list = document.getElementById('licenses-list');
-  var idx = licIdx++;
-  var item = document.createElement('div');
-  item.className = 'dyn-item';
-  item.innerHTML = '<div class="wiz-field"><label>نام مجوز</label><input type="text" name="lic_name_' + idx + '" placeholder="مجوز تجارت الکترونیک..."></div>';
-  item.appendChild(mkRemove());
-  list.appendChild(item);
-}
-
-// — Social media —
-var smIdx = 0;
-function addSocial() {
-  var list = document.getElementById('social-list');
-  var idx = smIdx++;
-  var item = document.createElement('div');
-  item.className = 'dyn-item';
-  item.innerHTML =
-    '<div class="row-fields row-fields-3">' +
-      '<div class="wiz-field"><label>پلتفرم</label>' +
-        '<select name="sm_platform_' + idx + '">' +
-          '<option value="instagram">اینستاگرام</option>' +
-          '<option value="telegram">تلگرام</option>' +
-          '<option value="twitter">توییتر</option>' +
-          '<option value="linkedin">لینکدین</option>' +
-          '<option value="youtube">یوتیوب</option>' +
-          '<option value="github">گیت‌هاب</option>' +
-          '<option value="facebook">فیسبوک</option>' +
-          '<option value="other">سایر</option>' +
-        '</select>' +
-      '</div>' +
-      '<div class="wiz-field"><label>تعداد فالوور</label><input type="text" name="sm_followers_' + idx + '" placeholder="۱۲,۵۰۰"></div>' +
-      '<div class="wiz-field"><label>لینک</label><input type="url" name="sm_url_' + idx + '" placeholder="https://" style="direction:ltr;text-align:left"></div>' +
-    '</div>';
-  item.appendChild(mkRemove());
-  list.appendChild(item);
-}
-
-// — Income proofs —
-var ipIdx = 0;
-function addIncomeProof() {
-  var list = document.getElementById('income-proof-list');
-  var idx = ipIdx++;
-  var item = document.createElement('div');
-  item.className = 'dyn-item';
-  item.innerHTML =
-    '<div class="row-fields row-fields-2">' +
-      '<div class="wiz-field"><label>تصویر اثبات</label><input type="file" name="income_proof_img_' + idx + '" accept="image/*"></div>' +
-      '<div class="wiz-field"><label>توضیحات</label><textarea name="income_proof_desc_' + idx + '" rows="2" placeholder="توضیح تصویر..."></textarea></div>' +
-    '</div>';
-  item.appendChild(mkRemove());
-  list.appendChild(item);
-}
-
-// — Attachments —
-var attIdx = 0;
-function addAttachment() {
-  var list = document.getElementById('attachments-list');
-  var idx = attIdx++;
-  var item = document.createElement('div');
-  item.className = 'dyn-item';
-  item.innerHTML = '<div class="wiz-field"><label>فایل پیوست</label><input type="file" name="attachment_' + idx + '"></div>';
-  item.appendChild(mkRemove());
-  list.appendChild(item);
-}
-
-// — Services —
-var srvIdx = 0;
-function addService() {
-  var list = document.getElementById('services-list');
-  var idx = srvIdx++;
-  var item = document.createElement('div');
-  item.className = 'dyn-item';
-  item.innerHTML = '<div class="wiz-field"><label>نام خدمت</label><input type="text" name="service_' + idx + '" placeholder="سرویس ایمیل مارکتینگ، CDN..."></div>';
-  item.appendChild(mkRemove());
-  list.appendChild(item);
-}
-
-// — Traffic sources —
-var trfIdx = 0;
-function addTraffic() {
-  var list = document.getElementById('traffic-list');
-  var idx = trfIdx++;
-  var item = document.createElement('div');
-  item.className = 'dyn-item';
-  item.innerHTML =
-    '<div class="row-fields row-fields-2">' +
-      '<div class="wiz-field"><label>منبع</label>' +
-        '<select name="trf_source_' + idx + '">' +
-          '<option value="organic_search">جستجوی ارگانیک (SEO)</option>' +
-          '<option value="direct">ترافیک مستقیم</option>' +
-          '<option value="social_media">شبکه‌های اجتماعی</option>' +
-          '<option value="referral">ارجاعی</option>' +
-          '<option value="paid_ads">تبلیغات پولی</option>' +
-          '<option value="email_sms">ایمیل مارکتینگ</option>' +
-          '<option value="push_notification">پوش نوتیفیکیشن</option>' +
-        '</select>' +
-      '</div>' +
-      '<div class="wiz-field"><label>درصد</label>' +
-        '<input type="number" name="trf_pct_' + idx + '" min="0" max="100" placeholder="0" oninput="updateTrafficTotal()">' +
-      '</div>' +
-    '</div>';
-  item.appendChild(mkRemove(updateTrafficTotal));
-  list.appendChild(item);
-}
-
-function updateTrafficTotal() {
-  var inputs = document.querySelectorAll('[name^="trf_pct_"]');
-  var total = 0;
-  inputs.forEach(function(i) { total += parseInt(i.value) || 0; });
-  var display = document.getElementById('traffic-total-display');
-  if (!display) return;
-  display.textContent = 'جمع: ' + toFa(total) + '%';
-  display.style.color = total === 100 ? '#2f9e44' : total > 100 ? '#c92a2a' : '#f08c00';
-}
-
-// — Chart points —
-var incomeIdx = 0;
-function addIncomePoint() {
-  var list = document.getElementById('income-points');
-  var idx = incomeIdx++;
-  var row = document.createElement('div');
-  row.className = 'chart-point-row';
-  row.innerHTML =
-    '<input type="date" name="income_date_' + idx + '">' +
-    '<input type="number" name="income_val_' + idx + '" min="0" placeholder="0">' +
-    '<button type="button" class="chart-remove" onclick="this.closest(\'.chart-point-row\').remove()">×</button>';
-  list.appendChild(row);
-}
-
-var viewsIdx = 0;
-function addViewPoint() {
-  var list = document.getElementById('views-points');
-  var idx = viewsIdx++;
-  var row = document.createElement('div');
-  row.className = 'chart-point-row';
-  row.innerHTML =
-    '<input type="date" name="views_date_' + idx + '">' +
-    '<input type="number" name="views_val_' + idx + '" min="0" placeholder="0">' +
-    '<button type="button" class="chart-remove" onclick="this.closest(\'.chart-point-row\').remove()">×</button>';
-  list.appendChild(row);
-}
-
-// ═══════════════════════════════════════════════════════════
-//  Review builder
-// ═══════════════════════════════════════════════════════════
-function buildReview() {
-  var fd = new FormData(document.getElementById('main-form'));
-  var title = fd.get('title') || '—';
-  var priceRaw = fd.get('price');
-  var price = priceRaw ? parseInt(priceRaw).toLocaleString('fa') : '—';
-  var areasEl = document.getElementById('f-areas');
-  var areas = areasEl && areasEl.selectedIndex >= 0 ? areasEl.options[areasEl.selectedIndex].text : '—';
-  var saleEl = document.getElementById('f-sale-type');
-  var saleType = saleEl && saleEl.selectedIndex >= 0 ? saleEl.options[saleEl.selectedIndex].text : '—';
-  var imgFile = document.getElementById('f-main-image').files[0];
-  var faqCount = document.querySelectorAll('[name^="faq_question_"]').length;
-  var expCount = document.querySelectorAll('[name^="exp_name_"]').length;
-  var incCount = document.querySelectorAll('[name^="income_date_"]').length;
-  var vwCount  = document.querySelectorAll('[name^="views_date_"]').length;
-  var smCount  = document.querySelectorAll('[name^="sm_platform_"]').length;
-
-  document.getElementById('review-content').innerHTML =
-    '<div class="review-grid">' +
-      '<div class="review-item"><div class="rl">عنوان</div><div class="rv">' + title + '</div></div>' +
-      '<div class="review-item"><div class="rl">قیمت</div><div class="rv">' + price + ' تومان</div></div>' +
-      '<div class="review-item"><div class="rl">حوزه فعالیت</div><div class="rv">' + areas + '</div></div>' +
-      '<div class="review-item"><div class="rl">نوع فروش</div><div class="rv">' + saleType + '</div></div>' +
-      '<div class="review-item"><div class="rl">تصویر اصلی</div><div class="rv">' + (imgFile ? imgFile.name : '—') + '</div></div>' +
-      '<div class="review-item"><div class="rl">پرسش و پاسخ</div><div class="rv">' + toFa(faqCount) + ' مورد</div></div>' +
-      '<div class="review-item"><div class="rl">هزینه‌ها</div><div class="rv">' + toFa(expCount) + ' مورد</div></div>' +
-      '<div class="review-item"><div class="rl">شبکه‌های اجتماعی</div><div class="rv">' + toFa(smCount) + ' مورد</div></div>' +
-      '<div class="review-item"><div class="rl">نقاط درآمد</div><div class="rv">' + toFa(incCount) + ' نقطه</div></div>' +
-      '<div class="review-item"><div class="rl">نقاط بازدید</div><div class="rv">' + toFa(vwCount) + ' نقطه</div></div>' +
-    '</div>';
-}
-
-// ═══════════════════════════════════════════════════════════
-//  Submit
-// ═══════════════════════════════════════════════════════════
-async function submitForm() {
-  var allErrs = [];
-  [1, 2, 4].forEach(function(s) {
-    var e = validateStep(s);
-    if (e.length) allErrs.push('مرحله ' + toFa(s) + ': ' + e.join('، '));
-  });
-  if (allErrs.length) {
-    toast('لطفاً مراحل قبل را کامل کنید: ' + allErrs.join(' | '), 'err', 6000);
-    return;
-  }
-
-  var submitBtn = document.getElementById('submit-btn');
-  submitBtn.disabled = true;
-  submitBtn.textContent = '⏳ در حال ارسال...';
-  showOverlay('در حال ارسال آگهی...');
-
-  var form = document.getElementById('main-form');
-  var fd = new FormData(form);
-
-  fd.append('faq_count', faqIdx);
-  fd.append('expense_count', expIdx);
-  fd.append('income_point_count', incomeIdx);
-  fd.append('views_point_count', viewsIdx);
-  fd.append('social_count', smIdx);
-  fd.append('income_proof_count', ipIdx);
-  fd.append('sale_include_count', siIdx);
-  fd.append('license_item_count', licIdx);
-  fd.append('service_count', srvIdx);
-  fd.append('traffic_count', trfIdx);
-  fd.append('attachment_count', attIdx);
-
-  ['tech_cms','tech_backend','tech_frontend','tech_db','tech_infra','tech_mobile','tech_third'].forEach(function(name) {
-    fd.delete(name);
-    document.querySelectorAll('input[name="' + name + '"]:checked').forEach(function(cb) {
-      fd.append(name, cb.value);
-    });
-  });
-
-  try {
-    var resp = await fetch(window.location.href, {
-      method: 'POST',
-      headers: { 'X-Requested-With': 'XMLHttpRequest' },
-      body: fd
-    });
-
-    var ct = resp.headers.get('Content-Type') || '';
-
-    if (ct.includes('application/json')) {
-      var data = await resp.json();
-      if (resp.ok && (data.success || data.id)) {
-        toast('آگهی با موفقیت ثبت شد!', 'ok');
-        try { localStorage.removeItem('listing_draft'); } catch(e) {}
-        if (data.redirect) {
-          setTimeout(function() { window.location.href = data.redirect; }, 1500);
-        }
-      } else {
-        var errs = data.errors || data.error || 'خطای ناشناخته';
-        toast('خطا در ثبت آگهی', 'err');
-        showErrors(typeof errs === 'object' ? errs : { خطا: errs });
-      }
-    } else if (resp.redirected || resp.ok) {
-      toast('آگهی با موفقیت ثبت شد!', 'ok');
-      try { localStorage.removeItem('listing_draft'); } catch(e) {}
-      if (resp.redirected) {
-        window.location.href = resp.url;
-      } else {
-        var html = await resp.text();
-        var doc = new DOMParser().parseFromString(html, 'text/html');
-        var erEls = doc.querySelectorAll('.errorlist li, .alert-danger, .field-error');
-        if (erEls.length) {
-          var msgs = Array.from(erEls).map(function(el) { return el.textContent.trim(); }).filter(Boolean);
-          showErrors({ 'خطاهای فرم': msgs.join(' | ') });
-          toast('فرم دارای خطا است', 'err');
-        }
-      }
-    } else {
-      toast('خطای سرور: ' + resp.status, 'err');
-    }
-  } catch (err) {
-    toast('خطای اتصال به سرور', 'err');
-  } finally {
-    hideOverlay();
-    submitBtn.disabled = false;
-    submitBtn.textContent = '💾 ثبت نهایی آگهی';
-  }
-}
-
-function showOverlay(msg) {
-  document.getElementById('overlay-msg').textContent = msg;
-  document.getElementById('overlay').classList.add('show');
-}
-function hideOverlay() {
-  document.getElementById('overlay').classList.remove('show');
-}
-function showErrors(errs) {
-  var msg = Object.entries(errs).map(function(entry) {
-    return entry[0] + ': ' + (typeof entry[1] === 'object' ? JSON.stringify(entry[1]) : entry[1]);
-  }).join('\n');
-  toast(msg, 'err', 7000);
-}
-
-// ═══════════════════════════════════════════════════════════
-//  Draft auto-save (localStorage)
-// ═══════════════════════════════════════════════════════════
-function saveDraft() {
-  try {
-    var form = document.getElementById('main-form');
-    var fd = new FormData(form);
-    var data = {};
-    fd.forEach(function(value, key) {
-      if (value instanceof File) return;
-      if (data[key]) {
-        if (Array.isArray(data[key])) data[key].push(value);
-        else data[key] = [data[key], value];
-      } else {
-        data[key] = value;
-      }
-    });
-    localStorage.setItem('listing_draft', JSON.stringify(data));
-  } catch(e) {}
-}
-// ذخیره هر ۵ ثانیه اگر تغییری رخ داده باشد
-var _draftTimer = null;
-document.getElementById('main-form').addEventListener('input', function() {
-  clearTimeout(_draftTimer);
-  _draftTimer = setTimeout(saveDraft, 3000);
-});
-
-// ═══════════════════════════════════════════════════════════
-//  Keyboard shortcuts
-// ═══════════════════════════════════════════════════════════
-document.addEventListener('keydown', function(e) {
-  if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowRight') {
-    e.preventDefault();
-    nextStep();
-  }
-  if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowLeft') {
-    e.preventDefault();
-    prevStep();
-  }
-});
-
-
-// ═══════════════════════════════════════════════════════════
-//  Toggle بخش‌های درآمدی بر اساس تیک «آگهی درآمد دارد»
-// ═══════════════════════════════════════════════════════════
-var INCOME_SECTIONS = [
-  'step2_income_stats',   // آمار مالی (درآمد، سود، ضرایب)
-  'step5_income_proof',   // مدارک اثبات درآمد
-];
-
-function applyIncomeVisibility() {
-  var cb = document.getElementById('f-is-income');
-  if (!cb) return;
-  var hasIncome = cb.checked;
-
-  INCOME_SECTIONS.forEach(function(key) {
-    document.querySelectorAll('[data-section="' + key + '"]').forEach(function(el) {
-      if (hasIncome) {
-        // وقتی درآمد دارد: نمایش — اما فقط اگر دسته‌بندی هم اجازه دهد
-        el.dataset.incomeHidden = '';
-        el.style.display = '';
-      } else {
-        // خاموش: مخفی کن
-        el.dataset.incomeHidden = '1';
-        el.style.display = 'none';
-      }
-    });
-  });
-
-  // نمودار درآمد در Step 5 هم مخفی شود اگر درآمد ندارد
-  var incomeChartBlock = document.querySelector('#income-points');
-  if (incomeChartBlock) {
-    var block = incomeChartBlock.closest('.chart-block');
-    if (block) block.style.display = hasIncome ? '' : 'none';
-  }
-
-  // اطمینان از اعمال visibility دسته‌بندی روی بخش‌های درآمدیِ روشن
-  applySectionVisibility();
-}
-
-// اتصال رویداد
-(function() {
-  var cb = document.getElementById('f-is-income');
-  if (cb) {
-    cb.addEventListener('change', applyIncomeVisibility);
-  }
+  function trafficState(){const rows=Array.from(document.querySelectorAll('#traffic-list [data-row="traffic"]'));const percentages=rows.map(row=>row.querySelector('[name^="trf_pct_"]')).filter(Boolean);return{hasValues:rows.some(row=>Array.from(row.querySelectorAll('input,select')).some(el=>el.value!=='')),total:percentages.reduce((sum,input)=>sum+(Number(input.value)||0),0)}}
+  function markTraffic(total){const meter=document.getElementById('traffic-meter'),message=document.getElementById('traffic-message');meter.classList.remove('complete','invalid');document.getElementById('traffic-total').textContent=total.toLocaleString('fa-IR')+'٪';if(total===0){message.textContent='هنوز منبعی ثبت نشده است.';return}if(total===100){meter.classList.add('complete');message.textContent='ترکیب منابع کامل و آماده ثبت است.';return}meter.classList.add('invalid');message.textContent=total>100?'مجموع از ۱۰۰٪ بیشتر شده است؛ درصدها را کاهش دهید.':'برای ثبت این بخش، '+(100-total).toLocaleString('fa-IR')+'٪ دیگر باقی مانده است.'}
+  function updateTrafficTotal(){const state=trafficState();markTraffic(state.total)}
+  document.querySelectorAll('[data-add]').forEach(button=>button.onclick=()=>addRow(button.dataset.add));
+  document.getElementById('main_image').onchange=function(){const file=this.files[0],field=this.closest('.lw-field');if(!file)return;if(file.size>5*1024*1024){this.value='';field.classList.add('invalid');toast('حجم تصویر اصلی نباید بیشتر از ۵ مگابایت باشد.','err');return}field.classList.remove('invalid');const img=document.getElementById('image-preview');img.src=URL.createObjectURL(file);img.style.display='block';document.getElementById('upload-title').textContent=file.name};
+  ['title','price'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{if(id==='title')document.getElementById('sum-title').textContent=document.getElementById(id).value||'—';else document.getElementById('sum-price').textContent=document.getElementById(id).value?Number(document.getElementById(id).value).toLocaleString('fa-IR')+' تومان':'—'}));
+  form.addEventListener('input',event=>{const field=event.target.closest('.lw-field');if(field&&event.target.checkValidity())field.classList.remove('invalid')});
+
+  function valueOf(name){const el=form.elements[name];if(!el)return '—';if(el instanceof RadioNodeList)return el.value||'—';if(el.type==='checkbox')return el.checked?'بله':'خیر';if(el.tagName==='SELECT')return el.selectedOptions[0]?.text||'—';return el.value||'—'}
+  function buildReview(){const chosen=document.querySelector('[name=category_choice]:checked');const rows=[['دسته‌بندی',chosen?chosen.dataset.label:'—'],['عنوان',valueOf('title')],['حوزه فعالیت',valueOf('areas_activity')],['قیمت',valueOf('price')==='—'?'—':Number(valueOf('price')).toLocaleString('fa-IR')+' تومان'],['نوع فروش',valueOf('sale_type')],['درآمد دارد',valueOf('is_income')]];document.getElementById('review-grid').innerHTML=rows.map(r=>'<div class="review-row"><span>'+esc(r[0])+'</span><b>'+esc(r[1])+'</b></div>').join('')}
+
+  form.onsubmit=async event=>{event.preventDefault();if(!validatePanel())return;const button=document.getElementById('submit-btn');button.disabled=true;button.textContent='در حال ثبت...';try{const response=await fetch(form.action||location.href,{method:'POST',body:new FormData(form),headers:{'X-Requested-With':'XMLHttpRequest'}});const data=await response.json();if(!response.ok||!data.success){const errors=data.errors||{};const first=Object.keys(errors)[0];if(first){const target=form.elements[first];if(target){const panel=target.closest('.lw-panel');const pos=flow.indexOf(panel?.dataset.panel);if(pos>=0)show(pos);target.closest('.lw-field')?.classList.add('invalid')}}throw new Error(data.error||'ثبت آگهی انجام نشد')}localStorage.removeItem('listing_wizard_draft');location.href=data.redirect}catch(error){toast(error.message,'err');button.disabled=false;button.textContent='ثبت نهایی آگهی'}};
+  computeFlow();drawSteps();show(0);
 })();
-
-// ═══════════════════════════════════════════════════════════
-//  Boot — add initial items
-// ═══════════════════════════════════════════════════════════
-addExpense();
-addFaq();
-addSocial();
-addTraffic();
-addIncomePoint();
-addViewPoint();
-applyIncomeVisibility();
-
-// ← اتصال دسته‌بندی
-(function() {
-  var catSelect = document.getElementById('f-category');
-  if (catSelect) {
-    catSelect.addEventListener('change', function() {
-      renderCategoryFields();
-      applySectionVisibility();
-    });
-  }
-  renderCategoryFields();
-  applySectionVisibility();
-  updateSidebar(1);
-})();
-
-// به‌روزرسانی چک‌لیست sidebar هنگام تغییر فیلدها
-['f-title', 'f-areas', 'f-sale-type', 'f-main-image', 'f-price', 'f-description'].forEach(function(id) {
-  var el = document.getElementById(id);
-  if (el) {
-    el.addEventListener('input', function() { updateSidebar(currentStep); });
-    el.addEventListener('change', function() { updateSidebar(currentStep); });
-  }
-});
 </script>
-
 {% endblock %}

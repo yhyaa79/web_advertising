@@ -1,9 +1,11 @@
 # listings/views.py
 
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
+from django import forms as django_forms
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db import transaction
 from django.db.models import Q, F, Case, When, DecimalField, Count, Sum
 from django.utils import timezone
 from datetime import timedelta
@@ -35,9 +37,9 @@ from .models import Category, Listing
 from .category_descriptions import get_category_description
 
 from .category_config import (
-    CATEGORY_FORM_CONFIG, STEP_SECTIONS_CONFIG,
-    get_main_category, get_fields_for_sub, get_sections_for_sub
+    build_category_form_config, get_main_category, get_fields_for_sub,
 )
+from .content_sanitizer import build_safe_rich_content
 import json as _json
 
 
@@ -125,13 +127,17 @@ def _save_category_details(listing, category_slug, post_data):
     if not model_cls:
         return
 
-    cfg = CATEGORY_FORM_CONFIG.get(main_cat)
-    if not cfg:
-        return
+    cfg = get_fields_for_sub(category_slug)
 
     payload = {}
+    concrete_fields = {
+        field.name: field for field in model_cls._meta.concrete_fields
+        if field.name not in {"id", "listing"}
+    }
     for f in cfg['fields']:
         fname = f['name']
+        if fname not in concrete_fields:
+            continue
         ftype = f.get('type', 'text')
 
         if ftype == 'checkbox':
@@ -144,25 +150,19 @@ def _save_category_details(listing, category_slug, post_data):
             else:
                 try:
                     # اگر عدد صحیح بود int، در غیر این صورت float
-                    payload[fname] = int(raw) if raw.isdigit() else float(raw)
-                except (ValueError, TypeError):
+                    payload[fname] = Decimal(raw)
+                except (ValueError, TypeError, InvalidOperation):
                     payload[fname] = None
+
+        elif ftype == 'date':
+            payload[fname] = post_data.get(fname) or None
 
         else:  # text / textarea
             val = post_data.get(fname, '').strip()
-            payload[fname] = val or None
+            payload[fname] = val if val else (None if concrete_fields[fname].null else "")
 
-    try:
-        model_cls.objects.create(listing=listing, **payload)
-        logger.info(
-            "_save_category_details: OK — listing=%s model=%s",
-            listing.pk, model_cls.__name__
-        )
-    except Exception as e:
-        logger.warning(
-            "_save_category_details: FAIL — listing=%s model=%s error=%s",
-            listing.pk, model_cls.__name__, e
-        )
+    model_cls.objects.update_or_create(listing=listing, defaults=payload)
+    logger.info("_save_category_details: OK — listing=%s model=%s", listing.pk, model_cls.__name__)
 
 
 def listing_list(request):
@@ -638,6 +638,7 @@ def listing_detail(request, pk):
 
 @login_required
 @require_http_methods(["GET", "POST"])
+@transaction.atomic
 def listing_create(request):
     platform_categories = Category.PLATFORM_CATEGORIES
     activity_categories = Listing.ACTIVITY_CATEGORIES
@@ -646,9 +647,7 @@ def listing_create(request):
         return render(request, "listings/listing_create.html", {
             "platform_categories": platform_categories,
             "activity_categories": activity_categories,
-            "category_config_json": _json.dumps(CATEGORY_FORM_CONFIG, ensure_ascii=False),
-            "sections_config_json": _json.dumps(STEP_SECTIONS_CONFIG, ensure_ascii=False),
-            "total_steps": 8,  # ← اضافه شود
+            "category_config_json": _json.dumps(build_category_form_config(), ensure_ascii=False),
         })
 
     is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
@@ -666,8 +665,7 @@ def listing_create(request):
             {
                 "platform_categories": platform_categories,
                 "activity_categories": activity_categories,
-                "category_config_json": _json.dumps(CATEGORY_FORM_CONFIG, ensure_ascii=False),
-                "sections_config_json": _json.dumps(STEP_SECTIONS_CONFIG, ensure_ascii=False),
+                "category_config_json": _json.dumps(build_category_form_config(), ensure_ascii=False),
                 "error": msg,
                 "field_errors": field_errors,
             },
@@ -683,15 +681,25 @@ def listing_create(request):
     price_raw = p.get("price", "").strip()
     areas_activity = p.get("areas_activity", "").strip()
     main_image = files.get("main_image")
+    category = p.get("category", "").strip()
 
     if not title:
         field_errors["title"] = "عنوان آگهی اجباری است"
     if not description:
         field_errors["description"] = "توضیحات اجباری است"
-    if not areas_activity:
-        field_errors["areas_activity"] = "حوزه فعالیت اجباری است"
     if not main_image:
         field_errors["main_image"] = "تصویر اصلی اجباری است"
+    elif main_image.size > 5 * 1024 * 1024:
+        field_errors["main_image"] = "حجم تصویر اصلی نباید بیشتر از ۵ مگابایت باشد"
+    else:
+        try:
+            django_forms.ImageField().clean(main_image)
+            main_image.seek(0)
+        except django_forms.ValidationError:
+            field_errors["main_image"] = "فایل انتخاب‌شده یک تصویر معتبر نیست"
+    valid_platform_slugs = {slug for slug, _ in Category.PLATFORM_CHOICES}
+    if category not in valid_platform_slugs:
+        field_errors["category"] = "یک دسته‌بندی معتبر انتخاب کنید"
 
     try:
         price = int(price_raw)
@@ -700,9 +708,6 @@ def listing_create(request):
     except (ValueError, TypeError):
         price = None
         field_errors["price"] = "قیمت وارد شده معتبر نیست"
-
-    if field_errors:
-        return _err("فیلدهای اجباری تکمیل نشده‌اند", field_errors=field_errors)
 
     def _int(val, default=0):
         try:
@@ -727,10 +732,144 @@ def listing_create(request):
     # ═══════════════════════════════════════════════════════════════
     # ← جدید: بررسی معتبر بودن category (اسلاگ رشته‌ای)
     # ═══════════════════════════════════════════════════════════════
-    category = p.get("category", "").strip() or None
-    valid_platform_slugs = {slug for slug, _ in Category.PLATFORM_CHOICES}
-    if category and category not in valid_platform_slugs:
-        category = None
+    # Required category-specific questions are validated from the same schema
+    # that generated the browser UI.
+    if category in valid_platform_slugs:
+        for spec in get_fields_for_sub(category)["fields"]:
+            raw = p.get(spec["name"], "").strip()
+            if spec.get("required") and spec.get("type") != "checkbox" and not raw:
+                field_errors[spec["name"]] = f"{spec['label']} اجباری است"
+                continue
+            if raw and spec.get("type") == "number":
+                try:
+                    number = Decimal(raw)
+                    if spec.get("min") is not None and number < Decimal(str(spec["min"])):
+                        field_errors[spec["name"]] = f"{spec['label']} کمتر از حد مجاز است"
+                    if spec.get("max") is not None and number > Decimal(str(spec["max"])):
+                        field_errors[spec["name"]] = f"{spec['label']} بیشتر از حد مجاز است"
+                except InvalidOperation:
+                    field_errors[spec["name"]] = f"{spec['label']} باید عدد معتبر باشد"
+
+    valid_activities = {slug for slug, _ in Listing.ACTIVITY_CHOICES}
+    if areas_activity and areas_activity not in valid_activities:
+        field_errors["areas_activity"] = "حوزه فعالیت معتبر نیست"
+    if len(description) < 80:
+        field_errors["description"] = "شرح آگهی باید حداقل ۸۰ کاراکتر باشد"
+    valid_sale_types = {slug for slug, _ in Listing.SALE_TYPE_CHOICES}
+    if p.get("sale_type") not in valid_sale_types:
+        field_errors["sale_type"] = "نوع فروش را انتخاب کنید"
+    selected_config = get_fields_for_sub(category) if category in valid_platform_slugs else {}
+    is_income_requested = bool(selected_config.get("financial") and p.get("is_income") == "on")
+    if is_income_requested and _decimal(p.get("monthly_income")) is None:
+        field_errors["monthly_income"] = "درآمد ماهانه را وارد کنید"
+    discount_price = _decimal(p.get("discount_price"))
+    if discount_price is not None and price is not None and discount_price >= price:
+        field_errors["discount_price"] = "قیمت تخفیف باید کمتر از قیمت اصلی باشد"
+    platform_url = p.get("platform_url", "").strip()
+    if platform_url:
+        try:
+            django_forms.URLField().clean(platform_url)
+        except django_forms.ValidationError:
+            field_errors["platform_url"] = "آدرس دارایی معتبر نیست"
+
+    # Validate repeatable sections before creating anything. This prevents a
+    # partially populated listing when one chart point or traffic row is bad.
+    count_limits = {
+        "faq_count": 20, "expense_count": 30, "sale_include_count": 30,
+        "license_item_count": 20, "social_count": 20, "income_proof_count": 10,
+        "attachment_count": 15, "traffic_count": 7,
+        "income_point_count": 50, "views_point_count": 50, "service_count": 30,
+    }
+    for count_name, limit in count_limits.items():
+        raw_count = _int(p.get(count_name))
+        if raw_count < 0 or raw_count > limit:
+            field_errors[count_name] = "تعداد آیتم‌های این بخش معتبر نیست"
+
+    valid_expense_periods = {"monthly", "yearly", "one_time"}
+    for i in range(min(_int(p.get("expense_count")), 30)):
+        name, amount, period = p.get(f"exp_name_{i}", "").strip(), p.get(f"exp_amount_{i}", "").strip(), p.get(f"exp_period_{i}", "")
+        if not name and not amount:
+            continue
+        try:
+            if not name or Decimal(amount) < 0 or period not in valid_expense_periods:
+                raise InvalidOperation
+        except (InvalidOperation, ValueError, TypeError):
+            field_errors[f"exp_name_{i}"] = "عنوان، مبلغ و دوره هزینه را معتبر وارد کنید"
+
+    from .models import MonetizationMethod as _MonetizationMethod, TechnologyUsed as _TechnologyUsed
+    valid_methods = {value for value, _label in _MonetizationMethod.METHOD_CHOICES}
+    if any(value not in valid_methods for value in p.getlist("monetization_methods")):
+        field_errors["monetization_methods"] = "روش کسب درآمد معتبر نیست"
+    technology_fields = {
+        "tech_cms": _TechnologyUsed.TECHNOLOGY_CHOICES_CMS,
+        "tech_backend": _TechnologyUsed.TECHNOLOGY_CHOICES_BACKEND,
+        "tech_frontend": _TechnologyUsed.TECHNOLOGY_CHOICES_FRONTEND,
+        "tech_db": _TechnologyUsed.TECHNOLOGY_CHOICES_DATABASE,
+        "tech_infra": _TechnologyUsed.TECHNOLOGY_CHOICES_INFRASTRUCTURE,
+        "tech_mobile": _TechnologyUsed.TECHNOLOGY_CHOICES_MOBILE,
+        "tech_devops": _TechnologyUsed.TECHNOLOGY_CHOICES_DEVOPS,
+        "tech_third": _TechnologyUsed.TECHNOLOGY_CHOICES_THIRD_PARTY,
+    }
+    for post_name, choices in technology_fields.items():
+        allowed = {value for value, _label in choices}
+        if any(value not in allowed for value in p.getlist(post_name)):
+            field_errors[post_name] = "یکی از تکنولوژی‌های انتخاب‌شده معتبر نیست"
+
+    traffic_total = 0
+    traffic_sources = set()
+    valid_traffic_sources = {"organic_search", "direct", "social_media", "referral", "paid_ads", "email_sms", "push_notification"}
+    for i in range(min(_int(p.get("traffic_count")), 7)):
+        source, pct = p.get(f"trf_source_{i}", ""), p.get(f"trf_pct_{i}", "")
+        if not source and not pct:
+            continue
+        if source not in valid_traffic_sources or source in traffic_sources:
+            field_errors[f"trf_source_{i}"] = "منبع ترافیک نامعتبر یا تکراری است"
+            continue
+        try:
+            percentage = int(pct)
+            if not 0 <= percentage <= 100:
+                raise ValueError
+            traffic_total += percentage
+            traffic_sources.add(source)
+        except (ValueError, TypeError):
+            field_errors[f"trf_pct_{i}"] = "درصد ترافیک باید بین صفر تا صد باشد"
+    if traffic_sources and traffic_total != 100:
+        field_errors["traffic_count"] = "مجموع منابع ترافیک باید دقیقاً ۱۰۰ درصد باشد"
+
+    for prefix, count_name, value_name in (
+        ("income", "income_point_count", "income_val"),
+        ("views", "views_point_count", "views_val"),
+    ):
+        seen_dates = set()
+        for i in range(min(_int(p.get(count_name)), 50)):
+            date_raw, value_raw = p.get(f"{prefix}_date_{i}", ""), p.get(f"{value_name}_{i}", "")
+            if not date_raw and not value_raw:
+                continue
+            try:
+                clean_date = django_forms.DateField().clean(date_raw)
+                if Decimal(value_raw) < 0:
+                    raise InvalidOperation
+                if clean_date in seen_dates:
+                    field_errors[f"{prefix}_date_{i}"] = "برای هر تاریخ فقط یک مقدار ثبت کنید"
+                seen_dates.add(clean_date)
+            except (django_forms.ValidationError, InvalidOperation, ValueError):
+                field_errors[f"{prefix}_date_{i}"] = "تاریخ و مقدار نمودار معتبر نیست"
+
+    for upload in files.getlist("gallery_images"):
+        if upload.size > 5 * 1024 * 1024:
+            field_errors["gallery_images"] = "حجم هر تصویر تکمیلی باید کمتر از ۵ مگابایت باشد"
+            break
+    for i in range(min(_int(p.get("income_proof_count")), 10)):
+        upload = files.get(f"income_proof_img_{i}")
+        if upload and upload.size > 5 * 1024 * 1024:
+            field_errors[f"income_proof_img_{i}"] = "حجم هر مدرک مالی باید کمتر از ۵ مگابایت باشد"
+    for i in range(min(_int(p.get("attachment_count")), 15)):
+        upload = files.get(f"attachment_{i}")
+        if upload and upload.size > 10 * 1024 * 1024:
+            field_errors[f"attachment_{i}"] = "حجم هر پیوست باید کمتر از ۱۰ مگابایت باشد"
+
+    if field_errors:
+        return _err("لطفاً فیلدهای مشخص‌شده را کامل کنید", field_errors=field_errors)
 
     # ═══════════════════════════════════════════════════════════════
     # ← جدید: استخراج فیلدهای اختصاصی دسته و ذخیره در asset_details
@@ -738,7 +877,7 @@ def listing_create(request):
     asset_details = {}
     if category:
         main_cat = get_main_category(category)
-        cat_cfg = CATEGORY_FORM_CONFIG.get(main_cat, CATEGORY_FORM_CONFIG['other'])
+        cat_cfg = get_fields_for_sub(category)
         for f in cat_cfg.get('fields', []):
             fname = f['name']
             ftype = f.get('type', 'text')
@@ -752,25 +891,37 @@ def listing_create(request):
                 else:
                     try:
                         # اگر عدد صحیح بود، int ذخیره کن، وگرنه float
-                        asset_details[fname] = int(raw) if raw.isdigit() else float(raw)
+                        asset_details[fname] = str(Decimal(raw))
                     except (ValueError, TypeError):
                         asset_details[fname] = None
             else:  # text / textarea
                 val = p.get(fname, '').strip()
                 asset_details[fname] = val or None
+        if p.get("financial_trend"):
+            asset_details["financial_trend"] = p.get("financial_trend")
 
     try:
+        safe_about_platform = build_safe_rich_content(
+            p.get("about_platform", "").strip(),
+            p.get("about_platform_css", "").strip(),
+        )
+        audience_value = next((p.get(name) for name in (
+            "followers", "subscribers", "mau", "monthly_visits", "active_clients"
+        ) if p.get(name)), None)
+        platform_age = _int(p.get("platform_age"))
+        if get_main_category(category) == "domain" and p.get("domain_age_years"):
+            platform_age = int(Decimal(p.get("domain_age_years")) * 12)
         listing = Listing.objects.create(
             seller=request.user,
             category=category,
             title=title,
             description=description,
             price=price,
-            discount_price=_decimal(p.get("discount_price")),
+            discount_price=discount_price,
             location=p.get("location", "").strip() or None,
-            platform_url=p.get("platform_url", "").strip(),
-            followers_count=_int(p.get("followers_count")),
-            platform_age=_int(p.get("platform_age")),
+            platform_url=platform_url,
+            followers_count=_int(audience_value),
+            platform_age=platform_age,
             monthly_income=_decimal(p.get("monthly_income")),
             most_like=_int(p.get("most_like")),
             most_view=_int(p.get("most_view")),
@@ -779,7 +930,7 @@ def listing_create(request):
             sale_reason=p.get("sale_reason") or None,
             sale_reason_description=p.get("sale_reason_description", "").strip() or None,
             sale_type=p.get("sale_type") or None,
-            is_income=p.get("is_income") == "on",
+            is_income=is_income_requested,
             suggested_price=p.get("suggested_price") == "on",
             is_private=p.get("is_private") == "on",
             boost=p.get("boost") == "on",
@@ -794,7 +945,7 @@ def listing_create(request):
             profit_multiplier=_decimal(p.get("profit_multiplier"), 2),
             revenue_multiplier=_decimal(p.get("revenue_multiplier"), 2),
             post_sale_support=p.get("post_sale_support", "").strip() or None,
-            about_platform=p.get("about_platform", "").strip() or None,
+            about_platform=safe_about_platform,
             ownership_document_status=p.get("ownership_document_status", "").strip() or None,
             ownership_transfer_conditions=p.get("ownership_transfer_conditions", "").strip() or None,
             partial_ownership_percentage=_decimal(p.get("partial_ownership_percentage"), 2),
@@ -814,6 +965,7 @@ def listing_create(request):
             brand_legal_status=p.get("brand_legal_status") or None,
             brand_usage_restrictions=p.get("brand_usage_restrictions", "").strip() or None,
             brand_industry_scope=p.get("brand_industry_scope", "").strip() or None,
+            asset_details=asset_details,
         )
 
         logger.info("listing_create: SUCCESS — id=%s title=%r user=%s", listing.pk, listing.title, request.user)
@@ -828,12 +980,15 @@ def listing_create(request):
         )
 
         faq_count = _int(p.get("faq_count"))
+        seen_faqs = set()
         for i in range(faq_count):
             q = p.get(f"faq_question_{i}", "").strip()
             a = p.get(f"faq_answer_{i}", "").strip()
             order = _int(p.get(f"faq_order_{i}"), i)
-            if q or a:
+            faq_key = q.casefold()
+            if (q or a) and faq_key not in seen_faqs:
                 ListingFAQ.objects.create(listing=listing, question=q, answer=a, order=order)
+                seen_faqs.add(faq_key)
 
         exp_count = _int(p.get("expense_count"))
         for i in range(exp_count):
@@ -852,24 +1007,33 @@ def listing_create(request):
                     logger.warning("expense create error: %s", e)
 
         si_count = _int(p.get("sale_include_count"))
+        seen_sale_assets = set()
         for i in range(si_count):
             name = p.get(f"sale_include_{i}", "").strip()
-            if name:
+            key = name.casefold()
+            if name and key not in seen_sale_assets:
                 SaleInclude.objects.create(listing=listing, asset_name=name)
+                seen_sale_assets.add(key)
 
         lic_count = _int(p.get("license_item_count"))
+        seen_licenses = set()
         for i in range(lic_count):
             name = p.get(f"lic_name_{i}", "").strip()
-            if name:
+            key = name.casefold()
+            if name and key not in seen_licenses:
                 License.objects.create(listing=listing, license_name=name)
+                seen_licenses.add(key)
 
         sm_count = _int(p.get("social_count"))
+        seen_socials = set()
         for i in range(sm_count):
             platform = p.get(f"sm_platform_{i}", "").strip()
             followers = p.get(f"sm_followers_{i}", "").strip()
             url = p.get(f"sm_url_{i}", "").strip()
-            if platform and followers:
+            social_key = (platform, url.casefold())
+            if platform and followers and social_key not in seen_socials:
                 SocialMedia.objects.create(listing=listing, platform=platform, followers=followers, url=url)
+                seen_socials.add(social_key)
 
         ip_count = _int(p.get("income_proof_count"))
         for i in range(ip_count):
@@ -898,7 +1062,7 @@ def listing_create(request):
                 except Exception as e:
                     logger.warning("traffic create error: %s", e)
 
-        for method in p.getlist("monetization_methods"):
+        for method in dict.fromkeys(p.getlist("monetization_methods")):
             if method:
                 MonetizationMethod.objects.create(listing=listing, method=method)
 
@@ -931,22 +1095,26 @@ def listing_create(request):
                     logger.warning("views point error: %s", e)
 
         tech_map = {
-            "technology_cms":            p.getlist("tech_cms"),
-            "technology_backend":        p.getlist("tech_backend"),
-            "technology_frontend":       p.getlist("tech_frontend"),
-            "technology_database":       p.getlist("tech_db"),
-            "technology_infrastructure": p.getlist("tech_infra"),
-            "technology_mobile":         p.getlist("tech_mobile"),
-            "technology_third_party":    p.getlist("tech_third"),
+            "technology_cms":            list(dict.fromkeys(p.getlist("tech_cms"))),
+            "technology_backend":        list(dict.fromkeys(p.getlist("tech_backend"))),
+            "technology_frontend":       list(dict.fromkeys(p.getlist("tech_frontend"))),
+            "technology_database":       list(dict.fromkeys(p.getlist("tech_db"))),
+            "technology_infrastructure": list(dict.fromkeys(p.getlist("tech_infra"))),
+            "technology_mobile":         list(dict.fromkeys(p.getlist("tech_mobile"))),
+            "technology_devops":         list(dict.fromkeys(p.getlist("tech_devops"))),
+            "technology_third_party":    list(dict.fromkeys(p.getlist("tech_third"))),
         }
         if any(tech_map.values()):
             TechnologyUsed.objects.create(listing=listing, **tech_map)
 
         srv_count = _int(p.get("service_count"))
+        seen_services = set()
         for i in range(srv_count):
             name = p.get(f"service_{i}", "").strip()
-            if name:
+            key = name.casefold()
+            if name and key not in seen_services:
                 ServiceUsed.objects.create(listing=listing, service_name=name)
+                seen_services.add(key)
 
         for img in files.getlist("gallery_images"):
             ListingImage.objects.create(listing=listing, image=img)
@@ -961,8 +1129,9 @@ def listing_create(request):
         return redirect("listings:detail", pk=listing.pk)
 
     except Exception as exc:
+        transaction.set_rollback(True)
         logger.exception("listing_create: UNEXPECTED ERROR — user=%s | %s", request.user, exc)
-        return _err(f"خطای داخلی سرور: {exc}", status=500)
+        return _err("ثبت آگهی انجام نشد. لطفاً اطلاعات را بررسی و دوباره تلاش کنید.", status=500)
 
 
 

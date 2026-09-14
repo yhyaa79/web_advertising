@@ -188,6 +188,9 @@ function checkContentHeight(cardId, closeHeightNumber, openHeight, defaultState 
     const myTextElement = document.getElementById(`text-more-card-${cardId}`);
     const BootStrap = document.getElementById(`bootstrap-${cardId}`);
 
+    // این اسکریپت سراسری در همه صفحات لود می‌شود؛ کارت فقط در صفحه جزئیات وجود دارد.
+    if (!aboutplatformCard) return;
+
     // پیدا کردن هدر به صورت داینامیک برای حذف قابلیت کلیک
     const cardContainer = aboutplatformCard.closest('.aboutplatform-card');
     const headerElement = cardContainer ? cardContainer.querySelector('.aboutplatform-card-h3') : null;
@@ -320,6 +323,9 @@ balanceNavbarLinks();
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("filterForm");
     let debounceTimer;
+
+    // فرم فیلتر فقط در صفحه فهرست آگهی‌ها وجود دارد.
+    if (!form) return;
 
     form.querySelectorAll("input, select").forEach(function (el) {
         const eventType = (el.type === "checkbox" || el.tagName === "SELECT") ? "change" :
