@@ -9,7 +9,6 @@
 
 {% block title %}لیست آگهی‌ها{% endblock %}
 
-{% block nav_class %}navbar-top-dark{% endblock %}
 
 {% block content %}
 
@@ -42,7 +41,7 @@
     </ul>
 
 
-        <a href="{% url 'listings:listing_create' %}" class="btn btn-primary btn-md btn-width-fit">ثبت آگهی جدید</a>
+        <a href="{% url 'listings:listing_create' %}" class="btn btn-secondary-red  btn-md btn-width-fit">ثبت آگهی جدید</a>
 
 </div>
 
@@ -190,7 +189,7 @@
                         </div>
                     </div>
 
-                    <hr>
+           
 
                     <form method="get" id="filterForm">
                         {% if request.GET.search %}

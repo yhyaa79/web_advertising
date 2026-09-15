@@ -166,7 +166,6 @@ def profile(request):
     return render(request, 'accounts/profile.html', context)
 
 
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -187,8 +186,22 @@ def saved_listings_view(request):
         SavedListing.objects.filter(user=request.user).values_list('listing_id', flat=True)
     )
     
+    # دریافت تمام notes
+    notes_dict = {}
+    for note in ListingNote.objects.filter(user=request.user):
+        notes_dict[note.listing_id] = note
+    
+    # ترکیب saved_listings با notes
+    saved_with_notes = []
+    for saved in saved_listings:
+        note = notes_dict.get(saved.listing_id)
+        saved_with_notes.append({
+            'saved': saved,
+            'note': note
+        })
+    
     context = {
-        'saved_listings': saved_listings,
+        'saved_with_notes': saved_with_notes,
         'saved_listing_ids': saved_listing_ids,
     }
     return render(request, 'accounts/saved_listings.html', context)

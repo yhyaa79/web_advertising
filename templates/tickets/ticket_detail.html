@@ -32,7 +32,7 @@
                             {% if ticket.category %}
                             <span class="detail-ticket-card-item-muted">دسته بندی: </span>
                             <div class="detail-ticket-card-item-text">
-                                <span>{{ ticket.category.name }}</span>
+                                <span>{{ ticket.get_category_display_safe }}</span>
                             </div>
                             {% endif %}
                         </div>

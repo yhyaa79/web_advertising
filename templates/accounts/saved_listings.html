@@ -13,9 +13,10 @@
     <div class="container my-5">
         <h2 class="mb-4">آگهی‌های ذخیره شده من</h2>
 
-        {% if saved_listings %}
+        {% if saved_with_notes %}
         <div class="row">
-            {% for saved in saved_listings %}
+            {% for item in saved_with_notes %}
+            {% with saved=item.saved user_note=item.note %}
             <div class="card-listing h-100 mb-4 {% if saved.listing.premier %}card-premier{% endif %}">
                 <div class="in-card">
 
@@ -213,7 +214,6 @@
                                 </a>
                             </div>
 
-                            <!-- در قسمت btn-primary-div -->
                             <div class="btn-primary-div">
 
                                 <a href="{% url 'listings:listing_detail' saved.listing.pk %}"
@@ -237,29 +237,28 @@
 
                 </div>
 
-                <!-- یادداشت شخصی (بخش خاص saved_listings) -->
+                <!-- یادداشت شخصی -->
                 <div class="card mt-3">
                     <div class="card-body pad-10">
                         <h5>یادداشت شخصی</h5>
                         <hr>
                     </div>
                     <div class="card-body">
-                        <form id="note-form" method="post" action="{% url 'accounts:save_listing_note' saved.listing.pk %}">
+                        <form class="note-form" method="post" action="{% url 'accounts:save_listing_note' saved.listing.pk %}" data-listing-id="{{ saved.listing.pk }}">
                             {% csrf_token %}
                             <div class="mb-3">
-                                <textarea class="form-control-textarea" name="note" id="listing-note" rows="4"
+                                <textarea class="form-control-textarea listing-note-textarea" name="note" rows="4"
                                     placeholder="یادداشت خود را اینجا بنویسید...">{% if user_note %}{{ user_note.note }}{% endif %}</textarea>
                             </div>
                             <div class="my-list-btn">
-                                <button class="btn btn-primary btn-medium btn-width-fit" type="submit">ذخیره</button>
+                                <button class="btn btn-primary btn-medium btn-width-fit save-note-btn" type="submit">ذخیره</button>
                                 {% if user_note %}
-                                <button class="btn btn-delet btn-medium btn-width-fit" type="button"
-                                    id="delete-note-btn">حذف</button>
+                                <button class="btn btn-delet btn-medium btn-width-fit delete-note-btn" type="button">حذف</button>
                                 {% endif %}
                             </div>
                         </form>
 
-                        <div id="note-timestamp" class="mt-2">
+                        <div class="note-timestamp mt-2">
                             {% if user_note %}
                             <small class="text-muted">
                                 آخرین بروزرسانی: {{ user_note.updated_at|date:"Y/m/d H:i" }}
@@ -270,7 +269,7 @@
                 </div>
 
             </div>
-
+            {% endwith %}
             {% endfor %}
         </div>
         {% else %}
@@ -285,37 +284,99 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // ذخیره/حذف لیستینگ
     document.querySelectorAll('.save-listing-btn').forEach(btn => {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
             const listingId = this.dataset.listingId;
-
             const icon = this.querySelector('.bookmark-icon');
 
             fetch(`/accounts/toggle-save-listing/${listingId}/`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',
-                        'X-Requested-With': 'XMLHttpRequest'
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.is_saved) {
+                        icon.classList.add('saved');
+                        this.dataset.isSaved = 'true';
+                    } else {
+                        icon.classList.remove('saved');
+                        this.dataset.isSaved = 'false';
+                        
+                        setTimeout(() => {
+                            const card = this.closest('.card-listing');
+                            if (card) card.remove();
+                        }, 300);
                     }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        if (data.is_saved) {
-                            icon.classList.add('saved');
-                            this.dataset.isSaved = 'true';
-                        } else {
-                            icon.classList.remove('saved');
-                            this.dataset.isSaved = 'false';
-                            
-                            setTimeout(() => {
-                                const card = this.closest('.card-listing');
-                                if (card) card.remove();
-                            }, 300);
-                        }
+                }
+            });
+        });
+    });
+
+    // ذخیره یادداشت
+    document.querySelectorAll('.note-form').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const listingId = this.dataset.listingId;
+            const formData = new FormData(this);
+
+            fetch(this.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const card = form.closest('.card mt-3');
+                    const timestamp = card.querySelector('.note-timestamp');
+                    if (timestamp) {
+                        timestamp.innerHTML = `<small class="text-muted">آخرین بروزرسانی: ${data.updated_at}</small>`;
                     }
-                });
+                    
+                    const deleteBtn = card.querySelector('.delete-note-btn');
+                    if (deleteBtn && !deleteBtn.style.display) {
+                        deleteBtn.style.display = 'block';
+                    }
+                }
+            });
+        });
+    });
+
+    // حذف یادداشت
+    document.querySelectorAll('.delete-note-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const form = this.closest('.note-form');
+            const listingId = form.dataset.listingId;
+            
+            fetch(`/accounts/delete-listing-note/${listingId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const card = form.closest('.card mt-3');
+                    const textarea = card.querySelector('.listing-note-textarea');
+                    if (textarea) textarea.value = '';
+                    
+                    const timestamp = card.querySelector('.note-timestamp');
+                    if (timestamp) timestamp.innerHTML = '';
+                    
+                    this.style.display = 'none';
+                }
+            });
         });
     });
 });

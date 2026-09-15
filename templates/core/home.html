@@ -227,7 +227,7 @@
                         {% for category in categories %}
                         <a href="?category={{ category.id }}"
                             class="btn btn-medium {% if request.GET.category == category.id|stringformat:'s' %}btn-secondary btn-medium btn-width-fit {% else %}btn-outline-secondary{% endif %}">
-                            {{ category.name }}
+                            {{ get_category_display_safe }}
                         </a>
                         {% endfor %}
                     </div>

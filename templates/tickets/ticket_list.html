@@ -35,7 +35,7 @@
                             <td>{{ ticket.subject }}</td>
                             <td>
                                 {% if ticket.category %}
-                                <span class="badge-normal">{{ ticket.category.name }}</span>
+                                <span class="badge-normal">{{ ticket.get_category_display_safe }}</span>
                                 {% else %}
                                 -
                                 {% endif %}
