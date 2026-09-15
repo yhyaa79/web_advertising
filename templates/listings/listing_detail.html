@@ -2922,6 +2922,40 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.save-listing-btn').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const listingId = this.dataset.listingId;
+
+            const icon = this.querySelector('.bookmark-icon');
+
+            fetch(`/accounts/toggle-save-listing/${listingId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.is_saved) {
+                            icon.classList.add('saved');
+                            this.dataset.isSaved = 'true';
+                        } else {
+                            icon.classList.remove('saved');
+                            this.dataset.isSaved = 'false';
+                        }
+                    }
+                });
+        });
+    });
+});
+</script>
+
+
 {% endblock %}
 
 

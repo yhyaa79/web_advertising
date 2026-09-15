@@ -167,11 +167,6 @@ def profile(request):
 
 
 
-
-
-
-# accounts/views.py
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -184,10 +179,17 @@ from .models import SavedListing, ListingNote
 @login_required
 def saved_listings_view(request):
     """نمایش لیست آگهی‌های ذخیره شده کاربر"""
-    saved_listings = SavedListing.objects.filter(user=request.user).select_related('listing', 'listing__category')
+    saved_listings = SavedListing.objects.filter(
+        user=request.user
+    ).select_related('listing', 'listing__seller')
+    
+    saved_listing_ids = list(
+        SavedListing.objects.filter(user=request.user).values_list('listing_id', flat=True)
+    )
     
     context = {
         'saved_listings': saved_listings,
+        'saved_listing_ids': saved_listing_ids,
     }
     return render(request, 'accounts/saved_listings.html', context)
 
@@ -197,12 +199,10 @@ def saved_listings_view(request):
 def toggle_save_listing(request, listing_id):
     """ذخیره یا حذف آگهی از لیست ذخیره‌شده‌ها"""
     listing = get_object_or_404(Listing, pk=listing_id)
-    
     saved_listing, created = SavedListing.objects.get_or_create(
         user=request.user,
         listing=listing
     )
-    
     if not created:
         saved_listing.delete()
         is_saved = False
@@ -217,7 +217,6 @@ def toggle_save_listing(request, listing_id):
             'is_saved': is_saved,
             'message': message
         })
-    
     messages.success(request, message)
     return redirect('listings:listing_detail', pk=listing_id)
 
@@ -254,7 +253,6 @@ def save_listing_note(request, listing_id):
             'updated_at': note.updated_at.strftime('%Y/%m/%d %H:%M'),
             'created': created
         })
-    
     messages.success(request, message)
     return redirect('listings:listing_detail', pk=listing_id)
 
@@ -264,7 +262,6 @@ def save_listing_note(request, listing_id):
 def delete_listing_note(request, listing_id):
     """حذف یادداشت آگهی"""
     listing = get_object_or_404(Listing, pk=listing_id)
-    
     try:
         note = ListingNote.objects.get(user=request.user, listing=listing)
         note.delete()

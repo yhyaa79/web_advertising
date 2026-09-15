@@ -608,12 +608,16 @@ def listing_detail(request, pk):
         status='active'
     ).exclude(pk=listing.pk)[:6]
     
-    # بررسی ذخیره‌شده بودن آگهی و یادداشت کاربر
     is_saved = False
     user_note = None
+    saved_listing_ids = []
     
     if request.user.is_authenticated:
         is_saved = SavedListing.objects.filter(user=request.user, listing=listing).exists()
+        
+        saved_listing_ids = list(
+            SavedListing.objects.filter(user=request.user).values_list('listing_id', flat=True)
+        )
         
         try:
             user_note = ListingNote.objects.get(user=request.user, listing=listing)
@@ -630,6 +634,7 @@ def listing_detail(request, pk):
         'views_chart_data': views_chart_data,
         'is_saved': is_saved,
         'user_note': user_note,
+        'saved_listing_ids': saved_listing_ids,
     }
     return render(request, 'listings/listing_detail.html', context)
 

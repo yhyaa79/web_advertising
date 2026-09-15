@@ -2024,11 +2024,11 @@ a.navbar-a {
    کارت‌ها (Cards)
    ======================================== */
 .card {
-    border-radius: var(--border-radius-md);
-    border: 1px solid #eaeef1 !important;
+    background: var(--white-bg);
+    border-radius: var(--border-radius-lg);
+    border: .5px solid #eaeef1 !important;
     box-shadow: var(--shadow-sm);
     margin-bottom: var(--spacing-xl);
-    border: none;
     overflow: hidden;
     transition: var(--transition-base);
 }
@@ -2072,7 +2072,6 @@ a.navbar-a {
 .card-body {
     padding: 10px 15px;
     width: 100%;
-    background: #f9fcff4f;
 }
 
 .card-body-decoration {
