@@ -9,8 +9,6 @@
 {% block title %}{{ listing.title }}{% endblock %}
 
 
-{% block nav_class %}navbar-top-dark navbar-absolute{% endblock %}
-
 {% block content %}
 
 <div class="navbar-listing-detail">
@@ -18,7 +16,7 @@
     <div class="rigt-navba-listing-detailr">
 
         <div class="ad-views-navbar">
-            <a href="{{ listing.platform_url }}" class="btn btn-primary btn-small btn-width-fit" target="_blank">بازدید
+            <a href="{{ listing.platform_url }}" class="btn btn-secondary-red  btn-md btn-width-fit" target="_blank">بازدید
                 پلتفرم</a>
         </div>
 
@@ -1537,7 +1535,7 @@
                             <div class="list-sell-includes">
                                 {% if listing.sale_includes.all %}
                                 <div class="h4-assets-sell-includes">
-                                    <h4>دارایی ها</h4>
+                                    <h4 class="h4-sale-support">دارایی ها</h4>
                                     <div class="list-assets-sell-includes">
                                         {% for includes in listing.sale_includes.all %}
                                         <div class="assets-sell-includes">
@@ -1556,7 +1554,8 @@
 
                                 {% if listing.post_sale_support %}
                                 <div class="post-sale-support">
-                                    <h4>پشتیبانی پس از فروش</h4>
+                                    <h4
+                                    class="h4-sale-support">پشتیبانی پس از فروش</h4>
                                     <div class="text-post-sale-support">
                                         {{ listing.post_sale_support|linebreaks }}
                                     </div>
@@ -1753,7 +1752,7 @@
                             <hr>
                             {% if listing.total_revenue or listing.total_profit or listing.avg_monthly_revenue or listing.avg_monthly_profit or listing.profit_margin or listing.profit_multiplier or listing.revenue_multiplier  %}
                             <div class="revenue-revenue-expenses">
-                                <h4>درامد ها</h4>
+                                <h4 class="h4-sale-support">درامد ها</h4>
 
                                 <div class="specifications-income-expense">
                                     <div class="inf-first-card-income-expense">
@@ -1824,7 +1823,7 @@
 
                             {% if listing.expenses.exists %}
                             <div class="expenses-revenue-expenses">
-                                <h4>هزینه ها</h4>
+                                <h4 class="h4-sale-support">هزینه ها</h4>
                                 <div class="list-revenue">
 
                                     {% for expense in listing.expenses.all %}
@@ -1858,7 +1857,7 @@
                         <div class="license-detail">
                             <hr>
                             <div class="list-license">
-                                <h4>{{ listing.get_sale_reason_display }}</h4>
+                                <h4 class="h4-sale-support">{{ listing.get_sale_reason_display }}</h4>
 
                                 <p class="text-post-sale-support">{{ listing.sale_reason_description }}</p>
                             </div>
@@ -2190,7 +2189,7 @@
                         <hr class="hr-between">
 
                         <div>
-                            <a href="{% url 'coming_soon' %}" class="text-link-scroll" target="_blank">شما میتواند از
+                            <a href="{% url 'coming_soon' %}" class="text-link-blu" target="_blank">شما میتواند از
                                 این قسمت
                                 نظرات خودتان را در مورد این اگهی به اشتراک بگذارید.</a>
                         </div>
@@ -2204,7 +2203,7 @@
                 <div class="card-body pad-10">
 
                     <div class="seller-information">
-                        <h5>اطلاعات فروشنده</h5>
+                        <h5 class="h5-information">اطلاعات فروشنده</h5>
 
                         {% if listing.seller.profile.premium %}
                         <div class="inf-card-profile-detail">
@@ -2305,7 +2304,7 @@
 
                     <div>
                         <a href="{% url 'listings:user_profile' listing.seller.username %}"
-                            class="btn btn-md text-link-scroll">
+                            class="btn btn-md text-link-blu">
                             مشاهده پروفایل
                         </a>
                     </div>
@@ -2319,7 +2318,7 @@
             {% if listing.confirmed.exists %}
             <div class="card mt-3 information-confirmed">
                 <div class="card-body pad-10">
-                    <h5>اطلاعات تایید شده</h5>
+                    <h5 class="h5-information">اطلاعات تایید شده</h5>
                     <hr>
                     <p class="information-confirmed-text">
                         تیم بررسی ما این فهرست را بررسی و موارد زیر را تأیید کرده است:
@@ -2367,7 +2366,7 @@
             {% if user.is_authenticated %}
             <div class="card mt-3">
                 <div class="card-body pad-10">
-                    <h5> یادداشت شخصی</h5>
+                    <h5 class="h5-information"> یادداشت شخصی</h5>
                     <hr>
                 </div>
                 <div class="card-body">
@@ -2403,7 +2402,7 @@
 
             <div class="card mt-3">
                 <div class="card-body pad-10">
-                    <h5>چگونه خرید کنم؟</h5>
+                    <h5 class="h5-information">چگونه خرید کنم؟</h5>
                     <hr>
                     <div class="card-body-how-buy">
                         <p class="steps-how-buy">
@@ -2464,7 +2463,7 @@
 
             <div class="card mt-3">
                 <div class="card-body pad-10">
-                    <h5>مشاغل مشابه</h5>
+                    <h5 class="h5-information">مشاغل مشابه</h5>
 
                     <hr>
 
@@ -2534,7 +2533,7 @@
 
             <div class="card mt-3">
                 <div class="card-body pad-10">
-                    <h5>گزارش تخلف</h5>
+                    <h5 class="h5-information">گزارش تخلف</h5>
                     <hr>
                     <p class="report-violation">
                         دیده‌بان جامعه آیا این آگهی، شرایط و ضوابط Flippa را نقض می‌کند؟
@@ -2542,7 +2541,7 @@
                     <p class="report-violation">
                         در این صورت، آن را
                         <a href="{% url 'tickets:ticket_create' %}?category={{ 1 }}&subject={{ 'تخلف%20اگهی' }}"
-                            class="text-link-scroll" target="_blank">
+                            class="text-link-blu" target="_blank">
                             <!-- href="{% url 'tickets:ticket_create' %}?category={{ category.id }}&subject={{ subject }}" -->
                             اینجا
                         </a>
@@ -2555,11 +2554,11 @@
 
             <div class="card mt-3">
                 <div class="card-body pad-10">
-                    <h5>مشاوره خرید</h5>
+                    <h5 class="h5-information">مشاوره خرید</h5>
 
                     <hr>
 
-                    <h5>قبل از ارائه پیشنهاد</h5>
+                    <h5 class="h5-purchase">قبل از ارائه پیشنهاد</h5>
 
                     <p class="card-body-text-purchase-advice"><strong>۱. به دنبال فروشندگان تأیید شده باشید.</strong>
                         فروشندگان باید
@@ -2589,7 +2588,7 @@
                         به
                         تیم پشتیبانی پس از فروش ما دسترسی خواهید داشت.</p>
 
-                    <h5>بعد از ارائه پیشنهاد</h5>
+                    <h5 class="h5-purchase">بعد از ارائه پیشنهاد</h5>
 
                     <p class="card-body-text-purchase-advice"><strong>۱. توافق‌نامه‌ها و قراردادها.</strong> با یک وکیل
                         مستقر در ایالات متحده ارتباط برقرار کنید یا از طریق Flippa Legal، الگوهای اسناد حقوقی مخصوص
@@ -2610,7 +2609,7 @@
             <div class="card mt-3">
                 <div class="card-body pad-10">
 
-                    <h5>راهنما</h5>
+                    <h5 class="h5-information">راهنما</h5>
 
                     <hr>
                     <div class="guide-list">

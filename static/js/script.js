@@ -168,7 +168,7 @@ function toggleHeight(cardId, closeHeight) {
 // بررسی ارتفاع هنگام لود شدن صفحه
 document.addEventListener("DOMContentLoaded", function () {
     checkContentHeight('1', 0, '1000px', 'open');
-    checkContentHeight('2', 0, '1000px', 'closed');
+    checkContentHeight('2', 0, '1000px', 'open');
     checkContentHeight('3', 0, '1000px', 'open');
     checkContentHeight('4', 0, '1000px', 'open');
     checkContentHeight('5', 0, '1000px', 'open');
