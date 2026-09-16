@@ -1719,7 +1719,8 @@ a.navbar-a {
 }
 
 .faq-item {
-    border: 1px solid #dee2e6;;
+    border: 1px solid #dee2e6;
+    ;
     border-radius: 8px;
     overflow: visible;
     transition: all 0.3s ease;
@@ -2512,7 +2513,7 @@ a.navbar-a {
 }
 
 .h5-purchase {
-        font-size: var(--font-size-xl);
+    font-size: var(--font-size-xl);
     font-weight: 500;
 }
 
@@ -2660,11 +2661,23 @@ a.navbar-a {
 
 .btn-listing-create {
     display: flex;
-    margin-bottom: 15px;
+    margin-bottom: 35px;
 }
 
 .btn-listing-create .btn-success {
     margin-right: auto;
+}
+
+
+.inf-my-listings h2 {
+    font-size: var(--font-size-5xl);
+    font-weight: 500;
+    margin-bottom: 3px;
+}
+
+.inf-my-listings p {
+    font-size: var(--font-size-2xl);
+    font-weight: 300;
 }
 
 
@@ -2751,7 +2764,7 @@ a.navbar-a {
 
 .h4-sale-support {
     font-size: var(--font-size-2xl);
-font-weight: 500;
+    font-weight: 500;
 }
 
 
@@ -3479,6 +3492,16 @@ hr {
 }
 
 
+.btn-accept {
+    color: #1fb900;
+    background: #d0efca;
+}
+
+.btn-accept:hover {
+    color: #1b9d01;
+    background: #a6e999;
+}
+
 .btn-large {
     padding: 7px 18px;
     font-size: var(--font-size-2xl);
@@ -3496,10 +3519,10 @@ hr {
 }
 
 .btn-small {
-    padding: 3px 17px;
+    padding: 2px 14px;
     font-size: var(--font-size-lg);
     font-weight: 500;
-    height: 27px;
+    height: 24px;
     min-width: 50px;
 }
 
@@ -3977,107 +4000,442 @@ form textarea {
 
 
 /* ========================================
-   جداول (Tables)
+   بازطراحی جدول‌ها — نسخه دو (حرفه‌ای‌تر)
+   بدون هیچ متغیر root جدید — فقط از متغیرهای موجود
+   (تینت‌های نرم با color-mix از همان رنگ‌های موجود ساخته شده‌اند)
    ======================================== */
+
 .table-responsive {
     overflow-x: auto;
-    margin-bottom: var(--spacing-lg);
 }
 
-.table,
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
+.card {
     background: var(--white-bg);
-    border-radius: var(--border-radius-lg);
-    overflow: hidden;
-    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-xl);
+    box-shadow: none;
 }
 
-.table thead,
-.data-table thead {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    color: var(--white-bg);
+/* نوار عنوان هر بخش با یک خط‌کش قرمز به‌جای لیبل تزئینی */
+.card-header {
+    position: relative;
+    padding: var(--spacing-md) var(--spacing-lg);
+    padding-inline-end: calc(var(--spacing-lg) + 10px);
+    background: var(--white-bg);
+    border-bottom: 1px solid var(--border-color);
 }
 
-.table th,
-.data-table th {
-    padding: var(--spacing-md);
-    text-align: right;
-    font-weight: 600;
+.card-header::before {
+    content: '';
+    position: absolute;
+    inset-inline-end: 0;
+    top: 10px;
+    bottom: 10px;
+    width: 4px;
+    border-radius: 4px;
+    background: var(--red-color);
+}
+
+.card-header h5 {
     font-size: var(--font-size-lg);
-    background: #f8f9fa;
-    color: #333;
+    font-weight: 700;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
 }
 
-.table td,
-.data-table td {
-    padding: var(--spacing-md);
-    border-bottom: 1px solid var(--light-bg);
-    color: var(--text-primary);
+.pending-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    margin-inline-start: var(--spacing-sm);
+    border-radius: var(--border-radius-999);
+    background: var(--red-color);
+    color: var(--white-bg);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+}
+
+/* ---------- جدول پایه: بدون گرادینت، بدون سایه سنگین ---------- */
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--white-bg);
+}
+
+.table thead {
+    background: #f9f9f9;
+    border-bottom: 2px solid var(--red-color);
+}
+
+.table th {
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: right;
+    font-weight: 500;
+    font-size: var(--font-size-xl);
+    color: var(--primary-color);
+    white-space: nowrap;
+}
+
+.table tbody tr,
+.table-striped tbody tr:nth-child(even),
+.table-striped tbody tr:nth-child(odd) {
+    background-color: var(--white-bg) !important;
+    transition: var(--transition-base);
 }
 
 .table td {
-    padding: var(--spacing-lg) var(--spacing-sm) !important;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+    vertical-align: middle;
+}
 
+.table tbody tr:hover {
+    background-color: color-mix(in srgb, var(--red-color) 5%, var(--white-bg)) !important;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
 }
 
 .my-list-btn {
     display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+a.btn-sm.btn-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: var(--font-size-xl);
+}
+
+a.btn-sm.btn-link:hover {
+    color: var(--red-durk-color);
+    text-decoration: underline;
+}
+
+/* ---------- آواتار حرف اول درخواست‌کننده ---------- */
+.avatar-chip {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--primary-color) 10%, var(--white-bg));
+    color: var(--primary-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.requester-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.requester-cell .names {
+    display: flex;
+    flex-direction: column;
+}
+
+.requester-cell .names .listing-ref {
+    font-size: var(--font-size-xl);
+    color: var(--text-primary);
+    font-weight: 400;
+}
+
+/* ---------- دکمه‌های دایره‌ای آیکونی (جدول درخواست‌ها) ---------- */
+.icon-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.icon-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.icon-btn-approve {
+    background: color-mix(in srgb, var(--success-color) 14%, var(--white-bg));
+    color: var(--success-color);
+}
+
+.icon-btn-approve:hover {
+    background: var(--success-color);
+    color: var(--white-bg);
+}
+
+.icon-btn-reject {
+    background: var(--red-light-color);
+    color: var(--red-durk-color);
+}
+
+.icon-btn-reject:hover {
+    background: var(--red-color);
+    color: var(--white-bg);
+}
+
+.icon-btn:focus-visible {
+    outline: 2px solid var(--red-color);
+    outline-offset: 2px;
+}
+
+/* ---------- جدول درخواست‌ها: فشرده + اسکرول با هدر ثابت ---------- */
+.table-requests-wrapper {
+    max-height: 360px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+}
+
+.table-requests-wrapper::-webkit-scrollbar {
+    width: 6px;
+}
+
+.table-requests-wrapper::-webkit-scrollbar-thumb {
+    background: var(--red-light-color);
+    border-radius: 999px;
+}
+
+.table-requests {
+    border: none;
+}
+
+.table-requests thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--white-bg);
+    padding: 10px var(--spacing-sm);
+}
+
+.table-requests td {
+    padding: 8px var(--spacing-sm) !important;
+    font-size: var(--font-size-sm);
+}
+
+.table-requests .message-link {
+    color: var(--text-secondary);
+    font-size: var(--font-size-lg);
+    font-weight: 400;
+}
+
+.table-requests .date-td {
+    color: var(--text-muted);
+    font-size: var(--font-size-xl);
+}
+
+/* ---------- جدول آگهی‌ها: فضادار و با جزئیات ---------- */
+.table-listings th {
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.table-listings td {
+    padding: var(--spacing-lg) !important;
+}
+
+.listing-title-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.listing-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.listing-meta .dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--text-muted);
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
     gap: 5px;
+    padding: 3px 10px;
+    border-radius: var(--border-radius-999);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    background: var(--white-bg);
 }
 
-.table-striped tbody tr:nth-child(even) {
-    background-color: #f8f9fa;
+.chip svg {
+    width: 12px;
+    height: 12px;
 }
 
-.table tbody tr:hover,
-.data-table tbody tr:hover {
-    background-color: var(--light-bg);
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
 }
 
-.table-container {
-    overflow-x: auto;
+.status-active {
+    color: var(--success-color);
+    border-color: color-mix(in srgb, var(--success-color) 35%, var(--white-bg));
 }
 
-.data-table {
-    margin-top: var(--spacing-md);
+.status-active .status-dot {
+    background: var(--success-color);
 }
 
-
-.premier-announcement {
-    color: #b08900;
-    background-color: #fdf0c8;
+.status-pending {
+    color: var(--warning-color);
+    border-color: color-mix(in srgb, var(--warning-color) 35%, var(--white-bg));
 }
 
-.boost-announcement {
-    color: #0560bc;
-    background-color: #d5eaff;
+.status-pending .status-dot {
+    background: var(--warning-color);
 }
 
-.card-alarm-accept {
-    color: #0560bc;
-    background-color: #d5eaff;
+.status-rejected {
+    color: var(--red-durk-color);
+    border-color: color-mix(in srgb, var(--red-color) 35%, var(--white-bg));
 }
 
-.card-alarm-reject {
-    color: #b50f0f;
-    background-color: #ffbaba;
+.status-rejected .status-dot {
+    background: var(--red-color);
 }
 
-.premier-announcement-text,
-.boost-announcement-text {
+.status-sold {
+    color: var(--text-muted);
+}
+
+.status-sold .status-dot {
+    background: var(--text-muted);
+}
+
+.rejection-note {
+    display: block;
+    margin-top: 4px;
+    font-size: var(--font-size-xs);
+    color: var(--red-durk-color);
+}
+
+.listing-price {
+    font-weight: 700;
     font-size: var(--font-size-lg);
-    padding: 5px 5px;
+    color: var(--red-durk-color);
+    white-space: nowrap;
 }
 
-.suggested-price {
-    color: #054e3b;
-    background-color: #d7fae3;
+.views-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-secondary);
 }
 
-.suggested-price-text {
-    font-size: var(--font-size-lg);
+.views-cell svg {
+    width: 14px;
+    height: 14px;
+    color: var(--text-muted);
+}
+
+/* دکمه‌های اصلی جدول آگهی‌ها: ghost به‌جای بلوک رنگی */
+.btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid var(--border-color);
+    background: var(--white-bg);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.btn-ghost svg {
+    width: 14px;
+    height: 14px;
+}
+
+.btn-ghost-edit:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-ghost-delete {
+    color: var(--red-durk-color);
+    border-color: color-mix(in srgb, var(--red-color) 30%, var(--white-bg));
+}
+
+.btn-ghost-delete:hover {
+    background: var(--red-color);
+    border-color: var(--red-color);
+    color: var(--white-bg);
+}
+
+.btn-activate {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    background: var(--success-color);
+    color: var(--white-bg);
+}
+
+.btn-activate:hover {
+    filter: brightness(0.93);
+}
+
+.btn-ghost:focus-visible,
+.btn-activate:focus-visible {
+    outline: 2px solid var(--red-color);
+    outline-offset: 2px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-md);
+    color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+
+    .table-listings td,
+    .table-listings th {
+        padding: var(--spacing-sm) !important;
+    }
+
+    .listing-price {
+        font-size: var(--font-size-base);
+    }
 }
 
 /* ========================================
@@ -5117,7 +5475,7 @@ form textarea {
 /* کوچکتر کردن لیبل‌ها */
 .filter-group .form-label {
     margin-bottom: 5px;
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-lg);
     color: #495057;
     font-weight: 400;
 }
@@ -5144,6 +5502,11 @@ form textarea {
 .card-filter {
     display: flex;
     gap: 2px;
+}
+
+.card-filter h4 {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
 }
 
 .div-btn-delet {}
