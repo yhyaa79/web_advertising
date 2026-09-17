@@ -170,11 +170,11 @@
 
                             <td onclick="event.stopPropagation();" class="my-list-btn">
                                 {% if listing.status != 'deleted' and listing.status != 'sold' %}
-                                <a href="{% url 'listings:listing_edit' listing.pk %}" class="btn-ghost btn-ghost-edit">
+                                <a href="{% url 'listings:listing_edit' listing.pk %}" class="btn-list btn-ghost-edit">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
                                     ویرایش
                                 </a>
-                                <a href="{% url 'listings:listing_delete' listing.pk %}" class="btn-ghost btn-ghost-delete">
+                                <a href="{% url 'listings:listing_delete' listing.pk %}" class="btn-list btn-ghost-delete">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>
                                     حذف
                                 </a>

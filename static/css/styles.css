@@ -4022,18 +4022,6 @@ form textarea {
     padding: var(--spacing-md) var(--spacing-lg);
     padding-inline-end: calc(var(--spacing-lg) + 10px);
     background: var(--white-bg);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.card-header::before {
-    content: '';
-    position: absolute;
-    inset-inline-end: 0;
-    top: 10px;
-    bottom: 10px;
-    width: 4px;
-    border-radius: 4px;
-    background: var(--red-color);
 }
 
 .card-header h5 {
@@ -4260,7 +4248,7 @@ a.btn-sm.btn-link:hover {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-lg);
     color: var(--text-muted);
 }
 
@@ -4277,8 +4265,8 @@ a.btn-sm.btn-link:hover {
     gap: 5px;
     padding: 3px 10px;
     border-radius: var(--border-radius-999);
-    font-size: var(--font-size-xs);
-    font-weight: 600;
+    font-size: var(--font-size-lg);
+    font-weight: 500;
     border: 1px solid var(--border-color);
     color: var(--text-secondary);
     background: var(--white-bg);
@@ -4340,7 +4328,7 @@ a.btn-sm.btn-link:hover {
 
 .listing-price {
     font-weight: 700;
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-xl);
     color: var(--red-durk-color);
     white-space: nowrap;
 }
@@ -4349,6 +4337,7 @@ a.btn-sm.btn-link:hover {
     display: inline-flex;
     align-items: center;
     gap: 5px;
+    font-size: var(--font-size-xl);
     color: var(--text-secondary);
 }
 
@@ -4359,13 +4348,13 @@ a.btn-sm.btn-link:hover {
 }
 
 /* دکمه‌های اصلی جدول آگهی‌ها: ghost به‌جای بلوک رنگی */
-.btn-ghost {
+.btn-list {
     display: inline-flex;
     align-items: center;
     gap: 5px;
     padding: 6px 14px;
     border-radius: var(--border-radius-md);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-lg);
     font-weight: 600;
     text-decoration: none;
     border: 1px solid var(--border-color);
@@ -4375,7 +4364,7 @@ a.btn-sm.btn-link:hover {
     transition: var(--transition-base);
 }
 
-.btn-ghost svg {
+.btn-list svg {
     width: 14px;
     height: 14px;
 }
@@ -4402,7 +4391,7 @@ a.btn-sm.btn-link:hover {
     gap: 5px;
     padding: 6px 14px;
     border-radius: var(--border-radius-md);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-lg);
     font-weight: 600;
     text-decoration: none;
     border: none;
@@ -4747,266 +4736,702 @@ a.btn-sm.btn-link:hover {
 }
 
 /* ========================================
-   تب‌ها (Tabs)
+   بازطراحی جداول my_transactions.html — نسخه ۲
+   اصلاحات: مودال چت، لیبل قیمت‌ها، فیلتر خرید/فروش، +۱ پله فونت
+   بدون هیچ متغیر root جدید.
    ======================================== */
+
+/* ---------- تب‌ها ---------- */
 .tabs-container {
     background: var(--white-bg);
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--card-shadow);
-    overflow: hidden;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-xl);
+    box-shadow: none;
 }
 
-.tabs-nav,
-.nav-tabs {
+.tabs-nav {
     display: flex;
-    background: #f5f5f5;
-    border-bottom: 2px solid var(--border-dark);
+    background: var(--white-bg);
+    border-bottom: 1px solid var(--border-color);
     list-style: none;
     overflow-x: auto;
+    padding: 0 var(--spacing-sm);
 }
 
 .tab-button {
     padding: var(--spacing-md) var(--spacing-lg);
     background: transparent;
     border: none;
+    border-bottom: 3px solid transparent;
     cursor: pointer;
     font-size: var(--font-size-xl);
-    color: #666;
+    font-weight: 600;
+    color: var(--text-secondary);
     transition: var(--transition-base);
     white-space: nowrap;
 }
 
 .tab-button:hover {
-    background: #e8e8e8;
+    color: var(--primary-color);
 }
 
 .tab-button.active {
-    background: var(--white-bg);
-    color: #007bff;
-    border-bottom: 3px solid #007bff;
-    font-weight: bold;
+    color: var(--primary-color);
+    border-bottom-color: var(--red-color);
 }
 
-.nav-item {
-    margin-left: var(--spacing-sm);
-}
-
-.nav-tabs .nav-link {
-    padding: 0.75rem var(--spacing-lg);
-    border: none;
-    background: transparent;
-    color: var(--text-secondary);
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: var(--transition-base);
-}
-
-.nav-tabs .nav-link.active {
-    color: var(--accent-color);
-    border-bottom-color: var(--accent-color);
-    font-weight: 600;
-}
-
-.nav-tabs .nav-link:hover {
-    color: var(--accent-color);
-}
-
-.tabs-content,
-.tab-content {
-    padding: var(--spacing-lg) 0;
+.tabs-content {
+    padding: var(--spacing-lg);
 }
 
 .tab-pane {
     display: none;
 }
 
-.tab-pane.show.active,
 .tab-pane.active {
     display: block;
 }
 
-
-.card-reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.card-reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-
-.serch-bur-ui {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.serch-bur-ui.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* ========================================
-   مودال‌ها (Modals)
-   ======================================== */
-.custom-modal,
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.custom-modal-content,
-.modal-content {
-    background-color: var(--white-bg);
-    margin: auto;
-    padding: 0;
-    border: 1px solid #888;
-    width: 90%;
-    max-width: 650px;
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--modal-shadow);
-    max-height: 136vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.modal-content {
-    height: 80vh !important;
-    margin-top: 60px;
-}
-
-.custom-modal-header,
-.modal-header {
-    padding: var(--spacing-md) var(--spacing-lg);
-    background-color: #f8f9fa;
-    border-bottom: 1px solid var(--border-light);
-    border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.custom-modal-header h5,
-.modal-header h3 {
-    margin: 0;
-    font-size: var(--font-size-lg);
-}
-
-.custom-modal-close,
-.close {
-    background: none;
-    border: none;
-    font-size: var(--font-size-xl);
-    font-weight: bold;
-    color: var(--text-muted);
-    cursor: pointer;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-    line-height: 1;
-}
-
-.custom-modal-close:hover,
-.custom-modal-close:focus,
-.close:hover {
-    color: #333;
-}
-
-.custom-modal-body,
-.modal-body {
-    padding: var(--spacing-lg);
-    max-height: 70vh;
-    overflow-y: auto;
-    flex: 1;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-.custom-modal-footer {
-    padding: var(--spacing-md) var(--spacing-lg);
-    background-color: #f8f9fa;
-    border-top: 1px solid var(--border-light);
-    border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
-    text-align: left;
-}
-
-
-.card-body-how-buy {
-    display: flex;
-    margin-bottom: 10px;
-    gap: 7px;
-    align-items: center;
-
-}
-
-.steps-how-buy {
-    display: flex;
-    align-items: center;
-    background: var(--red-color);
-    border: 1px solid #d1d4d7;
-    color: #fff;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+/* ---------- فیلتر خرید/فروش (فقط تب گفت‌وگوها) ---------- */
+.conv-filter {
+    display: inline-flex;
+    background: var(--light-bg);
     border-radius: var(--border-radius-999);
-    height: 28px;
-    text-align: center;
-    font-size: var(--font-size-md);
-    padding: 0 10px;
+    padding: 4px;
+    margin-bottom: var(--spacing-md);
+    gap: 2px;
+}
+
+.filter-btn {
+    border: none;
+    background: transparent;
+    padding: 8px 18px;
+    border-radius: var(--border-radius-999);
+    font-size: var(--font-size-lg);
     font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition-base);
+    font-family: inherit;
 }
 
-.card-body-text-how-buy {
-    background: #fefeff !important;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 7px;
-    font-size: var(--font-size-xl);
-    font-weight: 300;
-    color: #495057;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+.filter-btn:hover {
+    color: var(--text-primary);
 }
 
-.ad-views {
-    margin-top: 10px;
+.filter-btn.active {
+    background: var(--white-bg);
+    color: var(--primary-color);
+    box-shadow: var(--card-shadow);
 }
 
-.card-body-text-purchase-advice {
-    margin-bottom: 10px;
-    padding: 7px;
-    font-size: var(--font-size-xl);
-    font-weight: 300;
-    color: #495057;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+.filter-btn.active[data-filter="buy"] {
+    color: var(--blu-durk-color);
 }
 
-.card-body-text-purchase-advice strong {
+.filter-btn.active[data-filter="sell"] {
+    color: var(--red-durk-color);
+}
+
+/* ---------- جدول پایه ---------- */
+.table-container {
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--white-bg);
+}
+
+.data-table thead {
+    border-bottom: 2px solid var(--red-color);
+}
+
+.data-table th {
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: right;
+    font-weight: 700;
+    font-size: var(--font-size-md);
+    color: var(--primary-color);
+    white-space: nowrap;
+}
+
+.data-table tbody tr {
+    background: var(--white-bg);
+    transition: var(--transition-base);
+}
+
+.data-table tbody tr:hover {
+    background: color-mix(in srgb, var(--red-color) 5%, var(--white-bg));
+}
+
+.data-table td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+    vertical-align: middle;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.role-row-buy {
+    box-shadow: inset 3px 0 0 var(--blu-color);
+}
+
+.role-row-sell {
+    box-shadow: inset 3px 0 0 var(--red-color);
+}
+
+.role-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-md);
+    font-weight: 700;
+}
+
+.role-chip-buy {
+    background: color-mix(in srgb, var(--blu-color) 12%, var(--white-bg));
+    color: var(--blu-durk-color);
+}
+
+.role-chip-sell {
+    background: var(--red-light-color);
+    color: var(--red-durk-color);
+}
+
+.party-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.avatar-square {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--border-radius-sm-md);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: var(--font-size-md);
+    flex-shrink: 0;
+}
+
+.avatar-square.buy {
+    background: color-mix(in srgb, var(--blu-color) 12%, var(--white-bg));
+    color: var(--blu-durk-color);
+}
+
+.avatar-square.sell {
+    background: var(--red-light-color);
+    color: var(--red-durk-color);
+}
+
+.party-cell .party-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.party-info span {
     font-size: var(--font-size-xl);
     font-weight: 500;
 }
 
-.ad-views-navbar {
-    margin: auto 0;
+.party-cell .listing-name {
+    font-size: var(--font-size-lg);
+    color: var(--text-muted);
+    font-weight: 400;
 }
 
+/* ---------- قیمت‌ها: لیبل قبل هر مقدار، هم‌الگو با «توافق طرفین» ---------- */
+.price-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
 
-.report-violation {
-    font-weight: 400;
+.price-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-md);
+}
+
+.price-label {
+    font-size: var(--font-size-base);
+    color: var(--text-muted);
+    width: 75px;
+}
+
+.agreement-label {
+    font-size: var(--font-size-base);
+    color: var(--text-muted);
+    width: 40px;
+}
+
+.price-row .original {
+    font-size: var(--font-size-md);
+    color: var(--text-muted);
+    text-decoration: line-through;
+}
+
+.price-row .proposed {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+}
+
+.price-row .proposed.buy {
+    color: var(--blu-durk-color);
+}
+
+.price-row .proposed.sell {
+    color: var(--red-durk-color);
+}
+
+/* ---------- چیپ وضعیت ---------- */
+.status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-negotiating {
+    color: var(--warning-color);
+    border-color: color-mix(in srgb, var(--warning-color) 35%, var(--white-bg));
+}
+
+.status-negotiating .status-dot {
+    background: var(--warning-color);
+}
+
+.status-confirmed {
+    color: var(--success-color);
+    border-color: color-mix(in srgb, var(--success-color) 35%, var(--white-bg));
+}
+
+.status-confirmed .status-dot {
+    background: var(--success-color);
+}
+
+.status-rejected {
+    color: var(--red-durk-color);
+    border-color: color-mix(in srgb, var(--red-color) 35%, var(--white-bg));
+}
+
+.status-rejected .status-dot {
+    background: var(--red-color);
+}
+
+/* ---------- توافق طرفین ---------- */
+.agreement-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.agreement-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-md);
+}
+
+.agree-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+}
+
+.agree-badge svg {
+    width: 16px;
+    height: 16px;
+}
+
+.agree-badge.yes {
+    color: var(--success-color);
+}
+
+.agree-badge.no {
+    color: var(--red-durk-color);
+}
+
+.agree-badge.pending {
+    color: var(--text-muted);
+}
+
+/* ---------- دکمه چت ---------- */
+.chat-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+    background: var(--white-bg);
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.chat-btn:hover {
+    border-color: var(--primary-color);
+}
+
+.chat-btn svg {
+    width: 17px;
+    height: 17px;
+}
+
+.chat-badge {
+    position: absolute;
+    top: -6px;
+    inset-inline-start: -6px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: var(--red-color);
+    color: #fff;
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ---------- دکمه‌های عملیات گفت‌وگو ---------- */
+.btn-return {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+    background: var(--white-bg);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition-base);
+    text-decoration: none;
+}
+
+.btn-return:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-solid-success {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    border: none;
+    background: var(--success-color);
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-solid-success:hover {
+    filter: brightness(0.93);
+}
+
+.btn-return-danger {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    border: 1px solid color-mix(in srgb, var(--red-color) 30%, var(--white-bg));
+    background: var(--white-bg);
+    color: var(--red-durk-color);
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.btn-return-danger:hover {
+    background: var(--red-color);
+    border-color: var(--red-color);
+    color: #fff;
+}
+
+/* ---------- خریدها / فروش‌ها ---------- */
+.table-transactions td {
+    padding: var(--spacing-lg) var(--spacing-md) !important;
+}
+
+.tracking-code {
+    display: inline-block;
+    font-family: 'Courier New', monospace;
+    background: var(--light-bg);
+    color: var(--text-secondary);
+    padding: 3px 8px;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xl);
+}
+
+.tx-listing-title {
+    font-weight: 600;
+}
+
+.tx-amount {
+    font-weight: 700;
+    font-size: var(--font-size-2xl);
+}
+
+.tx-amount.buy {
+    color: var(--blu-durk-color);
+}
+
+.tx-amount.sell {
+    color: var(--red-durk-color);
+}
+
+.tx-date {
+    color: var(--text-muted);
+    font-size: var(--font-size-md);
+}
+
+.empty-row {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--text-muted);
     font-size: var(--font-size-lg);
 }
 
+/* ==================================================
+   مودال چت — طراحی کامل و درست‌شده
+   ================================================== */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.55);
+}
 
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(640px, 92vw);
+    height: min(640px, 82vh);
+    max-height: 82vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--white-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--modal-shadow);
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--white-bg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: var(--font-size-2xl);
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.close {
+    background: none;
+    border: none;
+    font-size: var(--font-size-2xl);
+    color: var(--text-muted);
+    cursor: pointer;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-base);
+    line-height: 1;
+}
+
+.close:hover {
+    background: var(--red-light-color);
+    color: var(--red-durk-color);
+}
+
+.modal-body {
+    padding: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    background: var(--light-bg);
+}
+
+.chat-message {
+    max-width: 75%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-lg);
+    background: var(--white-bg);
+}
+
+.chat-message.mine {
+    align-self: flex-start;
+    background: color-mix(in srgb, var(--red-color) 12%, var(--white-bg));
+    border-bottom-right-radius: 4px;
+}
+
+.chat-message.theirs {
+    align-self: flex-end;
+    background: var(--white-bg);
+    border: 1px solid var(--border-color);
+    border-bottom-left-radius: 4px;
+}
+
+.chat-message-sender {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 2px;
+}
+
+.chat-message.mine .chat-message-sender {
+    color: var(--red-durk-color);
+}
+
+.chat-message-text {
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.chat-message-time {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.chat-input-container {
+    display: flex;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+    background: var(--white-bg);
+    align-items: flex-end;
+    flex-shrink: 0;
+}
+
+#chatInput {
+    flex: 1;
+    resize: none;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-family: inherit;
+    font-size: var(--font-size-lg);
+    max-height: 150px;
+    transition: var(--transition-base);
+}
+
+#chatInput:focus {
+    outline: none;
+    border-color: var(--red-color);
+}
+
+.btn-send {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    background: var(--red-color);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    font-size: var(--font-size-lg);
+    cursor: pointer;
+    transition: var(--transition-base);
+    flex-shrink: 0;
+}
+
+.btn-send:hover {
+    background: var(--red-durk-color);
+}
+
+.chat-disabled-message {
+    padding: var(--spacing-lg);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: var(--font-size-lg);
+}
+
+@media (max-width: 768px) {
+
+    .data-table td,
+    .data-table th {
+        font-size: var(--font-size-md);
+        padding: var(--spacing-sm);
+    }
+
+    .modal-content {
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        border-radius: 0;
+        top: 0;
+        left: 0;
+        transform: none;
+    }
+}
 
 /* ========================================
    تیکت (ticket)
@@ -6368,11 +6793,6 @@ section {
     font-size: 1.3rem;
     font-weight: 800;
     color: var(--white);
-}
-
-.price-label {
-    font-size: .75rem;
-    color: var(--muted);
 }
 
 .verified-badge {
@@ -9209,10 +9629,6 @@ section {
     color: var(--white);
 }
 
-.price-label {
-    font-size: .75rem;
-    color: var(--muted);
-}
 
 .verified-badge {
     display: flex;
