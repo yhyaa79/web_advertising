@@ -1,66 +1,46 @@
 <!-- templates/tickets/ticket_create.html -->
-
 {% extends 'base.html' %}
-
 {% block title %}ایجاد تیکت جدید{% endblock %}
-
 {% block content %}
-
 <div class="container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <div class="card">
-                <div class="card-header">
-                    <h3>ایجاد تیکت جدید</h3>
-                </div>
+                <div class="card-header"><h3 style="color:var(--primary-color)">ایجاد تیکت جدید</h3></div>
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-
                         <div class="mb-3">
                             <label class="form-label">{{ form.subject.label }}</label>
                             {{ form.subject }}
-                            {% if form.subject.errors %}
-                            <div class="text-danger">{{ form.subject.errors }}</div>
-                            {% endif %}
+                            {% if form.subject.errors %}<div class="text-danger">{{ form.subject.errors }}</div>{% endif %}
                         </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">{{ form.category.label }}</label>
-                            {{ form.category }}
-                            {% if form.category.errors %}
-                            <div class="text-danger">{{ form.category.errors }}</div>
-                            {% endif %}
+                        <div class="ticket-category-priority">
+                            <div class="mb-3 ticket-category">
+                                <label class="form-label">{{ form.category.label }}</label>
+                                {{ form.category }}
+                                {% if form.category.errors %}<div class="text-danger">{{ form.category.errors }}</div>{% endif %}
+                            </div>
+                            <div class="mb-3 ticket-priority">
+                                <label class="form-label">{{ form.priority.label }}</label>
+                                {{ form.priority }}
+                                {% if form.priority.errors %}<div class="text-danger">{{ form.priority.errors }}</div>{% endif %}
+                            </div>
                         </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">{{ form.priority.label }}</label>
-                            {{ form.priority }}
-                            {% if form.priority.errors %}
-                            <div class="text-danger">{{ form.priority.errors }}</div>
-                            {% endif %}
-                        </div>
-
                         <div class="mb-3">
                             <label class="form-label">{{ form.message.label }}</label>
                             {{ form.message }}
-                            {% if form.message.errors %}
-                            <div class="text-danger">{{ form.message.errors }}</div>
-                            {% endif %}
+                            {% if form.message.errors %}<div class="text-danger">{{ form.message.errors }}</div>{% endif %}
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label">{{ form.attachment.label }}</label>
                             {{ form.attachment }}
                             <small class="form-text text-muted d-block">{{ form.attachment.help_text }}</small>
-                            {% if form.attachment.errors %}
-                            <div class="text-danger">{{ form.attachment.errors }}</div>
-                            {% endif %}
+                            {% if form.attachment.errors %}<div class="text-danger">{{ form.attachment.errors }}</div>{% endif %}
                         </div>
-
                         <div class="my-list-btn">
-                            <button type="submit" class="btn btn-success btn-medium btn-width-fit">ارسال تیکت</button>
-                            <a href="{% url 'tickets:ticket_list' %}" class="btn btn-primary btn-medium btn-width-fit">انصراف</a>
+                            <button type="submit" class="btn-solid">ارسال تیکت</button>
+                            <a href="{% url 'tickets:ticket_list' %}" class="btn-list btn-ghost-edit">انصراف</a>
                         </div>
                     </form>
                 </div>
@@ -68,5 +48,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
