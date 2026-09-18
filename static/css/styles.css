@@ -1,3 +1,7 @@
+/* global.css */
+
+
+
 @font-face {
     font-family: "Vazirmatn";
     src: url("../fonts/Vazirmatn-Thin.ttf") format("truetype");
@@ -6299,10 +6303,17 @@ width: 100%;
 .range-fill {
     position: absolute;
     height: 100%;
-    background: #0d6efd;
+    background: linear-gradient(90deg, var(--red-color), var(--red-durk-color)) ;
     border-radius: 6px;
     pointer-events: none;
 }
+
+
+.range-input::-webkit-slider-thumb {
+    background: var(--red-color) !important;
+}
+
+
 
 .range-input {
     position: absolute;

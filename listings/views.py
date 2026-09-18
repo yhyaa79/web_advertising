@@ -11,7 +11,9 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import (
     Listing, Category, IncomeProof, VisitRequest, ViewsDataPoint,
-    # ← جدید
+    ListingFAQ, Expense, SaleInclude, License, SocialMedia,
+    IncomeDataPoint, MonetizationMethod, TechnologyUsed, ServiceUsed,
+    ListingImage, TrafficSource,
     WebsiteDetails, EcommerceDetails, AppDetails, SocialMediaDetails,
     ContentMediaDetails, DomainDetails, ServiceBusinessDetails,
 )
@@ -1140,44 +1142,258 @@ def listing_create(request):
 
 
 
+
+
 @login_required
+@require_http_methods(["GET", "POST"])
+@transaction.atomic
 def listing_edit(request, pk):
+    """
+    ویرایش آگهی - صفحه‌ای شبیه create ولی با داده‌های موجود
+    دسته‌بندی تغییر نمی‌کند
+    """
     listing = get_object_or_404(Listing, pk=pk, seller=request.user)
-
-    if request.method == 'POST':
-        form = ListingForm(request.POST, request.FILES, instance=listing)
-        income_proof_formset = IncomeProofFormSet(request.POST, request.FILES, instance=listing)
-        income_data_formset = IncomeDataPointFormSet(request.POST, instance=listing)
-        views_data_formset = ViewsDataPointFormSet(request.POST, instance=listing)
-        faq_formset = FAQFormSet(request.POST, instance=listing)
-
-        if (form.is_valid() and income_proof_formset.is_valid() and
-            income_data_formset.is_valid() and views_data_formset.is_valid() and
-            faq_formset.is_valid()):
-
-            form.save()
-            income_proof_formset.save()
-            income_data_formset.save()
-            views_data_formset.save()
-            faq_formset.save()
-
-            messages.success(request, 'آگهی با موفقیت ویرایش شد.')
-            return redirect('listings:listing_detail', pk=listing.pk)
-    else:
-        form = ListingForm(instance=listing)
-        income_proof_formset = IncomeProofFormSet(instance=listing)
-        income_data_formset = IncomeDataPointFormSet(instance=listing)
-        views_data_formset = ViewsDataPointFormSet(instance=listing)
-        faq_formset = FAQFormSet(instance=listing)
-
-    return render(request, 'listings/listing_edit.html', {
-        'form': form,
-        'income_proof_formset': income_proof_formset,
-        'income_data_formset': income_data_formset,
-        'views_data_formset': views_data_formset,
-        'faq_formset': faq_formset,
-        'listing': listing
-    })
+    activity_categories = Listing.ACTIVITY_CATEGORIES
+    
+    if request.method == "GET":
+        # بارگذاری تمام داده‌های مرتبط
+        expenses = Expense.objects.filter(listing=listing)
+        faqs = ListingFAQ.objects.filter(listing=listing).order_by('order')
+        sale_includes = SaleInclude.objects.filter(listing=listing)
+        
+        context = {
+            "listing": listing,
+            "activity_categories": activity_categories,
+            "expenses_count": expenses.count(),
+            "expenses": expenses,
+            "faqs_count": faqs.count(),
+            "faqs": faqs,
+            "sale_includes_count": sale_includes.count(),
+            "sale_includes": sale_includes,
+        }
+        
+        return render(request, "listings/listing_edit.html", context)
+    
+    # POST: ذخیره تغییرات
+    is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+    
+    def _err(msg, status=400, field_errors=None):
+        logger.warning("listing_edit: validation error — %s | user=%s", msg, request.user)
+        if is_ajax:
+            payload = {"success": False, "error": msg}
+            if field_errors:
+                payload["errors"] = field_errors
+            return JsonResponse(payload, status=status)
+        messages.error(request, msg)
+        return redirect("listings:listing_edit", pk=listing.pk)
+    
+    def _success():
+        if is_ajax:
+            return JsonResponse({
+                "success": True,
+                "id": listing.pk,
+                "redirect": f"/listings/{listing.pk}/",
+            })
+        messages.success(request, "آگهی با موفقیت ویرایش شد.")
+        return redirect("listings:listing_detail", pk=listing.pk)
+    
+    p = request.POST
+    files = request.FILES
+    field_errors = {}
+    
+    # ===== اعتبارسنجی فیلدهای اساسی
+    title = p.get("title", "").strip()
+    description = p.get("description", "").strip()
+    price_raw = p.get("price", "").strip()
+    areas_activity = p.get("areas_activity", "").strip()
+    main_image = files.get("main_image")
+    
+    if not title:
+        field_errors["title"] = "عنوان آگهی اجباری است"
+    if not description:
+        field_errors["description"] = "توضیحات اجباری است"
+    if len(description) < 80:
+        field_errors["description"] = "شرح آگهی باید حداقل ۸۰ کاراکتر باشد"
+    
+    # بررسی تصویر (اختیاری برای edit)
+    if main_image:
+        if main_image.size > 5 * 1024 * 1024:
+            field_errors["main_image"] = "حجم تصویر اصلی نباید بیشتر از ۵ مگابایت باشد"
+        else:
+            try:
+                django_forms.ImageField().clean(main_image)
+                main_image.seek(0)
+            except django_forms.ValidationError:
+                field_errors["main_image"] = "فایل انتخاب‌شده یک تصویر معتبر نیست"
+    
+    # قیمت
+    try:
+        price = int(price_raw) if price_raw else None
+        if price and price <= 0:
+            field_errors["price"] = "قیمت باید عدد مثبت باشد"
+    except (ValueError, TypeError):
+        price = None
+        field_errors["price"] = "قیمت وارد شده معتبر نیست"
+    
+    # حوزه فعالیت
+    valid_activities = {slug for slug, _ in Listing.ACTIVITY_CHOICES}
+    if areas_activity and areas_activity not in valid_activities:
+        field_errors["areas_activity"] = "حوزه فعالیت معتبر نیست"
+    
+    # نوع فروش
+    valid_sale_types = {slug for slug, _ in Listing.SALE_TYPE_CHOICES}
+    if p.get("sale_type") not in valid_sale_types:
+        field_errors["sale_type"] = "نوع فروش را انتخاب کنید"
+    
+    # تحقق از درآمد
+    is_income = p.get("is_income") == "on"
+    if is_income and not (p.get("monthly_income", "").strip()):
+        field_errors["monthly_income"] = "درآمد ماهانه را وارد کنید"
+    
+    # قیمت تخفیف
+    discount_price_raw = p.get("discount_price", "").strip()
+    if discount_price_raw:
+        try:
+            discount_price = int(discount_price_raw)
+            if price and discount_price >= price:
+                field_errors["discount_price"] = "قیمت تخفیف باید کمتر از قیمت اصلی باشد"
+        except (ValueError, TypeError):
+            field_errors["discount_price"] = "قیمت تخفیف معتبر نیست"
+    
+    # URL دارایی
+    platform_url = p.get("platform_url", "").strip()
+    if platform_url:
+        try:
+            django_forms.URLField().clean(platform_url)
+        except django_forms.ValidationError:
+            field_errors["platform_url"] = "آدرس دارایی معتبر نیست"
+    
+    # اگر خطا وجود دارد، برگرد
+    if field_errors:
+        return _err("لطفاً فیلدهای مشخص‌شده را کامل کنید", field_errors=field_errors)
+    
+    # ===== ذخیره اطلاعات در Listing
+    try:
+        listing.title = title
+        listing.description = description
+        listing.price = price
+        listing.areas_activity = areas_activity or None
+        listing.platform_url = platform_url or None
+        listing.location = p.get("location", "").strip() or None
+        listing.platform_age = int(p.get("platform_age") or 0) or None
+        listing.sale_type = p.get("sale_type") or None
+        listing.sale_reason = p.get("sale_reason") or None
+        listing.is_income = is_income
+        listing.suggested_price = p.get("suggested_price") == "on"
+        listing.is_private = p.get("is_private") == "on"
+        listing.monthly_income = Decimal(p.get("monthly_income")) if p.get("monthly_income") else None
+        listing.avg_monthly_profit = Decimal(p.get("avg_monthly_profit")) if p.get("avg_monthly_profit") else None
+        listing.total_revenue = Decimal(p.get("total_revenue")) if p.get("total_revenue") else None
+        listing.total_profit = Decimal(p.get("total_profit")) if p.get("total_profit") else None
+        listing.profit_margin = Decimal(p.get("profit_margin") or 0) if p.get("profit_margin") else None
+        listing.ownership_transfer_conditions = p.get("ownership_transfer_conditions", "").strip() or None
+        listing.post_sale_support = p.get("post_sale_support", "").strip() or None
+        listing.about_platform = p.get("about_platform", "").strip() or None
+        listing.discount_price = int(discount_price_raw) if discount_price_raw else None
+        
+        if main_image:
+            listing.main_image = main_image
+        
+        listing.save()
+        logger.info("listing_edit: updated basics — id=%s user=%s", listing.pk, request.user)
+    
+    except Exception as exc:
+        transaction.set_rollback(True)
+        logger.exception("listing_edit: save error — user=%s | %s", request.user, exc)
+        return _err("ویرایش آگهی انجام نشد. لطفاً دوباره تلاش کنید.", status=500)
+    
+    # ===== ذخیره هزینه‌ها
+    def _int(val, default=0):
+        try:
+            return int(val) if val and str(val).strip() else default
+        except (ValueError, TypeError):
+            return default
+    
+    try:
+        # حذف هزینه‌های قدیمی
+        Expense.objects.filter(listing=listing).delete()
+        
+        # اضافه کردن هزینه‌های جدید
+        expense_count = _int(p.get("expense_count"))
+        for i in range(expense_count):
+            name = p.get(f"exp_name_{i}", "").strip()
+            amount_raw = p.get(f"exp_amount_{i}", "").strip()
+            period = p.get(f"exp_period_{i}", "monthly")
+            
+            if name and amount_raw:
+                try:
+                    Expense.objects.create(
+                        listing=listing,
+                        expense_name=name,
+                        amount=Decimal(amount_raw),
+                        period=period
+                    )
+                except Exception as e:
+                    logger.warning("expense create error: %s", e)
+        
+        logger.info("listing_edit: updated expenses — id=%s", listing.pk)
+    
+    except Exception as exc:
+        logger.exception("listing_edit: expense error — %s", exc)
+    
+    # ===== ذخیره اقلام فروش
+    try:
+        SaleInclude.objects.filter(listing=listing).delete()
+        
+        sale_count = _int(p.get("sale_include_count"))
+        for i in range(sale_count):
+            name = p.get(f"sale_include_{i}", "").strip()
+            if name:
+                SaleInclude.objects.create(listing=listing, asset_name=name)
+        
+        logger.info("listing_edit: updated sale includes — id=%s", listing.pk)
+    
+    except Exception as exc:
+        logger.exception("listing_edit: sale include error — %s", exc)
+    
+    # ===== ذخیره FAQ
+    try:
+        ListingFAQ.objects.filter(listing=listing).delete()
+        
+        faq_count = _int(p.get("faq_count"))
+        for i in range(faq_count):
+            q = p.get(f"faq_question_{i}", "").strip()
+            a = p.get(f"faq_answer_{i}", "").strip()
+            
+            if q or a:
+                ListingFAQ.objects.create(
+                    listing=listing,
+                    question=q,
+                    answer=a,
+                    order=i
+                )
+        
+        logger.info("listing_edit: updated FAQs — id=%s", listing.pk)
+    
+    except Exception as exc:
+        logger.exception("listing_edit: FAQ error — %s", exc)
+    
+    # ===== ذخیره تصاویر تکمیلی
+    try:
+        gallery_files = files.getlist("gallery_images")
+        if gallery_files:
+            for img in gallery_files:
+                if img.size > 5 * 1024 * 1024:
+                    logger.warning("gallery image too large: %s", img.name)
+                    continue
+                ListingImage.objects.create(listing=listing, image=img)
+        
+        logger.info("listing_edit: updated gallery — id=%s", listing.pk)
+    
+    except Exception as exc:
+        logger.exception("listing_edit: gallery error — %s", exc)
+    
+    return _success()
 
 
 

@@ -1,0 +1,1075 @@
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Thin.ttf") format("truetype");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+    /* Persian/Arabic */
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+    /* Persian/Arabic */
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+    /* Persian/Arabic */
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+    /* Persian/Arabic */
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+    /* Persian/Arabic */
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-ExtraBold.ttf") format("truetype");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F;
+    /* Persian/Arabic */
+}
+
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Thin.ttf") format("truetype");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+    /* Latin */
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+    /* Latin */
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+    /* Latin */
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+    /* Latin */
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+    /* Latin */
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-ExtraBold.ttf") format("truetype");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF;
+    /* Latin */
+}
+
+
+
+
+/* ========================================
+   متغیرهای رنگ و استایل
+   ======================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+:root {
+    /* رنگ‌های اصلی */
+    --primary-color: #011f44;
+    --secondary-color: #022a5b;
+    --accent-color: #3498db;
+    --blu-color: #0f55d6;
+    --blu-durk-color: #0544bb;
+    --red-color: #f66c68;
+    --red-durk-color: #d74d49;
+    --red-light-color: #fcf1f1;
+    --success-color: #27ae60;
+    --danger-color: #e74c3c;
+    --warning-color: #f39c12d9;
+    --info-color: #16a085cc;
+
+    /* رنگ‌های پس‌زمینه */
+    --light-bg: #ecf0f1;
+    --dark-bg: #1a252f;
+    --body-bg: #ffff;
+    --home-bg-1: #e7f0ff;
+    --home-bg-2: #f0f5ff;
+    --home-bg-3: #e7f0ff;
+    --bg: #fcfdfd;
+    --white-bg: #ffffff;
+
+    /* رنگ‌های متن */
+    --text-primary: #363f4f;
+    --text-secondary: #737879;
+    --text-muted: #999;
+
+    /* رنگ‌های مرز */
+    --border-color: #dee2e6;
+    --border-light: #dee2e6;
+    --border-dark: #ddd;
+
+
+
+    --primary: #6c47ff;
+    --primary-dark: #5535e0;
+    --dark-hero: #22203a;
+    --dark-marquee: #272459;
+    --text: #e2e2f0;
+    --muted: #8888aa;
+    --muted-dark: #59596d;
+    --card-bg: #16162a;
+    --light-card-bg: #dee6f5;
+    --light-serch-bg: #eef2fe;
+    --border: #3a3a5e;
+    --white: #ffffff;
+    --black: #000000;
+    --green: #22c55e;
+    --radius: 12px;
+
+
+    /* سایه‌ها */
+    --card-shadow: 0 3px 6px rgb(0 0 0 / 12%);
+    --hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --modal-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+
+    --stacked-card-height: 420px;
+    --stacked-card-offset: 24px;
+
+    /* شعاع گوشه‌ها */
+    --border-radius-sm: 4px;
+    --border-radius-sm-md: 6px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 10px;
+    --border-radius-xl: 12px;
+    --border-radius-50: 14px;
+    --border-radius-25: 25px;
+    --border-radius-999: 999px;
+
+    /* فاصله‌ها */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-xxl: 3rem;
+
+
+    --text: 6px;
+    --font-size-xs: calc(var(--text) + 1px);
+    --font-size-sm: calc(var(--text) + 2px);
+    --font-size-base: calc(var(--text) + 3px);
+    --font-size-md: calc(var(--text) + 4px);
+    --font-size-lg: calc(var(--text) + 5px);
+    --font-size-xl: calc(var(--text) + 6px);
+    --font-size-2xl: calc(var(--text) + 7px);
+    --font-size-3xl: calc(var(--text) + 9px);
+    --font-size-4xl: calc(var(--text) + 11px);
+    --font-size-5xl: calc(var(--text) + 15px);
+    --font-size-6xl: calc(var(--text) + 20px);
+    --font-size-7xl: calc(var(--text) + 24px);
+
+    /* انتقال */
+    --transition-base: all 0.3s ease;
+
+}
+
+:root {
+    --white: #ffffff;
+    --primary: #3b5bdb;
+    --primary-dark: #2f4ac5;
+    --primary-light: #eef2ff;
+    --success: #2f9e44;
+    --success-light: #d3f9d8;
+    --warn: #e67700;
+    --warn-light: #fff3bf;
+    --error: #c92a2a;
+    --error-light: #ffe3e3;
+    --border: #dee2e6;
+    --muted: #868e96;
+    --radius: 10px;
+}
+
+
+:root {
+    --primary: #4F6EF7;
+    --primary-light: #EEF1FF;
+    --primary-dark: #3A56D4;
+    --accent: #10B981;
+    --accent-light: #D1FAE5;
+    --danger: #EF4444;
+    --danger-light: #FEE2E2;
+    --warning: #F59E0B;
+    --warning-light: #FEF3C7;
+    --surface: #FFFFFF;
+    --border: #E2E8F0;
+    --border-focus: #4F6EF7;
+    --text-primary: #1E293B;
+    --text-secondary: #64748B;
+    --text-muted: #94A3B8;
+    --shadow-sm: 2px 2px 14px #a7a7a71a;
+    --shadow-md: 2px 2px 14px #a7a7a725;
+    --shadow-lg: 2px 2px 14px #a7a7a73d;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --radius-xs: 6px;
+    --transition: .2s ease;
+    --font: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+}
+
+
+
+
+:root {
+    --w-primary: #3157d5;
+    --w-primary-2: #6b7ff2;
+    --w-ink: #172033;
+    --w-muted: #6b7280;
+    --w-line: #e5e9f2;
+    --w-bg: #f4f6fb;
+    --w-good: #198754;
+    --w-danger: #c93636
+}
+
+
+/* ========================================
+   تنظیمات پایه
+   ======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+    color: var(--text);
+    line-height: 1.6;
+    direction: rtl;
+    overflow-x: hidden;
+    background: var(--w-bg);
+    min-height: 100vh;
+    background-image:
+        linear-gradient(rgba(23, 23, 19, 0.027) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 23, 19, 0.027) 1px, transparent 1px),
+        radial-gradient(circle at 8% 4%, rgba(255, 91, 53, 0.09), transparent 24rem) !important;
+    background-size: 62px 62px, 62px 62px, auto !important;
+}
+
+strong {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+}
+
+td {
+    white-space: nowrap !important;
+}
+
+a {
+    color: var(--blu-durk-color);
+}
+
+h3 {
+    font-size: var(--font-size-3xl);
+}
+
+h4 {
+    font-size: var(--font-size-2xl);
+}
+
+
+
+
+
+
+html,
+body,
+p,
+span,
+div,
+h1,
+td,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+li,
+ul,
+ol,
+label,
+small,
+medium,
+strong,
+em,
+b,
+i,
+blockquote,
+q,
+cite,
+code,
+pre,
+button,
+input,
+textarea,
+select,
+option {
+    font-family: "Vazirmatn", "Roboto", sans-serif;
+}
+
+
+
+
+/* ========================================
+   نوار ناوبری (Navbar)
+   ======================================== */
+
+
+#navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 50px;
+    z-index: 1000;
+    border-bottom: 0.5px solid var(--border-light);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* حالت بالای صفحه (رنگ تیره) */
+.navbar-top-dark {
+    background-color: #1c1666;
+    box-shadow: 0 1px 11px 0 #00000069;
+}
+
+
+/* حالت پیش‌فرض (بالای صفحه) */
+.navbar-top {
+    border-bottom: 0.5px solid var(--dark-bg) !important;
+    background-color: #22203bc4;
+    transition: background-color 0.3s ease;
+
+}
+
+/* حالتی که اسکرول شده */
+.navbar-scrolled {
+    background-color: var(--bg);
+    transition: background-color 0.3s ease;
+}
+
+/* تغییر رنگ لینک‌ها در حالت روشن (اختیاری) */
+.navbar-scrolled .nav-link,
+.navbar-scrolled .logo,
+.btn-ghost-nav {
+    color: #333 !important;
+}
+
+.navbar-scrolled a {
+    color: #000 !important;
+}
+
+
+
+.navbar-scrolled .nav-link:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+a.navbar-a {
+    font-size: var(--font-size-xl);
+    font-weight: 300;
+}
+
+.navbar-a,
+.notification-link,
+.dropdown-toggle {
+    color: #bfbfc9;
+    text-decoration: none;
+    font-size: var(--font-size-3xl);
+    font-weight: 500;
+    transition: color .2s;
+}
+
+
+.navbar-a:hover,
+.notification-link:hover,
+.dropdown-toggle:hover {
+    color: var(--red-color) !important;
+}
+
+
+.dropdown-toggle {
+    margin-top: 10px;
+}
+
+
+.navbar-scrolled a:hover {
+    color: var(--red-color) !important;
+}
+
+
+
+.dropdown-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.dropdown-navbar {
+    display: none;
+    /* در حالت عادی مخفی است */
+    position: absolute;
+    top: 40px;
+    left: 0px;
+    /* چون سایت RTL است، left: 0 باعث می‌شود منو سمت چپ دکمه تراز شود */
+    background-color: #ffffff;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border-radius: 8px;
+    padding: 8px 0;
+    margin-top: 10px;
+    border: 1px solid #eaeaea;
+}
+
+.dropdown-navbar a {
+    color: #333;
+    padding: 5px 12px;
+    text-decoration: none;
+    display: block;
+    text-align: right;
+    font-size: var(--font-size-2xl);
+    transition: background-color 0.2s;
+}
+
+.dropdown-navbar a:hover {
+    background-color: #f8f9fa;
+}
+
+/* کلاسی که با جاوا اسکریپت اضافه می‌شود تا منو نمایش داده شود */
+.dropdown-navbar.show {
+    display: block;
+    box-shadow: 0 1px 7px 0 #00000029;
+}
+
+
+/* حالت absolute برای صفحه listing_detail */
+#navbar.navbar-absolute {
+    position: absolute;
+}
+
+.navbar-listing-detail {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    position: fixed;
+    justify-content: space-between;
+    padding: 0 30px;
+    width: 100%;
+    height: 50px;
+    z-index: 999;
+    background-color: var(--bg);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+    gap: 40px;
+}
+
+
+/* وقتی navbar اصلی از دید خارج شد */
+.navbar-listing-detail.sticky {
+    top: 0;
+}
+
+.rigt-navba-listing-detailr {
+    display: flex;
+    gap: 20px;
+}
+
+
+
+.navbar-listing-list {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    justify-content: space-between;
+    padding: 0 30px;
+    margin-top: 50px;
+    width: 100%;
+    height: 50px;
+    z-index: 999;
+    background-color: var(--bg);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+    gap: 40px;
+}
+
+
+
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5% 0 20px;
+    height: 68px;
+    background-color: #22203b;
+    backdrop-filter: blur(14px);
+    transition: background .3s;
+}
+
+nav .nav-cta .btn-ghost {
+    color: var(--text) !important;
+}
+
+.logo {
+    display: flex;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: -.5px;
+    align-items: center;
+    gap: 1px;
+}
+
+.logo span {
+    color: var(--red-color);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.nav-cta {
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+    scale: 0.8;
+    margin-left: -10px;
+}
+
+.img-profile-nav {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    text-decoration: none;
+}
+
+.rounded-circle-profile-nav {
+    border-radius: 999px;
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border: 2px solid var(--border-light);
+    background: #e4e4e4;
+}
+
+
+
+
+/* ── Inputs ──────────────────────────────────────────── */
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 6px;
+    border: 1.1px solid var(--border);
+    border-radius: var(--border-radius-lg);
+    font-family: var(--font);
+    font-size: var(--font-size-xl);
+    ;
+    color: var(--text-primary);
+    background-color: var(--bg);
+    transition: border-color var(--transition), box-shadow var(--transition);
+    outline: none;
+    direction: rtl;
+    box-shadow: var(--shadow-sm);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.form-input.error,
+.form-select.error,
+.form-textarea.error {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px var(--danger-light);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.7;
+}
+
+.form-select {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 14px center;
+    padding-left: 36px;
+}
+
+.select-wrapper {
+    position: relative;
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    right: 12px;
+    font-size: 1rem;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.input-with-icon .form-input {
+    padding-right: 38px;
+}
+
+
+form label {
+    display: block;
+    color: var(--text-primary);
+    font-weight: 400;
+    font-size: var(--font-size-xl);
+}
+
+
+
+
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   22) Utility Classes (کلاس‌های کمکی)
+   ═══════════════════════════════════════════════════════════ */
+
+.w-100 {
+    width: 100%;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.mt-3 {
+    margin-top: var(--spacing-md);
+}
+
+.mb-2 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.mb-3 {
+    margin-bottom: var(--spacing-md);
+}
+
+.mb-4 {
+    margin-bottom: var(--spacing-lg);
+}
+
+.me-2 {
+    margin-left: var(--spacing-sm);
+}
+
+.ms-2 {
+    margin-right: var(--spacing-sm);
+}
+
+.py-5 {
+    padding-top: var(--spacing-xxl);
+    padding-bottom: var(--spacing-xxl);
+}
+
+.pad-10 {
+    padding: var(--spacing-md) !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-end {
+    text-align: right;
+}
+
+.text-muted {
+    color: var(--text-muted);
+    font-size: var(--font-size-md) !important;
+}
+
+.text-success {
+    color: var(--success-color);
+}
+
+.text-danger {
+    color: var(--danger-color);
+}
+
+.text-warning {
+    color: var(--warning-color);
+}
+
+.text-dark {
+    padding: 4px 6px 0;
+}
+
+.fw-bold {
+    font-weight: 700;
+}
+
+.fs-4 {
+    font-size: var(--font-size-xl);
+}
+
+.fs-5 {
+    font-size: var(--font-size-3xl);
+}
+
+.d-flex {
+    display: flex;
+}
+
+.top-0 {
+    top: 0;
+}
+
+.end-0 {
+    left: 0;
+}
+
+.m-2 {
+    margin: var(--spacing-sm);
+}
+
+hr {
+    border: none;
+    height: 1px;
+    margin: 12px 0;
+    background-color: #dee2e6;
+}
+
+.hr-between {
+    background-color: #00000024;
+}
+
+
+
+
+
+
+
+
+
+/* ── FOOTER ── */
+footer {
+    background: var(--white);
+    padding: 60px 5% 30px;
+    border-top: 1px solid #dee2e6 !important;
+    margin-top: 80px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.footer-brand p {
+    color: var(--black);
+    font-size: .88rem;
+    margin-top: .75rem;
+    max-width: 260px;
+}
+
+.footer-col h4 {
+    color: var(--white);
+    font-size: .9rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+}
+
+.footer-col a {
+    color: var(--black);
+    text-decoration: none;
+    font-size: .85rem;
+    transition: color .2s;
+}
+
+.footer-col a:hover {
+    color: var(--primary);
+}
+
+.footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-bottom p {
+    color: var(--muted);
+    font-size: .8rem;
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity .6s ease, transform .6s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .hero-stats {
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.rsd-ps-sale-box {
+    padding: 12px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #ffffff 0%, #fcfcfd 100%);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+    margin: 20px 0px;
+}
+
+.rsd-ps-sale-box__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.rsd-ps-sale-box__title-wrap {
+    min-width: 0;
+}
+
+.rsd-ps-sale-box__label {
+    display: block;
+    margin-bottom: 2px;
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.rsd-ps-sale-box__title {
+    margin: 0;
+    font-size: var(--font-size-2xl);
+    font-weight: 500;
+    color: #0f172a;
+    line-height: 1.6;
+    padding-right: 10px;
+}
+
+.rsd-ps-sale-box__badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.rsd-ps-sale-box__badge {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 10px 15px;
+    border-radius: 999px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    color: #334155;
+    white-space: nowrap;
+}
+
+.rsd-ps-sale-box__badge--accent {
+    background: #eef6ff;
+    border-color: #cfe3ff;
+    color: #1d4ed8;
+}
+
+.rsd-ps-sale-box__details {
+    display: grid;
+    gap: 8px;
+}
+
+.rsd-ps-sale-box__item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 10px;
+    border: 1px solid #f1f5f9;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.rsd-ps-sale-box__item-label {
+    flex: 0 0 auto;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: #475569;
+    line-height: 1.7;
+}
+
+.rsd-ps-sale-box__item-value {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: left;
+    font-size: var(--font-size-lg);
+    color: #0f172a;
+    line-height: 1.8;
+}
+
+@media (max-width: 767px) {
+    .rsd-ps-sale-box {
+        padding: 11px 12px;
+    }
+
+    .rsd-ps-sale-box__head {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .rsd-ps-sale-box__badges {
+        justify-content: flex-start;
+    }
+
+    .rsd-ps-sale-box__item {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .rsd-ps-sale-box__item-value {
+        text-align: right;
+    }
+}
+
+
+
+
+
+

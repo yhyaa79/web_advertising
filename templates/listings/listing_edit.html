@@ -1,182 +1,176 @@
 <!-- templates/listings/listing_edit.html -->
+ 
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}ویرایش آگهی{% endblock %}
 
 {% block content %}
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h4>ویرایش آگهی</h4>
-                </div>
-                <div class="card-body">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-
-                        <h5>اطلاعات آگهی</h5>
-                        {{ form.as_p }}
-
-                        <hr class="my-4">
-
-                        <h5 class="mb-3">نمودار درآمد (قابل ویرایش)</h5>
-                        {{ income_data_formset.management_form }}
-                        {% for form in income_data_formset %}
-                        <div class="border p-3 mb-3 rounded bg-light">
-                            {{ form.date.label_tag }} {{ form.date }}<br>
-                            {{ form.income.label_tag }} {{ form.income }}
-                            {{ form.id }}
-                        </div>
-                        {% endfor %}
-                        <button type="button" class="btn btn-success mb-3" id="add-income-data">افزودن نقطه
-                            درآمد</button>
-
-                        <hr class="my-4">
-
-                        <h5 class="mb-3">نمودار بازدید (قابل ویرایش)</h5>
-                        {{ views_data_formset.management_form }}
-                        {% for form in views_data_formset %}
-                        <div class="border p-3 mb-3 rounded bg-light">
-                            {{ form.date.label_tag }} {{ form.date }}<br>
-                            {{ form.views.label_tag }} {{ form.views }}
-                            {{ form.id }}
-                        </div>
-                        {% endfor %}
-                        <button type="button" class="btn btn-info mb-3" id="add-views-data">افزودن نقطه بازدید</button>
-
-
-
-
-                        <h5>اثبات درآمد</h5>
-                        <p class="text-muted">می‌توانید اثبات درآمد خود را ویرایش یا اضافه کنید</p>
-
-                        {{ formset.management_form }}
-
-                        <div id="income-proofs">
-                            {% for form in formset %}
-                            <div class="income-proof-form border p-3 mb-3 rounded"
-                                data-proof-id="{{ form.instance.id }}">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <h6>اثبات درآمد {{ forloop.counter }}</h6>
-                                    <button type="button"
-                                        class="btn btn-sm btn-danger remove-existing-form">حذف</button>
-                                </div>
-
-                                {% if form.instance.image %}
-                                <div class="mb-2">
-                                    <img src="{{ form.instance.image.url }}" class="img-thumbnail"
-                                        style="max-width: 200px;">
-                                </div>
-                                {% endif %}
-
-                                <p>
-                                    <label for="id_income_proofs-{{ forloop.counter0 }}-image">تصویر اثبات
-                                        درآمد:</label>
-                                    {{ form.image }}
-                                </p>
-                                <p>
-                                    <label for="id_income_proofs-{{ forloop.counter0 }}-description">توضیحات:</label>
-                                    {{ form.description }}
-                                </p>
-                                {{ form.id }}
-                            </div>
-                            {% endfor %}
-                        </div>
-
-                        <button type="button" class="btn btn-primary mb-3" id="add-income-proof">
-                            <i class="bi bi-plus-circle"></i> افزودن اثبات درآمد
-                        </button>
-
-                        <hr>
-
-                        <button type="submit" class="btn btn-success">ذخیره تغییرات</button>
-                        <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-secondary">انصراف</a>
-                    </form>
-                </div>
-            </div>
-        </div>
+<main class="lw-shell">
+  <header class="lw-hero"><div class="lw-hero-in"><h1>ویرایش آگهی فروش دارایی دیجیتال</h1><p>تمام اطلاعات آگهی خود را مرتب کنید و به‌روز رسانی کنید؛ دسته‌بندی قابل تغییر نیست.</p></div></header>
+  <div class="lw-wrap">
+    <div class="lw-progress">
+      <div class="lw-progress-top"><b id="progress-title">مرحله ۱ — اطلاعات پایه</b><span id="progress-count">۱ از ۶</span></div>
+      <div class="lw-track"><div class="lw-fill" id="progress-fill"></div></div>
+      <div class="lw-steps" id="steps"></div>
     </div>
-</div>
+
+    <form id="listing-form" method="post" enctype="multipart/form-data" action="{% url 'listings:listing_edit' listing.pk %}" novalidate>
+      {% csrf_token %}
+      <input type="hidden" name="category" id="category-input" value="{{ listing.category }}">
+      <div class="lw-grid">
+        <div class="lw-main">
+
+          <!-- مرحله اول: اطلاعات پایه -->
+          <section class="lw-panel active" data-panel="basics">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">✍️</div><div><h2>اطلاعات پایه</h2><p>تیتر، شرح و مشخصات کلی آگهی</p></div></div><div class="lw-card-body"><div class="lw-fields">
+              <div class="lw-field full"><label>دسته‌بندی <span class="req">*</span></label><div style="padding:11px 13px;background:#f5f7fb;border:1.4px solid #dce1ea;border-radius:10px;color:#8a93a3;font-size:12.5px">{{ listing.get_category_display }}</div><small style="display:block;margin-top:5px">دسته‌بندی برای جلوگیری از تغییرات غیر‌منطقی قابل تغییر نیست.</small></div>
+              <div class="lw-field full"><label>عنوان آگهی <span class="req">*</span></label><input name="title" id="title" required maxlength="200" placeholder="مثال: فروش فروشگاه تخصصی با مشتریان بازگشتی" value="{{ listing.title }}"><small>نوع دارایی و مهم‌ترین مزیت آن را کوتاه و دقیق بنویسید.</small><div class="error">عنوان آگهی را وارد کنید.</div></div>
+              <div class="lw-field"><label>حوزه فعالیت <span class="optional">اختیاری</span></label><select name="areas_activity" id="areas_activity"><option value="">انتخاب کنید</option>{% for slug,label,subs in activity_categories %}<optgroup label="{{ label }}">{% for value,text in subs %}<option value="{{ value }}" {% if listing.areas_activity == value %}selected{% endif %}>{{ text }}</option>{% endfor %}</optgroup>{% endfor %}</select><small>صنعت یا موضوع اصلی مخاطبان دارایی را مشخص می‌کند.</small></div>
+              <div class="lw-field" id="url-field"><label id="url-label">آدرس دارایی <span class="optional">اختیاری</span></label><input type="url" name="platform_url" id="platform_url" class="ltr" placeholder="https://example.com" value="{{ listing.platform_url|default:'' }}"><small>لینک عمومی و قابل بررسی دارایی را وارد کنید.</small><div class="error">آدرس واردشده معتبر نیست.</div></div>
+              <div class="lw-field" id="age-field"><label>عمر دارایی (ماه) <span class="optional">اختیاری</span></label><input type="number" name="platform_age" min="0" placeholder="مثال: ۲۴" value="{{ listing.platform_age|default:'' }}"><small>مدت فعالیت واقعی دارایی از زمان شروع بهره‌برداری.</small></div>
+              <div class="lw-field"><label>موقعیت / شهر <span class="optional">اختیاری</span></label><input name="location" placeholder="مثال: تهران" value="{{ listing.location|default:'' }}"><small>فقط اگر مکان در انتقال یا عملیات کسب‌وکار اثر دارد.</small></div>
+              <div class="lw-field full"><label>شرح کامل آگهی <span class="req">*</span></label><textarea name="description" id="description" required minlength="80" rows="7" placeholder="تاریخچه، مزیت رقابتی، وضعیت فعلی و فرصت‌های رشد را شفاف توضیح دهید.">{{ listing.description }}</textarea><small>حداقل ۸۰ کاراکتر؛ اطلاعات مالی و آماری را اینجا تکرار نکنید.</small><div class="error">شرح آگهی باید حداقل ۸۰ کاراکتر باشد.</div></div>
+            </div></div></div>
+            <nav class="lw-nav"><span></span><button class="lw-btn next" type="button" data-next>مرحله بعد ←</button></nav>
+          </section>
+
+          <!-- مرحله دوم: اطلاعات مالی -->
+          <section class="lw-panel" data-panel="finance">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">💹</div><div><h2>عملکرد مالی</h2><p>درآمد، هزینه و معیارهای مالی</p></div></div><div class="lw-card-body">
+              <label class="lw-check"><input type="checkbox" name="is_income" id="is_income" {% if listing.is_income %}checked{% endif %}><span>این دارایی در حال حاضر درآمد دارد</span></label>
+              <div class="lw-fields lw-finance-fields" id="finance-fields" {% if not listing.is_income %}style="display:none"{% endif %}>
+                <div class="lw-field"><label>درآمد ماهانه (تومان) <span class="req">*</span></label><input type="number" name="monthly_income" min="0" data-income-required value="{{ listing.monthly_income|default:'' }}"><div class="error">درآمد ماهانه را وارد کنید.</div></div>
+                <div class="lw-field"><label>سود خالص ماهانه (تومان) <span class="optional">اختیاری</span></label><input type="number" name="avg_monthly_profit" min="0" value="{{ listing.avg_monthly_profit|default:'' }}"></div>
+                <div class="lw-field"><label>کل درآمد از ابتدای فعالیت</label><input type="number" name="total_revenue" min="0" value="{{ listing.total_revenue|default:'' }}"></div>
+                <div class="lw-field"><label>کل سود از ابتدای فعالیت</label><input type="number" name="total_profit" min="0" value="{{ listing.total_profit|default:'' }}"></div>
+                <div class="lw-field"><label>حاشیه سود (درصد) <span class="optional">اختیاری</span></label><input type="number" name="profit_margin" min="0" max="100" step="0.01" value="{{ listing.profit_margin|default:'' }}"></div>
+                <div class="lw-field"><label>روند درآمد ۶ ماه اخیر</label><select name="financial_trend"><option value="">انتخاب کنید</option><option value="stable" {% if listing.asset_details.financial_trend == 'stable' %}selected{% endif %}>تقریباً ثابت</option><option value="growing" {% if listing.asset_details.financial_trend == 'growing' %}selected{% endif %}>رو به رشد</option><option value="declining" {% if listing.asset_details.financial_trend == 'declining' %}selected{% endif %}>کاهشی</option><option value="seasonal" {% if listing.asset_details.financial_trend == 'seasonal' %}selected{% endif %}>فصلی</option></select></div>
+              </div>
+              <div class="lw-subcard" id="finance-extras" {% if not listing.is_income %}style="display:none"{% endif %}>
+                <div class="lw-subcard-head"><div><h3>هزینه‌ها</h3><p>هزینه‌های جاری یا دوره‌ای دارایی</p></div><button type="button" class="lw-add" data-add="expense">+ افزودن هزینه</button></div>
+                <div id="expense-list"></div><input type="hidden" name="expense_count" id="expense-count" value="{{ expenses_count }}">
+              </div>
+            </div></div>
+            <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn next" type="button" data-next>مرحله بعد ←</button></nav>
+          </section>
+
+          <!-- مرحله سوم: شرایط فروش -->
+          <section class="lw-panel" data-panel="sale">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">🤝</div><div><h2>قیمت و شرایط انتقال</h2><p>قیمت، نوع فروش و شرایط تحویل</p></div></div><div class="lw-card-body"><div class="lw-fields">
+              <div class="lw-field"><label>قیمت پیشنهادی (تومان) <span class="req">*</span></label><input type="number" name="price" id="price" required min="1" value="{{ listing.price }}"><small>ارزش کل معامله را بدون جداکننده وارد کنید.</small><div class="error">قیمت باید بیشتر از صفر باشد.</div></div>
+              <div class="lw-field"><label>قیمت با تخفیف <span class="optional">اختیاری</span></label><input type="number" name="discount_price" min="1" value="{{ listing.discount_price|default:'' }}"><small>در صورت استفاده باید از قیمت اصلی کمتر باشد.</small></div>
+              <div class="lw-field"><label>نوع فروش <span class="req">*</span></label><select name="sale_type" id="sale_type" required><option value="">انتخاب کنید</option><option value="full_ownership" {% if listing.sale_type == 'full_ownership' %}selected{% endif %}>انتقال کامل مالکیت</option><option value="partial_ownership" {% if listing.sale_type == 'partial_ownership' %}selected{% endif %}>فروش بخشی از مالکیت</option><option value="license" {% if listing.sale_type == 'license' %}selected{% endif %}>فروش مجوز / لایسنس</option><option value="revenue_share" {% if listing.sale_type == 'revenue_share' %}selected{% endif %}>سهم از درآمد</option><option value="brand" {% if listing.sale_type == 'brand' %}selected{% endif %}>فروش برند</option></select><div class="error">نوع فروش را انتخاب کنید.</div></div>
+              <div class="lw-field"><label>دلیل واگذاری <span class="optional">اختیاری</span></label><select name="sale_reason"><option value="">انتخاب کنید</option><option value="focus_other_projects" {% if listing.sale_reason == 'focus_other_projects' %}selected{% endif %}>تمرکز روی پروژه‌های دیگر</option><option value="lack_of_time" {% if listing.sale_reason == 'lack_of_time' %}selected{% endif %}>کمبود زمان</option><option value="need_capital" {% if listing.sale_reason == 'need_capital' %}selected{% endif %}>نیاز به سرمایه</option><option value="immigration" {% if listing.sale_reason == 'immigration' %}selected{% endif %}>مهاجرت</option><option value="career_change" {% if listing.sale_reason == 'career_change' %}selected{% endif %}>تغییر مسیر شغلی</option><option value="partner_dispute" {% if listing.sale_reason == 'partner_dispute' %}selected{% endif %}>اختلاف شرکا</option><option value="growth_ceiling" {% if listing.sale_reason == 'growth_ceiling' %}selected{% endif %}>محدودیت رشد فردی</option><option value="personal_health" {% if listing.sale_reason == 'personal_health' %}selected{% endif %}>دلایل شخصی</option></select></div>
+              <div class="lw-field full"><label>فرایند و زمان‌بندی تحویل <span class="optional">اختیاری</span></label><textarea name="ownership_transfer_conditions" id="transfer" rows="4" placeholder="مثال: انتقال دسترسی‌ها طی ۳ روز کاری و تحویل نهایی پس از تأیید خریدار">{{ listing.ownership_transfer_conditions|default:'' }}</textarea><small>در این قسمت فقط روش، ترتیب و زمان تحویل را بنویسید.</small></div>
+              <div class="lw-field full"><label>پشتیبانی پس از فروش <span class="optional">اختیاری</span></label><textarea name="post_sale_support" rows="3" placeholder="مثال: ۳۰ روز آموزش و رفع اشکال">{{ listing.post_sale_support|default:'' }}</textarea><small>مدت، کانال ارتباطی و حدود تعهد پشتیبانی را مشخص کنید.</small></div>
+              <div class="lw-field full"><label class="lw-check"><input type="checkbox" name="suggested_price" {% if listing.suggested_price %}checked{% endif %}><span>خریداران بتوانند قیمت دیگری پیشنهاد دهند</span></label></div>
+              <div class="lw-field full"><label class="lw-check"><input type="checkbox" name="is_private" {% if listing.is_private %}checked{% endif %}><span>اطلاعات حساس فقط برای خریداران تأییدشده نمایش داده شود</span></label></div>
+            </div></div></div>
+            <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn next" type="button" data-next>درباره آگهی ←</button></nav>
+          </section>
+
+          <!-- مرحله چهارم: درباره پلتفرم و FAQ -->
+          <section class="lw-panel" data-panel="story">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">🧾</div><div><h2>درباره پلتفرم و اقلام معامله</h2><p>معرفی کامل دارایی و سؤالات متداول</p></div></div><div class="lw-card-body">
+              <div class="lw-field full"><label>درباره پلتفرم <span class="optional">اختیاری</span></label>
+                <div class="rich-editor">
+                  <div class="rich-toolbar" aria-label="ابزارهای ویرایش HTML">
+                    <button type="button" class="rich-tool" data-html-snippet="<h2>عنوان اصلی</h2>">H2 عنوان</button>
+                    <button type="button" class="rich-tool" data-html-snippet="<h3>زیرعنوان</h3>">H3 زیرعنوان</button>
+                    <button type="button" class="rich-tool" data-wrap-tag="p">پاراگراف</button>
+                    <button type="button" class="rich-tool" data-wrap-tag="strong">متن پررنگ</button>
+                    <button type="button" class="rich-tool" data-wrap-tag="em">متن مورب</button>
+                    <button type="button" class="rich-tool" data-html-snippet="<ul>\n  <li>ویژگی اول</li>\n  <li>ویژگی دوم</li>\n</ul>">فهرست</button>
+                    <button type="button" class="rich-tool" data-html-snippet="<blockquote>نکته مهم درباره پلتفرم</blockquote>">نقل‌قول</button>
+                  </div>
+                  <div class="rich-tabs"><button type="button" class="rich-tab active" data-rich-tab="html">HTML محتوا</button><button type="button" class="rich-tab" data-rich-tab="css">CSS سفارشی</button></div>
+                  <div class="rich-source" data-source="html"><textarea name="about_platform" id="about-html" placeholder="<h2>درباره کسب‌وکار</h2>&#10;<p>داستان، مدل فعالیت، مزیت رقابتی و فرصت‌های رشد را توضیح دهید.</p>">{{ listing.about_platform|default:'' }}</textarea></div>
+                  <div class="rich-source is-hidden" data-source="css"><textarea name="about_platform_css" id="about-css" placeholder="h2 { color: #3157d5; }">{{ listing.about_platform_css|default:'' }}</textarea></div>
+                </div>
+              </div>
+              <div class="lw-subcard"><div class="lw-subcard-head"><div><h3>دارایی‌های فروش</h3><p>اقلام و دارایی‌های قابل انتقال</p></div><button type="button" class="lw-add" data-add="saleAsset">+ افزودن دارایی</button></div><div id="sale-asset-list"></div><input type="hidden" name="sale_include_count" id="sale-asset-count" value="{{ sale_includes_count }}"></div>
+              <div class="lw-subcard"><div class="lw-subcard-head"><div><h3>پرسش و پاسخ</h3><p>پاسخ پرسش‌هایی که معمولاً خریداران می‌پرسند</p></div><button type="button" class="lw-add" data-add="faq">+ افزودن پرسش</button></div><div id="faq-list"></div><input type="hidden" name="faq_count" id="faq-count" value="{{ faqs_count }}"></div>
+            </div></div>
+            <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn next" type="button" data-next>تصاویر و مدارک ←</button></nav>
+          </section>
+
+          <!-- مرحله پنجم: تصاویر -->
+          <section class="lw-panel" data-panel="media">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">🖼️</div><div><h2>تصاویر و مدارک</h2><p>تصویر اصلی و فایل‌های تکمیلی</p></div></div><div class="lw-card-body">
+              <div class="lw-field"><label>تصویر اصلی <span class="req">*</span></label><div style="margin-bottom:12px"><div style="padding:9px 12px;background:#f5f7fb;border:1px solid #dce1ea;border-radius:9px;font-size:11px;color:#8a93a3">تصویر فعلی: {{ listing.main_image.name|truncatechars:40 }}</div></div><label class="lw-upload"><span style="font-size:30px">☁️</span><strong id="upload-title">تغییر تصویر اصلی</strong><small>JPG، PNG یا WEBP — حداکثر ۵ مگابایت</small><input type="file" name="main_image" id="main_image" accept="image/jpeg,image/png,image/webp"><img class="lw-preview" id="image-preview" alt="پیش‌نمایش تصویر" style="max-width:100%;max-height:210px;border-radius:11px"></label><div class="error">تصویر اصلی معتبر نیست.</div></div>
+              <div class="lw-field" style="margin-top:18px"><label>تصاویر تکمیلی <span class="optional">اختیاری</span></label><input type="file" name="gallery_images" accept="image/jpeg,image/png,image/webp" multiple><small>صفحات مهم یا داشبورد بدون نمایش اطلاعات محرمانه</small></div>
+            </div></div>
+            <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn next" type="button" data-next>بازبینی نهایی ←</button></nav>
+          </section>
+
+          <!-- مرحله پایانی: بازبینی -->
+          <section class="lw-panel" data-panel="review">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">✅</div><div><h2>بازبینی و ذخیره تغییرات</h2><p>پیش از ذخیره، خلاصه‌ی تغییرات را کنترل کنید.</p></div></div><div class="lw-card-body"><div class="review-grid" id="review-grid"></div><div class="lw-note" style="margin:18px 0 0;background:#eefaf3;color:#215f40">تغییرات پس از ثبت بلافاصله ذخیره می‌شوند.</div></div></div>
+            <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn submit" id="submit-btn" type="submit">ذخیره تغییرات</button></nav>
+          </section>
+        </div>
+
+        <aside class="lw-side">
+          <div class="lw-side-card"><h3>خلاصه آگهی</h3><ul class="lw-summary"><li><span>عنوان</span><b id="sum-title">{{ listing.title|truncatechars:20 }}</b></li><li><span>قیمت</span><b id="sum-price">{{ listing.price|default:"—" }}</b></li><li><span>درآمد دارد</span><b id="sum-income">{% if listing.is_income %}بله{% else %}خیر{% endif %}</b></li><li><span>تکمیل</span><b id="sum-progress">۱۷٪</b></li></ul></div>
+          <div class="lw-side-card"><h3>نکات ویرایش</h3><p>تمام فیلدها را بررسی کنید و داده‌های نادرست را اصلاح کنید. دسته‌بندی تغییر نمی‌کند.</p></div>
+          <div class="lw-side-card lw-safe"><h3>🔒 نسخه‌ی پیشین</h3><p>اگر ویرایش را لغو کنید، تغییرات ذخیره نمی‌شوند.</p></div>
+        </aside>
+      </div>
+    </form>
+  </div>
+</main>
+<div class="toast-wrap" id="toasts"></div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const container = document.getElementById('income-proofs');
-        const addButton = document.getElementById('add-income-proof');
-        const totalForms = document.querySelector('#id_income_proofs-TOTAL_FORMS');
+(function(){
+  'use strict';
+  const form = document.getElementById('listing-form');
+  const labels = {basics:'اطلاعات پایه', finance:'عملکرد مالی', sale:'شرایط فروش', story:'درباره و اقلام', media:'تصاویر و مدارک', review:'بازبینی نهایی'};
+  const tips = {basics:'اطلاعات کلی دارایی را بررسی و اصلاح کنید.',finance:'اطلاعات مالی را به‌روز نگاه دارید.',sale:'قیمت و شرایط فروش را بررسی کنید.',story:'معرفی دارایی و اقلام معامله را کامل کنید.',media:'تصاویر و مدارک را به‌روز رسانی کنید.',review:'پیش از ذخیره، تمام تغییرات را بررسی کنید.'};
+  let flow = ['basics','finance','sale','story','media','review'], index = 0, maxVisited = 0;
 
-        let formCount = parseInt(totalForms.value);
-        const deletedIds = [];
+  const esc = value => String(value == null ? '' : value).replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+  function toast(message, type=''){const el=document.createElement('div');el.className='toast '+type;el.textContent=message;document.getElementById('toasts').appendChild(el);setTimeout(()=>el.remove(),4500)}
+  function drawSteps(){const wrap=document.getElementById('steps');wrap.innerHTML='';flow.forEach((key,i)=>{const b=document.createElement('button');b.type='button';b.className='lw-step '+(i===index?'active':i<index?'done':'locked');b.innerHTML='<i>'+(i<index?'✓':i+1)+'</i><span>'+labels[key]+'</span>';b.disabled=i>maxVisited;b.onclick=()=>show(i);wrap.appendChild(b)})}
+  function show(nextIndex){if(nextIndex<0||nextIndex>=flow.length)return;document.querySelectorAll('.lw-panel').forEach(p=>p.classList.toggle('active',p.dataset.panel===flow[nextIndex]));index=nextIndex;maxVisited=Math.max(maxVisited,index);drawSteps();const pct=Math.round((index+1)/flow.length*100);document.getElementById('progress-fill').style.width=pct+'%';document.getElementById('progress-title').textContent='مرحله '+(index+1)+' — '+labels[flow[index]];document.getElementById('progress-count').textContent=(index+1)+' از '+flow.length;document.getElementById('sum-progress').textContent=pct+'٪';document.getElementById('tip-title').textContent=labels[flow[index]];document.getElementById('tip-text').textContent=tips[flow[index]]||'انتخاب‌های خود را بررسی کنید.';if(flow[index]==='review')buildReview();window.scrollTo({top:0,behavior:'smooth'})}
+  function currentPanel(){return document.querySelector('.lw-panel.active')}
+  function validatePanel(){let valid=true;currentPanel().querySelectorAll('[required]:not(:disabled)').forEach(el=>{const field=el.closest('.lw-field');let ok=el.type==='file'?true:el.checkValidity();if(!ok){valid=false;if(field)field.classList.add('invalid')}else if(field)field.classList.remove('invalid')});return valid}
+  document.querySelectorAll('[data-next]').forEach(b=>b.onclick=()=>{if(!validatePanel()){toast('لطفاً موارد مشخص‌شده را کامل کنید.','err');return}show(index+1)});
+  document.querySelectorAll('[data-prev]').forEach(b=>b.onclick=()=>show(index-1));
 
-        addButton.addEventListener('click', function () {
-            const currentCount = container.querySelectorAll('.income-proof-form').length;
-            if (currentCount >= 10) {
-                alert('حداکثر 10 اثبات درآمد می‌توانید اضافه کنید');
-                return;
-            }
+  document.getElementById('is_income').onchange=function(){document.getElementById('finance-fields').classList.toggle('is-hidden',!this.checked);document.getElementById('finance-extras').classList.toggle('is-hidden',!this.checked);document.querySelectorAll('[data-income-required]').forEach(x=>x.required=this.checked)};
 
-            const newForm = `
-            <div class="income-proof-form border p-3 mb-3 rounded">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6>اثبات درآمد ${currentCount + 1}</h6>
-                    <button type="button" class="btn btn-sm btn-danger remove-form">حذف</button>
-                </div>
-                <p>
-                    <label for="id_income_proofs-${formCount}-image">تصویر اثبات درآمد:</label>
-                    <input type="file" name="income_proofs-${formCount}-image" class="form-control" id="id_income_proofs-${formCount}-image">
-                </p>
-                <p>
-                    <label for="id_income_proofs-${formCount}-description">توضیحات:</label>
-                    <textarea name="income_proofs-${formCount}-description" rows="2" class="form-control" id="id_income_proofs-${formCount}-description"></textarea>
-                </p>
-                <input type="hidden" name="income_proofs-${formCount}-id" id="id_income_proofs-${formCount}-id">
-            </div>
-        `;
+  const aboutHtml=document.getElementById('about-html'),aboutCss=document.getElementById('about-css');
+  function insertText(editor,text,wrapTag=''){const start=editor.selectionStart,end=editor.selectionEnd,selectedText=editor.value.slice(start,end);let insertion=text;if(wrapTag)insertion='<'+wrapTag+'>'+(selectedText||'متن خود را اینجا بنویسید')+'</'+wrapTag+'>';editor.setRangeText(insertion,start,end,'end');editor.focus()}
+  document.querySelectorAll('[data-html-snippet]').forEach(button=>button.onclick=()=>insertText(aboutHtml,button.dataset.htmlSnippet));
+  document.querySelectorAll('[data-wrap-tag]').forEach(button=>button.onclick=()=>insertText(aboutHtml,'',button.dataset.wrapTag));
+  document.querySelectorAll('[data-css-snippet]').forEach(button=>button.onclick=()=>insertText(aboutCss,'\n'+button.dataset.cssSnippet+'\n'));
+  document.querySelectorAll('[data-rich-tab]').forEach(button=>button.onclick=()=>{document.querySelectorAll('[data-rich-tab]').forEach(tab=>tab.classList.toggle('active',tab===button));document.querySelectorAll('.rich-source').forEach(source=>source.classList.toggle('is-hidden',source.dataset.source!==button.dataset.richTab))});
 
-            container.insertAdjacentHTML('beforeend', newForm);
-            formCount++;
-            totalForms.value = formCount;
-        });
+  const counters={};
+  function addRow(type){
+    const definitions={
+      expense:{list:'expense-list',count:'expense-count',cls:'',html:i=>`<input name="exp_name_${i}" placeholder="عنوان هزینه"><input type="number" min="0" name="exp_amount_${i}" placeholder="مبلغ"><select name="exp_period_${i}"><option value="monthly">ماهانه</option><option value="yearly">سالانه</option><option value="one_time">یک‌بار</option></select>`},
+      saleAsset:{list:'sale-asset-list',count:'sale-asset-count',cls:'one',html:i=>`<input name="sale_include_${i}" placeholder="مثال: دامنه، سورس‌کد یا بانک محتوا">`},
+      faq:{list:'faq-list',count:'faq-count',cls:'two',html:i=>`<input name="faq_question_${i}" placeholder="پرسش"><textarea rows="1" name="faq_answer_${i}" placeholder="پاسخ"></textarea>`}
+    };
+    const def=definitions[type];if(!def)return;const i=counters[type]||0;counters[type]=i+1;document.getElementById(def.count).value=counters[type];const row=document.createElement('div');row.className='lw-repeat-row '+def.cls;row.innerHTML=def.html(i)+'<button type="button" class="lw-remove" aria-label="حذف">×</button>';row.querySelector('.lw-remove').onclick=()=>row.remove();document.getElementById(def.list).appendChild(row)
+  }
+  document.querySelectorAll('[data-add]').forEach(button=>button.onclick=()=>addRow(button.dataset.add));
+  
+  document.getElementById('main_image').onchange=function(){const file=this.files[0],field=this.closest('.lw-field');if(!file)return;if(file.size>5*1024*1024){this.value='';field.classList.add('invalid');toast('حجم تصویر اصلی نباید بیشتر از ۵ مگابایت باشد.','err');return}field.classList.remove('invalid');const img=document.getElementById('image-preview');img.src=URL.createObjectURL(file);img.style.display='block';document.getElementById('upload-title').textContent=file.name};
+  
+  ['title','price'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{if(id==='title')document.getElementById('sum-title').textContent=document.getElementById(id).value||'—';else document.getElementById('sum-price').textContent=document.getElementById(id).value?Number(document.getElementById(id).value).toLocaleString('fa-IR')+' تومان':'—'}));
+  
+  form.addEventListener('input',event=>{const field=event.target.closest('.lw-field');if(field&&event.target.checkValidity())field.classList.remove('invalid')});
 
-        container.addEventListener('click', function (e) {
-            if (e.target.classList.contains('remove-form')) {
-                e.target.closest('.income-proof-form').remove();
-                updateFormNumbers();
-            }
+  function valueOf(name){const el=form.elements[name];if(!el)return '—';if(el instanceof RadioNodeList)return el.value||'—';if(el.type==='checkbox')return el.checked?'بله':'خیر';if(el.tagName==='SELECT')return el.selectedOptions[0]?.text||'—';return el.value||'—'}
+  function buildReview(){const rows=[['عنوان',valueOf('title')],['قیمت',valueOf('price')==='—'?'—':Number(valueOf('price')).toLocaleString('fa-IR')+' تومان'],['نوع فروش',valueOf('sale_type')],['درآمد دارد',valueOf('is_income')]];document.getElementById('review-grid').innerHTML=rows.map(r=>'<div class="review-row"><span>'+esc(r[0])+'</span><b>'+esc(r[1])+'</b></div>').join('')}
 
-            if (e.target.classList.contains('remove-existing-form')) {
-                const form = e.target.closest('.income-proof-form');
-                const proofId = form.dataset.proofId;
-
-                if (proofId) {
-                    deletedIds.push(proofId);
-                    updateDeletedInput();
-                }
-
-                form.remove();
-                updateFormNumbers();
-            }
-        });
-
-        function updateFormNumbers() {
-            const forms = container.querySelectorAll('.income-proof-form');
-            forms.forEach((form, index) => {
-                form.querySelector('h6').textContent = `اثبات درآمد ${index + 1}`;
-            });
-        }
-
-        function updateDeletedInput() {
-            let input = document.getElementById('deleted-proofs');
-            if (!input) {
-                input = document.createElement('input');
-                input.type = 'hidden';
-                input.id = 'deleted-proofs';
-                input.name = 'deleted_proofs';
-                document.querySelector('form').appendChild(input);
-            }
-            input.value = deletedIds.join(',');
-        }
-    });
+  form.onsubmit=async event=>{event.preventDefault();if(!validatePanel())return;const button=document.getElementById('submit-btn');button.disabled=true;button.textContent='در حال ذخیره...';try{const response=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{'X-Requested-With':'XMLHttpRequest'}});const data=await response.json();if(!response.ok||!data.success){const errors=data.errors||{};const first=Object.keys(errors)[0];if(first){const target=form.elements[first];if(target){target.closest('.lw-field')?.classList.add('invalid')}}throw new Error(data.error||'ذخیره تغییرات انجام نشد')}toast('تغییرات با موفقیت ذخیره شدند.','success');setTimeout(()=>{location.href=data.redirect||location.href},1500)}catch(error){toast(error.message,'err');button.disabled=false;button.textContent='ذخیره تغییرات'}};
+  
+  drawSteps();show(0);
+})();
 </script>
 {% endblock %}

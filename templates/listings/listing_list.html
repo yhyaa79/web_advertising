@@ -12,7 +12,7 @@
 
 {% block content %}
 
-
+<link rel="stylesheet" href="{% static 'css/listing_list.css' %}">
 
 
 <div class="navbar-listing-list">
@@ -600,7 +600,7 @@
 
                                         <div class="all-badge-card">
                                             {% if listing.is_private %}
-                                            <div class="position-absolute top-0 end-0 m-2">
+                                            <div class="position-absolute">
                                                 <span class="badge-card bg-warning text-dark">
                                                     <i class="bi bi-lock-fill"></i> خصوصی
                                                 </span>
@@ -608,7 +608,7 @@
                                             {% endif %}
 
                                             {% if listing.is_income %}
-                                            <div class="position-absolute top-0 end-0 m-2">
+                                            <div class="position-absolute">
                                                 <span class="badge-card bg-warning text-dark">
                                                     <i class="bi bi-lock-fill"></i> درامد اگهی
                                                 </span>
@@ -617,7 +617,7 @@
 
 
                                             {% if listing.is_verified %}
-                                            <div class="position-absolute top-0 end-0 m-2">
+                                            <div class="position-absolute">
                                                 <span class="badge-card bg-warning text-dark">
                                                     <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
                                                 </span>
@@ -625,7 +625,7 @@
                                             {% endif %}
 
                                             {% if listing.suggested_price %}
-                                            <div class="position-absolute top-0 end-0 m-2">
+                                            <div class="position-absolute">
                                                 <span class="badge-card bg-warning text-dark">
                                                     <i class="bi bi-lock-fill"></i> پیشنهاد قیمت
                                                 </span>
@@ -633,7 +633,7 @@
                                             {% endif %}
 
                                             {% if listing.premier %}
-                                            <div class="position-absolute top-0 end-0 m-2">
+                                            <div class="position-absolute">
                                                 <span class="badge-card bg-warning text-dark">
                                                     <i class="bi bi-lock-fill"></i> اگهی برتر
 
@@ -646,7 +646,7 @@
                                                 </span>
                                             </div>
                                             {% elif listing.boost %}
-                                            <div class="position-absolute top-0 end-0 m-2">
+                                            <div class="position-absolute">
                                                 <span class="badge-card bg-warning text-dark">
                                                     <i class="bi bi-lock-fill"></i> اگهی پیشرفته
                                                 </span>
@@ -829,7 +829,7 @@
 
                                     <div class="all-badge-card">
                                         {% if listing.is_private %}
-                                        <div class="position-absolute top-0 end-0 m-2">
+                                        <div class="position-absolute">
                                             <span class="badge-card bg-warning text-dark">
                                                 <i class="bi bi-lock-fill"></i> خصوصی
                                             </span>
@@ -837,7 +837,7 @@
                                         {% endif %}
 
                                         {% if listing.is_income %}
-                                        <div class="position-absolute top-0 end-0 m-2">
+                                        <div class="position-absolute">
                                             <span class="badge-card bg-warning text-dark">
                                                 <i class="bi bi-lock-fill"></i> درامد اگهی
                                             </span>
@@ -846,7 +846,7 @@
 
 
                                         {% if listing.is_verified %}
-                                        <div class="position-absolute top-0 end-0 m-2">
+                                        <div class="position-absolute">
                                             <span class="badge-card bg-warning text-dark">
                                                 <i class="bi bi-lock-fill"></i> اطلاعات مورد تایید
                                             </span>
@@ -854,7 +854,7 @@
                                         {% endif %}
 
                                         {% if listing.suggested_price %}
-                                        <div class="position-absolute top-0 end-0 m-2">
+                                        <div class="position-absolute">
                                             <span class="badge-card bg-warning text-dark">
                                                 <i class="bi bi-lock-fill"></i> پیشنهاد قیمت
                                             </span>
@@ -862,7 +862,7 @@
                                         {% endif %}
 
                                         {% if listing.premier %}
-                                        <div class="position-absolute top-0 end-0 m-2">
+                                        <div class="position-absolute">
                                             <span class="badge-card bg-warning text-dark">
                                                 <i class="bi bi-lock-fill"></i> اگهی برتر
 
@@ -875,7 +875,7 @@
                                             </span>
                                         </div>
                                         {% elif listing.boost %}
-                                        <div class="position-absolute top-0 end-0 m-2">
+                                        <div class="position-absolute">
                                             <span class="badge-card bg-warning text-dark">
                                                 <i class="bi bi-lock-fill"></i> اگهی پیشرفته
                                             </span>
