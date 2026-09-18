@@ -818,67 +818,11 @@ a.btn-sm.btn-link:hover {
 }
 
 
-/* ============================================================
-   20) دکمه‌های عمومی (btn, btn-small, btn-large, btn-success)
-   ============================================================ */
-
-.btn {
-    display: flex;
-    border-radius: var(--border-radius-999);
-    border: none;
-    cursor: pointer;
-    transition: var(--transition-base);
-    text-decoration: none;
-    text-align: center;
-    white-space: nowrap;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-success {
-    background: var(--red-color);
-    color: var(--white-bg);
-}
-
-.btn-success:hover {
-    background: var(--red-durk-color);
-}
-
-.btn-large {
-    padding: 7px 18px;
-    font-size: var(--font-size-2xl);
-    font-weight: 500;
-    height: 35px;
-    min-width: 70px;
-}
-
-.btn-small {
-    padding: 2px 14px;
-    font-size: var(--font-size-lg);
-    font-weight: 500;
-    height: 24px;
-    min-width: 50px;
-}
-
-.btn-width-fit {
-    width: fit-content;
-}
-
-.btn-width-100 {
-    width: 100%;
-}
-
 
 /* ============================================================
    21) hr
    ============================================================ */
 
-hr {
-    border: none;
-    height: 1px;
-    margin: 12px 0;
-    background-color: #dee2e6;
-}
 
 .hr-between {
     background-color: #00000024;

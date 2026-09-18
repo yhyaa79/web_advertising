@@ -343,7 +343,7 @@
     display: inline-flex;
     align-items: center;
     background-color: #ffffff;
-    border: 1px solid var(--border-light);
+    border: 0.9px solid var(--border-light);
     border-radius: var(--border-radius-999);
     padding: 7px 16px;
     font-size: var(--font-size-lg);
@@ -1189,136 +1189,6 @@
 .premier-star {
     margin: 0 2px;
 }
-
-
-/* ═══════════════════════════════════════════════════════════
-   17) Buttons (دکمه‌ها)
-   ═══════════════════════════════════════════════════════════ */
-
-.btn {
-    display: flex;
-    border-radius: var(--border-radius-999);
-    border: none;
-    cursor: pointer;
-    transition: var(--transition-base);
-    text-decoration: none;
-    text-align: center;
-    white-space: nowrap;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-primary {
-    color: var(--red-color);
-    border: 1.6px solid var(--red-color);
-}
-
-.btn-primary:hover {
-    color: var(--red-durk-color);
-    background: var(--red-light-color);
-}
-
-.btn-success {
-    background: var(--red-color);
-    color: var(--white-bg);
-}
-
-.btn-success:hover {
-    background: var(--red-durk-color);
-}
-
-.btn-secondary-red {
-    background-color: var(--red-light-color);
-    color: var(--red-color);
-}
-
-.btn-secondary-red:hover {
-    transform: translateY(-2px);
-}
-
-.btn-delet {
-    color: #df1111;
-    background: #fcb3b2;
-}
-
-.btn-delet:hover {
-    color: #a91a1a;
-    background: #f9918f;
-}
-
-.btn-outline-secondary {
-    background-color: var(--bg);
-    border: 1.1px solid var(--border-light);
-    color: var(--text-secondary);
-    box-shadow: var(--shadow-sm);
-}
-
-.btn-outline-secondary:hover {
-    background-color: #7f898a38;
-    border: 1.1px solid var(--border-light);
-}
-
-.btn-outline-primary {
-    background: transparent;
-    border: 2px solid var(--accent-color);
-    color: var(--accent-color);
-}
-
-.btn-outline-primary:hover {
-    background: var(--accent-color);
-    color: var(--white-bg);
-}
-
-.btn-large {
-    padding: 7px 18px;
-    font-size: var(--font-size-2xl);
-    font-weight: 500;
-    height: 35px;
-    min-width: 70px;
-}
-
-.btn-medium {
-    padding: 5px 20px;
-    font-size: var(--font-size-xl);
-    font-weight: 500;
-    height: 30px;
-    min-width: 60px;
-}
-
-.btn-small {
-    padding: 2px 14px;
-    font-size: var(--font-size-lg);
-    font-weight: 500;
-    height: 24px;
-    min-width: 50px;
-}
-
-.btn-sm {
-    padding: 5px var(--spacing-md);
-    font-size: var(--font-size-base);
-}
-
-.btn-md {
-    padding: 5px var(--spacing-md);
-    font-size: var(--font-size-xl);
-}
-
-.btn-width-100 {
-    width: 100%;
-}
-
-.btn-width-fit {
-    width: fit-content;
-}
-
-.btn-gap {
-    gap: 4px;
-}
-
-.svg-btn {
-    margin: auto 0;
-}
-
 
 /* ═══════════════════════════════════════════════════════════
    18) Pagination (صفحه‌بندی)

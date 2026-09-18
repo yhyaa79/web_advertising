@@ -3373,11 +3373,6 @@ hr {
 }
 
 
-.hr-between {
-    background-color: #00000024;
-}
-
-
 /* استایل کانتینر اصلی صفحه‌بندی */
 .pagination {
     display: flex;

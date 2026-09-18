@@ -683,6 +683,7 @@ nav .nav-cta .btn-ghost {
     background-repeat: no-repeat;
     background-position: left 14px center;
     padding-left: 36px;
+    height: 36px;
 }
 
 .select-wrapper {
@@ -833,6 +834,295 @@ hr {
 .hr-between {
     background-color: #00000024;
 }
+
+
+
+
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   ۳۲. Buttons
+   ═══════════════════════════════════════════════════════════ */
+.btn {
+    display: flex;
+    border-radius: var(--border-radius-999);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-base);
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary {
+    color: var(--red-color);
+    border: 1.4px solid var(--red-color);
+}
+
+.btn-primary:hover {
+    color: var(--red-durk-color);
+    background: var(--red-light-color);
+}
+
+.btn-secondary-red {
+    background-color: var(--red-light-color);
+    color: var(--red-color);
+}
+
+.btn-secondary-red:hover {
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: var(--red-color);
+    color: var(--white-bg);
+}
+
+.btn-success:hover {
+    background: var(--red-durk-color);
+}
+
+.btn-delet {
+    color: #df1111;
+    background: #fcb3b2;
+}
+
+.btn-delet:hover {
+    color: #a91a1a;
+    background: #f9918f;
+}
+
+.btn-outline-secondary {
+    background-color: var(--bg);
+    border: 1.1px solid var(--border-light);
+    color: var(--text-secondary);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-outline-secondary:hover {
+    background-color: #7f898a38;
+    border: 1.1px solid var(--border-light);
+}
+
+.btn-accept {
+    color: #1fb900;
+    background: #d0efca;
+}
+
+.btn-accept:hover {
+    color: #1b9d01;
+    background: #a6e999;
+}
+
+.btn-large {
+    padding: 5px 16px;
+    font-size: var(--font-size-2xl);
+    font-weight: 400;
+    height: 32px;
+    min-width: 70px;
+}
+
+.btn-medium {
+    padding: 5px 14px;
+    font-size: var(--font-size-xl);
+    font-weight: 400;
+    height: 28px;
+    min-width: 60px;
+}
+
+.btn-small {
+    padding: 2px 14px;
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    height: 24px;
+    min-width: 50px;
+}
+
+.btn-width-100 {
+    width: 100%;
+}
+
+.btn-width-fit {
+    width: fit-content;
+}
+
+.btn-gap {
+    gap: 4px;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger-color) 0%, #c0392b 100%);
+    color: var(--white-bg);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #c0392b 0%, var(--danger-color) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.btn-warning {
+    margin-top: 20px;
+    background: var(--warning-color);
+    color: var(--white-bg);
+}
+
+.btn-warning:hover {
+    background: #f0984b;
+    transform: translateY(-2px);
+}
+
+.btn-info {
+    background: linear-gradient(135deg, var(--info-color) 0%, #138d75 100%);
+    color: var(--white-bg);
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, #138d75 0%, var(--info-color) 100%);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: #9ca3a3b5;
+    color: var(--white-bg);
+    border: 1.1px solid var(--border-light);
+}
+
+.btn-outline-primary {
+    background: transparent;
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+}
+
+.btn-outline-primary:hover {
+    background: var(--accent-color);
+    color: var(--white-bg);
+}
+
+.btn-sm {
+    padding: 5px var(--spacing-md);
+    font-size: var(--font-size-base);
+}
+
+.btn-md {
+    padding: 5px var(--spacing-md);
+    font-size: var(--font-size-xl);
+}
+
+.btn-lg {
+    padding: 0.875rem var(--spacing-xl);
+    font-size: var(--font-size-md);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   ۳۳. Badges
+   ═══════════════════════════════════════════════════════════ */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: var(--font-size-lg);
+    font-weight: 400;
+    border-radius: var(--border-radius-999);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+}
+
+.badge-success,
+.bg-success {
+    background-color: var(--success-color);
+}
+
+.badge-warning,
+.bg-warning,
+.badge-secondary {
+    background-color: #f9bc5c63;
+    color: #e49518;
+}
+
+.badge-info,
+.bg-info {
+    background-color: var(--info-color);
+}
+
+.bg-info {
+    position: absolute;
+    margin-top: 10px;
+    margin-right: 14px;
+}
+
+.badge-danger,
+.bg-danger {
+    background-color: var(--danger-color);
+}
+
+.badge-primary,
+.bg-primary {
+    background-color: var(--accent-color);
+}
+
+.badge-secondary {
+    color: var(--white-bg);
+}
+
+.all-badge {
+    display: flex;
+    gap: 5px;
+    margin: auto 0;
+}
+
+.badge-card {
+    padding: 1px 8px;
+    font-size: var(--font-size-md);
+    font-weight: 300;
+    border-radius: var(--border-radius-999);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   ۳۴. alarm / announcement cards
+   ═══════════════════════════════════════════════════════════ */
+.premier-announcement {
+    color: #b08900;
+    background-color: #fdf0c8;
+}
+
+.boost-announcement {
+    color: #0560bc;
+    background-color: #d5eaff;
+}
+
+.card-alarm-accept {
+    color: #0560bc;
+    background-color: #d5eaff;
+}
+
+.card-alarm-reject {
+    color: #b50f0f;
+    background-color: #ffbaba;
+}
+
+.premier-announcement-text,
+.boost-announcement-text {
+    font-size: var(--font-size-lg);
+    padding: 5px 5px;
+}
+
+.suggested-price {
+    color: #054e3b;
+    background-color: #d7fae3;
+}
+
 
 
 
@@ -1067,9 +1357,3 @@ footer {
         text-align: right;
     }
 }
-
-
-
-
-
-
