@@ -1,12 +1,15 @@
 <!-- templates/listings/my_listings.html -->
 {% extends 'base.html' %}
 
+{% load static %}
 {% load custom_tags %}
 {% load date_filters %}
 
 {% block title %}آگهی‌های من{% endblock %}
 
 {% block content %}
+
+<link rel="stylesheet" href="{% static 'css/my_listings.css' %}">
 
 <div class="container">
 

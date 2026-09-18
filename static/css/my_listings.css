@@ -1,0 +1,974 @@
+/* ============================================================
+   my_listings.css
+   استایل‌های کامل و دقیق صفحه «آگهی‌های من» (my_listings.html)
+   ============================================================ */
+
+
+/* ============================================================
+   2) کانتینر اصلی
+   ============================================================ */
+
+.container {
+    margin: 0 auto;
+    padding: 120px 5% 20px 5%;
+}
+
+
+/* ============================================================
+   3) هدر صفحه (عنوان + دکمه ثبت آگهی)
+   ============================================================ */
+
+.btn-listing-create {
+    display: flex;
+    margin-bottom: 35px;
+}
+
+.btn-listing-create .btn-success {
+    margin-right: auto;
+}
+
+.inf-my-listings h2 {
+    font-size: var(--font-size-5xl);
+    font-weight: 500;
+    margin-bottom: 3px;
+}
+
+.inf-my-listings p {
+    font-size: var(--font-size-2xl);
+    font-weight: 300;
+}
+
+
+/* ============================================================
+   4) کارت‌ها
+   ============================================================ */
+
+.card {
+    background: var(--white-bg);
+    border-radius: var(--border-radius-lg);
+    border: .5px solid #eaeef1 !important;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-xl);
+    overflow: hidden;
+    transition: var(--transition-base);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.card-listing {
+    background: var(--white-bg);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-xl);
+    border: none;
+    overflow: hidden;
+    transition: var(--transition-base);
+}
+
+.card-header {
+    position: relative;
+    padding: var(--spacing-md) var(--spacing-lg);
+    padding-inline-end: calc(var(--spacing-lg) + 10px);
+    background: var(--white-bg);
+    border-bottom: none;
+    font-size: var(--font-size-4xl);
+}
+
+.card-header h5 {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+}
+
+.card-header h4 {
+    margin: 0;
+    font-size: var(--font-size-3xl);
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 10px 15px;
+    width: 100%;
+}
+
+.card-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.card-text {
+    color: var(--text-primary);
+    font-size: var(--font-size-lg);
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-weight: 300;
+}
+
+
+/* ============================================================
+   5) نشان تعداد درخواست‌های در انتظار
+   ============================================================ */
+
+.pending-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    margin-inline-start: var(--spacing-sm);
+    border-radius: var(--border-radius-999);
+    background: var(--red-color);
+    color: var(--white-bg);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   6) جدول درخواست‌های بازدید (table-requests)
+   ============================================================ */
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table-requests-wrapper {
+    max-height: 360px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+}
+
+.table-requests-wrapper::-webkit-scrollbar {
+    width: 6px;
+}
+
+.table-requests-wrapper::-webkit-scrollbar-thumb {
+    background: var(--red-light-color);
+    border-radius: 999px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--white-bg);
+}
+
+.table thead {
+    background: #f9f9f9;
+    border-bottom: 2px solid var(--red-color);
+}
+
+.table th {
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: right;
+    font-weight: 500;
+    font-size: var(--font-size-xl);
+    color: var(--primary-color);
+    white-space: nowrap;
+}
+
+.table tbody tr,
+.table-striped tbody tr:nth-child(even),
+.table-striped tbody tr:nth-child(odd) {
+    background-color: var(--white-bg) !important;
+    transition: var(--transition-base);
+}
+
+.table td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+    vertical-align: middle;
+    font-size: var(--font-size-xl);
+    white-space: nowrap !important;
+}
+
+.table tbody tr:hover {
+    background-color: color-mix(in srgb, var(--red-color) 5%, var(--white-bg)) !important;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table-requests {
+    border: none;
+}
+
+.table-requests thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--white-bg);
+    padding: 10px var(--spacing-sm);
+}
+
+.table-requests td {
+    padding: 8px var(--spacing-sm) !important;
+    font-size: var(--font-size-sm);
+}
+
+.table-requests .message-link {
+    color: var(--text-secondary);
+    font-size: var(--font-size-lg);
+    font-weight: 400;
+}
+
+.table-requests .date-td {
+    color: var(--text-muted);
+    font-size: var(--font-size-xl);
+}
+
+
+/* ============================================================
+   7) سلول درخواست‌کننده (آواتار + نام + لینک آگهی)
+   ============================================================ */
+
+.requester-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.requester-cell .names {
+    display: flex;
+    flex-direction: column;
+}
+
+.requester-cell .names .listing-ref {
+    font-size: var(--font-size-xl);
+    color: var(--text-primary);
+    font-weight: 400;
+}
+
+.avatar-chip {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--primary-color) 10%, var(--white-bg));
+    color: var(--primary-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+
+/* ============================================================
+   8) لینک‌های کوچک داخل جدول
+   ============================================================ */
+
+a.btn-sm.btn-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: var(--font-size-xl);
+    padding: 0 !important;
+}
+
+a.btn-sm.btn-link:hover {
+    color: var(--red-durk-color);
+    text-decoration: underline;
+}
+
+.btn-sm {
+    padding: 5px var(--spacing-md);
+    font-size: var(--font-size-base);
+}
+
+
+/* ============================================================
+   9) دکمه‌های عملیات داخل جدول درخواست‌ها
+   ============================================================ */
+
+.my-list-btn {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.btn-accept {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    color: #1fb900;
+    background: #d0efca;
+    transition: var(--transition-base);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.btn-accept:hover {
+    color: #1b9d01;
+    background: #a6e999;
+}
+
+.btn-delet {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    color: #df1111;
+    background: #fcb3b2;
+    transition: var(--transition-base);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.btn-delet:hover {
+    color: #a91a1a;
+    background: #f9918f;
+}
+
+
+/* ============================================================
+   10) جدول لیست آگهی‌ها (table-listings)
+   ============================================================ */
+
+.table-listings th {
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.table-listings td {
+    padding: var(--spacing-lg) !important;
+}
+
+.listing-title-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.listing-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-lg);
+    color: var(--text-muted);
+}
+
+.listing-meta .dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--text-muted);
+}
+
+
+/* ============================================================
+   11) چیپ‌ها (chip) — عمومی/خصوصی و وضعیت‌ها
+   ============================================================ */
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.chip .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.chip svg {
+    width: 14px;
+    height: 14px;
+}
+
+.chip-open {
+    color: var(--info-color);
+    border-color: color-mix(in srgb, var(--info-color) 35%, var(--white-bg));
+}
+
+.chip-open .dot {
+    background: var(--info-color);
+}
+
+.chip-answered {
+    color: var(--success-color);
+    border-color: color-mix(in srgb, var(--success-color) 35%, var(--white-bg));
+}
+
+.chip-answered .dot {
+    background: var(--success-color);
+}
+
+.chip-closed {
+    color: var(--text-muted);
+}
+
+.chip-closed .dot {
+    background: var(--text-muted);
+}
+
+.chip-low .dot {
+    background: var(--success-color);
+}
+
+.chip-low {
+    color: var(--success-color);
+}
+
+.chip-medium .dot {
+    background: var(--warning-color);
+}
+
+.chip-medium {
+    color: var(--warning-color);
+}
+
+.chip-high .dot {
+    background: var(--red-color);
+}
+
+.chip-high {
+    color: var(--red-durk-color);
+}
+
+
+/* ============================================================
+   12) وضعیت‌های آگهی (status-*)
+   ============================================================ */
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-active {
+    color: var(--success-color);
+    border-color: color-mix(in srgb, var(--success-color) 35%, var(--white-bg));
+}
+
+.status-active .status-dot {
+    background: var(--success-color);
+}
+
+.status-pending {
+    color: var(--warning-color);
+    border-color: color-mix(in srgb, var(--warning-color) 35%, var(--white-bg));
+}
+
+.status-pending .status-dot {
+    background: var(--warning-color);
+}
+
+.status-rejected {
+    color: var(--red-durk-color);
+    border-color: color-mix(in srgb, var(--red-color) 35%, var(--white-bg));
+}
+
+.status-rejected .status-dot {
+    background: var(--red-color);
+}
+
+.status-sold {
+    color: var(--text-muted);
+}
+
+.status-sold .status-dot {
+    background: var(--text-muted);
+}
+
+.rejection-note {
+    display: block;
+    margin-top: 4px;
+    font-size: var(--font-size-xs);
+    color: var(--red-durk-color);
+}
+
+
+/* ============================================================
+   13) قیمت آگهی
+   ============================================================ */
+
+.listing-price {
+    font-weight: 700;
+    font-size: var(--font-size-xl);
+    color: var(--red-durk-color);
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   14) تعداد بازدید
+   ============================================================ */
+
+.views-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: var(--font-size-xl);
+    color: var(--text-secondary);
+}
+
+.views-cell svg {
+    width: 14px;
+    height: 14px;
+    color: var(--text-muted);
+}
+
+
+/* ============================================================
+   15) تاریخ (date-td)
+   ============================================================ */
+
+.date-td {
+    color: var(--text-secondary) !important;
+    font-size: var(--font-size-2xl);
+    font-weight: 400;
+}
+
+
+/* ============================================================
+   16) دکمه‌های عملیات داخل جدول آگهی‌ها (btn-list)
+   ============================================================ */
+
+.btn-list {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid var(--border-color);
+    background: var(--white-bg);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.btn-list svg {
+    width: 14px;
+    height: 14px;
+}
+
+.btn-ghost-edit:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-ghost-delete {
+    color: var(--red-durk-color);
+    border-color: color-mix(in srgb, var(--red-color) 30%, var(--white-bg));
+}
+
+.btn-ghost-delete:hover {
+    background: var(--red-color);
+    border-color: var(--red-color);
+    color: var(--white-bg);
+}
+
+.btn-activate {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    background: var(--success-color);
+    color: var(--white-bg);
+}
+
+.btn-activate:hover {
+    filter: brightness(0.93);
+}
+
+.btn-ghost:focus-visible,
+.btn-activate:focus-visible {
+    outline: 2px solid var(--red-color);
+    outline-offset: 2px;
+}
+
+
+/* ============================================================
+   17) حالت خالی جدول
+   ============================================================ */
+
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-md);
+    color: var(--text-muted);
+}
+
+
+/* ============================================================
+   18) مودال سفارشی پیام درخواست
+   ============================================================ */
+
+.custom-modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.custom-modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    position: relative;
+}
+
+.custom-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.custom-modal-header h4 {
+    margin-bottom: 0;
+    font-weight: 700;
+}
+
+.custom-modal-header .close {
+    background: none;
+    border: none;
+    font-size: var(--font-size-5xl);
+    color: var(--text-muted);
+    cursor: pointer;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-base);
+    line-height: 1;
+}
+
+.custom-modal-header .close:hover {
+    background: var(--red-light-color);
+    color: var(--red-durk-color);
+}
+
+.custom-modal-body {
+    text-wrap: wrap;
+    word-break: break-word;
+}
+
+.text-request-message {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--border-light);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-base);
+    transition: var(--transition-base);
+    height: 250px;
+    resize: vertical;
+    background-color: var(--bg);
+    font-family: "Vazirmatn", "Roboto", sans-serif;
+}
+
+
+/* ============================================================
+   19) کلاس‌های کمکی (Utility Classes)
+   ============================================================ */
+
+.w-100 {
+    width: 100%;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.mt-2 {
+    margin-top: var(--spacing-sm);
+}
+
+.mt-3 {
+    margin-top: var(--spacing-md);
+}
+
+.mt-4 {
+    margin-top: var(--spacing-lg);
+}
+
+.mt-5 {
+    margin-top: var(--spacing-xxl);
+}
+
+.mb-2 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.mb-3 {
+    margin-bottom: var(--spacing-md);
+}
+
+.mb-4 {
+    margin-bottom: var(--spacing-lg);
+}
+
+.mb-5 {
+    margin-bottom: var(--spacing-xxl);
+}
+
+.me-2 {
+    margin-left: var(--spacing-sm);
+}
+
+.py-5 {
+    padding-top: var(--spacing-xxl);
+    padding-bottom: var(--spacing-xxl);
+}
+
+.pad-10 {
+    padding: var(--spacing-md) !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-end {
+    text-align: right;
+}
+
+.text-muted {
+    color: var(--text-muted);
+    font-size: var(--font-size-md) !important;
+}
+
+.text-success {
+    color: var(--success-color);
+}
+
+.text-danger {
+    color: var(--danger-color);
+}
+
+.text-warning {
+    color: var(--warning-color);
+}
+
+.fw-bold {
+    font-weight: 700;
+}
+
+.fs-4 {
+    font-size: var(--font-size-xl);
+}
+
+.fs-5 {
+    font-size: var(--font-size-3xl);
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.text-wrap {
+    white-space: normal !important;
+}
+
+.text-break {
+    word-break: break-word !important;
+}
+
+
+/* ============================================================
+   20) دکمه‌های عمومی (btn, btn-small, btn-large, btn-success)
+   ============================================================ */
+
+.btn {
+    display: flex;
+    border-radius: var(--border-radius-999);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-base);
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-success {
+    background: var(--red-color);
+    color: var(--white-bg);
+}
+
+.btn-success:hover {
+    background: var(--red-durk-color);
+}
+
+.btn-large {
+    padding: 7px 18px;
+    font-size: var(--font-size-2xl);
+    font-weight: 500;
+    height: 35px;
+    min-width: 70px;
+}
+
+.btn-small {
+    padding: 2px 14px;
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    height: 24px;
+    min-width: 50px;
+}
+
+.btn-width-fit {
+    width: fit-content;
+}
+
+.btn-width-100 {
+    width: 100%;
+}
+
+
+/* ============================================================
+   21) hr
+   ============================================================ */
+
+hr {
+    border: none;
+    height: 1px;
+    margin: 12px 0;
+    background-color: #dee2e6;
+}
+
+.hr-between {
+    background-color: #00000024;
+}
+
+
+/* ============================================================
+   22) انیمیشن‌ها
+   ============================================================ */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card,
+.alert {
+    animation: fadeIn 0.5s ease-out;
+}
+
+
+/* ============================================================
+   23) ریسپانسیو
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    .table-listings td,
+    .table-listings th {
+        padding: var(--spacing-sm) !important;
+    }
+
+    .listing-price {
+        font-size: var(--font-size-base);
+    }
+
+    .table,
+    .data-table {
+        font-size: var(--font-size-sm);
+    }
+
+    .table th,
+    .table td,
+    .data-table th,
+    .data-table td {
+        padding: 0.75rem var(--spacing-sm);
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+
+    .custom-modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+
+    .btn-listing-create {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        align-items: flex-start;
+    }
+
+    .btn-listing-create .btn-success {
+        margin-right: 0;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .col-md-3,
+    .col-md-4,
+    .col-md-6,
+    .col-md-8,
+    .col-md-10 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .display-1 {
+        font-size: var(--font-size-xxl);
+    }
+}
+
