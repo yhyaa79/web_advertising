@@ -1,7 +1,11 @@
 <!-- templates/tickets/ticket_create.html -->
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}ایجاد تیکت جدید{% endblock %}
 {% block content %}
+
+<link rel="stylesheet" href="{% static 'css/ticket.css' %}">
+
 <div class="container">
     <div class="row">
         <div class="col-md-8 offset-md-2">

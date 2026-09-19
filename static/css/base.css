@@ -1357,3 +1357,122 @@ footer {
         text-align: right;
     }
 }
+
+
+
+
+
+
+
+
+/* ========================================
+   کلاس‌های کمکی (Utility Classes)
+   ======================================== */
+.w-100 {
+    width: 100%;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.mt-2 {
+    margin-top: var(--spacing-sm);
+}
+
+.mt-3 {
+    margin-top: var(--spacing-md);
+}
+
+.mt-4 {
+    margin-top: var(--spacing-lg);
+}
+
+.mt-5 {
+    margin-top: var(--spacing-xxl);
+}
+
+.mb-2 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.mb-3 {
+    margin-bottom: var(--spacing-md);
+}
+
+.mb-4 {
+    margin-bottom: var(--spacing-lg);
+}
+
+.mb-5 {
+    margin-bottom: var(--spacing-xxl);
+}
+
+.me-2 {
+    margin-left: var(--spacing-sm);
+}
+
+.py-5 {
+    padding-top: var(--spacing-xxl);
+    padding-bottom: var(--spacing-xxl);
+}
+
+.pad-10 {
+    padding: var(--spacing-md) !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-end {
+    text-align: right;
+}
+
+.text-muted {
+    color: var(--text-muted);
+    font-size: var(--font-size-md) !important;
+}
+
+.inf-created-views-username {
+    display: flex;
+    gap: 60px;
+}
+
+.inf-created-views-username p {
+    color: var(--text-secondary);
+    font-size: var(--font-size-base) !important;
+    font-weight: 300;
+}
+
+.text-success {
+    color: var(--success-color);
+}
+
+.text-danger {
+    color: var(--danger-color);
+}
+
+.text-warning {
+    color: var(--warning-color);
+}
+
+.fw-bold {
+    font-weight: 700;
+}
+
+.fs-4 {
+    font-size: var(--font-size-xl);
+}
+
+.fs-5 {
+    font-size: var(--font-size-3xl);
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
