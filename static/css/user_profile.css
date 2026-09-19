@@ -1,0 +1,513 @@
+/* ==========================================================================
+   user_profile.css
+   استایل‌های اختصاصی صفحه پروفایل کاربر
+   ========================================================================== */
+
+/* ========================================
+   کانتینر
+   ======================================== */
+.container {
+    margin: 0 auto;
+    padding: 120px 5% 20px 5%;
+}
+
+/* ========================================
+   کارت‌ها (Cards)
+   ======================================== */
+.card {
+    background: var(--white-bg);
+    border-radius: var(--border-radius-lg);
+    border: .5px solid #eaeef1 !important;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-xl);
+    overflow: hidden;
+    transition: var(--transition-base);
+}
+
+/* نسخه دوم (نسخه‌ای که در global.css بعدتر آمده و override می‌کند) */
+.card {
+    background: var(--white-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-xl);
+    box-shadow: none;
+}
+
+.card-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.card-text {
+    color: var(--text-primary);
+    font-size: var(--font-size-lg);
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-weight: 300;
+}
+
+.card-header {
+    padding: var(--spacing-md);
+    border-bottom: none;
+    font-size: var(--font-size-4xl);
+}
+
+.card-header h4 {
+    margin: 0;
+    font-size: var(--font-size-3xl);
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 10px 15px;
+    width: 100%;
+}
+
+/* ========================================
+   کارت پروفایل کاربر
+   ======================================== */
+.profile-card {
+    display: flex;
+    gap: 10px;
+}
+
+.info-profile-user {
+    display: grid;
+    padding: 10px 20px;
+    width: 380px;
+    gap: inherit;
+}
+
+.strong-info-profile {
+    display: inline-block;
+    color: var(--text-secondary);
+    font-size: var(--font-size-xl);
+    font-weight: 400;
+}
+
+.p-info-profile {
+    display: grid;
+}
+
+.bio-addres-profile {
+    /* در global.css خالی است */
+}
+
+/* ========================================
+   کارت اطلاعات تأیید شده
+   ======================================== */
+.card-inf {
+    border-radius: 4px;
+    box-shadow: var(--card-shadow);
+    border: none;
+    overflow: hidden;
+    transition: var(--transition-base);
+    padding: 4px 14px;
+    font-weight: 500;
+    font-size: var(--font-size-lg);
+}
+
+.suggested-price {
+    color: #054e3b;
+    background-color: #d7fae3;
+}
+
+/* ========================================
+   کارت آگهی‌ها (In-card)
+   ======================================== */
+.in-card {
+    padding: 10px;
+    display: inline-flex;
+    width: 100%;
+}
+
+.in-card-img {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.card-img {
+    max-height: 210px;
+    display: inline-block;
+}
+
+.card-img-top {
+    height: 185px;
+    width: 285px;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+}
+
+.inf-all-card {
+    display: flex;
+    gap: 25px;
+}
+
+.inf-card {
+    margin: 0 auto;
+}
+
+.strong-inf {
+    color: var(--text-secondary);
+    font-size: var(--font-size-md);
+    font-weight: 300;
+    white-space: nowrap;
+}
+
+.inf-card p {
+    color: var(--text-2c3e50);
+    font-size: var(--font-size-2xl);
+    font-weight: 500;
+}
+
+.all-btn {
+    margin-right: auto;
+}
+
+/* ========================================
+   بخش قیمت و دکمه‌ها
+   ======================================== */
+.price-btn {
+    display: grid;
+    padding: 3px 10px;
+    width: 300px;
+    height: 100%;
+    margin-top: -23px;
+}
+
+.price-div {
+    text-align: center;
+}
+
+.income-display {
+    margin-top: 10px;
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.monthly-income {
+    margin-bottom: 5px;
+    font-size: var(--font-size-lg);
+}
+
+.between-price-btn {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.btn-primary-div {
+    margin-top: auto;
+    display: flex;
+    gap: 15px;
+}
+
+/* ========================================
+   نشان‌ها (Badges)
+   ======================================== */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: var(--font-size-lg);
+    font-weight: 400;
+    border-radius: var(--border-radius-999);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+}
+
+.all-badge {
+    display: flex;
+    gap: 5px;
+    margin: auto 0;
+}
+
+.badge-success,
+.bg-success {
+    background-color: var(--success-color);
+}
+
+.badge-warning,
+.bg-warning,
+.badge-secondary {
+    background-color: #f9bc5c63;
+    color: #e49518;
+}
+
+.badge-info,
+.bg-info {
+    background-color: var(--info-color);
+}
+
+/* استایل اختصاصی bg-info (در global.css هم position دارد) */
+.bg-info {
+    position: absolute;
+    margin-top: 10px;
+    margin-right: 14px;
+}
+
+.badge-danger,
+.bg-danger {
+    background-color: var(--danger-color);
+}
+
+.badge-primary,
+.bg-primary {
+    background-color: var(--accent-color);
+}
+
+.badge-secondary {
+    color: var(--white-bg);
+}
+
+/* ========================================
+   دکمه‌ها (Buttons)
+   ======================================== */
+.btn {
+    display: flex;
+    border-radius: var(--border-radius-999);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-base);
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary {
+    color: var(--red-color);
+    border: 1.6px solid var(--red-color);
+}
+
+.btn-primary:hover {
+    color: var(--red-durk-color);
+    background: var(--red-light-color);
+}
+
+.btn-success {
+    background: var(--red-color);
+    color: var(--white-bg);
+}
+
+.btn-success:hover {
+    background: var(--red-durk-color);
+}
+
+/* ========================================
+   کلاس‌های کمکی (Utility Classes)
+   ======================================== */
+.w-100 {
+    width: 100%;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.mt-2 {
+    margin-top: var(--spacing-sm);
+}
+
+.mt-3 {
+    margin-top: var(--spacing-md);
+}
+
+.mt-4 {
+    margin-top: var(--spacing-lg);
+}
+
+.mt-5 {
+    margin-top: var(--spacing-xxl);
+}
+
+.mb-2 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.mb-3 {
+    margin-bottom: var(--spacing-md);
+}
+
+.mb-4 {
+    margin-bottom: var(--spacing-lg);
+}
+
+.mb-5 {
+    margin-bottom: var(--spacing-xxl);
+}
+
+.me-2 {
+    margin-left: var(--spacing-sm);
+}
+
+.py-5 {
+    padding-top: var(--spacing-xxl);
+    padding-bottom: var(--spacing-xxl);
+}
+
+.pad-10 {
+    padding: var(--spacing-md) !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-end {
+    text-align: right;
+}
+
+.text-muted {
+    color: var(--text-muted);
+    font-size: var(--font-size-md) !important;
+}
+
+.text-success {
+    color: var(--success-color);
+}
+
+.text-danger {
+    color: var(--danger-color);
+}
+
+.text-warning {
+    color: var(--warning-color);
+}
+
+.fw-bold {
+    font-weight: 700;
+}
+
+.fs-4 {
+    font-size: var(--font-size-xl);
+}
+
+.fs-5 {
+    font-size: var(--font-size-3xl);
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+/* ========================================
+   سیستم Grid
+   ======================================== */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-md-3,
+.col-md-4,
+.col-md-6,
+.col-md-8,
+.col-md-10 {
+    padding: 0 15px;
+}
+
+.col-md-3 {
+    flex: 0 0 20%;
+    max-width: 20%;
+}
+
+.col-md-4 {
+    flex: 0 0 33.333%;
+    max-width: 33.333%;
+}
+
+.col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.col-md-8 {
+    flex: 0 0 66.666%;
+    max-width: 66.666%;
+}
+
+.col-md-10 {
+    flex: 0 0 70%;
+    max-width: 70%;
+}
+
+.col-md-11 {
+    flex: 0 0 80%;
+    max-width: 80%;
+}
+
+.col-md-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.col-md-12 strong {
+    font-size: var(--font-size-md);
+    margin-right: 15px;
+}
+
+/* ========================================
+   تصویر پروفایل (rounded-circle)
+   ======================================== */
+.rounded-circle {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 7px;
+}
+
+/* ========================================
+   خط جداکننده (hr)
+   ======================================== */
+hr {
+    border: none;
+    height: 1px;
+    margin: 12px 0;
+    background-color: #dee2e6;
+}
+
+/* ========================================
+   انیمیشن FadeIn برای کارت‌ها
+   ======================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card,
+.alert {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* ========================================
+   ریسپانسیو (Responsive)
+   ======================================== */
+@media (max-width: 768px) {
+    .col-md-3,
+    .col-md-4,
+    .col-md-6,
+    .col-md-8,
+    .col-md-10 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}

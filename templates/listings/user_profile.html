@@ -3,12 +3,15 @@
 
 {% extends 'base.html' %}
 
+{% load static %}
 {% load custom_tags %}
 {% load date_filters %}
 
 {% block title %}پروفایل {{ profile_user.username }}{% endblock %}
 
 {% block content %}
+
+<link rel="stylesheet" href="{% static 'css/user_profile.css' %}">
 
 <div class="container">
     <div class="mt-4">

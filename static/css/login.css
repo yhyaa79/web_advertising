@@ -1,0 +1,192 @@
+/* ========================================
+   login.css
+   استایل‌های اختصاصی صفحات ورود و ثبت‌نام
+   استخراج شده از global.css
+   ======================================== */
+
+/* ---------- کانتینر و گرید ---------- */
+.container {
+    margin: 0 auto;
+    padding: 120px 5% 20px 5%;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.col-md-6 {
+    padding: 0 15px;
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+/* ---------- کارت ---------- */
+.card {
+    background: var(--white-bg);
+    border-radius: var(--border-radius-lg);
+    border: .5px solid #eaeef1 !important;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-xl);
+    overflow: hidden;
+    transition: var(--transition-base);
+}
+
+.card {
+    background: var(--white-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-xl);
+    box-shadow: none;
+}
+
+.card,
+.alert {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* ---------- هدر کارت ---------- */
+.card-header {
+    padding: var(--spacing-md);
+    border-bottom: none;
+    font-size: var(--font-size-4xl);
+}
+
+.card-header {
+    position: relative;
+    padding: var(--spacing-md) var(--spacing-lg);
+    padding-inline-end: calc(var(--spacing-lg) + 10px);
+    background: var(--white-bg);
+}
+
+.card-header h4 {
+    margin: 0;
+    font-size: var(--font-size-3xl);
+    font-weight: 600;
+}
+
+/* ---------- بدنه کارت ---------- */
+.card-body {
+    padding: 10px 15px;
+    width: 100%;
+}
+
+/* ---------- فرم‌ها ---------- */
+form p {
+    margin-bottom: var(--spacing-lg);
+}
+
+form label {
+    display: block;
+    color: var(--text-primary);
+    font-weight: 400;
+    font-size: var(--font-size-xl);
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="number"],
+form input[type="url"],
+form input[type="file"],
+form select,
+form textarea {
+    width: 100%;
+    height: 40px;
+    padding: 8px 12px;
+    border: 1.1px solid var(--border-light);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-2xl);
+    transition: var(--transition-base);
+    background-color: var(--bg);
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+    outline: none;
+}
+
+form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* ---------- دکمه‌ها ---------- */
+.btn {
+    display: flex;
+    border-radius: var(--border-radius-999);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-base);
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-success {
+    background: var(--red-color);
+    color: var(--white-bg);
+}
+
+.btn-success:hover {
+    background: var(--red-durk-color);
+}
+
+.btn-medium {
+    padding: 5px 20px;
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    height: 30px;
+    min-width: 60px;
+}
+
+.btn-width-fit {
+    width: fit-content;
+}
+
+/* ---------- جداکننده ---------- */
+hr {
+    border: none;
+    height: 1px;
+    margin: 12px 0;
+    background-color: #dee2e6;
+}
+
+/* ---------- متن و لینک ---------- */
+.text-center {
+    text-align: center;
+}
+
+a {
+    color: var(--blu-durk-color);
+}
+
+h4 {
+    font-size: var(--font-size-2xl);
+}
+
+/* ---------- انیمیشن ---------- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---------- ریسپانسیو ---------- */
+@media (max-width: 768px) {
+    .col-md-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}

@@ -1,9 +1,13 @@
 <!-- templates/accounts/login.html -->
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}ورود{% endblock %}
 
 {% block content %}
+
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
 
 <div class="container">
     <div class="row justify-content-center">
