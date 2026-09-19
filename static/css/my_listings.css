@@ -290,7 +290,6 @@ a.btn-sm.btn-link:hover {
    ============================================================ */
 
 .my-list-btn {
-    display: flex;
     gap: var(--spacing-xs);
     align-items: center;
     flex-wrap: wrap;
