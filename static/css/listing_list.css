@@ -150,6 +150,7 @@
     animation: slideInDown 0.4s ease-out;
     border-radius: 12px;
     overflow: hidden;
+    margin-top: 20px;
     margin-bottom: 40px;
     padding: 10px 40px;
 }
