@@ -108,7 +108,7 @@
 }
 
 .category-dropdown-link:hover {
-    background-color: var(--light-serch-bg);
+    background-color: var(--red-light-color);
     color: var(--red-color);
 }
 

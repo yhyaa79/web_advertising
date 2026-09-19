@@ -1,3 +1,5 @@
+/* base.css */
+
 @font-face {
     font-family: "Vazirmatn";
     src: url("../fonts/Vazirmatn-Thin.ttf") format("truetype");
@@ -442,7 +444,7 @@ option {
 
 a.navbar-a {
     font-size: var(--font-size-xl);
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .navbar-a,

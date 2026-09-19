@@ -116,9 +116,9 @@ a:focus-visible {
     position: absolute;
     inset: 0;
     background-image:
-        linear-gradient(to right, rgba(150, 108, 108, .22) 1.5px, transparent 1px),
-        linear-gradient(to bottom, rgba(150, 108, 108, .22) 1.5px, transparent 1px);
-    background-size: calc(var(--k) * 52) calc(var(--k) * 52);
+        linear-gradient(to right, rgba(150, 108, 108, .22) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(150, 108, 108, .22) 1px, transparent 1px);
+    background-size: calc(var(--k) * 35) calc(var(--k) * 35);
     background-position: calc(var(--k) * 26) calc(var(--k) * 25);
     -webkit-mask-image: radial-gradient(ellipse 46% 54% at 50% 46%, #000 22%, transparent 78%);
     mask-image: radial-gradient(ellipse 46% 54% at 50% 46%, #000 22%, transparent 78%);
@@ -126,8 +126,8 @@ a:focus-visible {
 
 .plus {
     position: absolute;
-    width: calc(var(--k) * 9);
-    height: calc(var(--k) * 9);
+    width: calc(var(--k) * 14);
+    height: calc(var(--k) * 14);
     transform: translate(-50%, -50%);
 }
 
@@ -182,12 +182,12 @@ a:focus-visible {
     position: absolute;
     left: 0;
     right: 0;
-    top: calc(var(--k) * 70);
+    top: calc(var(--k) * 74);
     text-align: center;
     z-index: 2;
     font-size: calc(var(--k) * 28);
-    line-height: calc(var(--k) * 34);
-    font-weight: 600;
+    line-height: calc(var(--k) * 36);
+    font-weight: 700;
     letter-spacing: -.02em;
 }
 
@@ -503,7 +503,7 @@ a:focus-visible {
     margin: 0 auto;
 }
 
-.strip-in::before,
+/* .strip-in::before,
 .strip-in::after {
     content: "";
     position: absolute;
@@ -511,7 +511,7 @@ a:focus-visible {
     bottom: -1px;
     width: 1px;
     background: var(--line);
-}
+} */
 
 .strip-in::before {
     right: calc(var(--k) * 27);
@@ -791,9 +791,9 @@ a:focus-visible {
 }
 
 .h2 {
-    font-size: clamp(28px, 4.4vw, 56px);
-    line-height: 1.35;
-    font-weight: 600;
+    font-size: clamp(28px,3vw, 56px);
+    line-height: 1.2;
+    font-weight: 700;
     letter-spacing: -.02em;
     text-align: center;
 }
@@ -819,11 +819,11 @@ a:focus-visible {
 }
 
 .b-y {
-    background: radial-gradient(closest-side, rgba(255, 211, 105, .6), rgba(255, 226, 150, 0));
+    background: radial-gradient(closest-side, rgba(255, 211, 105, .2), rgba(255, 226, 150, 0));
 }
 
 .b-v {
-    background: radial-gradient(closest-side, rgba(246, 108, 104, .45), rgba(247, 140, 137, 0));
+    background: radial-gradient(closest-side, rgba(246, 108, 104, .3), rgba(247, 140, 137, 0));
 }
 
 .card {
@@ -898,7 +898,7 @@ a:focus-visible {
 }
 
 .num {
-    font-size: clamp(40px, 5vw, 62px);
+    font-size: clamp(25px, 1vw, 62px);
     font-weight: 600;
     letter-spacing: -.02em;
     line-height: 1.2;
@@ -907,13 +907,13 @@ a:focus-visible {
 .stats3 p {
     margin-top: 14px;
     color: var(--muted);
-    font-size: 15px;
-    line-height: 1.9;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
 .bar-mini {
     margin-top: 22px;
-    height: 4px;
+    height: 6px;
     border-radius: 99px;
     background: #e9e7ef;
     overflow: hidden;
@@ -947,7 +947,7 @@ a:focus-visible {
     height: 230px;
     border-radius: 16px;
     overflow: hidden;
-    background: linear-gradient(160deg, #ffe9e8, #fff4dc);
+    background: linear-gradient(160deg, #fce7e5, #fcf8f1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1089,7 +1089,7 @@ a:focus-visible {
     bottom: -40%;
     width: 60%;
     height: 90%;
-    background: radial-gradient(closest-side, rgba(255, 200, 90, .22), rgba(255, 200, 90, 0));
+    background: radial-gradient(closest-side, rgba(255, 200, 90, .18), rgba(255, 200, 90, 0));
     pointer-events: none;
 }
 
@@ -1104,9 +1104,9 @@ a:focus-visible {
     color: #fff;
 }
 
-.dcopy .h2 .dim {
+/* .dcopy .h2 .dim {
     color: rgba(255, 255, 255, .45);
-}
+} */
 
 .dcopy .lead {
     margin: 22px 0 0;
@@ -1379,7 +1379,7 @@ a:focus-visible {
 
 .split .h2 {
     text-align: right;
-    font-size: clamp(26px, 3.7vw, 48px);
+    font-size: clamp(26px, 2.7vw, 48px);
 }
 
 .split .lead {
@@ -1405,9 +1405,9 @@ a:focus-visible {
     transform: translateY(28px);
 }
 
-.facts .num {
+/* .facts .num {
     font-size: clamp(34px, 3.8vw, 48px);
-}
+} */
 
 .facts .num sub {
     font-size: .34em;
@@ -1629,7 +1629,7 @@ a:focus-visible {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-    margin-top: 64px;
+    margin-top: 35px;
     align-items: start;
 }
 
