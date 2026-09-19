@@ -1,9 +1,11 @@
 <!-- templates/payments/my_transactions.html -->
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}تراکنش‌های من{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/my_transactions.css' %}">
 
 <div class="container">
     <h2 style="margin-bottom: 1.5rem;">تراکنش‌ها و گفت‌وگوها</h2>

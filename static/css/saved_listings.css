@@ -1,0 +1,799 @@
+/* ============================================================
+   saved_listings.css
+   استایل‌های اختصاصی صفحه «آگهی‌های ذخیره شده»
+   ============================================================ */
+
+
+/* ============================================================
+   کارت آگهی (card-listing) — ساختار اصلی
+   ============================================================ */
+
+.card-listing {
+    background: var(--white-bg);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-xl);
+    border: none;
+    overflow: hidden;
+    transition: var(--transition-base);
+}
+
+.card-listing.card-premier {
+    border: 2px solid #f59e1c75 !important;
+}
+
+
+/* ============================================================
+   چیدمان داخلی کارت (in-card)
+   ============================================================ */
+
+.in-card {
+    padding: 10px;
+    display: inline-flex;
+    width: 100%;
+}
+
+.in-card-img {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+
+/* ============================================================
+   تصویر کارت
+   ============================================================ */
+
+.card-img {
+    max-height: 210px;
+    display: inline-block;
+}
+
+.card-img-top {
+    height: 185px;
+    width: 285px;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+}
+
+.img-badge {
+    position: relative;
+}
+
+/* نشان پلتفرم روی تصویر */
+.bg-info {
+    position: absolute;
+    margin-top: 10px;
+    margin-right: 14px;
+}
+
+.badge.bg-info {
+    background-color: var(--info-color);
+}
+
+
+/* ============================================================
+   بدنه کارت (card-body-decoration)
+   ============================================================ */
+
+.card-body-decoration {
+    padding: 5px 15px 5px 2px;
+    width: 100%;
+}
+
+.card-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.card-text {
+    color: var(--text-primary);
+    font-size: var(--font-size-lg);
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-weight: 300;
+}
+
+/* توضیحات با محدودیت خط */
+.description-clamp {
+    display: -webkit-box;
+    margin-top: 33px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-height: 65px;
+}
+
+
+/* ============================================================
+   نشان‌ها روی کارت
+   ============================================================ */
+
+.all-badge-card {
+    position: absolute;
+    display: flex;
+    gap: 5px;
+    margin: auto 0;
+}
+
+.badge-card {
+    padding: 1px 8px;
+    font-size: var(--font-size-md);
+    font-weight: 300;
+    border-radius: var(--border-radius-999);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.badge-card.bg-warning {
+    background-color: #f9bc5c63;
+    color: #e49518;
+}
+
+/* ستاره آگهی برتر */
+.premier-star {
+    margin: 0 2px;
+}
+
+
+/* ============================================================
+   اطلاعات کارت (inf-all-card)
+   ============================================================ */
+
+.inf-all-card {
+    display: flex;
+    gap: 25px;
+}
+
+.inf-card-decoration {
+    /* ظرف هر آیتم اطلاعات */
+}
+
+.p-card-decoration {
+    color: var(--text-2c3e50);
+    font-size: var(--font-size-xl);
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+.strong-inf {
+    color: var(--text-secondary);
+    font-size: var(--font-size-md);
+    font-weight: 300;
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   حوزه فعالیت
+   ============================================================ */
+
+.p-card-areas-activity-div {
+    width: fit-content;
+}
+
+.p-card-areas-activity-hr {
+    margin: 8px 0 5px;
+}
+
+.p-card-areas-activity {
+    font-size: var(--font-size-xl);
+    font-weight: 400;
+    white-space: nowrap;
+    padding-left: 20px;
+    padding-right: 5px;
+}
+
+
+/* ============================================================
+   بخش دکمه‌ها (all-btn)
+   ============================================================ */
+
+.all-btn {
+    margin-right: auto;
+}
+
+
+/* ============================================================
+   دکمه اشتراک‌گذاری و ذخیره (save-share-card)
+   ============================================================ */
+
+.save-share-card {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 6px;
+    position: relative;
+}
+
+.share-listing-btn {
+    border: none;
+    background: #00000000;
+    height: fit-content;
+    cursor: pointer;
+}
+
+.save-listing-btn {
+    border: none;
+    background: #00000000;
+    height: fit-content;
+    margin-bottom: 3px;
+    cursor: pointer;
+}
+
+/* آیکون بوکمارک */
+.bookmark-icon {
+    transition: fill 0.3s ease, transform 0.3s ease;
+    fill: transparent;
+    vertical-align: middle;
+}
+
+.bookmark-icon.saved {
+    fill: currentColor;
+    animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.4);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+/* ============================================================
+   بخش قیمت (price-btn / price-div)
+   ============================================================ */
+
+.price-btn {
+    display: grid;
+    padding: 3px 10px;
+    width: 300px;
+    height: 100%;
+    margin-top: -23px;
+}
+
+.price-div {
+    text-align: center;
+}
+
+.income-display {
+    margin-top: 10px;
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.monthly-income {
+    margin-bottom: 5px;
+    font-size: var(--font-size-lg);
+}
+
+.inf-card-detail {
+    flex: 0 0 auto;
+    padding: 5px 12px;
+}
+
+.inf-card-detail p {
+    margin: 0;
+    color: #2c3e50;
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+}
+
+.strong-info-detail {
+    display: inline-flex;
+    gap: 5px;
+    color: var(--text-2c3e50);
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+}
+
+/* لینک اگهی‌های مشابه */
+.between-price-btn {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.link-similar {
+    font-size: var(--font-size-lg);
+    padding-bottom: 4px;
+    font-weight: 500;
+    color: var(--blu-durk-color);
+    text-decoration: underline;
+}
+
+.link-similar:hover {
+    color: #00369a;
+}
+
+/* دکمه‌های اصلی کارت */
+.btn-primary-div {
+    margin-top: auto;
+    display: flex;
+    gap: 15px;
+}
+
+
+/* ============================================================
+   یادداشت شخصی (note)
+   ============================================================ */
+
+.card-body.pad-10 {
+    padding: var(--spacing-md) !important;
+}
+
+.listing-note-textarea {
+    /* استایل اختصاصی textarea یادداشت — در صورت نیاز */
+}
+
+.note-form {
+    /* ظرف فرم یادداشت */
+}
+
+.note-timestamp {
+    /* زمان آخرین بروزرسانی */
+}
+
+.save-note-btn {
+    /* دکمه ذخیره یادداشت — از btn-primary استفاده می‌کند */
+}
+
+.delete-note-btn {
+    /* دکمه حذف یادداشت — از btn-delet استفاده می‌کند */
+}
+
+.my-list-btn {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.form-control-textarea {
+    width: 100%;
+    height: 140px;
+    padding: 0.75rem;
+    border: 1.14px solid var(--border-light);
+    border-radius: var(--border-radius-sm-md);
+    font-size: var(--font-size-xl);
+    color: #495057;
+    background: #ffffff;
+}
+
+
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   11) Card Listing (کارت آگهی)
+   ═══════════════════════════════════════════════════════════ */
+
+.card-listing {
+    background: var(--white-bg);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-xl);
+    border: none;
+    overflow: hidden;
+    transition: var(--transition-base);
+}
+
+.card-premier {
+    border: 2px solid #f59e1c75 !important;
+}
+
+.titel-card {
+    font-size: var(--font-size-2xl);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+
+.card-body-decoration {
+    padding: 5px 15px 5px 2px;
+    width: 100%;
+}
+
+.card-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.card-text {
+    color: var(--text-primary);
+    font-size: var(--font-size-lg);
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-weight: 300;
+}
+
+.description-clamp {
+    display: -webkit-box;
+    margin-top: 33px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-height: 65px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   12) In-Card & Image (تصاویر کارت)
+   ═══════════════════════════════════════════════════════════ */
+
+.in-card {
+    padding: 10px;
+    display: inline-flex;
+    width: 100%;
+}
+
+.in-card-img {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.card-img {
+    max-height: 210px;
+    display: inline-block;
+}
+
+.card-img-top {
+    height: 185px;
+    width: 285px;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+}
+
+.img-badge {
+    position: relative;
+}
+
+.all-btn {
+    margin-right: auto;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   13) Info Card Decoration (اطلاعات کارت)
+   ═══════════════════════════════════════════════════════════ */
+
+.inf-all-card {
+    display: flex;
+    gap: 25px;
+}
+
+.p-card-decoration {
+    color: var(--text-2c3e50);
+    font-size: var(--font-size-xl);
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+.p-card-areas-activity {
+    font-size: var(--font-size-xl);
+    font-weight: 400;
+    white-space: nowrap;
+    padding-left: 20px;
+    padding-right: 5px;
+}
+
+.p-card-areas-activity-hr {
+    margin: 8px 0 5px;
+}
+
+.p-card-areas-activity-div {
+    width: fit-content;
+}
+
+.strong-inf {
+    color: var(--text-secondary);
+    font-size: var(--font-size-md);
+    font-weight: 300;
+    white-space: nowrap;
+}
+
+.inf-card-decoration {
+    display: flow;
+    align-items: center;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   14) Save & Share (ذخیره و اشتراک‌گذاری)
+   ═══════════════════════════════════════════════════════════ */
+
+.save-share-card {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 6px;
+    position: relative;
+}
+
+.bookmark-icon {
+    transition: fill 0.3s ease, transform 0.3s ease;
+    fill: transparent;
+    vertical-align: middle;
+}
+
+.bookmark-icon.saved {
+    fill: currentColor;
+    animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.save-listing-btn {
+    border: none;
+    background: #00000000;
+    height: fit-content;
+    margin-bottom: 3px;
+    cursor: pointer;
+}
+
+.share-listing-btn {
+    border: none;
+    background: #00000000;
+    height: fit-content;
+    cursor: pointer;
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.4);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   15) Price & Income (قیمت و درآمد)
+   ═══════════════════════════════════════════════════════════ */
+
+.price-btn {
+    display: grid;
+    padding: 3px 10px;
+    width: 300px;
+    height: 100%;
+    margin-top: -23px;
+}
+
+.price-div {
+    text-align: center;
+}
+
+.income-display {
+    margin-top: 10px;
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.monthly-income {
+    margin-bottom: 5px;
+    font-size: var(--font-size-lg);
+}
+
+.between-price-btn {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.btn-primary-div {
+    margin-top: auto;
+    display: flex;
+    gap: 15px;
+}
+
+.link-similar {
+    font-size: var(--font-size-lg);
+    padding-bottom: 4px;
+    font-weight: 500;
+    color: var(--blu-durk-color);
+    text-decoration: underline;
+}
+
+.link-similar:hover {
+    color: #00369a;
+}
+
+/* Info detail (برگشت سرمایه) */
+.inf-card-detail {
+    flex: 0 0 auto;
+    padding: 5px 12px;
+}
+
+.inf-card-detail p {
+    margin: 0;
+    color: #2c3e50;
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+}
+
+.strong-info-detail {
+    display: inline-flex;
+    gap: 5px;
+    color: var(--text-2c3e50);
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   16) Badges (نشان‌ها)
+   ═══════════════════════════════════════════════════════════ */
+
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: var(--font-size-lg);
+    font-weight: 400;
+    border-radius: var(--border-radius-999);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+}
+
+.badge-card {
+    padding: 1px 8px;
+    font-size: var(--font-size-md);
+    font-weight: 300;
+    border-radius: var(--border-radius-999);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.badge-card-detail {
+    padding: 3px 12px;
+    font-size: var(--font-size-lg);
+    font-weight: 400;
+    border-radius: var(--border-radius-999);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.all-badge {
+    display: flex;
+    gap: 5px;
+    margin: auto 0;
+}
+
+.all-badge-card {
+    position: absolute;
+    display: flex;
+    gap: 5px;
+    margin: auto 0;
+}
+
+.all-badge-card-detail {
+    display: flex;
+    gap: 8px;
+    margin: auto 0;
+}
+
+.badge-detail {
+    display: inline-block;
+    padding: 2px 11px;
+    font-size: var(--font-size-lg);
+    font-weight: 400;
+    border-radius: var(--border-radius-999);
+    margin: 0 5px;
+}
+
+.badge-warning,
+.bg-warning,
+.badge-secondary {
+    background-color: #f9bc5c63;
+    color: #e49518;
+}
+
+.bg-info {
+    position: absolute;
+    margin-top: 10px;
+    margin-right: 14px;
+    background-color: var(--info-color);
+}
+
+.bg-info-detail {
+    background-color: var(--info-color);
+    height: fit-content;
+    margin: auto 10px;
+    font-size: var(--font-size-lg) !important;
+    font-weight: 500 !important;
+}
+
+.premier-star {
+    margin: 0 2px;
+}
+
+
+
+.container {
+    margin: 0 auto;
+    padding: 40px 5% 20px 5%;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-md-3,
+.col-md-4,
+.col-md-6,
+.col-md-8,
+.col-md-10 {
+    padding: 0 15px;
+}
+
+.col-md-3 {
+    flex: 0 0 20%;
+    max-width: 20%;
+}
+
+.col-md-4 {
+    flex: 0 0 33.333%;
+    max-width: 33.333%;
+}
+
+.col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.col-md-8 {
+    flex: 0 0 66.666%;
+    max-width: 66.666%;
+}
+
+.col-md-10 {
+    flex: 0 0 70%;
+    max-width: 70%;
+}
+
+.col-md-11 {
+    flex: 0 0 80%;
+    max-width: 80%;
+}
+
+.col-md-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.col-md-12 strong {
+    font-size: var(--font-size-md);
+    margin-right: 15px;
+}
+
