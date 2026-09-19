@@ -1,0 +1,230 @@
+/* ========================================
+   profile.css
+   استخراج‌شده از global.css برای templates/accounts/profile.html
+   ======================================== */
+
+/* ---------- Layout ---------- */
+.container {
+    margin: 0 auto;
+    padding: 120px 5% 20px 5%;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-md-3,
+.col-md-4,
+.col-md-6,
+.col-md-8,
+.col-md-10 {
+    padding: 0 15px;
+}
+
+.col-md-4 {
+    flex: 0 0 33.333%;
+    max-width: 33.333%;
+}
+
+.col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.col-md-8 {
+    flex: 0 0 66.666%;
+    max-width: 66.666%;
+}
+
+@media (max-width: 768px) {
+    .col-md-3,
+    .col-md-4,
+    .col-md-6,
+    .col-md-8,
+    .col-md-10 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* ---------- Card ---------- */
+.card {
+    background: var(--white-bg);
+    border: .5px solid #eaeef1 !important;
+    border-radius: var(--border-radius-xl);
+    box-shadow: none;
+    margin-bottom: var(--spacing-xl);
+    overflow: hidden;
+    transition: var(--transition-base);
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-header {
+    position: relative;
+    padding: var(--spacing-md) var(--spacing-lg);
+    padding-inline-end: calc(var(--spacing-lg) + 10px);
+    background: var(--white-bg);
+    border-bottom: none;
+    font-size: var(--font-size-4xl);
+}
+
+.card-header h4 {
+    margin: 0;
+    font-size: var(--font-size-3xl);
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 10px 15px;
+    width: 100%;
+}
+
+/* ---------- Form ---------- */
+.form-label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* چون ویجت‌های فرم پروفایل کلاس اختصاصی ندارند، این بخش لازم است */
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="number"],
+form input[type="url"],
+form input[type="file"],
+form select,
+form textarea {
+    width: 100%;
+    height: 40px;
+    padding: 8px 12px;
+    border: 1.1px solid var(--border-light);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-2xl);
+    transition: var(--transition-base);
+    background-color: var(--bg);
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+    outline: none;
+}
+
+form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* ---------- Utilities ---------- */
+.mt-2 {
+    margin-top: var(--spacing-sm);
+}
+
+.mt-3 {
+    margin-top: var(--spacing-md);
+}
+
+.mt-4 {
+    margin-top: var(--spacing-lg);
+}
+
+.mb-3 {
+    margin-bottom: var(--spacing-md);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: var(--text-muted);
+    font-size: var(--font-size-md) !important;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+/* ---------- Avatar ---------- */
+.rounded-circle {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 7px;
+}
+
+/* ---------- Badges ---------- */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: var(--font-size-lg);
+    font-weight: 400;
+    border-radius: var(--border-radius-999);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+}
+
+.bg-success {
+    background-color: var(--success-color);
+}
+
+.bg-warning {
+    background-color: #f9bc5c63;
+    color: #e49518;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+    display: flex;
+    border-radius: var(--border-radius-999);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-base);
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-success {
+    background: var(--red-color);
+    color: var(--white-bg);
+}
+
+.btn-success:hover {
+    background: var(--red-durk-color);
+}
+
+.btn-sm {
+    padding: 5px var(--spacing-md);
+    font-size: var(--font-size-base);
+}
+
+.btn-info {
+    background: linear-gradient(135deg, var(--info-color) 0%, #138d75 100%);
+    color: var(--white-bg);
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, #138d75 0%, var(--info-color) 100%);
+    transform: translateY(-2px);
+}

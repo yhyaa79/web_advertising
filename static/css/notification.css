@@ -1,0 +1,174 @@
+/* ========================================
+   notification_list.css
+   استخراج‌شده از global.css
+   ======================================== */
+
+.container {
+    margin: 0 auto;
+    padding: 120px 5% 20px 5%;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-md-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-content-between {
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.mb-2 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.mb-3 {
+    margin-bottom: var(--spacing-md);
+}
+
+.mb-4 {
+    margin-bottom: var(--spacing-lg);
+}
+
+.mt-5 {
+    margin-top: var(--spacing-xxl);
+}
+
+/* ========================================
+   list-group-item-action
+   ======================================== */
+
+.list-group-item-action {
+    background: var(--white-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-xl);
+    box-shadow: none;
+
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-md);
+    overflow: hidden;
+    transition: var(--transition-base);
+    padding: 8px 12px;
+}
+
+/* ========================================
+   message-notification
+   ======================================== */
+
+.message-notification {
+    padding: 4px 16px;
+}
+
+/* ========================================
+   card-text
+   ======================================== */
+
+.card-text {
+    color: var(--text-primary);
+    font-size: var(--font-size-lg);
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-weight: 300;
+}
+
+/* ========================================
+   text-muted
+   ======================================== */
+
+.text-muted {
+    color: var(--text-muted);
+    font-size: var(--font-size-md) !important;
+}
+
+/* ========================================
+   btn-group-vertical
+   ======================================== */
+
+.btn-group-vertical {
+    display: flex;
+    gap: 5px;
+    margin-top: auto;
+}
+
+/* ========================================
+   Buttons
+   ======================================== */
+
+.btn {
+    display: flex;
+    border-radius: var(--border-radius-999);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-base);
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary {
+    color: var(--red-color);
+    border: 1.6px solid var(--red-color);
+}
+
+.btn-primary:hover {
+    color: var(--red-durk-color);
+    background: var(--red-light-color);
+    /* transform: translateY(-2px); */
+}
+
+.btn-delet {
+    color: #df1111;
+    background: #fcb3b2;
+}
+
+.btn-delet:hover {
+    color: #a91a1a;
+    background: #f9918f;
+}
+
+.btn-medium {
+    padding: 5px 20px;
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    height: 30px;
+    min-width: 60px;
+}
+
+.btn-width-fit {
+    width: fit-content;
+}
+
+/* ========================================
+   Alert animation
+   ======================================== */
+
+.alert {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
