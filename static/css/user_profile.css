@@ -1,513 +1,730 @@
 /* ==========================================================================
-   user_profile.css
-   استایل‌های اختصاصی صفحه پروفایل کاربر
+   user_profile.css — طراحی جدید پروفایل عمومی کاربر
+   هماهنگ با listing_list.css و profile.css (تم --red-color)
+   همه کلاس‌ها با پیشوند up- هستند تا با base.css تداخل نکنند
    ========================================================================== */
 
-/* ========================================
-   کانتینر
-   ======================================== */
+
+
 .container {
     margin: 0 auto;
-    padding: 120px 5% 20px 5%;
+    padding: 80px 5% 20px 5%;
 }
 
-/* ========================================
-   کارت‌ها (Cards)
-   ======================================== */
-.card {
-    background: var(--white-bg);
-    border-radius: var(--border-radius-lg);
-    border: .5px solid #eaeef1 !important;
-    box-shadow: var(--shadow-sm);
-    margin-bottom: var(--spacing-xl);
-    overflow: hidden;
-    transition: var(--transition-base);
+
+.up-page {
+    --up-line: #eaeef1;
+    --up-ring: rgba(246, 108, 104, 0.18);
 }
 
-/* نسخه دوم (نسخه‌ای که در global.css بعدتر آمده و override می‌کند) */
-.card {
+.up-ltr {
+    direction: ltr;
+    text-align: right;
+}
+
+/* ---------- Shared bits ---------- */
+.up-card,
+.up-hero,
+.up-listing,
+.up-empty {
     background: var(--white-bg);
-    border: 1px solid var(--border-color);
+    border: 0.5px solid var(--up-line);
     border-radius: var(--border-radius-xl);
-    box-shadow: none;
+    box-shadow: var(--shadow-sm);
 }
 
-.card-title {
-    font-size: var(--font-size-2xl);
-    font-weight: 500;
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-sm);
-}
-
-.card-text {
-    color: var(--text-primary);
-    font-size: var(--font-size-lg);
-    margin-bottom: 5px;
-    margin-top: 5px;
-    font-weight: 300;
-}
-
-.card-header {
-    padding: var(--spacing-md);
-    border-bottom: none;
-    font-size: var(--font-size-4xl);
-}
-
-.card-header h4 {
-    margin: 0;
-    font-size: var(--font-size-3xl);
-    font-weight: 600;
-}
-
-.card-body {
-    padding: 10px 15px;
-    width: 100%;
-}
-
-/* ========================================
-   کارت پروفایل کاربر
-   ======================================== */
-.profile-card {
-    display: flex;
-    gap: 10px;
-}
-
-.info-profile-user {
-    display: grid;
-    padding: 10px 20px;
-    width: 380px;
-    gap: inherit;
-}
-
-.strong-info-profile {
-    display: inline-block;
-    color: var(--text-secondary);
-    font-size: var(--font-size-xl);
-    font-weight: 400;
-}
-
-.p-info-profile {
-    display: grid;
-}
-
-.bio-addres-profile {
-    /* در global.css خالی است */
-}
-
-/* ========================================
-   کارت اطلاعات تأیید شده
-   ======================================== */
-.card-inf {
-    border-radius: 4px;
-    box-shadow: var(--card-shadow);
-    border: none;
-    overflow: hidden;
-    transition: var(--transition-base);
-    padding: 4px 14px;
-    font-weight: 500;
-    font-size: var(--font-size-lg);
-}
-
-.suggested-price {
-    color: #054e3b;
-    background-color: #d7fae3;
-}
-
-/* ========================================
-   کارت آگهی‌ها (In-card)
-   ======================================== */
-.in-card {
-    padding: 10px;
+.up-badge {
     display: inline-flex;
-    width: 100%;
-}
-
-.in-card-img {
-    text-decoration: none;
-    color: inherit;
-    display: flex;
+    align-items: center;
     gap: 6px;
-    align-items: center;
-}
-
-.card-img {
-    max-height: 210px;
-    display: inline-block;
-}
-
-.card-img-top {
-    height: 185px;
-    width: 285px;
-    object-fit: cover;
-    border-radius: var(--border-radius-md);
-}
-
-.inf-all-card {
-    display: flex;
-    gap: 25px;
-}
-
-.inf-card {
-    margin: 0 auto;
-}
-
-.strong-inf {
-    color: var(--text-secondary);
-    font-size: var(--font-size-md);
-    font-weight: 300;
-    white-space: nowrap;
-}
-
-.inf-card p {
-    color: var(--text-2c3e50);
-    font-size: var(--font-size-2xl);
-    font-weight: 500;
-}
-
-.all-btn {
-    margin-right: auto;
-}
-
-/* ========================================
-   بخش قیمت و دکمه‌ها
-   ======================================== */
-.price-btn {
-    display: grid;
-    padding: 3px 10px;
-    width: 300px;
-    height: 100%;
-    margin-top: -23px;
-}
-
-.price-div {
-    text-align: center;
-}
-
-.income-display {
-    margin-top: 10px;
-    font-size: var(--font-size-xl);
-    font-weight: 700;
-    color: var(--text-secondary);
-}
-
-.monthly-income {
-    margin-bottom: 5px;
+    padding: 3px 12px;
     font-size: var(--font-size-lg);
-}
-
-.between-price-btn {
-    display: flex;
-    align-items: center;
-    margin: 0 auto;
-}
-
-.btn-primary-div {
-    margin-top: auto;
-    display: flex;
-    gap: 15px;
-}
-
-/* ========================================
-   نشان‌ها (Badges)
-   ======================================== */
-.badge {
-    display: inline-block;
-    padding: 3px 10px;
-    font-size: var(--font-size-lg);
-    font-weight: 400;
     border-radius: var(--border-radius-999);
     white-space: nowrap;
-    display: flex;
+}
+
+.up-badge-ok {
+    background: #d7fae3;
+    color: #054e3b;
+}
+
+.up-badge-soft {
+    background: var(--red-light-color);
+    color: var(--red-color);
+}
+
+.up-badge-plain {
+    background: #f3f4f6;
+    color: var(--text-secondary);
+}
+
+.up-btn {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: fit-content;
-}
-
-.all-badge {
-    display: flex;
-    gap: 5px;
-    margin: auto 0;
-}
-
-.badge-success,
-.bg-success {
-    background-color: var(--success-color);
-}
-
-.badge-warning,
-.bg-warning,
-.badge-secondary {
-    background-color: #f9bc5c63;
-    color: #e49518;
-}
-
-.badge-info,
-.bg-info {
-    background-color: var(--info-color);
-}
-
-/* استایل اختصاصی bg-info (در global.css هم position دارد) */
-.bg-info {
-    position: absolute;
-    margin-top: 10px;
-    margin-right: 14px;
-}
-
-.badge-danger,
-.bg-danger {
-    background-color: var(--danger-color);
-}
-
-.badge-primary,
-.bg-primary {
-    background-color: var(--accent-color);
-}
-
-.badge-secondary {
-    color: var(--white-bg);
-}
-
-/* ========================================
-   دکمه‌ها (Buttons)
-   ======================================== */
-.btn {
-    display: flex;
+    gap: 6px;
+    height: 34px;
+    padding: 0 18px;
+    font-family: inherit;
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
     border-radius: var(--border-radius-999);
-    border: none;
+    border: 1.4px solid transparent;
     cursor: pointer;
     transition: var(--transition-base);
-    text-decoration: none;
-    text-align: center;
-    white-space: nowrap;
-    align-items: center;
-    justify-content: center;
 }
 
-.btn-primary {
-    color: var(--red-color);
-    border: 1.6px solid var(--red-color);
+.up-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--up-ring);
 }
 
-.btn-primary:hover {
-    color: var(--red-durk-color);
-    background: var(--red-light-color);
-}
-
-.btn-success {
+.up-btn-red {
     background: var(--red-color);
     color: var(--white-bg);
 }
 
-.btn-success:hover {
+.up-btn-red:hover {
     background: var(--red-durk-color);
 }
 
-/* ========================================
-   کلاس‌های کمکی (Utility Classes)
-   ======================================== */
-.w-100 {
-    width: 100%;
+.up-btn-outline {
+    color: var(--red-color);
+    border-color: var(--red-color);
+    background: transparent;
 }
 
-.h-100 {
-    height: 100%;
+.up-btn-outline:hover {
+    color: var(--red-durk-color);
+    background: var(--red-light-color);
 }
 
-.mt-2 {
-    margin-top: var(--spacing-sm);
-}
-
-.mt-3 {
-    margin-top: var(--spacing-md);
-}
-
-.mt-4 {
-    margin-top: var(--spacing-lg);
-}
-
-.mt-5 {
-    margin-top: var(--spacing-xxl);
-}
-
-.mb-2 {
-    margin-bottom: var(--spacing-sm);
-}
-
-.mb-3 {
-    margin-bottom: var(--spacing-md);
-}
-
-.mb-4 {
+/* ---------- Hero ---------- */
+.up-hero {
+    overflow: hidden;
     margin-bottom: var(--spacing-lg);
 }
 
-.mb-5 {
-    margin-bottom: var(--spacing-xxl);
+.up-hero-cover {
+    height: 70px;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(246, 108, 104, 0.28), transparent 55%),
+        linear-gradient(135deg, var(--red-light-color) 0%, #fff 100%);
+    border-bottom: 1px solid var(--up-line);
 }
 
-.me-2 {
-    margin-left: var(--spacing-sm);
+.up-hero-body {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: end;
+    gap: var(--spacing-lg);
+    padding: 0 var(--spacing-xl) var(--spacing-lg);
+    margin-top: -48px;
 }
 
-.py-5 {
-    padding-top: var(--spacing-xxl);
-    padding-bottom: var(--spacing-xxl);
+.up-avatar {
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #fff;
+    background: var(--red-light-color);
+    box-shadow: 0 0 0 1px var(--up-line), var(--shadow-md);
 }
 
-.pad-10 {
-    padding: var(--spacing-md) !important;
+.up-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.text-center {
+.up-avatar-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--red-color);
+    font-size: 40px;
+}
+
+.up-identity {
+    min-width: 0;
+    padding-bottom: 4px;
+}
+
+.up-identity-top {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.up-name {
+    font-size: var(--font-size-5xl);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.up-username {
+    direction: ltr;
+    text-align: right;
+    color: var(--text-secondary);
+    font-size: var(--font-size-xl);
+    margin-bottom: 20px;
+    margin-top: 3px;
+}
+
+.up-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.up-hero-side {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding-bottom: 4px;
+}
+
+.up-stats {
+    display: flex;
+    gap: 6px;
+}
+
+.up-stat {
+    min-width: 96px;
+    padding: 8px 16px;
+    text-align: center;
+    background: var(--bg);
+    border: 1px solid var(--up-line);
+    border-radius: var(--border-radius-lg);
+}
+
+.up-stat strong {
+    display: block;
+    font-size: var(--font-size-4xl);
+    font-weight: 700;
+    color: var(--red-color);
+    line-height: 1.5;
+}
+
+.up-stat span {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+}
+
+/* ---------- Layout ---------- */
+.up-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: var(--spacing-lg);
+    align-items: start;
+}
+
+.up-side {
+    position: sticky;
+    top: 70px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+/* ---------- About card ---------- */
+.up-card {
+    padding: var(--spacing-lg);
+}
+
+.up-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--font-size-3xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    padding-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--up-line);
+}
+
+.up-card-title i {
+    color: var(--red-color);
+}
+
+.up-bio {
+    font-size: var(--font-size-xl);
+    line-height: 1.9;
+    color: var(--text-primary);
+    padding-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    border-bottom: 1px dashed var(--border-light);
+    white-space: pre-line;
+}
+
+.up-info {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.up-info li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.up-info-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--font-size-base);
+    font-weight: 300;
+    color: var(--text-secondary);
+}
+
+.up-info-label i {
+    width: 14px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.up-info-value {
+    padding-right: 22px;
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+/* ---------- Verified notice ---------- */
+.up-verified {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    background: #d7fae3;
+    color: #054e3b;
+    border-radius: var(--border-radius-xl);
+}
+
+.up-verified-icon {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    font-size: var(--font-size-2xl);
+}
+
+.up-verified h3 {
+    font-size: var(--font-size-2xl);
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.up-verified p {
+    font-size: var(--font-size-lg);
+    line-height: 1.8;
+}
+
+/* ---------- Main head ---------- */
+.up-main {
+    min-width: 0;
+}
+
+.up-main-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-md);
+    padding: 0 4px;
+}
+
+.up-main-head h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--font-size-3xl);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.up-main-head h2 i {
+    color: var(--red-color);
+}
+
+.up-count {
+    font-size: var(--font-size-lg);
+    color: #8d939d;
+    background: #f9fafb;
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    padding: 3px 10px;
+}
+
+/* ---------- Listing card ---------- */
+.up-listings {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.up-listing {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr) 240px;
+    gap: var(--spacing-md);
+    padding: 12px;
+    transition: var(--transition-base);
+}
+
+.up-listing:hover {
+    border-color: #f3c4c2;
+    box-shadow: var(--hover-shadow);
+}
+
+.up-listing.is-private {
+    border-color: #f5c77e;
+}
+
+.up-listing-media {
+    position: relative;
+    display: block;
+    height: 180px;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    background: #f3f4f6;
+}
+
+.up-listing-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.up-listing-noimg {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c4c9d0;
+    font-size: 32px;
+}
+
+.up-listing-platform {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 2px 12px;
+    font-size: var(--font-size-lg);
+    color: #fff;
+    background: var(--info-color);
+    border-radius: var(--border-radius-999);
+}
+
+.up-listing-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    padding: 4px 0;
+    text-decoration: none;
+    color: inherit;
+}
+
+.up-listing-title {
+    font-size: var(--font-size-3xl);
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.6;
+    transition: color 0.2s ease;
+}
+
+.up-listing-body:hover .up-listing-title {
+    color: var(--red-color);
+}
+
+.up-flags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.up-flags:empty {
+    display: none;
+}
+
+.up-flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 1px 10px;
+    font-size: var(--font-size-md);
+    font-weight: 400;
+    border-radius: var(--border-radius-999);
+    white-space: nowrap;
+}
+
+.up-flag-warn {
+    background: #f9bc5c63;
+    color: #e49518;
+}
+
+.up-flag-ok {
+    background: #d7fae3;
+    color: #054e3b;
+}
+
+.up-flag-info {
+    background: #d5eaff;
+    color: #0560bc;
+}
+
+.up-flag-gold {
+    background: #fdf0c8;
+    color: #b08900;
+}
+
+.up-listing-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: var(--font-size-lg);
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-primary);
+}
+
+.up-listing-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 24px;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.up-listing-meta dt {
+    font-size: var(--font-size-md);
+    font-weight: 300;
+    color: var(--text-secondary);
+}
+
+.up-listing-meta dd {
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* ---------- Price column ---------- */
+.up-listing-aside {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: 12px;
+    background: var(--bg);
+    border: 1px solid #f1f5f9;
+    border-radius: var(--border-radius-lg);
+}
+
+.up-price {
     text-align: center;
 }
 
-.text-end {
-    text-align: right;
-}
-
-.text-muted {
-    color: var(--text-muted);
-    font-size: var(--font-size-md) !important;
-}
-
-.text-success {
-    color: var(--success-color);
-}
-
-.text-danger {
-    color: var(--danger-color);
-}
-
-.text-warning {
-    color: var(--warning-color);
-}
-
-.fw-bold {
+.up-price-now {
+    display: block;
+    font-size: var(--font-size-4xl);
     font-weight: 700;
+    color: var(--success-color);
+    line-height: 1.6;
 }
 
-.fs-4 {
+.up-price-now small {
+    font-size: var(--font-size-lg);
+    font-weight: 400;
+}
+
+.up-price-old {
+    display: block;
     font-size: var(--font-size-xl);
+    color: var(--text-muted);
 }
 
-.fs-5 {
-    font-size: var(--font-size-3xl);
+.up-income,
+.up-roi {
+    margin-top: 8px;
+    font-size: var(--font-size-lg);
+    line-height: 1.7;
+    color: var(--text-secondary);
 }
 
-.d-flex {
-    display: flex;
+.up-income {
+    font-weight: 500;
 }
 
-.justify-content-center {
-    justify-content: center;
-}
-
-/* ========================================
-   سیستم Grid
-   ======================================== */
-.row {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.col-md-3,
-.col-md-4,
-.col-md-6,
-.col-md-8,
-.col-md-10 {
-    padding: 0 15px;
-}
-
-.col-md-3 {
-    flex: 0 0 20%;
-    max-width: 20%;
-}
-
-.col-md-4 {
-    flex: 0 0 33.333%;
-    max-width: 33.333%;
-}
-
-.col-md-6 {
-    flex: 0 0 50%;
-    max-width: 50%;
-}
-
-.col-md-8 {
-    flex: 0 0 66.666%;
-    max-width: 66.666%;
-}
-
-.col-md-10 {
-    flex: 0 0 70%;
-    max-width: 70%;
-}
-
-.col-md-11 {
-    flex: 0 0 80%;
-    max-width: 80%;
-}
-
-.col-md-12 {
-    flex: 0 0 100%;
-    max-width: 100%;
-}
-
-.col-md-12 strong {
+.up-roi {
+    margin-top: 2px;
     font-size: var(--font-size-md);
-    margin-right: 15px;
+    font-weight: 300;
 }
 
-/* ========================================
-   تصویر پروفایل (rounded-circle)
-   ======================================== */
-.rounded-circle {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 7px;
+.up-listing-actions {
+    display: flex;
+    gap: 8px;
 }
 
-/* ========================================
-   خط جداکننده (hr)
-   ======================================== */
-hr {
-    border: none;
-    height: 1px;
-    margin: 12px 0;
-    background-color: #dee2e6;
+.up-listing-actions .up-btn {
+    flex: 1;
 }
 
-/* ========================================
-   انیمیشن FadeIn برای کارت‌ها
-   ======================================== */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+/* ---------- Empty state ---------- */
+.up-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: var(--spacing-xxl) var(--spacing-lg);
+    text-align: center;
+}
+
+.up-empty-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+    border-radius: 50%;
+    background: var(--red-light-color);
+    color: var(--red-color);
+    font-size: var(--font-size-5xl);
+}
+
+.up-empty strong {
+    font-size: var(--font-size-3xl);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.up-empty p {
+    font-size: var(--font-size-xl);
+    color: var(--text-secondary);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+    .up-listing {
+        grid-template-columns: 220px minmax(0, 1fr);
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    .up-listing-aside {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .up-price {
+        text-align: right;
+    }
+
+    .up-listing-actions {
+        margin-right: auto;
+        min-width: 220px;
     }
 }
 
-.card,
-.alert {
-    animation: fadeIn 0.5s ease-out;
+@media (max-width: 992px) {
+    .up-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .up-side {
+        position: static;
+        order: 2;
+    }
+
+    .up-hero-body {
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .up-hero-side {
+        grid-column: 1 / -1;
+        justify-content: space-between;
+    }
 }
 
-/* ========================================
-   ریسپانسیو (Responsive)
-   ======================================== */
-@media (max-width: 768px) {
-    .col-md-3,
-    .col-md-4,
-    .col-md-6,
-    .col-md-8,
-    .col-md-10 {
-        flex: 0 0 100%;
-        max-width: 100%;
+@media (max-width: 640px) {
+    .up-hero-body {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+        padding: 0 var(--spacing-md) var(--spacing-md);
+    }
+
+    .up-identity-top,
+    .up-tags {
+        justify-content: center;
+    }
+
+    .up-username {
+        text-align: center;
+    }
+
+    .up-name {
+        font-size: var(--font-size-4xl);
+    }
+
+    .up-hero-side {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .up-stats {
+        width: 100%;
+    }
+
+    .up-stat {
+        flex: 1;
+    }
+
+    .up-listing {
+        grid-template-columns: 1fr;
+    }
+
+    .up-listing-media {
+        height: 200px;
+    }
+
+    .up-listing-aside {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .up-price {
+        text-align: center;
+    }
+
+    .up-listing-actions {
+        min-width: 0;
+        margin-right: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .up-page * {
+        transition: none !important;
     }
 }

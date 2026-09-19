@@ -1,0 +1,6 @@
+<div class="pf-field {{ span }}">
+    <label class="pf-label" for="{{ field.id_for_label }}">{{ label }}{% if field.field.required %}<span class="pf-req" aria-hidden="true">*</span>{% endif %}</label>
+    {{ field }}
+    {% if hint %}<small class="pf-hint">{{ hint }}</small>{% endif %}
+    {% for error in field.errors %}<small class="pf-error">{{ error }}</small>{% endfor %}
+</div>

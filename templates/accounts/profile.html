@@ -7,319 +7,436 @@
 
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h4>ویرایش پروفایل</h4>
+{% with current_type=base_form.user_type.value|default:profile.user_type %}
+<div class="container pf-page" id="pf_page" data-user-type="{{ current_type }}">
+
+    <header class="pf-page-head">
+        <h1>ویرایش پروفایل</h1>
+        <p>اطلاعات حساب خود را کامل کنید تا سطح احراز هویت و اعتماد خریداران به شما بیشتر شود.</p>
+    </header>
+
+    <div class="pf-layout">
+
+        <!-- ═════════ فرم اصلی ═════════ -->
+        <form method="post" enctype="multipart/form-data" class="pf-form" id="pf_form" novalidate>
+            {% csrf_token %}
+
+            {% if messages %}
+            <div class="pf-messages">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
                 </div>
-                <div class="card-body">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
+                {% endfor %}
+            </div>
+            {% endif %}
 
-                        <h5 class="mb-3">اطلاعات عمومی</h5>
-                        <div class="mb-3">
-                            <label class="form-label">نوع کاربر</label>
-                            {{ base_form.user_type }}
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">بیو</label>
-                            {{ base_form.bio }}
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">شهر</label>
-                                {{ base_form.city }}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">استان</label>
-                                {{ base_form.province }}
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">آدرس</label>
-                            {{ base_form.address }}
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">ایمیل عمومی</label>
-                            {{ base_form.email_address }}
-                        </div>
-
-
-                        <div class="mb-3">
-                            <label class="form-label">کد پستی</label>
-                            {{ base_form.postal_code }}
-                        </div>
-
-                        <hr class="my-4">
-
-                        <div id="individual_fields"
-                            class="{% if profile.user_type == 'individual' %}section-visible{% else %}section-hidden{% endif %}">
-                            <h5 class="mb-3">اطلاعات شخص حقیقی</h5>
-
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">نام</label>
-                                    {{ individual_form.first_name }}
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">نام خانوادگی</label>
-                                    {{ individual_form.last_name }}
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">تاریخ تولد</label>
-                                    {{ individual_form.date_of_birth }}
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">جنسیت</label>
-                                    {{ individual_form.gender }}
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">تصویر کارت ملی</label>
-                                {{ individual_form.national_id_image }}
-                                {% if profile.national_id_image %}
-                                <div class="mt-2">
-                                    <img src="{{ profile.national_id_image.url }}" alt="کارت ملی"
-                                        style="max-width: 200px;">
-                                </div>
-                                {% endif %}
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">سلفی با مدرک</label>
-                                {{ individual_form.selfie_with_id }}
-                                {% if profile.selfie_with_id %}
-                                <div class="mt-2">
-                                    <img src="{{ profile.selfie_with_id.url }}" alt="سلفی" style="max-width: 200px;">
-                                </div>
-                                {% endif %}
-                            </div>
-
-                            <hr class="my-4">
-                        </div>
-
-                        <div id="company_fields"
-                            class="{% if profile.user_type == 'company' %}section-visible{% else %}section-hidden{% endif %}">
-                            <h5 class="mb-3">اطلاعات شخص حقوقی</h5>
-
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">نام شرکت</label>
-                                    {{ company_form.company_name }}
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">نوع شرکت</label>
-                                    {{ company_form.company_type }}
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">شماره ثبت</label>
-                                    {{ company_form.registration_number }}
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">کد اقتصادی</label>
-                                    {{ company_form.economic_code }}
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">شناسه ملی شرکت</label>
-                                    {{ company_form.company_national_id }}
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">لوگوی شرکت</label>
-                                {{ company_form.company_logo }}
-                                {% if profile.company_logo %}
-                                <div class="mt-2">
-                                    <img src="{{ profile.company_logo.url }}" alt="لوگو" style="max-width: 150px;">
-                                </div>
-                                {% endif %}
-                            </div>
-
-                            <h6 class="mt-4 mb-3">اطلاعات نماینده</h6>
-
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">نام نماینده</label>
-                                    {{ company_form.agent_name }}
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">سمت نماینده</label>
-                                    {{ company_form.agent_position }}
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">کد ملی نماینده</label>
-                                    {{ company_form.agent_national_code }}
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">مدرک نمایندگی</label>
-                                {{ company_form.authorization_document }}
-                                {% if profile.authorization_document %}
-                                <div class="mt-2">
-                                    <a href="{{ profile.authorization_document.url }}" target="_blank"
-                                        class="btn btn-sm btn-info">مشاهده مدرک</a>
-                                </div>
-                                {% endif %}
-                            </div>
-
-                            <hr class="my-4">
-                        </div>
-
-                        <h5 class="mb-3">اطلاعات مالی</h5>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">شماره شبا</label>
-                                {{ base_form.iban_number }}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">نام بانک</label>
-                                {{ base_form.bank_name }}
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">اطلاعات مالیاتی</label>
-                            {{ base_form.tax_info }}
-                        </div>
-
-                        <hr class="my-4">
-
-                        <h5 class="mb-3">اطلاعات فروشنده (اختیاری)</h5>
-
-                        <div class="mb-3">
-                            <label class="form-label">دسته‌بندی کسب‌وکار</label>
-                            {{ seller_form.business_category }}
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">مجوز کسب‌وکار</label>
-                            {{ seller_form.business_license }}
-                            {% if profile.business_license %}
-                            <div class="mt-2">
-                                <a href="{{ profile.business_license.url }}" target="_blank"
-                                    class="btn btn-sm btn-info">مشاهده مجوز</a>
-                            </div>
-                            {% endif %}
-                        </div>
-
-                        <button type="submit" class="btn btn-success mt-3">ذخیره تغییرات</button>
-                    </form>
+            {% if user_form.non_field_errors or base_form.non_field_errors or individual_form.non_field_errors or company_form.non_field_errors %}
+            <div class="pf-alert pf-alert-error">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <strong>خطا در اعتبارسنجی</strong>
+                    {{ user_form.non_field_errors }}
+                    {{ base_form.non_field_errors }}
+                    {{ individual_form.non_field_errors }}
+                    {{ company_form.non_field_errors }}
                 </div>
             </div>
-        </div>
+            {% endif %}
 
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body text-center">
 
-                    {% if profile.user_type %}
-                    {% if user.profile_image %}
-                    <img src="{{ user.profile_image.url }}" alt="پروفایل" class="rounded-circle mb-3"
-                        style="width: 120px; height: 120px; object-fit: cover;">
-                    {% else %}
-                    <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
-                        style="width: 120px; height: 120px;">
-                        <i class="fas fa-user fa-3x text-white"></i>
+            <!-- ── ۱) نوع کاربر ── -->
+            <section class="pf-card">
+                <div class="pf-card-head">
+                    <span class="pf-card-icon"><i class="fas fa-user-tag"></i></span>
+                    <div>
+                        <h2>نوع کاربر</h2>
+                        <p>با انتخاب نوع کاربر، فقط فیلدهای مربوط به همان نوع نمایش داده می‌شود.</p>
                     </div>
-                    {% endif %}
-                    {% else %}
+                </div>
 
-                    {% if profile.company_logo %}
-                    <img src="{{ profile.company_logo.url }}" alt="پروفایل" class="rounded-circle mb-3"
-                        style="width: 120px; height: 120px; object-fit: cover;">
-                    {% else %}
-                    <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
-                        style="width: 120px; height: 120px;">
-                        <i class="fas fa-user fa-3x text-white"></i>
+                <div class="pf-type-switch" role="radiogroup" aria-label="نوع کاربر">
+                    <button type="button" class="pf-type-option {% if current_type == 'individual' %}is-active{% endif %}"
+                        data-value="individual" role="radio" aria-checked="{% if current_type == 'individual' %}true{% else %}false{% endif %}">
+                        <span class="pf-type-icon"><i class="fas fa-user"></i></span>
+                        <span class="pf-type-text">
+                            <strong>شخص حقیقی</strong>
+                            <small>ثبت‌نام با مشخصات و کارت ملی</small>
+                        </span>
+                        <span class="pf-type-check"><i class="fas fa-check"></i></span>
+                    </button>
+
+                    <button type="button" class="pf-type-option {% if current_type == 'company' %}is-active{% endif %}"
+                        data-value="company" role="radio" aria-checked="{% if current_type == 'company' %}true{% else %}false{% endif %}">
+                        <span class="pf-type-icon"><i class="fas fa-building"></i></span>
+                        <span class="pf-type-text">
+                            <strong>شخص حقوقی</strong>
+                            <small>ثبت‌نام با اطلاعات شرکت و نماینده</small>
+                        </span>
+                        <span class="pf-type-check"><i class="fas fa-check"></i></span>
+                    </button>
+                </div>
+
+                <!-- select اصلی فرم؛ با دکمه‌های بالا همگام می‌شود -->
+                <div class="pf-sr-only">
+                    <label for="{{ base_form.user_type.id_for_label }}">نوع کاربر</label>
+                    {{ base_form.user_type }}
+                </div>
+                {% for error in base_form.user_type.errors %}<small class="pf-error">{{ error }}</small>{% endfor %}
+            </section>
+
+            <!-- ── ۰) اطلاعات کاربری ── -->
+            <section class="pf-card">
+                <div class="pf-card-head">
+                    <span class="pf-card-icon"><i class="fas fa-user-circle"></i></span>
+                    <div>
+                        <h2>اطلاعات کاربری</h2>
+                        <p>اطلاعات شامل شماره موبایل، کد ملی و تصویر پروفایل</p>
                     </div>
+                </div>
+
+                <div class="pf-grid">
+                    {% include 'accounts/partials/_field.html' with field=user_form.phone_number label='شماره موبایل' hint='شماره موبایل 11 رقمی شروع با 09' %}
+                    {% include 'accounts/partials/_field.html' with field=user_form.national_code label='کد ملی' hint='کد ملی 10 رقمی' %}
+                </div>
+
+                <div class="pf-grid pf-grid-uploads">
+                    {% include 'accounts/partials/_file_upload.html' with field=user_form.profile_image label='تصویر پروفایل' current=user.profile_image kind='image' hint='تصویر واضح از چهره شما (JPG, PNG)' %}
+                </div>
+            </section>
+
+
+            <!-- ── ۲) اطلاعات عمومی ── -->
+            <section class="pf-card">
+                <div class="pf-card-head">
+                    <span class="pf-card-icon"><i class="fas fa-id-badge"></i></span>
+                    <div>
+                        <h2>اطلاعات عمومی</h2>
+                        <p>این اطلاعات در پروفایل عمومی شما نمایش داده می‌شود.</p>
+                    </div>
+                </div>
+
+                <div class="pf-grid">
+                    {% include 'accounts/partials/_field.html' with field=base_form.bio label='بیو' span='pf-span-full' hint='چند جمله درباره خودتان یا کسب‌وکارتان بنویسید.' %}
+                    {% include 'accounts/partials/_field.html' with field=base_form.province label='استان' %}
+                    {% include 'accounts/partials/_field.html' with field=base_form.city label='شهر' %}
+                    {% include 'accounts/partials/_field.html' with field=base_form.address label='آدرس' span='pf-span-full' %}
+                    {% include 'accounts/partials/_field.html' with field=base_form.email_address label='ایمیل عمومی' %}
+                    {% include 'accounts/partials/_field.html' with field=base_form.postal_code label='کد پستی' %}
+                </div>
+            </section>
+
+            <!-- ── راهنما: هنوز نوعی انتخاب نشده ── -->
+            <div class="pf-empty" id="pf_empty">
+                <span class="pf-empty-icon"><i class="fas fa-hand-pointer"></i></span>
+                <div>
+                    <strong>نوع کاربر را انتخاب کنید</strong>
+                    <p>بعد از انتخاب شخص حقیقی یا حقوقی، بخش اطلاعات هویتی همین‌جا باز می‌شود.</p>
+                </div>
+            </div>
+
+            <!-- ── ۳) شخص حقیقی ── -->
+            <section class="pf-card pf-section-individual" id="individual_fields" style="display: none;">
+                <div class="pf-card-head">
+                    <span class="pf-card-icon"><i class="fas fa-user"></i></span>
+                    <div>
+                        <h2>اطلاعات شخص حقیقی</h2>
+                        <p>مشخصات باید با مدارک هویتی شما یکسان باشد.</p>
+                    </div>
+                </div>
+
+                <div class="pf-grid">
+                    {% include 'accounts/partials/_field.html' with field=individual_form.first_name label='نام' %}
+                    {% include 'accounts/partials/_field.html' with field=individual_form.last_name label='نام خانوادگی' %}
+                    {% include 'accounts/partials/_field.html' with field=individual_form.date_of_birth label='تاریخ تولد' %}
+                    {% include 'accounts/partials/_field.html' with field=individual_form.gender label='جنسیت' %}
+                </div>
+
+                <div class="pf-grid pf-grid-uploads">
+                    {% include 'accounts/partials/_file_upload.html' with field=individual_form.national_id_image label='تصویر کارت ملی' current=profile.national_id_image kind='image' hint='تصویر واضح از روی کارت' %}
+                    {% include 'accounts/partials/_file_upload.html' with field=individual_form.selfie_with_id label='سلفی با مدرک' current=profile.selfie_with_id kind='image' hint='چهره و کارت ملی در یک قاب' %}
+                </div>
+            </section>
+
+            <!-- ── ۴) شخص حقوقی ── -->
+            <section class="pf-card pf-section-company" id="company_fields" style="display: none;">
+                <div class="pf-card-head">
+                    <span class="pf-card-icon"><i class="fas fa-building"></i></span>
+                    <div>
+                        <h2>اطلاعات شخص حقوقی</h2>
+                        <p>مشخصات شرکت مطابق با اساسنامه و روزنامه رسمی.</p>
+                    </div>
+                </div>
+
+                <div class="pf-grid">
+                    {% include 'accounts/partials/_field.html' with field=company_form.company_name label='نام شرکت' %}
+                    {% include 'accounts/partials/_field.html' with field=company_form.company_type label='نوع شرکت' %}
+                    {% include 'accounts/partials/_field.html' with field=company_form.registration_number label='شماره ثبت' %}
+                    {% include 'accounts/partials/_field.html' with field=company_form.economic_code label='کد اقتصادی' %}
+                    {% include 'accounts/partials/_field.html' with field=company_form.company_national_id label='شناسه ملی شرکت' span='pf-span-full' %}
+                </div>
+
+                <div class="pf-grid pf-grid-uploads">
+                    {% include 'accounts/partials/_file_upload.html' with field=company_form.company_logo label='لوگوی شرکت' current=profile.company_logo kind='image' hint='لوگو با پس‌زمینه ساده' %}
+                </div>
+
+                <div class="pf-subhead">
+                    <span><i class="fas fa-user-tie"></i></span>
+                    <h3>اطلاعات نماینده</h3>
+                </div>
+
+                <div class="pf-grid">
+                    {% include 'accounts/partials/_field.html' with field=company_form.agent_name label='نام نماینده' %}
+                    {% include 'accounts/partials/_field.html' with field=company_form.agent_position label='سمت نماینده' %}
+                    {% include 'accounts/partials/_field.html' with field=company_form.agent_national_code label='کد ملی نماینده' span='pf-span-full' %}
+                </div>
+
+                <div class="pf-grid pf-grid-uploads">
+                    {% include 'accounts/partials/_file_upload.html' with field=company_form.authorization_document label='مدرک نمایندگی' current=profile.authorization_document kind='doc' hint='تصویر یا فایل PDF' %}
+                </div>
+            </section>
+
+            <!-- ── ۵) اطلاعات مالی ── -->
+            <section class="pf-card">
+                <div class="pf-card-head">
+                    <span class="pf-card-icon"><i class="fas fa-wallet"></i></span>
+                    <div>
+                        <h2>اطلاعات مالی</h2>
+                        <p>برای واریز و تسویه حساب استفاده می‌شود و به دیگران نمایش داده نمی‌شود.</p>
+                    </div>
+                </div>
+
+                <div class="pf-grid">
+                    {% include 'accounts/partials/_field.html' with field=base_form.iban_number label='شماره شبا' hint='مثال: IR + ۲۴ رقم' %}
+                    {% include 'accounts/partials/_field.html' with field=base_form.bank_name label='نام بانک' %}
+                    {% include 'accounts/partials/_field.html' with field=base_form.tax_info label='اطلاعات مالیاتی' span='pf-span-full' %}
+                </div>
+            </section>
+
+            <!-- ── ۶) فروشنده ── -->
+            <section class="pf-card">
+                <div class="pf-card-head">
+                    <span class="pf-card-icon"><i class="fas fa-store"></i></span>
+                    <div>
+                        <h2>اطلاعات فروشنده <span class="pf-optional">اختیاری</span></h2>
+                        <p>اگر آگهی ثبت می‌کنید، این بخش اعتبار حساب شما را بالا می‌برد.</p>
+                    </div>
+                </div>
+
+                <div class="pf-grid">
+                    {% include 'accounts/partials/_field.html' with field=seller_form.business_category label='دسته‌بندی کسب‌وکار' span='pf-span-full' %}
+                </div>
+
+                <div class="pf-grid pf-grid-uploads">
+                    {% include 'accounts/partials/_file_upload.html' with field=seller_form.business_license label='مجوز کسب‌وکار' current=profile.business_license kind='doc' hint='تصویر یا فایل PDF' %}
+                </div>
+            </section>
+
+            <!-- ── نوار ذخیره ── -->
+            <div class="pf-actions">
+                <span class="pf-dirty" id="pf_dirty" hidden><i class="fas fa-circle"></i> تغییرات ذخیره نشده</span>
+                <div class="pf-actions-btns">
+                    <button type="reset" class="pf-btn pf-btn-ghost" id="pf_reset">لغو تغییرات</button>
+                    <button type="submit" class="pf-btn pf-btn-red">
+                        <i class="fas fa-check"></i> ذخیره تغییرات
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- ═════════ ستون کناری ═════════ -->
+        <aside class="pf-side">
+            <div class="pf-card pf-summary">
+                <div class="pf-avatar">
+                    {% if profile.user_type == 'company' and profile.company_logo %}
+                    <img src="{{ profile.company_logo.url }}" alt="لوگوی شرکت">
+                    {% elif user.profile_image %}
+                    <img src="{{ user.profile_image.url }}" alt="تصویر پروفایل">
+                    {% else %}
+                    <span class="pf-avatar-fallback">
+                        <i class="fas {% if profile.user_type == 'company' %}fa-building{% else %}fa-user{% endif %}"></i>
+                    </span>
                     {% endif %}
+                </div>
+
+                <h3 class="pf-name">
+                    {% if profile.user_type == 'company' and profile.company_name %}{{ profile.company_name }}
+                    {% elif profile.user_type == 'individual' and profile.first_name %}{{ profile.first_name }} {{ profile.last_name }}
+                    {% else %}{{ user.username }}{% endif %}
+                </h3>
+                <p class="pf-username">@{{ user.username }}</p>
+
+                <div class="pf-badges">
+                    {% if profile.user_type == 'individual' %}<span class="pf-badge pf-badge-soft">شخص حقیقی</span>{% endif %}
+                    {% if profile.user_type == 'company' %}<span class="pf-badge pf-badge-soft">شخص حقوقی</span>{% endif %}
+                    {% if user.is_verified %}
+                    <span class="pf-badge pf-badge-ok"><i class="fas fa-check-circle"></i> تایید شده</span>
+                    {% else %}
+                    <span class="pf-badge pf-badge-warn">تایید نشده</span>
                     {% endif %}
+                </div>
 
+                <ul class="pf-meta">
+                    <li><i class="fas fa-envelope"></i><span>{{ user.email }}</span></li>
+                    {% if user.phone_number %}<li><i class="fas fa-phone"></i><span dir="ltr">{{ user.phone_number }}</span></li>{% endif %}
+                    {% if user.national_code %}<li><i class="fas fa-id-card"></i><span dir="ltr">{{ user.national_code }}</span></li>{% endif %}
+                    <li><i class="fas fa-calendar-alt"></i><span>عضویت از {{ user.created_at|date:"Y/m/d" }}</span></li>
+                </ul>
+            </div>
 
-                    <h5>{{ user.username }}</h5>
-                    <p class="text-muted">{{ user.email }}</p>
-
-                    {% if user.phone_number %}
-                    <p><i class="fas fa-phone"></i> {{ user.phone_number }}</p>
+            <div class="pf-card pf-kyc">
+                <div class="pf-kyc-head">
+                    <h3>سطح احراز هویت</h3>
+                    <strong>{{ kyc_level }}%</strong>
+                </div>
+                <div class="pf-kyc-track" role="progressbar" aria-valuenow="{{ kyc_level }}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="pf-kyc-fill {{ kyc_class }}" style="width: {{ kyc_level }}%"></div>
+                </div>
+                <p class="pf-kyc-hint">
+                    {% if kyc_level >= 100 %}
+                    احراز هویت شما کامل است.
+                    {% else %}
+                    با تکمیل مدارک هویتی و اطلاعات مالی، سطح احراز هویت شما بالاتر می‌رود.
                     {% endif %}
+                </p>
 
-                    {% if user.national_code %}
-                    <p><i class="fas fa-id-card"></i> {{ user.national_code }}</p>
-                    {% endif %}
-
-                    <div class="mt-3">
-                        {% if user.is_verified %}
-                        <span class="badge bg-success">تایید شده ✓</span>
+                <div class="pf-kyc-checklist">
+                    <h4>نکات احراز هویت:</h4>
+                    <ul>
+                        <li><i class="fas fa-{% if user.phone_number %}check-circle{% else %}circle{% endif %}"></i> شماره موبایل</li>
+                        <li><i class="fas fa-{% if user.national_code %}check-circle{% else %}circle{% endif %}"></i> کد ملی</li>
+                        <li><i class="fas fa-{% if profile.address %}check-circle{% else %}circle{% endif %}"></i> آدرس</li>
+                        <li><i class="fas fa-{% if profile.city %}check-circle{% else %}circle{% endif %}"></i> شهر و استان</li>
+                        {% if profile.user_type == 'individual' %}
+                        <li><i class="fas fa-{% if profile.first_name and profile.last_name %}check-circle{% else %}circle{% endif %}"></i> نام و نام خانوادگی</li>
+                        <li><i class="fas fa-{% if profile.national_id_image %}check-circle{% else %}circle{% endif %}"></i> کارت ملی</li>
                         {% else %}
-                        <span class="badge bg-warning">تایید نشده</span>
+                        <li><i class="fas fa-{% if profile.company_name %}check-circle{% else %}circle{% endif %}"></i> اطلاعات شرکت</li>
+                        <li><i class="fas fa-{% if profile.agent_name %}check-circle{% else %}circle{% endif %}"></i> اطلاعات نماینده</li>
                         {% endif %}
-                    </div>
-
-                    <div class="mt-3">
-                        <p class="mb-1"><strong>سطح احراز هویت:</strong></p>
-                        <div class="progress">
-                            <div class="progress-bar kyc-progress-bar {{ kyc_class }}" role="progressbar"
-                                aria-valuenow="{{ kyc_level }}" aria-valuemin="0" aria-valuemax="100">
-                                {{ kyc_level }}%
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-3">
-                        <small class="text-muted">عضویت از: {{ user.created_at|date:"Y/m/d" }}</small>
-                    </div>
+                        <li><i class="fas fa-{% if profile.iban_number %}check-circle{% else %}circle{% endif %}"></i> شماره شبا</li>
+                    </ul>
                 </div>
             </div>
-        </div>
+        </aside>
     </div>
 </div>
+{% endwith %}
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const userTypeSelect = document.getElementById('user_type_select');
-        const individualFields = document.getElementById('individual_fields');
-        const companyFields = document.getElementById('company_fields');
+        const page = document.getElementById('pf_page');
+        const form = document.getElementById('pf_form');
+        const select = document.getElementById('user_type_select');
+        const options = document.querySelectorAll('.pf-type-option');
+        const empty = document.getElementById('pf_empty');
+        const sections = {
+            individual: document.getElementById('individual_fields'),
+            company: document.getElementById('company_fields'),
+        };
+        const dirty = document.getElementById('pf_dirty');
 
-        function updateUserTypeSections() {
-            if (!userTypeSelect) {
-                return;
+        // فیلدهای بخش مخفی ارسال نمی‌شوند (و اعتبارسنجی مرورگر را مختل نمی‌کنند)
+        function applyType(type) {
+            page.dataset.userType = type || '';
+            
+            // نمایش/پنهان کردن بخش‌ها
+            Object.keys(sections).forEach(function (key) {
+                const section = sections[key];
+                if (key === type) {
+                    section.style.display = 'block';
+                    section.querySelectorAll('input, select, textarea').forEach(function (el) {
+                        el.disabled = false;
+                    });
+                } else {
+                    section.style.display = 'none';
+                    section.querySelectorAll('input, select, textarea').forEach(function (el) {
+                        el.disabled = true;
+                    });
+                }
+            });
+
+            // پنهان/نمایش پیام راهنما
+            if (type) {
+                empty.style.display = 'none';
+            } else {
+                empty.style.display = 'block';
             }
 
-            if (userTypeSelect.value === 'individual') {
-                individualFields.classList.remove('section-hidden');
-                individualFields.classList.add('section-visible');
+            // به‌روزرسانی دکمه‌ها
+            options.forEach(function (btn) {
+                const on = btn.dataset.value === type;
+                btn.classList.toggle('is-active', on);
+                btn.setAttribute('aria-checked', on ? 'true' : 'false');
+            });
+        }
 
-                companyFields.classList.remove('section-visible');
-                companyFields.classList.add('section-hidden');
-            } else if (userTypeSelect.value === 'company') {
-                companyFields.classList.remove('section-hidden');
-                companyFields.classList.add('section-visible');
+        // کلیک روی دکمه‌های نوع کاربر
+        options.forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (select) select.value = btn.dataset.value;
+                applyType(btn.dataset.value);
+                markDirty();
+            });
+        });
 
-                individualFields.classList.remove('section-visible');
-                individualFields.classList.add('section-hidden');
+        if (select) {
+            select.addEventListener('change', function () { applyType(select.value); });
+        }
+        
+        // اعمال نوع اولیه
+        applyType(select ? select.value : page.dataset.userType);
+
+        // پیش‌نمایش فایل انتخاب‌شده
+        document.querySelectorAll('.pf-upload-input').forEach(function (input) {
+            input.addEventListener('change', function () {
+                const box = input.closest('.pf-upload');
+                const file = input.files && input.files[0];
+                if (!file) return;
+
+                const nameEl = box.querySelector('.pf-upload-name');
+                const img = box.querySelector('.pf-upload-preview');
+                const previewContainer = box.querySelector('.pf-upload-preview-container');
+
+                nameEl.textContent = file.name;
+                previewContainer.hidden = false;
+
+                if (file.type.indexOf('image/') === 0 && img) {
+                    img.src = URL.createObjectURL(file);
+                    img.style.display = 'block';
+                    box.classList.add('has-preview');
+                }
+                box.classList.add('has-file');
+                markDirty();
+            });
+        });
+
+        // نشانگر تغییرات ذخیره‌نشده
+        function markDirty() { 
+            if (dirty) dirty.hidden = false; 
+        }
+        
+        form.addEventListener('input', markDirty);
+        form.addEventListener('change', markDirty);
+        
+        form.addEventListener('reset', function () {
+            setTimeout(function () {
+                applyType(select ? select.value : '');
+                if (dirty) dirty.hidden = true;
+            }, 0);
+        });
+
+        // جلوگیری از submit پیش‌فرض برای دکمه‌های نوع کاربر
+        form.addEventListener('submit', function (e) {
+            const activeType = select ? select.value : '';
+            if (!activeType) {
+                e.preventDefault();
+                alert('لطفا نوع کاربر را انتخاب کنید');
+                return false;
             }
-        }
-
-        updateUserTypeSections();
-
-        if (userTypeSelect) {
-            userTypeSelect.addEventListener('change', updateUserTypeSections);
-        }
+        });
     });
 </script>
+
 {% endblock %}

@@ -1,0 +1,28 @@
+<div class="pf-field pf-span-full">
+    <span class="pf-label">{{ label }}</span>
+    <div class="pf-upload {% if kind == 'image' and current %}has-preview{% endif %}">
+        <input type="file"
+               name="{{ field.html_name }}"
+               id="{{ field.id_for_label }}"
+               class="pf-upload-input"
+               {% if kind == 'image' %}accept="image/*"{% else %}accept="image/*,.pdf"{% endif %}>
+        <label for="{{ field.id_for_label }}" class="pf-upload-drop">
+            {% if kind == 'image' and current %}
+            <img src="{{ current.url }}" class="pf-upload-preview" alt="{{ label }}">
+            {% else %}
+            <img class="pf-upload-preview" alt="" hidden>
+            {% endif %}
+            <span class="pf-upload-icon"><i class="fas fa-cloud-upload-alt"></i></span>
+            <span class="pf-upload-text">
+                <span class="pf-upload-title">{% if current %}تغییر فایل{% else %}انتخاب فایل{% endif %}</span>
+                <span class="pf-upload-name">{% if hint %}{{ hint }}{% else %}فایل خود را انتخاب کنید{% endif %}</span>
+            </span>
+        </label>
+        {% if kind == 'doc' and current %}
+        <a href="{{ current.url }}" target="_blank" rel="noopener" class="pf-upload-current">
+            <i class="fas fa-paperclip"></i> مشاهده فایل فعلی
+        </a>
+        {% endif %}
+    </div>
+    {% for error in field.errors %}<small class="pf-error">{{ error }}</small>{% endfor %}
+</div>
