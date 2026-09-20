@@ -15,31 +15,6 @@
     padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-html {
-    scroll-padding-top: env(safe-area-inset-top, 0px);
-    background: #fff;
-}
-
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
-
-* {
-    margin: 0;
-}
-
-body {
-    font-family: 'Vazirmatn', 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    color: var(--ink);
-    background: #fff;
-    min-height: 100vh;
-    overflow-x: hidden;
-    direction: rtl;
-    -webkit-font-smoothing: antialiased;
-}
-
 a {
     color: inherit;
     text-decoration: none;
@@ -58,7 +33,7 @@ a:focus-visible {
     background: #fefefe;
 }
 
-.stage {
+/* .stage {
     position: absolute;
     left: 50%;
     top: 0;
@@ -66,7 +41,7 @@ a:focus-visible {
     height: 100%;
     transform: translateX(-50%);
 }
-
+ */
 /* background: glows + grid */
 .bg {
     position: absolute;

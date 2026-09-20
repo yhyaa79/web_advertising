@@ -321,7 +321,7 @@ body {
         linear-gradient(rgba(23, 23, 19, 0.027) 1px, transparent 1px),
         linear-gradient(90deg, rgba(23, 23, 19, 0.027) 1px, transparent 1px),
         radial-gradient(circle at 8% 4%, rgba(255, 91, 53, 0.09), transparent 24rem) !important;
-    background-size: 62px 62px, 62px 62px, auto !important;
+    background-size: 66px 66px, 66px 66px, auto !important;
 }
 
 strong {
