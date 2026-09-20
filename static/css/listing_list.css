@@ -357,7 +357,6 @@
 .activity-sub-chip:hover {
     border-color: var(--red-color);
     color: var(--red-color);
-    background-color: var(--home-bg-1);
 }
 
 .activity-sub-chip.active {

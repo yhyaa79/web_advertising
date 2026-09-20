@@ -36,9 +36,7 @@
 }
 
 /* رنگ صفحه هم‌رنگ صفحه اصلی */
-body {
-    background-color: #fefefe !important;
-}
+
 
 /* ============================================================
    Shell + Hero
@@ -56,7 +54,6 @@ body {
     overflow: hidden;
     padding: 44px 20px 96px;
     text-align: center;
-    background: #fefefe;
     color: var(--lw-ink);
 }
 
@@ -130,7 +127,7 @@ body {
 
 .lw-progress {
     background: #fff;
-    border-radius: 24px;
+    border-radius: var(--border-radius-xl);
     padding: 20px 24px 12px;
     box-shadow: var(--lw-shadow);
 }
@@ -294,7 +291,7 @@ body {
 /* ---------- Card ---------- */
 .lw-card {
     background: #fff;
-    border-radius: 24px;
+    border-radius: var(--border-radius-xl);
     box-shadow: var(--lw-shadow);
     margin-bottom: 18px;
     overflow: hidden;
@@ -313,7 +310,7 @@ body {
     flex: none;
     width: 46px;
     height: 46px;
-    border-radius: 15px;
+    border-radius: var(--border-radius-md);
     background: linear-gradient(160deg, #fce7e5, #fcf8f1);
     box-shadow: 0 0 0 1px #f3dcda;
     display: grid;
@@ -351,9 +348,9 @@ body {
 
 .lw-main-cat {
     border: 0;
-    border-radius: 18px;
+    border-radius: var(--border-radius-md);
     background: #fff;
-    padding: 20px 10px 16px;
+    padding: 10px 5px 7px;
     text-align: center;
     cursor: pointer;
     transition: transform .18s, box-shadow .18s, background .18s;
@@ -380,7 +377,6 @@ body {
 .lw-main-cat span {
     display: block;
     font-size: 28px;
-    margin-bottom: 8px;
 }
 
 .lw-main-cat b {
@@ -410,7 +406,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    border-radius: 14px;
+    border-radius: var(--border-radius-lg);
     padding: 13px 14px;
     cursor: pointer;
     font-size: 13px;
@@ -422,7 +418,8 @@ body {
 }
 
 .lw-sub:hover {
-    box-shadow: 0 0 0 1px #f2b9b7;
+    box-shadow: 0 0 0 1px var(--red-color);
+    background-color: var(--red-light-color);
 }
 
 .lw-sub input {
@@ -434,8 +431,7 @@ body {
 .lw-sub.active {
     background: var(--lw-red-light);
     color: var(--lw-err);
-    box-shadow: 0 0 0 1.5px var(--lw-red);
-    font-weight: 600;
+    box-shadow: 0 0 0 1px var(--lw-red);
 }
 
 /* ============================================================
@@ -480,7 +476,7 @@ body {
     box-sizing: border-box;
     width: 100%;
     border: 0;
-    border-radius: 14px;
+    border-radius: var(--border-radius-sm-md);
     padding: 12px 14px;
     background: #fff;
     font: inherit;
@@ -564,7 +560,7 @@ body {
     align-items: center;
     gap: 10px;
     padding: 13px 14px;
-    border-radius: 14px;
+    border-radius: var(--border-radius-sm-md);
     cursor: pointer;
     margin: 0 !important;
     font-size: 13px;
@@ -602,7 +598,7 @@ body {
 
 .lw-note {
     padding: 13px 16px;
-    border-radius: 14px;
+    border-radius: var(--border-radius-sm-md);
     background: var(--lw-warn-bg);
     color: var(--lw-warn);
     font-size: 12.5px;
@@ -614,7 +610,7 @@ body {
    Sub-cards (repeatable groups)
    ============================================================ */
 .lw-subcard {
-    border-radius: 18px;
+    border-radius: var(--border-radius-md);
     padding: 18px;
     margin-top: 18px;
     background: var(--lw-red-tint);
@@ -791,7 +787,7 @@ body {
    Rich editor (about platform)
    ============================================================ */
 .rich-editor {
-    border-radius: 18px;
+    border-radius: var(--border-radius-md);
     overflow: hidden;
     background: #fff;
     box-shadow: 0 0 0 1px var(--lw-line);
@@ -904,7 +900,7 @@ body {
     width: 100%;
     min-height: 300px;
     border: 0;
-    border-radius: 16px;
+    border-radius: var(--border-radius-md);
     background: #fff;
     box-shadow: 0 0 0 1px var(--lw-line);
 }
@@ -927,7 +923,7 @@ body {
     gap: 12px;
     margin-top: 14px;
     padding: 12px 16px;
-    border-radius: 14px;
+    border-radius: var(--border-radius-sm-md);
     background: #fff;
     color: var(--lw-muted);
     font-size: 12px;
@@ -966,7 +962,7 @@ body {
 .lw-upload {
     display: block;
     border: 2px dashed #ebd0ce;
-    border-radius: 20px;
+    border-radius: var(--border-radius-lg);
     padding: 32px 24px;
     text-align: center;
     cursor: pointer;
@@ -998,7 +994,7 @@ body {
 .lw-preview {
     max-width: 100%;
     max-height: 220px;
-    border-radius: 14px;
+    border-radius: var(--border-radius-sm-md);
     margin: 16px auto 0;
     display: none;
     box-shadow: var(--lw-shadow-sm);
@@ -1100,7 +1096,7 @@ body {
     position: relative;
     overflow: hidden;
     background: #fff;
-    border-radius: 22px;
+    border-radius: var(--border-radius-xl);
     padding: 20px;
     margin-bottom: 14px;
     box-shadow: var(--lw-shadow);
@@ -1209,7 +1205,7 @@ body {
 .review-row {
     padding: 15px 16px;
     background: var(--lw-red-tint);
-    border-radius: 16px;
+    border-radius: var(--border-radius-md);
     box-shadow: 0 0 0 1px var(--lw-line-warm);
 }
 
@@ -1287,7 +1283,7 @@ body {
 
     .lw-progress {
         padding: 16px 14px 8px;
-        border-radius: 20px;
+        border-radius: var(--border-radius-lg);
     }
 
     .lw-step {
@@ -1300,7 +1296,7 @@ body {
 
     .lw-card,
     .lw-side-card {
-        border-radius: 20px;
+        border-radius: var(--border-radius-lg);
     }
 
     .lw-card-head {
@@ -1360,7 +1356,7 @@ body {
     }
 
     .toast {
-        border-radius: 16px;
+        border-radius: var(--border-radius-md);
     }
 }
 
