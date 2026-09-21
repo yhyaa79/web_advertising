@@ -646,10 +646,9 @@ nav .nav-cta .btn-ghost {
     width: 100%;
     padding: 6px;
     border: 1.1px solid var(--border);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--border-radius-md);
     font-family: var(--font);
-    font-size: var(--font-size-xl);
-    ;
+    font-size: var(--font-size-xl);;
     color: var(--text-primary);
     background-color: var(--bg);
     transition: border-color var(--transition), box-shadow var(--transition);
@@ -686,6 +685,7 @@ nav .nav-cta .btn-ghost {
     background-position: left 14px center;
     padding-left: 36px;
     height: 36px;
+    border: unset;
 }
 
 .select-wrapper {

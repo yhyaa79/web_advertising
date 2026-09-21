@@ -43,13 +43,13 @@
     color: var(--red-color);
 }
 
-.category-header-item.active > .category-header-link {
+.category-header-item.active>.category-header-link {
     color: var(--red-color);
     border-bottom-color: var(--red-color);
     font-weight: 600;
 }
 
-.category-header-item.hover-open > .category-header-link {
+.category-header-item.hover-open>.category-header-link {
     color: var(--red-color);
 }
 
@@ -160,6 +160,7 @@
         opacity: 0;
         transform: translateY(-15px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -233,6 +234,7 @@
         opacity: 0;
         transform: scale(0.98);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -385,7 +387,6 @@
         padding: 6px 12px;
     }
 }
-
 
 /* ═══════════════════════════════════════════════════════════
    5) Results Bar (نوار نتایج)
@@ -562,42 +563,250 @@
 }
 
 
+
 /* ═══════════════════════════════════════════════════════════
-   9) Range Slider (اسلایدر دوگانه)
+   Checkbox Filter Group - Professional Style
+   ═══════════════════════════════════════════════════════════ */
+/* ── Layout ─────────────────────────────────────────── */
+.compact-filter-card-items {
+    display: block;
+    width: 100%;
+}
+
+.form-all-label {
+    display: grid;
+    gap: 10px;
+    flex-wrap: wrap;
+    gap: 10px 10px;
+    align-items: center;
+    padding: 4px 0;
+}
+
+/* ── Base Check Item ────────────────────────────────── */
+.checkbox-group .form-check {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px 4px 15px;
+    margin: 0;
+    min-height: 31px;
+    background: #ffffff;
+    border: unset;
+    border-radius: var(--border-radius-999);
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition-base);
+    box-shadow: var(--shadow-sm);
+}
+
+.checkbox-group .form-check:hover {
+    border-color: var(--red-color);
+    background: var(--red-light-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(246, 108, 104, 0.15);
+}
+
+/* ── Hide Default Input ─────────────────────────────── */
+.checkbox-group .form-check-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    margin: 0;
+}
+
+/* ── Custom Checkbox Square ─────────────────────────── */
+.checkbox-group .form-check-input + .form-check-label {
+    position: relative;          /* ✅ اضافه شد — بدون این، تیک بیرون مربع می‌افتد */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    line-height: 1.4;
+    margin: 0;
+    transition: color var(--transition-base);
+}
+
+.checkbox-group .form-check-input + .form-check-label::before {
+    content: "";
+    flex: 0 0 auto;
+    box-sizing: border-box;      /* ✅ تا 18px واقعاً 18px باشد */
+    width: 18px;
+    height: 18px;
+    border-radius: var(--border-radius-sm-md);
+    border: 1.6px solid #cbd5e1;
+    background: #ffffff;
+    transition: var(--transition-base);
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+
+
+/* ── Checkmark Icon ─────────────────────────────────── */
+.checkbox-group .form-check-input + .form-check-label::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    inset-inline-start: 6.5px;   /* فاصله از لبه‌ی inline-start (در RTL = راست) */
+
+    width: 5px;
+    height: 9px;
+    box-sizing: border-box;      /* تا 5×9 واقعاً همان باشد */
+
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;   /* ✅ right + bottom  (قبلاً: 0 0 2px 2px) */
+
+    transform: translateY(-50%) rotate(45deg) scale(0);   /* ✅ rotate(+45) */
+    transform-origin: center;
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity  0.18s ease;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.checkbox-group .form-check-input:checked + .form-check-label::after {
+    transform: translateY(-50%) rotate(45deg) scale(1);   /* ✅ همین‌جا هم +45 */
+    opacity: 1;
+}
+
+/* ── Checked State ──────────────────────────────────── */
+.checkbox-group .form-check-input:checked+.form-check-label::before {
+    background: linear-gradient(135deg, var(--red-color) 0%, var(--red-durk-color) 100%);
+    border-color: var(--red-color);
+    box-shadow:
+        0 0 0 3px var(--red-light-color),
+        inset 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.checkbox-group .form-check-input:checked+.form-check-label {
+    color: var(--red-durk-color);
+    font-weight: 600;
+}
+
+/* ── Checked Parent Card ────────────────────────────── */
+.checkbox-group .form-check:has(.form-check-input:checked) {
+    border-color: var(--red-color);
+    border: 0.9px solid var(--red-color);
+    background: var(--red-light-color);
+}
+
+/* ── Focus State ────────────────────────────────────── */
+.checkbox-group .form-check-input:focus-visible+.form-check-label::before {
+    border-color: var(--red-color);
+    box-shadow: 0 0 0 4px rgba(246, 108, 104, 0.25);
+}
+
+/* ── Disabled State ─────────────────────────────────── */
+.checkbox-group .form-check-input:disabled+.form-check-label {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.checkbox-group .form-check:has(.form-check-input:disabled) {
+    cursor: not-allowed;
+    background: #f8fafc;
+}
+
+.checkbox-group .form-check:has(.form-check-input:disabled):hover {
+    transform: none;
+    border-color: var(--border-light);
+    background: #f8fafc;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03);
+}
+
+/* ── Animated Wave Effect on Check ──────────────────── */
+.checkbox-group .form-check-input:checked+.form-check-label::before {
+    animation: checkbox-pop 0.32s ease;
+}
+
+@keyframes checkbox-pop {
+    0% {
+        transform: scale(1);
+    }
+
+    45% {
+        transform: scale(1.18);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+    .checkbox-group {
+        padding: 12px;
+        border-radius: var(--border-radius-25);
+    }
+
+    .form-all-label {
+        gap: 6px 8px;
+    }
+
+    .checkbox-group .form-check {
+        flex: 1 1 calc(50% - 8px);
+        justify-content: center;
+        padding: 7px 10px;
+        min-height: 36px;
+    }
+
+    .checkbox-group .form-check-label {
+        font-size: var(--font-size-md);
+    }
+}
+
+@media (max-width: 380px) {
+    .checkbox-group .form-check {
+        flex: 1 1 100%;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   9) Range Slider (اسلایدر دوگانه) — طراحی مجدد
+   (قیمت، سن پلتفرم، دنبال‌کننده، درآمد ماهیانه،
+    برگشت سرمایه، حاشیه سود، بیشترین بازدید)
    ═══════════════════════════════════════════════════════════ */
 
+
+/* ── ساختار اسلایدر ─────────────────────────────────── */
 .range-slider {
     position: relative;
     direction: ltr;
+    padding-top: 9px;            /* جا برای thumb (بجای margin که collapse می‌شد) */
 }
 
 .range-track {
     position: relative;
-    height: 4px;
-    background: #dee2e6;
-    border-radius: 6px;
-    margin: 12px 0;
+    height: 5px;
+    background: #e9edf3;
+    border-radius: 999px;
+    margin: 0;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.08);
 }
 
 .range-fill {
     position: absolute;
     height: 100%;
-    background: linear-gradient(90deg, var(--red-color), var(--red-durk-color)) ;
-    border-radius: 6px;
+    background: linear-gradient(90deg, var(--red-color), var(--red-durk-color));
+    border-radius: 999px;
     pointer-events: none;
 }
 
-
-.range-input::-webkit-slider-thumb {
-    background: var(--red-color) !important;
-}
-
-
+/* ── اینپوت‌های رِنج (روی هم قرار می‌گیرند) ───────────── */
 .range-input {
     position: absolute;
     width: 100%;
-    height: 4px;
-    top: 0;
+    height: 5px;
+    top: 9px;                    /* هم‌تراز با track */
     left: 0;
     background: transparent;
     pointer-events: none;
@@ -605,76 +814,130 @@
     appearance: none;
     margin: 0;
     padding: 0;
+    outline: none;
     transform: scaleX(-1);
 }
 
+.range-input:focus {
+    z-index: 3;
+}
+
+.range-input::-webkit-slider-runnable-track {
+    height: 5px;
+    background: transparent;
+    border: none;
+}
+
+.range-input::-moz-range-track {
+    height: 5px;
+    background: transparent;
+    border: none;
+}
+
+/* ── دستگیره (Thumb) ─────────────────────────────────── */
 .range-input::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
+    box-sizing: border-box;
     width: 18px;
     height: 18px;
+    margin-top: -7px;            /* (6 - 20) / 2 → وسط track */
     border-radius: 50%;
-    background: var(--red-color);
-    border: 2px solid #fff;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
-    pointer-events: all;
+    background: #ffffff;
+    border: 3.5px solid var(--red-color);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    cursor: grab;
+    pointer-events: auto;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .range-input::-moz-range-thumb {
+    box-sizing: border-box;
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: var(--red-color);
-    border: 2px solid #fff;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
-    pointer-events: all;
+    background: #ffffff;
+    border: 3.5px solid var(--red-color);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    cursor: grab;
+    pointer-events: auto;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.range-input::-webkit-slider-thumb:hover {
+    cursor: grabbing;
+    transform: scale(1.18);
+    background: var(--red-light-color);
+    box-shadow: 0 0 0 6px rgba(246, 108, 104, 0.2), 0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+.range-input::-moz-range-thumb:hover {
+    cursor: grabbing;
+    transform: scale(1.18);
+    background: var(--red-light-color);
+    box-shadow: 0 0 0 6px rgba(246, 108, 104, 0.2), 0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+.range-input:active::-webkit-slider-thumb {
+    cursor: grabbing;
+    transform: scale(1.18);
+    background: var(--red-light-color);
+    box-shadow: 0 0 0 6px rgba(246, 108, 104, 0.2), 0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+.range-input:active::-moz-range-thumb {
+    cursor: grabbing;
+    transform: scale(1.18);
+    background: var(--red-light-color);
+    box-shadow: 0 0 0 6px rgba(246, 108, 104, 0.2), 0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+.range-input:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 5px rgba(246, 108, 104, 0.3);
+}
+
+.range-input:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 5px rgba(246, 108, 104, 0.3);
+}
+
+/* ── برچسب مقادیر (از / تا) ───────────────────────────── */
 .range-labels {
     display: flex;
     justify-content: space-between;
-    margin-top: 12px;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
     font-size: 0.8rem;
     color: #495057;
     direction: rtl;
 }
 
+.range-labels .range-val-min,
+.range-labels .range-val-max {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0px 10px;
+    min-height: 20px;
+    border: .5px solid var(--red-color);
+    color: var(--red-durk-color);
+    border-radius: 999px;
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
 .range-labels .range-val-min::before {
     content: "از: ";
+    color: #8d939d;
+    font-weight: 400;
 }
 
 .range-labels .range-val-max::before {
     content: "تا: ";
+    color: #8d939d;
+    font-weight: 400;
 }
-
-/* تین‌های نهایی برای کروم و فایرفاکس */
-.range-input::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #0d6efd;
-    border: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-    pointer-events: auto;
-}
-
-.range-input::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #0d6efd;
-    border: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-    pointer-events: auto;
-}
-
-
 /* ═══════════════════════════════════════════════════════════
    10) Guide Card (راهنما)
    ═══════════════════════════════════════════════════════════ */
@@ -1014,9 +1277,11 @@
     0% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.4);
     }
+
     100% {
         transform: scale(1);
     }
@@ -1366,6 +1631,7 @@
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
