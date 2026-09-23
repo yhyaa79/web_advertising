@@ -1,192 +1,465 @@
-/* ========================================
-   login.css
-   استایل‌های اختصاصی صفحات ورود و ثبت‌نام
-   استخراج شده از global.css
-   ======================================== */
+/* ════════════════════════════════════════════════════════════════════════════
+   login.css — استایل صفحات ورود و ثبت‌نام (login.html / register.html)
+   وابسته به متغیرهای base.css (رنگ‌ها، فونت‌ها، سایه‌ها)
+   ════════════════════════════════════════════════════════════════════════════ */
 
-/* ---------- کانتینر و گرید ---------- */
-.container {
-    margin: 0 auto;
-    padding: 120px 5% 20px 5%;
-}
 
-.row {
+/* ═══════════════════════════════════════════════════════════
+   1) Page wrapper
+   ═══════════════════════════════════════════════════════════ */
+
+.auth-page {
+    min-height: 100vh;
     display: flex;
-    flex-wrap: wrap;
-}
-
-.justify-content-center {
-    justify-content: center;
-}
-
-.col-md-6 {
-    padding: 0 15px;
-    flex: 0 0 50%;
-    max-width: 50%;
-}
-
-/* ---------- کارت ---------- */
-.card {
-    background: var(--white-bg);
-    border-radius: var(--border-radius-lg);
-    border: .5px solid #eaeef1 !important;
-    box-shadow: var(--shadow-sm);
-    margin-bottom: var(--spacing-xl);
-    overflow: hidden;
-    transition: var(--transition-base);
-}
-
-.card {
-    background: var(--white-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-xl);
-    box-shadow: none;
-}
-
-.card,
-.alert {
-    animation: fadeIn 0.5s ease-out;
-}
-
-/* ---------- هدر کارت ---------- */
-.card-header {
-    padding: var(--spacing-md);
-    border-bottom: none;
-    font-size: var(--font-size-4xl);
-}
-
-.card-header {
-    position: relative;
-    padding: var(--spacing-md) var(--spacing-lg);
-    padding-inline-end: calc(var(--spacing-lg) + 10px);
-    background: var(--white-bg);
-}
-
-.card-header h4 {
-    margin: 0;
-    font-size: var(--font-size-3xl);
-    font-weight: 600;
-}
-
-/* ---------- بدنه کارت ---------- */
-.card-body {
-    padding: 10px 15px;
-    width: 100%;
-}
-
-/* ---------- فرم‌ها ---------- */
-form p {
-    margin-bottom: var(--spacing-lg);
-}
-
-form label {
-    display: block;
-    color: var(--text-primary);
-    font-weight: 400;
-    font-size: var(--font-size-xl);
-}
-
-form input[type="text"],
-form input[type="email"],
-form input[type="password"],
-form input[type="number"],
-form input[type="url"],
-form input[type="file"],
-form select,
-form textarea {
-    width: 100%;
-    height: 40px;
-    padding: 8px 12px;
-    border: 1.1px solid var(--border-light);
-    border-radius: var(--border-radius-md);
-    font-size: var(--font-size-2xl);
-    transition: var(--transition-base);
-    background-color: var(--bg);
-}
-
-form input:focus,
-form select:focus,
-form textarea:focus {
-    outline: none;
-}
-
-form textarea {
-    resize: vertical;
-    min-height: 120px;
-}
-
-/* ---------- دکمه‌ها ---------- */
-.btn {
-    display: flex;
-    border-radius: var(--border-radius-999);
-    border: none;
-    cursor: pointer;
-    transition: var(--transition-base);
-    text-decoration: none;
-    text-align: center;
-    white-space: nowrap;
     align-items: center;
     justify-content: center;
+    padding: 90px 5% 50px;
 }
 
-.btn-success {
-    background: var(--red-color);
-    color: var(--white-bg);
+.auth-shell {
+    width: 100%;
+    max-width: 900px;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    background: var(--white-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 22px;
+    box-shadow: 0 18px 50px rgba(1, 31, 68, 0.08), var(--shadow-sm);
+    overflow: hidden;
+    animation: authRise 0.45s ease-out both;
 }
 
-.btn-success:hover {
-    background: var(--red-durk-color);
-}
-
-.btn-medium {
-    padding: 5px 20px;
-    font-size: var(--font-size-xl);
-    font-weight: 500;
-    height: 30px;
-    min-width: 60px;
-}
-
-.btn-width-fit {
-    width: fit-content;
-}
-
-/* ---------- جداکننده ---------- */
-hr {
-    border: none;
-    height: 1px;
-    margin: 12px 0;
-    background-color: #dee2e6;
-}
-
-/* ---------- متن و لینک ---------- */
-.text-center {
-    text-align: center;
-}
-
-a {
-    color: var(--blu-durk-color);
-}
-
-h4 {
-    font-size: var(--font-size-2xl);
-}
-
-/* ---------- انیمیشن ---------- */
-@keyframes fadeIn {
+@keyframes authRise {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(14px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-/* ---------- ریسپانسیو ---------- */
-@media (max-width: 768px) {
-    .col-md-6 {
-        flex: 0 0 100%;
-        max-width: 100%;
+
+/* ═══════════════════════════════════════════════════════════
+   2) Brand panel (ستون معرفی — سمت راست در RTL)
+   ═══════════════════════════════════════════════════════════ */
+
+.auth-aside {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 40px 36px;
+    color: #ffffff;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(246, 108, 104, 0.55), transparent 55%),
+        radial-gradient(circle at 0% 100%, rgba(15, 85, 214, 0.35), transparent 50%),
+        linear-gradient(160deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    overflow: hidden;
+}
+
+/* حلقه‌های تزئینی — تنها عنصر تصویری پنل */
+.auth-aside::before,
+.auth-aside::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    pointer-events: none;
+}
+
+.auth-aside::before {
+    width: 260px;
+    height: 260px;
+    bottom: -90px;
+    left: -90px;
+}
+
+.auth-aside::after {
+    width: 160px;
+    height: 160px;
+    bottom: -40px;
+    left: -40px;
+    border-color: rgba(246, 108, 104, 0.35);
+}
+
+.auth-aside > * {
+    position: relative;
+    z-index: 1;
+}
+
+.auth-aside__title {
+    font-size: var(--font-size-4xl);
+    font-weight: 800;
+    line-height: 1.7;
+    margin-bottom: 10px;
+}
+
+.auth-aside__text {
+    font-size: var(--font-size-xl);
+    font-weight: 300;
+    line-height: 2;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.auth-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.auth-points li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--font-size-xl);
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.auth-points li::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='8' viewBox='0 0 10 8'%3E%3Cpath d='M1 4l3 3 5-6' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 10px no-repeat,
+        var(--red-color);
+    box-shadow: 0 0 0 4px rgba(246, 108, 104, 0.22);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   3) Form panel
+   ═══════════════════════════════════════════════════════════ */
+
+.auth-main {
+    padding: 44px 44px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.auth-head {
+    margin-bottom: 26px;
+}
+
+.auth-head h1 {
+    font-size: var(--font-size-5xl);
+    font-weight: 800;
+    color: var(--primary-color);
+    letter-spacing: -0.3px;
+    line-height: 1.5;
+}
+
+.auth-head p {
+    margin-top: 4px;
+    font-size: var(--font-size-xl);
+    font-weight: 300;
+    color: var(--text-secondary);
+}
+
+
+/* ── Fields (خروجی form.as_p) ─────────────────────────── */
+
+.auth-form p {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 18px;
+}
+
+.auth-form label {
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.auth-form input:not([type="checkbox"]):not([type="radio"]),
+.auth-form select,
+.auth-form textarea {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    font-family: inherit;
+    font-size: var(--font-size-2xl);
+    color: var(--text-primary);
+    background: var(--bg);
+    border: 1.2px solid var(--border-light);
+    border-radius: var(--border-radius-lg);
+    outline: none;
+    direction: rtl;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+/* فیلدهایی که محتوای لاتین دارند (ایمیل، رمز) چپ‌چین تایپ شوند */
+.auth-form input[type="email"],
+.auth-form input[type="password"],
+.auth-form input[type="url"] {
+    direction: ltr;
+    text-align: left;
+}
+
+.auth-form input::placeholder {
+    color: var(--text-muted);
+    font-weight: 300;
+}
+
+.auth-form input:hover {
+    border-color: #c9d1da;
+}
+
+.auth-form input:focus,
+.auth-form select:focus,
+.auth-form textarea:focus {
+    background: var(--white-bg);
+    border-color: var(--red-color);
+    box-shadow: 0 0 0 4px rgba(246, 108, 104, 0.16);
+}
+
+/* Autofill مرورگر */
+.auth-form input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 40px var(--bg) inset;
+    -webkit-text-fill-color: var(--text-primary);
+}
+
+/* checkbox (مثلاً «مرا به خاطر بسپار») */
+.auth-form p:has(input[type="checkbox"]) {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.auth-form input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--red-color);
+    cursor: pointer;
+}
+
+
+/* ── Help text ────────────────────────────────────────── */
+
+.auth-form .helptext {
+    display: block;
+    font-size: var(--font-size-lg);
+    font-weight: 300;
+    line-height: 1.9;
+    color: var(--text-secondary);
+}
+
+.auth-form .helptext ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.auth-form .helptext li {
+    position: relative;
+    padding-right: 14px;
+}
+
+.auth-form .helptext li::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0.85em;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--text-muted);
+}
+
+
+/* ── Errors ───────────────────────────────────────────── */
+
+.auth-form .errorlist,
+.auth-alert {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0 0 8px;
+    padding: 9px 12px;
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    line-height: 1.8;
+    color: #b50f0f;
+    background: #fff1f1;
+    border: 1px solid #ffc9c7;
+    border-right: 3px solid var(--danger-color);
+    border-radius: var(--border-radius-md);
+}
+
+/* خطای هر فیلد، قبل از خود <p> می‌آید؛ فاصله‌اش را جمع می‌کنیم */
+.auth-form .errorlist + p {
+    margin-top: 0;
+}
+
+.auth-form .errorlist + p input {
+    border-color: var(--danger-color);
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.12);
+}
+
+
+/* ── Password toggle (توسط اسکریپت اضافه می‌شود) ────────── */
+
+.pw-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.pw-wrap input {
+    padding-left: 42px !important;
+}
+
+.pw-toggle {
+    position: absolute;
+    left: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: var(--border-radius-md);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.pw-toggle:hover {
+    color: var(--red-color);
+    background: var(--red-light-color);
+}
+
+.pw-toggle:focus-visible {
+    outline: 2px solid var(--red-color);
+    outline-offset: 1px;
+}
+
+
+/* ── Submit ───────────────────────────────────────────── */
+
+.auth-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 46px;
+    margin-top: 6px;
+    font-family: inherit;
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--red-color) 0%, var(--red-durk-color) 100%);
+    border: none;
+    border-radius: var(--border-radius-999);
+    box-shadow: 0 8px 20px rgba(246, 108, 104, 0.32);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.auth-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(246, 108, 104, 0.42);
+    filter: brightness(1.04);
+}
+
+.auth-submit:active {
+    transform: translateY(0);
+}
+
+.auth-submit:focus-visible {
+    outline: 3px solid rgba(246, 108, 104, 0.4);
+    outline-offset: 2px;
+}
+
+
+/* ── Switch link ──────────────────────────────────────── */
+
+.auth-switch {
+    margin-top: 22px;
+    padding-top: 18px;
+    text-align: center;
+    font-size: var(--font-size-xl);
+    font-weight: 300;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border-light);
+}
+
+.auth-switch a {
+    margin-right: 4px;
+    font-weight: 700;
+    color: var(--red-color);
+    text-decoration: none;
+    background: linear-gradient(currentColor, currentColor) right bottom / 0 1.5px no-repeat;
+    transition: color 0.2s ease, background-size 0.25s ease;
+}
+
+.auth-switch a:hover {
+    color: var(--red-durk-color);
+    background-size: 100% 1.5px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   4) Responsive
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 820px) {
+    .auth-shell {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+    }
+
+    /* پنل معرفی روی موبایل به یک نوار جمع‌وجور تبدیل می‌شود */
+    .auth-aside {
+        padding: 22px 24px;
+        gap: 0;
+    }
+
+    .auth-aside__title {
+        margin-bottom: 4px;
+    }
+
+    .auth-aside__text,
+    .auth-points {
+        display: none;
+    }
+
+    .auth-main {
+        padding: 30px 24px 24px;
+    }
+}
+
+@media (max-width: 420px) {
+    .auth-page {
+        padding: 76px 4% 30px;
+    }
+
+    .auth-main {
+        padding: 26px 18px 20px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .auth-shell {
+        animation: none;
+    }
+
+    .auth-submit,
+    .auth-form input {
+        transition: none;
     }
 }

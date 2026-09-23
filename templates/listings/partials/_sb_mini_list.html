@@ -1,0 +1,25 @@
+<!-- templates/listings/partials/_sb_mini_list.html -->
+
+
+{% load custom_tags %}
+<ul class="sb-mini">
+    {% for l in items %}
+    <li>
+        <a href="{% url 'listings:listing_detail' l.pk %}">
+            {% if l.main_image %}
+            <img src="{{ l.main_image.url }}" alt="" loading="lazy">
+            {% else %}
+            <span class="sb-mini-ph"><i class="bi bi-image"></i></span>
+            {% endif %}
+            <div>
+                <strong>{{ l.title|truncatechars:32 }}</strong>
+                <small>
+                    {% if show == 'views' %}<i class="bi bi-eye"></i> {{ l.views_count|split_number }} بازدید
+                    {% elif show == 'discount' %}<s>{{ l.price|split_number }}</s> {{ l.discount_price|split_number }} تومان
+                    {% else %}{{ l.price|split_number }} تومان{% endif %}
+                </small>
+            </div>
+        </a>
+    </li>
+    {% endfor %}
+</ul>

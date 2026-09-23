@@ -569,6 +569,242 @@
                     </div>
                 </div>
 
+                {# ═════════════ ویجت‌های سایدبار (به ترتیب اولویت) ═════════════ #}
+                {% url 'accounts:profile' as profile_url %}
+                {% url 'accounts:login' as login_url %}
+                {% url 'accounts:register' as register_url %}
+                {% url 'notifications:notification_list' as notif_url %}
+                {% url 'listings:my_listings' as my_listings_url %}
+                {# ⚠️ اگر نام urlها فرق دارد فقط همین ۵ خط را اصلاح کن؛ در صورت اشتباه، لینک خالی می‌شود و صفحه خطا نمی‌دهد #}
+
+                {% with b=boosted_listings|length %}
+                {% with total=listings|length|add:b %}
+                {% if total > 0 %}
+                <div class="sidebar-widgets" id="sidebarWidgets">
+
+                    {% if user.is_authenticated %}
+
+                    {# ۱) کارت پروفایل و سطح احراز هویت #}
+                    <section class="sb-widget sb-profile">
+                        <div class="sb-profile-top">
+                            <div class="sb-avatar">
+                                {% if user.profile_image %}<img src="{{ user.profile_image.url }}" alt="">
+                                {% else %}<i class="bi bi-person-fill"></i>{% endif %}
+                            </div>
+                            <div class="sb-profile-info">
+                                <strong>{{ user.username }}</strong>
+                                {% if user.is_verified %}
+                                <span class="sb-tag sb-tag-ok"><i class="bi bi-patch-check-fill"></i> تایید شده</span>
+                                {% else %}
+                                <span class="sb-tag sb-tag-warn">تایید نشده</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="sb-progress-head">
+                            <span>سطح احراز هویت</span><strong>{{ sidebar.kyc_level|default:0 }}٪</strong>
+                        </div>
+                        <div class="sb-progress"><div class="sb-progress-fill" style="width: {{ sidebar.kyc_level|default:0 }}%"></div></div>
+                        <a href="{{ profile_url }}" class="btn btn-primary btn-medium btn-width-100">
+                            {% if sidebar.kyc_level < 100 %}تکمیل پروفایل{% else %}مشاهده پروفایل{% endif %}
+                        </a>
+                    </section>
+
+                    {# ۲) اعلان‌ها #}
+                    <section class="sb-widget">
+                        <h5 class="sb-title">
+                            <span class="sb-dot"></span>اعلان‌ها
+                            {% if sidebar.unread_count %}<span class="sb-count-badge">{{ sidebar.unread_count }}</span>{% endif %}
+                        </h5>
+                        {% for n in sidebar.notifications %}
+                        <a href="{% if n.action_url %}{{ n.action_url }}{% else %}{{ notif_url }}{% endif %}" class="sb-notif">
+                            <i class="bi {% if n.notification_type == 'visit_approved' %}bi-check-circle{% elif n.notification_type == 'visit_rejected' %}bi-x-circle{% else %}bi-bell{% endif %}"></i>
+                            <div><strong>{{ n.title|truncatechars:30 }}</strong><small>{{ n.created_at|time_ago }}</small></div>
+                        </a>
+                        {% empty %}
+                        <p class="sb-empty"><i class="bi bi-bell-slash"></i> اعلان جدیدی ندارید.</p>
+                        {% endfor %}
+                        <a href="{{ notif_url }}" class="sb-more">همه اعلان‌ها <i class="bi bi-arrow-left"></i></a>
+                    </section>
+
+                    {# ۳) درخواست‌های بازدید در انتظار #}
+                    {% if sidebar.pending_count %}
+                    <section class="sb-widget sb-alert">
+                        <h5 class="sb-title">
+                            <span class="sb-dot"></span>درخواست‌های بازدید
+                            <span class="sb-count-badge">{{ sidebar.pending_count }}</span>
+                        </h5>
+                        {% for r in sidebar.pending_requests %}
+                        <a href="{{ my_listings_url }}" class="sb-notif">
+                            <span class="sb-letter">{{ r.requester.username|slice:":1"|upper }}</span>
+                            <div><strong>{{ r.requester.username }}</strong><small>{{ r.listing.title|truncatechars:26 }}</small></div>
+                        </a>
+                        {% endfor %}
+                        <a href="{{ my_listings_url }}" class="sb-more">بررسی و تایید <i class="bi bi-arrow-left"></i></a>
+                    </section>
+                    {% endif %}
+
+                    {# ۴) خلاصه آگهی‌های من #}
+                    {% if sidebar.my_stats.total %}
+                    <section class="sb-widget">
+                        <h5 class="sb-title"><span class="sb-dot"></span>آگهی‌های من</h5>
+                        <div class="sb-stats">
+                            <div class="sb-stat"><strong>{{ sidebar.my_stats.active }}</strong><span>فعال</span></div>
+                            <div class="sb-stat"><strong>{{ sidebar.my_stats.pending }}</strong><span>در انتظار</span></div>
+                            <div class="sb-stat"><strong>{{ sidebar.my_stats.rejected }}</strong><span>ردشده</span></div>
+                        </div>
+                        <ul class="sb-rows">
+                            <li><span>مجموع بازدید</span><strong>{{ sidebar.my_stats.views|split_number }}</strong></li>
+                        </ul>
+                        <a href="{{ my_listings_url }}" class="sb-more">مدیریت آگهی‌ها <i class="bi bi-arrow-left"></i></a>
+                    </section>
+                    {% else %}
+                    <section class="sb-widget sb-cta">
+                        <i class="bi bi-rocket-takeoff sb-cta-icon"></i>
+                        <h5>پلتفرم خود را بفروشید</h5>
+                        <p>در چند دقیقه آگهی ثبت کنید و به هزاران خریدار دسترسی پیدا کنید.</p>
+                        <a href="{% url 'listings:listing_create' %}" class="btn btn-md btn-width-100 sb-cta-btn">ثبت آگهی جدید</a>
+                    </section>
+                    {% endif %}
+
+                    {# ۵) آگهی‌های ذخیره‌شده #}
+                    <section class="sb-widget">
+                        <h5 class="sb-title"><span class="sb-dot"></span>نشان‌شده‌ها</h5>
+                        <p class="sb-big"><strong>{{ saved_listing_ids|length }}</strong> آگهی ذخیره‌شده</p>
+                        <small class="sb-hint">با آیکون نشان (bookmark) روی هر آگهی، آن را برای مقایسه بعدی نگه دار.</small>
+                    </section>
+
+                    {% else %}
+
+                    {# ۱) کاربر مهمان #}
+                    <section class="sb-widget sb-cta">
+                        <i class="bi bi-person-circle sb-cta-icon"></i>
+                        <h5>به خانواده ما بپیوندید</h5>
+                        <p>با ورود، آگهی‌ها را ذخیره کنید، درخواست بازدید بدهید و آگهی ثبت کنید.</p>
+                        <a href="{{ login_url }}" class="btn btn-md btn-width-100 sb-cta-btn">ورود</a>
+                        <a href="{{ register_url }}" class="sb-cta-link">ثبت‌نام رایگان</a>
+                    </section>
+
+                    {% endif %}
+
+                    {# ۶) آمار بازار #}
+                    {% if sidebar.market %}
+                    <section class="sb-widget">
+                        <h5 class="sb-title"><span class="sb-dot"></span>نگاهی به بازار</h5>
+                        <ul class="sb-rows">
+                            <li><span>میانگین قیمت</span><strong>{{ sidebar.market.avg_price|floatformat:0|split_number }}</strong></li>
+                            <li><span>ارزان‌ترین</span><strong>{{ sidebar.market.min_price|floatformat:0|split_number }}</strong></li>
+                            <li><span>گران‌ترین</span><strong>{{ sidebar.market.max_price|floatformat:0|split_number }}</strong></li>
+                            <li><span>میانگین دنبال‌کننده</span><strong>{{ sidebar.market.avg_followers|floatformat:0|split_number }}</strong></li>
+                            <li><span>آگهی درآمددار</span><strong>{{ sidebar.income_count }}</strong></li>
+                            <li><span>آگهی تاییدشده</span><strong>{{ sidebar.verified_count }}</strong></li>
+                        </ul>
+                        <small class="sb-hint">بر اساس نتایج فعلی (با احتساب فیلترها)</small>
+                    </section>
+                    {% endif %}
+
+                    {# ۷) فیلتر سریع #}
+                    <section class="sb-widget">
+                        <h5 class="sb-title"><span class="sb-dot"></span>فیلتر سریع</h5>
+                        <div class="sb-chips">
+                            <a href="{% filter_url filter_verified='on' page='' %}" class="sb-chip {% if request.GET.filter_verified %}active{% endif %}"><i class="bi bi-patch-check"></i> تایید شده</a>
+                            <a href="{% filter_url filter_income='on' page='' %}" class="sb-chip {% if request.GET.filter_income %}active{% endif %}"><i class="bi bi-cash-coin"></i> درآمددار</a>
+                            <a href="{% filter_url filter_preferment='on' page='' %}" class="sb-chip {% if request.GET.filter_preferment %}active{% endif %}"><i class="bi bi-stars"></i> آگهی ویژه</a>
+                            <a href="{% filter_url filter_premier='on' page='' %}" class="sb-chip {% if request.GET.filter_premier %}active{% endif %}"><i class="bi bi-award"></i> آگهی برتر</a>
+                            <a href="{% filter_url filter_suggested_price='on' page='' %}" class="sb-chip {% if request.GET.filter_suggested_price %}active{% endif %}"><i class="bi bi-chat-dots"></i> قابل مذاکره</a>
+                        </div>
+                    </section>
+
+                    {# ۸) جدیدترین آگهی‌ها #}
+                    {% if sidebar.newest %}
+                    <section class="sb-widget">
+                        <h5 class="sb-title"><span class="sb-dot"></span>تازه‌ترین آگهی‌ها</h5>
+                        {% include 'listings/partials/_sb_mini_list.html' with items=sidebar.newest show='price' %}
+                    </section>
+                    {% endif %}
+
+                    {# ۹) مرتب‌سازی سریع #}
+                    <section class="sb-widget">
+                        <h5 class="sb-title"><span class="sb-dot"></span>مرتب‌سازی سریع</h5>
+                        <ul class="sb-list">
+                            <li><a href="{% filter_url sort_by='newest' page='' %}" class="{% if request.GET.sort_by == 'newest' %}active{% endif %}"><i class="bi bi-clock-history"></i> جدیدترین</a></li>
+                            <li><a href="{% filter_url sort_by='cheapest' page='' %}" class="{% if request.GET.sort_by == 'cheapest' %}active{% endif %}"><i class="bi bi-arrow-down-circle"></i> ارزان‌ترین</a></li>
+                            <li><a href="{% filter_url sort_by='most_followers' page='' %}" class="{% if request.GET.sort_by == 'most_followers' %}active{% endif %}"><i class="bi bi-people"></i> بیشترین دنبال‌کننده</a></li>
+                            <li><a href="{% filter_url sort_by='highest_income' page='' %}" class="{% if request.GET.sort_by == 'highest_income' %}active{% endif %}"><i class="bi bi-graph-up-arrow"></i> بیشترین درآمد</a></li>
+                            <li><a href="{% filter_url sort_by='fastest_roi' page='' %}" class="{% if request.GET.sort_by == 'fastest_roi' %}active{% endif %}"><i class="bi bi-lightning-charge"></i> سریع‌ترین برگشت سرمایه</a></li>
+                        </ul>
+                    </section>
+
+                    {# ۱۰) پربازدیدترین‌ها #}
+                    {% if sidebar.most_viewed %}
+                    <section class="sb-widget">
+                        <h5 class="sb-title"><span class="sb-dot"></span>پربازدیدترین‌ها</h5>
+                        {% include 'listings/partials/_sb_mini_list.html' with items=sidebar.most_viewed show='views' %}
+                    </section>
+                    {% endif %}
+
+                    {# ۱۱) بازه قیمتی #}
+                    <section class="sb-widget">
+                        <h5 class="sb-title"><span class="sb-dot"></span>بازه قیمتی محبوب</h5>
+                        <ul class="sb-list">
+                            <li><a href="{% filter_url min_price='' max_price='100000000' page='' %}"><i class="bi bi-tag"></i> تا ۱۰۰ میلیون تومان</a></li>
+                            <li><a href="{% filter_url min_price='100000000' max_price='500000000' page='' %}"><i class="bi bi-tag"></i> ۱۰۰ تا ۵۰۰ میلیون</a></li>
+                            <li><a href="{% filter_url min_price='500000000' max_price='2000000000' page='' %}"><i class="bi bi-tag"></i> ۵۰۰ میلیون تا ۲ میلیارد</a></li>
+                            <li><a href="{% filter_url min_price='2000000000' max_price='' page='' %}"><i class="bi bi-tag"></i> بالای ۲ میلیارد</a></li>
+                        </ul>
+                    </section>
+
+                    {# ۱۲) آگهی‌های تخفیف‌دار #}
+                    {% if sidebar.discounted %}
+                    <section class="sb-widget">
+                        <h5 class="sb-title"><span class="sb-dot"></span>فرصت‌های تخفیف‌دار</h5>
+                        {% include 'listings/partials/_sb_mini_list.html' with items=sidebar.discounted show='discount' %}
+                    </section>
+                    {% endif %}
+
+                    {# ۱۳) حوزه‌های پرطرفدار (با تعداد واقعی) #}
+                    {% if sidebar.top_activities %}
+                    <section class="sb-widget">
+                        <h5 class="sb-title"><span class="sb-dot"></span>حوزه‌های پرطرفدار</h5>
+                        <ul class="sb-list">
+                            {% for a in sidebar.top_activities %}
+                            <li>
+                                <a href="{% filter_url areas_activity=a.slug page='' %}" class="{% if selected_activity_sub == a.slug %}active{% endif %}">
+                                    <i class="bi bi-grid"></i> {{ a.label }}
+                                    <small class="sb-count">{{ a.count }} آگهی</small>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                    {% endif %}
+
+                    {# ۱۴) مراحل خرید امن #}
+                    <section class="sb-widget">
+                        <h5 class="sb-title"><span class="sb-dot"></span>مراحل خرید امن</h5>
+                        <ol class="sb-steps">
+                            <li><span>۱</span><div><strong>بررسی آگهی</strong><small>اطلاعات و آمار پلتفرم را با دقت ببینید.</small></div></li>
+                            <li><span>۲</span><div><strong>گفتگو با فروشنده</strong><small>درآمد و سابقه را مستند بخواهید.</small></div></li>
+                            <li><span>۳</span><div><strong>توافق و پرداخت امن</strong><small>فقط از مسیر رسمی سایت پرداخت کنید.</small></div></li>
+                            <li><span>۴</span><div><strong>تحویل و تایید</strong><small>پس از تحویل کامل، معامله را نهایی کنید.</small></div></li>
+                        </ol>
+                    </section>
+
+                    {# ۱۵) نکات مهم #}
+                    <section class="sb-widget sb-tips">
+                        <h5 class="sb-title"><span class="sb-dot"></span>نکات مهم قبل از خرید</h5>
+                        <ul>
+                            <li><i class="bi bi-check2-circle"></i> آگهی‌های «تایید شده» را در اولویت قرار دهید.</li>
+                            <li><i class="bi bi-check2-circle"></i> نسبت قیمت به درآمد ماهانه را بسنجید.</li>
+                            <li><i class="bi bi-check2-circle"></i> سن پلتفرم و کیفیت دنبال‌کنندگان را بررسی کنید.</li>
+                            <li><i class="bi bi-check2-circle"></i> خارج از سایت پول واریز نکنید.</li>
+                        </ul>
+                    </section>
+
+                </div>
+                {% endif %}
+                {% endwith %}
+                {% endwith %}
+
             </div>
 
             <div class="all-list-notice col-md-11">
@@ -1188,6 +1424,46 @@ document.querySelectorAll('.category-header-item[data-hover-item]').forEach(func
             activePill = pill;
         });
     });
+})();
+
+
+
+// هم‌ترازسازی ارتفاع سایدبار با لیست آگهی‌ها
+(function () {
+    const side = document.getElementById('filterCollapse');
+    const main = document.querySelector('.all-list-notice');
+    const box  = document.getElementById('sidebarWidgets');
+    if (!side || !main || !box) return;
+
+    const widgets = Array.from(box.querySelectorAll('.sb-widget'));
+    const mobile = window.matchMedia('(max-width: 768px)');
+    let raf = null;
+
+    function fit() {
+        widgets.forEach(w => w.classList.remove('sb-hidden'));
+        if (mobile.matches) return;               // در موبایل با CSS مخفی است
+        const limit = main.offsetHeight;
+        for (let i = widgets.length - 1; i >= 0; i--) {
+            if (side.offsetHeight <= limit) break;
+            widgets[i].classList.add('sb-hidden'); // از آخر شروع به حذف کن
+        }
+    }
+    function schedule() {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(fit);
+    }
+
+    window.addEventListener('load', schedule);
+    window.addEventListener('resize', schedule);
+    if ('ResizeObserver' in window) {
+        const ro = new ResizeObserver(schedule);
+        ro.observe(main);
+        const fc = side.querySelector('.compact-filter-card');
+        const gl = side.querySelector('.guide-list');
+        if (fc) ro.observe(fc);
+        if (gl) ro.observe(gl);
+    }
+    schedule();
 })();
 </script>
 

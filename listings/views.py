@@ -43,6 +43,7 @@ from .category_config import (
 )
 from .content_sanitizer import build_safe_rich_content
 import json as _json
+from .sidebar import build_sidebar_context
 
 
 logger = logging.getLogger(__name__)
@@ -171,7 +172,6 @@ def listing_list(request):
     listings = Listing.objects.filter(status='active')
     
     # تمام فیلتر‌ها برای حفظ در URL
-    # تمام فیلتر‌ها برای حفظ در URL
     preserved_params = {
         'search': request.GET.get('search', ''),
         'sort_by': request.GET.get('sort_by', ''),
@@ -210,7 +210,6 @@ def listing_list(request):
     selected_platform_display_name = ''
 
     if selected_platform_sub:
-        # ✅ اصلاح: category خودش CharField است و اسلاگ زیردسته را نگه می‌دارد
         listings = listings.filter(category=selected_platform_sub)
         for main_slug, main_label, subs in Category.PLATFORM_CATEGORIES:
             for sub_slug, sub_label in subs:
@@ -226,7 +225,6 @@ def listing_list(request):
                 selected_platform_display_name = label
                 break
         if sub_slugs:
-            # ✅ اصلاح: از __in استفاده می‌کنیم نه join روی Category
             listings = listings.filter(category__in=sub_slugs)
  
     # ╔══════════════════════════════════════════════════════════════════╗
@@ -462,7 +460,6 @@ def listing_list(request):
     elif selected_main_platform:
         section_description = get_category_description(selected_main_platform)
     else:
-        # اگر هیچی انتخاب نشده
         section_description = get_category_description('all_platform')
  
     # بررسی فیلترهای فعال
@@ -524,12 +521,20 @@ def listing_list(request):
         if activity_sub:
             params.append(f'areas_activity={activity_sub}')
         
-        # اضافه کردن سایر فیلتر‌های فعال
         for key, value in preserved_params.items():
             if value and key not in ['sort_by']:
                 params.append(f'{key}={value}')
         
         return '&'.join(params)
+
+    # ╔══════════════════════════════════════════════════════════════════╗
+    # ║                    داده‌های ویجت‌های سایدبار                      ║
+    # ╚══════════════════════════════════════════════════════════════════╝
+    sidebar = build_sidebar_context(
+        request,
+        listings.order_by(),
+        activity_categories,
+    )
  
     context = {
         'boosted_listings': boosted_listings,
@@ -553,9 +558,7 @@ def listing_list(request):
         'platform_categories': platform_categories,
         'sale_type_choices': sale_type_choices,
         
-        # ╔════════════════════════════════════════════════════════════╗
-        # ║        متن‌های توضیح و فیلتر انتخاب‌شده (نو!)             ║
-        # ╚════════════════════════════════════════════════════════════╝
+        # متن‌های توضیح و فیلتر انتخاب‌شده
         'section_description': section_description,
         'selected_main_platform': selected_main_platform,
         'selected_platform_sub': selected_platform_sub,
@@ -564,10 +567,12 @@ def listing_list(request):
         'selected_activity_sub': selected_activity_sub,
         'build_filter_url': build_filter_url,
         'preserved_params': preserved_params,
+
+        # سایدبار
+        'sidebar': sidebar,
     }
  
     return render(request, 'listings/listing_list.html', context)
-
 
 
 def listing_detail(request, pk):
