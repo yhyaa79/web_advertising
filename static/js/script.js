@@ -332,7 +332,12 @@ document.addEventListener("DOMContentLoaded", function () {
             "input";
 
         el.addEventListener(eventType, function () {
-            if (el.type === "number" || el.type === "range") {
+            // ✅ فقط چک‌باکس‌ها + رنج‌ها + نامبرها با تاخیر ۲ ثانیه‌ای
+            if (
+                el.type === "checkbox" ||
+                el.type === "number" ||
+                el.type === "range"
+            ) {
                 clearTimeout(debounceTimer);
                 debounceTimer = setTimeout(() => form.submit(), 2000);
             } else {
@@ -341,8 +346,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-
-
 
 
 
