@@ -8,6 +8,9 @@ from django.db.models import Count, Sum, Avg, Q, F, Case, When, DecimalField, Mi
 from listings.models import Listing, Category, ViewsDataPoint, IncomeDataPoint
 from accounts.models import SavedListing
 from django.views.generic import TemplateView 
+import random
+from django.urls import reverse
+
 
 class ComingSoonView(TemplateView):
     template_name = 'coming_soon.html'
@@ -270,6 +273,39 @@ def format_number(num):
     return str(int(num))
 
 
+def get_strip_items():
+    """
+    ساخت لیست به‌هم‌ریخته از دسته‌بندی‌ها و زیردسته‌ها
+    برای نمایش در نوار متحرک صفحه اصلی.
+    """
+    items = []
+
+    # دسته‌های اصلی پلتفرم + زیردسته‌هایشان
+    for slug, label, subs in Category.PLATFORM_CATEGORIES:
+        items.append({
+            'type': 'category',
+            'label': label,
+            'slug': slug,
+            'url': f"{reverse('listings:listing_list')}?category={slug}",
+        })
+        for sub_slug, sub_label in subs:
+            items.append({
+                'type': 'subcategory',
+                'label': sub_label,
+                'slug': sub_slug,
+                'url': f"{reverse('listings:listing_list')}?category={sub_slug}",
+            })
+
+    # اگر خواستی دسته‌های فعالیت را هم قاطی کنی، این بلاک را فعال کن:
+    # for slug, label, subs in Listing.ACTIVITY_CATEGORIES:
+    #     items.append({...})
+    #     for sub_slug, sub_label in subs:
+    #         items.append({...})
+
+    random.shuffle(items)   # به‌هم‌ریختن
+    return items
+
+
 def home(request):
     """صفحه اصلی با داده‌های دینامیک جامع"""
     
@@ -318,6 +354,8 @@ def home(request):
         
         # توابع کمکی
         'format_number': format_number,
+
+        'strip_items': get_strip_items(),
     }
 
     from listings.models import Category, Listing

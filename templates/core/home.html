@@ -133,36 +133,45 @@
   </section>
 
 
-  <!-- press strip -->
-  <section class="strip" aria-label="رسانه‌های همراه">
+  <!-- ═══════════ strip: دسته‌بندی و زیردسته‌های داینامیک ═══════════ -->
+  {% if strip_items %}
+  <section class="strip" aria-label="دسته‌بندی‌ها و زیردسته‌ها">
     <div class="strip-in">
       <div class="marquee">
         <div class="track">
+
           <div class="set">
-            <span class="lg lg-nyt">The New York Times</span>
-            <span class="lg lg-guardian"><small>The</small><b>Guardian</b></span>
-            <span class="lg lg-tc"><i>TC</i>TechCrunch</span>
-            <span class="lg lg-wsj">The Wall Street Journal.</span>
-            <span class="lg lg-yc"><i>Y</i>Combinator</span>
-            <span class="lg lg-bust">Bustle</span>
-            <span class="lg lg-digi">دیجی‌مارکت</span>
-            <span class="lg lg-web">وب‌سایت و شبکه اجتماعی</span>
+            {% for item in strip_items %}
+              <a href="{{ item.url }}"
+                 class="lg {% if item.type == 'category' %}lg-cat{% else %}lg-sub{% endif %}">
+                {% if item.type == 'category' %}
+                  <i class="lg-dot"></i>{{ item.label }}
+                {% else %}
+                  {{ item.label }}
+                {% endif %}
+              </a>
+            {% endfor %}
           </div>
+
           <div class="set" aria-hidden="true">
-            <span class="lg lg-nyt">The New York Times</span>
-            <span class="lg lg-guardian"><small>The</small><b>Guardian</b></span>
-            <span class="lg lg-tc"><i>TC</i>TechCrunch</span>
-            <span class="lg lg-wsj">The Wall Street Journal.</span>
-            <span class="lg lg-yc"><i>Y</i>Combinator</span>
-            <span class="lg lg-bust">Bustle</span>
-            <span class="lg lg-digi">دیجی‌مارکت</span>
-            <span class="lg lg-web">وب‌سایت و شبکه اجتماعی</span>
+            {% for item in strip_items %}
+              <a href="{{ item.url }}"
+                 class="lg {% if item.type == 'category' %}lg-cat{% else %}lg-sub{% endif %}"
+                 tabindex="-1">
+                {% if item.type == 'category' %}
+                  <i class="lg-dot"></i>{{ item.label }}
+                {% else %}
+                  {{ item.label }}
+                {% endif %}
+              </a>
+            {% endfor %}
           </div>
+
         </div>
       </div>
     </div>
   </section>
-
+  {% endif %}
 
 
 
@@ -199,7 +208,7 @@
   </section>
 
 
-  
+
 
   <!-- ═══════════════════════ FOR SELLERS ═══════════════════════ -->
   <section class="sec ind" id="for-sellers">
@@ -941,5 +950,39 @@
   </section>
 
 </main>
+
+
+<script>
+(function initMarqueeSpeed() {
+  // سرعت دلخواه: پیکسل بر ثانیه
+  const SPEED = 50;   // ← هر عددی که دوست داری
+
+  function setup(marquee) {
+    const track = marquee.querySelector('.track');
+    const set   = track && track.querySelector('.set');
+    if (!track || !set) return;
+
+    const update = () => {
+      const width = set.getBoundingClientRect().width;
+      if (!width) return;
+      // مدت = مسافت / سرعت  → عرض یک set تقسیم بر px/s
+      const duration = width / SPEED;
+      track.style.animationDuration = duration.toFixed(2) + 's';
+    };
+
+    update();
+
+    // اگر تعداد آیتم‌ها یا فونت عوض شد، دوباره حساب کن
+    if (window.ResizeObserver) {
+      const ro = new ResizeObserver(update);
+      ro.observe(set);
+    } else {
+      window.addEventListener('resize', update);
+    }
+  }
+
+  document.querySelectorAll('.marquee').forEach(setup);
+})();
+</script>
 
 {% endblock %}

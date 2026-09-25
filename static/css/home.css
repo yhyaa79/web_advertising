@@ -513,7 +513,9 @@ a:focus-visible {
     width: max-content;
     height: 100%;
     margin-right: calc(var(--k) * -9);
-    animation: scroll 45s linear infinite;
+    /* مدت را JS تعیین می‌کند */
+    animation: scroll var(--marquee-duration, 45s) linear infinite;
+    will-change: transform;
 }
 
 .set {
@@ -533,8 +535,9 @@ a:focus-visible {
     display: flex;
     align-items: center;
     white-space: nowrap;
-    color: #4d4d52;
     flex: none;
+    font-size: calc(var(--k) * 7.5);
+    font-weight: 300;
 }
 
 .lg-nyt {
