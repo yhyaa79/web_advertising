@@ -195,14 +195,11 @@ def get_trending_listings():
 
 def get_special_listings():
     """✨ آگهی‌های ویژه"""
-    now = timezone.now()
-    week_ago = now - timedelta(days=7)
-    
-    # تازه‌ترین‌ها (این هفته)
+    # تازه‌ترین آگهی‌های فعال. محدودکردن به هفتهٔ اخیر باعث
+    # می‌شد خانه با وجود آگهی فعال، بخش فرصت‌های خالی نشان دهد.
     latest = Listing.objects.filter(
-        status='active',
-        created_at__gte=week_ago
-    ).order_by('-created_at')[:4]
+        status='active'
+    ).select_related('seller').order_by('-created_at')[:6]
     
     # تخفیف‌دار‌ها
     discounted = Listing.objects.filter(
@@ -210,11 +207,9 @@ def get_special_listings():
         discount_price__isnull=False
     ).exclude(discount_price=0).order_by('-created_at')[:4]
     
-    # پرباز‌دید‌ترین‌ها (این ماه)
-    month_ago = now - timedelta(days=30)
+    # پربازدیدترین آگهی‌های فعال
     most_viewed = Listing.objects.filter(
-        status='active',
-        created_at__gte=month_ago
+        status='active'
     ).order_by('-most_view')[:4]
     
     # بیشترین دنبال‌کننده
@@ -324,7 +319,19 @@ def home(request):
         # توابع کمکی
         'format_number': format_number,
     }
-    
+
+    from listings.models import Category, Listing
+
+    context['sale_type_choices'] = Listing.SALE_TYPE_CHOICES
+    context['platform_main_categories'] = [
+        (slug, label, len(subs)) for slug, label, subs in Category.PLATFORM_CATEGORIES
+    ]
+    context['platform_categories_full'] = Category.PLATFORM_CATEGORIES
+    context['activity_main_categories'] = [
+        (slug, label, len(subs)) for slug, label, subs in Listing.ACTIVITY_CATEGORIES
+    ]
+    context['activity_categories_full'] = Listing.ACTIVITY_CATEGORIES
+        
     return render(request, 'core/home.html', context)
 
 

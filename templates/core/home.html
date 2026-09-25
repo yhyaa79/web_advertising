@@ -6,7 +6,7 @@
 {% load custom_tags %}
 {% load date_filters %}
 
-{% block title %}صفحه اصلی{% endblock %}
+{% block title %}صفحه اصلی | بازار دارایی‌های دیجیتال{% endblock %}
 
 {% block content %}
 
@@ -32,20 +32,22 @@
       </div>
 
       <h1 class="title">
-        <span>دارایی دیجیتال شما،</span>
-        <span>معامله‌ای امن و شفاف</span>
-        <span class="dim">از وب‌سایت تا شبکه</span>
-        <span>اجتماعی، با ما</span>
+        <span>دارایی دیجیتال خود را</span>
+        <span>شفاف، امن و بدون کمیسیون</span>
+        <span class="dim">بفروشید یا بخرید</span>
+        <span>با اطمینان کامل</span>
       </h1>
 
-      <p class="sub">بازار واسطه خرید و فروش دارایی‌های دیجیتال، شامل وب‌سایت و رسانه‌های اجتماعی.<br> فروشنده، خریدار و توافق، همه در یک پنل.</p>
+      <p class="sub">
+        بازار تخصصی خرید و فروش وب‌سایت، فروشگاه، اپلیکیشن و شبکه‌های اجتماعی.<br>
+        فروشنده با قول فروش و بازدید بالا — خریدار با تنوع بی‌نظیر و قیمت منصفانه.
+      </p>
 
       <div class="actions">
-        <a class="btn-home btn-light" href="#about">بیشتر بدانید</a>
-        <a class="btn-home btn-dark" href="#">شروع کنید <svg aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
+        <a class="btn-home btn-light" href="#for-buyers">خریدار هستم</a>
+        <a class="btn-home btn-dark" href="#for-sellers">فروشنده هستم <svg aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
       </div>
 
-      <!-- Real market stat card (animated) -->
       <div class="appt float-slow">
         <div class="lbl">میانگین قیمت بازار</div>
         <div class="doc">{{ market_insights.avg_price|format_number }} تومان</div>
@@ -59,7 +61,6 @@
         </div>
       </div>
 
-      <!-- ═══ Random listing: BONNIE (right card) ═══ -->
       {% if latest_listings %}
         {% with listing=latest_listings|random %}
         <div class="person bonnie float-rotate-b">
@@ -84,18 +85,8 @@
           <div class="bar"><i style="width:{% if listing.is_verified %}100{% elif listing.is_income %}75{% else %}45{% endif %}%"></i></div>
         </div>
         {% endwith %}
-      {% else %}
-        <div class="person bonnie float-rotate-b">
-          <div class="head">
-            <svg class="av" viewBox="0 0 40 40" aria-hidden="true"><use href="#av-bonnie"/></svg>
-            <div><b>فروش وب‌سایت فروشگاهی</b><small>آگهی نمونه</small></div>
-          </div>
-          <div class="week">در انتظار آگهی‌ها</div>
-          <div class="bar"><i style="width:75%"></i></div>
-        </div>
       {% endif %}
 
-      <!-- ═══ Random listing: SIMON (left card) ═══ -->
       {% if most_viewed_listings %}
         {% with listing=most_viewed_listings|random %}
         <div class="person simon float-rotate-s">
@@ -120,18 +111,8 @@
           <div class="bar"><i style="width:{% if listing.is_verified %}100{% elif listing.is_income %}75{% else %}45{% endif %}%"></i></div>
         </div>
         {% endwith %}
-      {% else %}
-        <div class="person simon float-rotate-s">
-          <div class="head">
-            <svg class="av" viewBox="0 0 40 40" aria-hidden="true"><use href="#av-simon"/></svg>
-            <div><b>واگذاری پیج اینستاگرام</b><small>آگهی نمونه</small></div>
-          </div>
-          <div class="week">در انتظار آگهی‌ها</div>
-          <div class="bar"><i style="width:82%"></i></div>
-        </div>
       {% endif %}
 
-      <!-- Real platform stats pills (animated) -->
       <div class="pill pill-dark float-pill-dark">
         <span class="av-icon-tile-v2">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
@@ -182,6 +163,251 @@
     </div>
   </section>
 
+
+
+
+    <!-- ═══════════════════════ NO COMMISSION ═══════════════════════ -->
+  <section class="sec no-comm" id="no-commission">
+    <div class="blob b-v" style="left:-6%;right:auto;top:10%;width:44%;height:70%" aria-hidden="true"></div>
+    <div class="wrap">
+      <h2 class="h2">واسطه‌ی ما،<br><span class="dim">هیچ کمیسیونی نمی‌گیرد.</span></h2>
+      <p class="lead">ما فقط زمین بازی را فراهم می‌کنیم. تمام مبلغ توافق‌شده بین خریدار و فروشنده جابجا می‌شود — بدون کسر درصد یا هزینه‌ی پنهان.</p>
+
+      <div class="comm-grid">
+        <div class="comm-card">
+          <div class="comm-num">۰<span>٪</span></div>
+          <b>کمیسیون از فروشنده</b>
+          <p>صد درصد مبلغ فروش به فروشنده می‌رسد.</p>
+        </div>
+        <div class="comm-card comm-card-accent">
+          <div class="comm-num">۰<span>٪</span></div>
+          <b>کمیسیون از خریدار</b>
+          <p>فقط قیمت توافق‌شده را پرداخت می‌کنید.</p>
+        </div>
+        <div class="comm-card">
+          <div class="comm-num">۲۴/۷</div>
+          <b>پنل پیگیری تراکنش</b>
+          <p>شفافیت کامل در تمام مراحل معامله.</p>
+        </div>
+        <div class="comm-card">
+          <div class="comm-num">۱۰۰<span>٪</span></div>
+          <b>شفافیت قیمت و مدارک</b>
+          <p>بدون هزینه‌ی پنهان و بدون سورپرایز.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  
+
+  <!-- ═══════════════════════ FOR SELLERS ═══════════════════════ -->
+  <section class="sec ind" id="for-sellers">
+    <div class="wrap">
+      <div class="dpanel">
+
+        <div class="dcopy">
+          <h2 class="h2">دارایی‌ات را بفروش،<br><span class="dim">با قول فروش و بازدید بالا.</span></h2>
+          <p class="lead">تیم تحلیل و بازاریابی ما در تمام مسیر فروش کنارت است تا دارایی‌ات سریع‌تر، گران‌تر و مطمئن‌تر به دست خریدار واقعی برسد.</p>
+
+          <ul class="checks">
+            <li>
+              <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3l2.3 2.3L9.5 3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span><b>قول فروش</b> — معرفی هدفمند به خریداران واقعی توسط تیم بازاریابی</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3l2.3 2.3L9.5 3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span><b>بازدید بالا</b> — نمایش در بخش‌های ویژه، ترند و پیشنهادهای هوشمند</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3l2.3 2.3L9.5 3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span><b>امنیت کامل</b> — آگهی خصوصی، کنترل دسترسی و پیگیری تراکنش در پنل</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3l2.3 2.3L9.5 3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span><b>بدون کمیسیون</b> — هیچ درصدی از فروش به‌عنوان حق واسطه‌گری کسر نمی‌شود</span>
+            </li>
+          </ul>
+
+          <div class="btn-home-row" style="margin-top:34px">
+            <a class="pbtn pbtn-violet" href="{% url 'listings:listing_create' %}">ثبت آگهی فروش <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
+          </div>
+        </div>
+
+        <div class="pwrap">
+          <div class="phone">
+            <div class="screen">
+              <div class="s-top"><span>۹:۴۱</span><span>پنل فروشنده</span></div>
+              <div class="s-hi">سلام.<br><span>آماده‌ی فروش دارایی‌ات هستی؟</span></div>
+              <div class="s-card">
+                <small>آگهی‌های فعال شما</small>
+                <b>{{ platform_stats.active_listings|format_number }} آگهی در دسترس</b>
+                <div class="wave" aria-hidden="true"><i style="height:30%"></i><i style="height:52%"></i><i style="height:38%"></i><i style="height:70%"></i><i style="height:44%"></i><i style="height:60%"></i><i style="height:28%"></i><i style="height:66%"></i><i style="height:48%"></i><i class="off" style="height:74%"></i><i class="off" style="height:36%"></i><i class="off" style="height:58%"></i><i class="off" style="height:42%"></i><i class="off" style="height:64%"></i><i class="off" style="height:32%"></i><i class="off" style="height:54%"></i><i class="off" style="height:40%"></i><i class="off" style="height:68%"></i><i class="off" style="height:34%"></i><i class="off" style="height:50%"></i></div>
+                <div class="s-row"><small>میانگین قیمت فروش بازار</small><span class="s-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.2v9.6L10.2 6z" fill="currentColor"/></svg></span></div>
+              </div>
+              <div class="s-prog"><div><span>میانگین قیمت</span><span>{{ market_insights.avg_price|format_number }}</span></div><div class="bar"><i></i></div></div>
+              <div class="s-chips"><span>بدون کمیسیون</span><span>بازدید بالا</span><span>امنیت کامل</span></div>
+            </div>
+            <div class="floatc f-done"><i><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3l2.3 2.3L9.5 3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></i>{{ platform_stats.sold_listings|format_number }} معامله</div>
+            <div class="floatc f-doc"><svg class="av" viewBox="0 0 40 40" aria-hidden="true"><use href="#av-gary"/></svg><span>پنل فروشنده<small>پشتیبان شما</small></span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════ FOR BUYERS ═══════════════════════ -->
+  <section class="sec buyer-sec" id="for-buyers">
+    <div class="blob b-v" style="left:-6%;right:auto;top:10%;width:44%;height:70%" aria-hidden="true"></div>
+    <div class="blob b-y" style="right:-8%;left:auto;top:30%;width:44%;height:60%" aria-hidden="true"></div>
+
+    <div class="wrap">
+      <h2 class="h2">هر دارایی دیجیتالی که بخواهی<br><span class="dim">اینجا پیدا می‌شود.</span></h2>
+      <p class="lead">از یک دامنه‌ی کوتاه تا یک فروشگاه اینترنتی با درآمد ماهانه — همه در یک بازار شفاف، با قیمت منصفانه و امکان بررسی دقیق اطلاعات.</p>
+
+      <!-- ═══ انواع فروش ═══ -->
+      {% if sale_type_choices %}
+      <div class="buyer-block">
+        <div class="buyer-block-head">
+          <div class="buyer-block-title">
+            <span class="buyer-block-dot"></span>
+            <h3>انواع فروش</h3>
+          </div>
+          <p class="buyer-block-sub">بسته به اینکه چقدر از مالکیت را می‌خواهی منتقل کنی، یکی از این مدل‌ها را انتخاب کن.</p>
+        </div>
+
+        <div class="sale-types-grid">
+          {% for slug, label in sale_type_choices %}
+          <article class="sale-type-card">
+            <span class="sale-type-num">{{ forloop.counter|stringformat:"02d" }}</span>
+            <span class="sale-type-icon">
+              {% if slug == 'full_ownership' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              {% elif slug == 'partial_ownership' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20"/></svg>
+              {% elif slug == 'license' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+              {% elif slug == 'revenue_share' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+              {% elif slug == 'brand' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
+              {% else %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>
+              {% endif %}
+            </span>
+            <h4 class="sale-type-title">{{ label }}</h4>
+            <p class="sale-type-desc">
+              {% if slug == 'full_ownership' %}همه‌چیز به خریدار منتقل می‌شود؛ مالکیت، اسناد و درآمد.
+              {% elif slug == 'partial_ownership' %}فروش درصدی از مالکیت برای جذب شریک یا سرمایه‌گذار.
+              {% elif slug == 'license' %}واگذاری حق استفاده در بازه یا محدوده‌ی مشخص بدون انتقال مالکیت.
+              {% elif slug == 'revenue_share' %}فروشنده مالک می‌ماند و درصدی از درآمد آینده را می‌گیرد.
+              {% elif slug == 'brand' %}انتقال برند، لوگو و دارایی‌های هویتی به خریدار.
+              {% else %}مدل فروش مطابق با نیاز شما.{% endif %}
+            </p>
+            <div class="sale-type-fit">
+              {% if slug == 'full_ownership' %}مناسب برای: <b>فروش کامل</b>
+              {% elif slug == 'partial_ownership' %}مناسب برای: <b>سرمایه‌گذاری</b>
+              {% elif slug == 'license' %}مناسب برای: <b>درآمد پایدار</b>
+              {% elif slug == 'revenue_share' %}مناسب برای: <b>حفظ مالکیت</b>
+              {% elif slug == 'brand' %}مناسب برای: <b>فروش هویت برند</b>
+              {% else %}مناسب برای: <b>نیازهای خاص</b>{% endif %}
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+
+      <!-- ═══ دسته‌بندی‌ها + زیرمجموعه‌ها ═══ -->
+      {% if platform_categories_full %}
+      <div class="buyer-block">
+        <div class="buyer-block-head">
+          <div class="buyer-block-title">
+            <span class="buyer-block-dot"></span>
+            <h3>دسته‌بندی‌ها</h3>
+          </div>
+          <p class="buyer-block-sub">هر کارت، یک دسته‌ی اصلی است و چیپ‌های داخلش، زیردسته‌های آن.</p>
+        </div>
+
+        <div class="cat-expanded-grid">
+          {% for slug, label, subs in platform_categories_full %}
+          <article class="cat-expanded">
+            <header class="cat-expanded-header">
+              <span class="cat-expanded-icon">
+                {% if slug == 'content_media' %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                {% elif slug == 'ecommerce' %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                {% elif slug == 'software' %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                {% elif slug == 'social_media' %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/></svg>
+                {% elif slug == 'service_business' %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                {% elif slug == 'domain' %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                {% else %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>
+                {% endif %}
+              </span>
+              <div class="cat-expanded-head">
+                <b>{{ label }}</b>
+                <small>{{ subs|length }} زیردسته</small>
+              </div>
+            </header>
+            <div class="cat-subs">
+              {% for sub_slug, sub_label in subs %}
+                <a href="{% url 'listings:listing_list' %}?category={{ sub_slug }}" class="cat-sub-chip">{{ sub_label }}</a>
+              {% endfor %}
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+
+      <!-- ═══ حوزه‌های فعالیت ═══ -->
+      {% if activity_categories_full %}
+      <div class="buyer-block">
+        <div class="buyer-block-head">
+          <div class="buyer-block-title">
+            <span class="buyer-block-dot"></span>
+            <h3>حوزه‌های فعالیت</h3>
+          </div>
+          <p class="buyer-block-sub">روی هر حوزه بزن تا زیرمجموعه‌هایش باز شود.</p>
+        </div>
+
+        <div class="activity-grid">
+          {% for slug, label, subs in activity_categories_full %}
+          <details class="activity-item">
+            <summary>
+              <span class="activity-label">{{ label }}</span>
+              <span class="activity-count">{{ subs|length }}</span>
+              <span class="activity-chev">
+                <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5l3.5 3.5L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </summary>
+            <div class="activity-subs">
+              {% for sub_slug, sub_label in subs %}
+                <a href="{% url 'listings:listing_list' %}?areas_activity={{ sub_slug }}" class="activity-chip">{{ sub_label }}</a>
+              {% endfor %}
+            </div>
+          </details>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="buyer-cta">
+        <a class="pbtn pbtn-violet" href="{% url 'listings:listing_list' %}">مشاهده همه آگهی‌ها <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
+      </div>
+
+    </div>
+  </section>
 
   <!-- ═══════════════════════ MARKET DASHBOARD ═══════════════════════ -->
   <section class="sec dash-sec" id="market">
@@ -267,7 +493,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════ TOP CATEGORIES ═══════════════════════ -->
+  <!-- ═══════════════════════ TOP CATEGORIES (Trending) ═══════════════════════ -->
   {% if top_categories %}
   <section class="sec cat-sec" id="categories">
     <div class="blob b-y" style="right:-8%;left:auto;top:15%;width:46%;height:65%" aria-hidden="true"></div>
@@ -285,7 +511,7 @@
               {% elif cat.slug == 'social_telegram_channel' %}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
               {% elif cat.slug == 'social_youtube' %}
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor" stroke="none"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/></svg>
               {% elif cat.slug == 'ecommerce_woocommerce' or cat.slug == 'ecommerce_shopify' or cat.slug == 'ecommerce_custom' %}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
               {% elif cat.slug == 'app_android' or cat.slug == 'app_ios' or cat.slug == 'app_saas' %}
@@ -293,7 +519,7 @@
               {% elif cat.slug == 'domain_ir' or cat.slug == 'domain_com' or cat.slug == 'domain_brandable' %}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
               {% else %}
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>
               {% endif %}
             </span>
             <div class="cat-info">
@@ -318,14 +544,13 @@
     <div class="blob b-v" style="left:-6%;right:auto;top:10%;width:44%;height:70%" aria-hidden="true"></div>
     <div class="wrap">
       <h2 class="h2">آگهی‌های ویژه<br><span class="dim">منتخب بازار.</span></h2>
-      <p class="lead">جدیدترین، تخفیف‌دار، پربازدید و پرمخاطب‌ترین دارایی‌های دیجیتال.</p>
+      <p class="lead">جدیدترین، تخفیف‌دار و پربازدیدترین دارایی‌های دیجیتال.</p>
 
-      <!-- Latest -->
       {% if latest_listings %}
       <div class="lst-group">
         <div class="lst-head">
           <h3><span class="dot"></span>تازه‌ترین آگهی‌ها</h3>
-          <a href="#">مشاهده همه</a>
+          <a href="{% url 'listings:listing_list' %}">مشاهده همه</a>
         </div>
         <div class="lst-grid">
           {% for listing in latest_listings %}
@@ -407,12 +632,11 @@
       </div>
       {% endif %}
 
-      <!-- Discounted -->
       {% if discounted_listings %}
       <div class="lst-group">
         <div class="lst-head">
           <h3><span class="dot"></span>آگهی‌های تخفیف‌دار</h3>
-          <a href="#">مشاهده همه</a>
+          <a href="{% url 'listings:listing_list' %}">مشاهده همه</a>
         </div>
         <div class="lst-grid">
           {% for listing in discounted_listings %}
@@ -450,12 +674,11 @@
       </div>
       {% endif %}
 
-      <!-- Most viewed -->
       {% if most_viewed_listings %}
       <div class="lst-group">
         <div class="lst-head">
           <h3><span class="dot"></span>پربازدیدترین‌ها</h3>
-          <a href="#">مشاهده همه</a>
+          <a href="{% url 'listings:listing_list' %}">مشاهده همه</a>
         </div>
         <div class="lst-grid">
           {% for listing in most_viewed_listings %}
@@ -493,7 +716,7 @@
   {% endif %}
 
   <!-- ═══════════════════════ TRENDING ═══════════════════════ -->
-  {% if trending_listings or market_opportunities.big_discounts or most_followers_listings or highest_income_listings %}
+  {% if trending_listings or market_opportunities.big_discounts %}
   <section class="sec trend-sec" id="trending">
     <div class="gridbg" aria-hidden="true"></div>
     <div class="wrap">
@@ -550,87 +773,9 @@
         </article>
         {% endfor %}
       </div>
-
-      <div class="trend-two-col">
-        {% if most_followers_listings %}
-        <div class="trend-panel">
-          <div class="trend-panel-head">
-            <h3><span class="dot"></span>بیشترین دنبال‌کننده</h3>
-            <a href="#">همه</a>
-          </div>
-          <ul class="trend-list">
-            {% for listing in most_followers_listings %}
-            <li>
-              <div class="trend-list-i">
-                <b>{{ listing.title|truncatechars:28 }}</b>
-                <small>{{ listing.get_category_display_safe|default:listing.category }}</small>
-              </div>
-              <div class="trend-list-v">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-                {{ listing.followers_count|format_number }}
-              </div>
-            </li>
-            {% endfor %}
-          </ul>
-        </div>
-        {% endif %}
-
-        {% if highest_income_listings %}
-        <div class="trend-panel">
-          <div class="trend-panel-head">
-            <h3><span class="dot"></span>بیشترین درآمد</h3>
-            <a href="#">همه</a>
-          </div>
-          <ul class="trend-list">
-            {% for listing in highest_income_listings %}
-            <li>
-              <div class="trend-list-i">
-                <b>{{ listing.title|truncatechars:28 }}</b>
-                <small>{{ listing.get_area_activity_display_safe|default:listing.areas_activity }}</small>
-              </div>
-              <div class="trend-list-v income">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-                {{ listing.monthly_income|format_number }}
-              </div>
-            </li>
-            {% endfor %}
-          </ul>
-        </div>
-        {% endif %}
-      </div>
     </div>
   </section>
   {% endif %}
-
-  <!-- ═══════════════════════ ABOUT ═══════════════════════ -->
-  <section class="sec about" id="about">
-    <div class="blob b-y" style="right:-8%;left:auto;top:10%;width:46%;height:70%" aria-hidden="true"></div>
-    <div class="blob b-v" style="left:-10%;right:auto;top:0;width:50%;height:80%" aria-hidden="true"></div>
-    <div class="wrap">
-      <h2 class="h2">
-        <span>بازار واسطه‌ای امن برای</span>
-        <span>خرید و فروش دارایی‌های دیجیتال</span>
-        <span class="dim">از وب‌سایت تا رسانه‌های اجتماعی</span>
-      </h2>
-      <p class="lead">فروشنده اطلاعات فعالیت، قیمت، درآمد، مدارک و شرایط واگذاری را ثبت می‌کند. خریدار آگهی‌ها را جست‌وجو، ذخیره و بررسی می‌کند و از طریق پیشنهاد قیمت و گفت‌وگو به توافق می‌رسد.</p>
-
-      <div class="stats3">
-        <div class="card">
-          <div class="num">{{ platform_stats.active_listings|format_number }}</div>
-          <p>آگهی فعال در دسته‌بندی‌های وب‌سایت، شبکه اجتماعی، اپلیکیشن، دامنه و کسب‌وکار خدماتی.</p>
-        </div>
-        <div class="card">
-          <div class="num">{{ platform_stats.verified_listings|format_number }}</div>
-          <p>آگهی تایید‌شده با مدارک بررسی‌شده، درآمد مستند و شرایط واگذاری شفاف.</p>
-          <div class="bar-mini"><i style="width:{% widthratio platform_stats.verified_listings platform_stats.active_listings 100 %}%"></i></div>
-        </div>
-        <div class="card">
-          <div class="num">{{ platform_stats.income_listings|format_number }}</div>
-          <p>آگهی درآمدزا با درآمد ماهانه ثبت‌شده و قابل بررسی توسط خریدار.</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ═══════════════════════ HOW IT WORKS ═══════════════════════ -->
   <section class="sec how" id="how">
@@ -655,7 +800,7 @@
         <article class="card step">
           <div class="viz">
             <div class="player">
-              <div class="play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.500 1.200v9.600L10.200 6z" fill="currentColor"/></svg></div>
+              <div class="play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.2v9.6L10.2 6z" fill="currentColor"/></svg></div>
               <div class="wave" aria-hidden="true"><i style="height:30%"></i><i style="height:52%"></i><i style="height:38%"></i><i style="height:70%"></i><i style="height:44%"></i><i style="height:60%"></i><i style="height:28%"></i><i style="height:66%"></i><i style="height:48%"></i><i style="height:74%"></i><i style="height:36%"></i><i class="off" style="height:58%"></i><i class="off" style="height:42%"></i><i class="off" style="height:64%"></i><i class="off" style="height:32%"></i><i class="off" style="height:54%"></i><i class="off" style="height:40%"></i><i class="off" style="height:68%"></i><i class="off" style="height:34%"></i><i class="off" style="height:50%"></i></div>
             </div>
           </div>
@@ -676,78 +821,18 @@
           </div>
           <div class="step-n">۳</div>
           <h3>پیشنهاد بدهید و توافق کنید</h3>
-          <p>از طریق پیشنهاد قیمت و گفت‌وگو به توافق برسید و تراکنش را در پنل پیگیری کنید.</p>
+          <p>از طریق پیشنهاد قیمت و گفت‌وگو به توافق برسید و تراکنش را در پنل پیگیری کنید — بدون هیچ کمیسیون.</p>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- ═══════════════════════ FOR INDIVIDUALS ═══════════════════════ -->
-  <section class="sec ind" id="individuals">
-    <div class="wrap">
-      <div class="dpanel">
-        <div class="dcopy">
-          <h2 class="h2">همه ابزارها،<br><span class="dim">در یک پنل یکپارچه.</span></h2>
-          <p class="lead">بدون رفت‌وآمد و بدون کاغذبازی. خرید، فروش، پیگیری تراکنش و گفت‌وگو، همه روی گوشی شما.</p>
-          <ul class="checks">
-            <li><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.500 6.300l2.300 2.300L9.500 3.500" fill="none" stroke="currentColor" stroke-width="1.700" stroke-linecap="round" stroke-linejoin="round"/></svg><span>جست‌وجو، ذخیره و بررسی آگهی‌ها</span></li>
-            <li><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.500 6.300l2.300 2.300L9.500 3.500" fill="none" stroke="currentColor" stroke-width="1.700" stroke-linecap="round" stroke-linejoin="round"/></svg><span>درخواست دسترسی خصوصی به اطلاعات کسب‌وکار</span></li>
-            <li><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.500 6.300l2.300 2.300L9.500 3.500" fill="none" stroke="currentColor" stroke-width="1.700" stroke-linecap="round" stroke-linejoin="round"/></svg><span>پیشنهاد قیمت، گفت‌وگو و رسیدن به توافق</span></li>
-            <li><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.500 6.300l2.300 2.300L9.500 3.500" fill="none" stroke="currentColor" stroke-width="1.700" stroke-linecap="round" stroke-linejoin="round"/></svg><span>پیگیری تراکنش، اختلاف، تیکت و اعلان‌ها</span></li>
-          </ul>
-          <div class="btn-home-row"><a class="pbtn pbtn-violet" href="#">شروع کنید <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#i-arrow-r"/></svg></a></div>
-        </div>
-
-        <div class="pwrap">
-          <div class="phone">
-            <div class="screen">
-              <div class="s-top"><span>۹:۴۱</span><span>پنل شخصی</span></div>
-              <div class="s-hi">سلام.<br><span>آماده بررسی آگهی‌ها هستید؟</span></div>
-              <div class="s-card">
-                <small>آگهی‌های فعال</small>
-                <b>{{ platform_stats.active_listings|format_number }} آگهی در دسترس</b>
-                <div class="wave" aria-hidden="true"><i style="height:30%"></i><i style="height:52%"></i><i style="height:38%"></i><i style="height:70%"></i><i style="height:44%"></i><i style="height:60%"></i><i style="height:28%"></i><i style="height:66%"></i><i style="height:48%"></i><i class="off" style="height:74%"></i><i class="off" style="height:36%"></i><i class="off" style="height:58%"></i><i class="off" style="height:42%"></i><i class="off" style="height:64%"></i><i class="off" style="height:32%"></i><i class="off" style="height:54%"></i><i class="off" style="height:40%"></i><i class="off" style="height:68%"></i><i class="off" style="height:34%"></i><i class="off" style="height:50%"></i></div>
-                <div class="s-row"><small>میانگین قیمت بازار</small><span class="s-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.500 1.200v9.600L10.200 6z" fill="currentColor"/></svg></span></div>
-              </div>
-              <div class="s-prog"><div><span>میانگین قیمت</span><span>{{ market_insights.avg_price|format_number }}</span></div><div class="bar"><i></i></div></div>
-              <div class="s-chips"><span>وب‌سایت</span><span>اینستاگرام</span><span>سهم درآمد</span></div>
-            </div>
-            <div class="floatc f-done"><i><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.500 6.300l2.300 2.300L9.500 3.500" fill="none" stroke="currentColor" stroke-width="1.700" stroke-linecap="round" stroke-linejoin="round"/></svg></i>{{ platform_stats.sold_listings|format_number }} معامله</div>
-            <div class="floatc f-doc"><svg class="av" viewBox="0 0 40 40" aria-hidden="true"><use href="#av-gary"/></svg><span>پنل معامله<small>پشتیبان شما</small></span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════ SCIENCE ═══════════════════════ -->
-  <section class="sec sci" id="science">
-    <div class="gridbg" aria-hidden="true"></div>
-    <div class="blob b-v" style="left:-6%;right:auto;top:10%;width:44%;height:70%" aria-hidden="true"></div>
-    <div class="wrap">
-      <div class="split">
-        <div>
-          <h2 class="h2">مدل‌های آماده،<br><span class="dim">برای هر نوع واگذاری.</span></h2>
-          <p class="lead">مدل‌ها انتقال کامل، واگذاری سهم، لایسنس، سهم درآمد و برند را تعریف کرده‌اند. توجه کنید که وجود فیلدها به معنی کامل بودن اجرای هر نوع قرارداد نیست و جزئیات هر توافق باید بررسی شود.</p>
-          <div class="btn-home-row"><a class="pbtn pbtn-dark" href="#">مشاهده مدل‌ها <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#i-arrow-ur"/></svg></a></div>
-        </div>
-        <div class="facts">
-          <div class="card"><div class="num">۵<sub>مدل</sub></div><p>انتقال کامل، سهم، لایسنس، سهم درآمد و برند.</p></div>
-          <div class="card violet"><div class="num">۲۴/۷</div><p>پنل پیگیری تراکنش و تیکت، همیشه در دسترس شما.</p></div>
-          <div class="card"><div class="num">{{ platform_stats.income_listings|format_number }}<sub>درآمدزا</sub></div><p>آگهی فعال با درآمد ماهانه ثبت‌شده و مستند.</p></div>
-          <div class="card"><div class="num">{{ platform_stats.verified_listings|format_number }}<sub>تایید‌شده</sub></div><p>حساب شخصی یا شرکتی، با کنترل کامل روی اطلاعات.</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════ LIVE MARKET PANEL (جایگزین "آگهی‌های شما") ═══════════════════════ -->
+  <!-- ═══════════════════════ LIVE MARKET PANEL ═══════════════════════ -->
   <section class="sec clin" id="live-panel">
     <div class="blob b-y" style="right:-10%;left:auto;top:20%;width:40%;height:60%" aria-hidden="true"></div>
     <div class="wrap">
       <div class="split">
 
-        <!-- Left: Live listing feed (dynamic, with fallbacks) -->
         <div class="dash card">
           <div class="dash-h">
             <b>فعالیت زنده بازار</b>
@@ -762,8 +847,6 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/></svg>
                 {% elif listing.category == 'social_telegram_channel' %}
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                {% elif listing.category == 'social_youtube' %}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/></svg>
                 {% else %}
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 {% endif %}
@@ -785,52 +868,27 @@
               {% endif %}
             </div>
             {% endfor %}
-          {% elif latest_listings %}
-            {% for listing in latest_listings|slice:":4" %}
-            <div class="prow">
-              <span class="av-icon-tile sm">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-              </span>
-              <div class="who">
-                <b>{{ listing.title|truncatechars:26 }}</b>
-                <small>{{ listing.get_category_display_safe|default:listing.category }}</small>
-              </div>
-              <div class="pg">
-                <div class="bar"><i style="width:{% if listing.is_verified %}100{% elif listing.is_income %}75{% else %}45{% endif %}%"></i></div>
-                <small>{{ listing.views_count|format_number }} بازدید</small>
-              </div>
-              {% if listing.is_verified %}
-                <span class="tagp ok">تایید</span>
-              {% elif listing.is_income %}
-                <span class="tagp">درآمدزا</span>
-              {% else %}
-                <span class="tagp wait">فعال</span>
-              {% endif %}
-            </div>
-            {% endfor %}
           {% else %}
-            <!-- Empty state -->
             <div class="dash-empty">
               <div class="dash-empty-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
               </div>
               <b>هنوز آگهی فعالی ثبت نشده</b>
               <p>اولین آگهی خود را ثبت کنید و در صدر بازار دیده شوید.</p>
-              <a href="#" class="pbtn pbtn-violet">ثبت اولین آگهی</a>
+              <a href="{% url 'listings:listing_create' %}" class="pbtn pbtn-violet">ثبت اولین آگهی</a>
             </div>
           {% endif %}
         </div>
 
-        <!-- Right: Copy -->
         <div>
           <h2 class="h2">همراهی کامل<br><span class="dim">تا پایان معامله.</span></h2>
           <p class="lead">پنل اختصاصی برای فروشندگان، خریداران و کارشناسان؛ تا هیچ جزئیاتی از قلم نیفتد.</p>
           <ul class="feat">
-            <li><span class="ic"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h4l2-5 3 10 2-5h3" fill="none" stroke="currentColor" stroke-width="1.700" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>وضعیت در یک نگاه</b><p>داشبورد ساده نشان می‌دهد کدام آگهی در مسیر است و کدام نیاز به بررسی دارد.</p></div></li>
-            <li><span class="ic"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.500l4 4 8-9" fill="none" stroke="currentColor" stroke-width="1.700" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>ثبت در چند دقیقه</b><p>آگهی خود را ثبت کنید و همان روز در معرض دید خریداران قرار دهید.</p></div></li>
-            <li><span class="ic"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16V9M10 16V4M16 16v-5" fill="none" stroke="currentColor" stroke-width="1.700" stroke-linecap="round"/></svg></span><div><b>خروجی قابل ارائه</b><p>خلاصه‌ای از درآمد، فعالیت و وضعیت آگهی برای ارائه به خریدار یا حسابرس.</p></div></li>
+            <li><span class="ic"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h4l2-5 3 10 2-5h3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>وضعیت در یک نگاه</b><p>داشبورد ساده نشان می‌دهد کدام آگهی در مسیر است و کدام نیاز به بررسی دارد.</p></div></li>
+            <li><span class="ic"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>ثبت در چند دقیقه</b><p>آگهی خود را ثبت کنید و همان روز در معرض دید خریداران قرار دهید.</p></div></li>
+            <li><span class="ic"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16V9M10 16V4M16 16v-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><div><b>خروجی قابل ارائه</b><p>خلاصه‌ای از درآمد، فعالیت و وضعیت آگهی برای ارائه به خریدار یا حسابرس.</p></div></li>
           </ul>
-          <div class="btn-home-row" style="margin-top:34px"><a class="pbtn pbtn-dark" href="#">پنل فروشندگان <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#i-arrow-ur"/></svg></a></div>
+          <div class="btn-home-row" style="margin-top:34px"><a class="pbtn pbtn-dark" href="{% url 'listings:listing_create' %}">ثبت آگهی فروش <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#i-arrow-ur"/></svg></a></div>
         </div>
       </div>
     </div>
@@ -842,16 +900,16 @@
       <h2 class="h2">پرسش‌های پرتکرار،<br><span class="dim">پاسخ داده شده.</span></h2>
       <div class="faq-list">
         <details open>
-          <summary>چه دارایی‌هایی را می‌توان خرید و فروش کرد؟<i></i></summary>
-          <p>دارایی‌های دیجیتال شامل وب‌سایت‌ها، فروشگاه‌های اینترنتی، رسانه‌های اجتماعی، اپلیکیشن‌ها، دامنه‌ها و کسب‌وکارهای خدماتی. فروشنده اطلاعات فعالیت، قیمت، درآمد، مدارک و شرایط واگذاری را ثبت می‌کند و خریدار آن‌ها را بررسی می‌کند.</p>
-        </details>
-        <details>
-          <summary>مدل‌های واگذاری چیست؟<i></i></summary>
-          <p>مدل‌ها شامل انتقال کامل، واگذاری سهم، لایسنس، سهم درآمد و برند است. توجه کنید که وجود فیلدها به معنی کامل بودن اجرای هر نوع قرارداد نیست و جزئیات هر توافق باید جداگانه بررسی شود.</p>
+          <summary>انواع فروش در پلتفرم چیست؟<i></i></summary>
+          <p>پلتفرم ما پنج مدل فروش را پشتیبانی می‌کند: <b>انتقال کامل مالکیت</b>، <b>فروش مالکیت بخشی (سهمی)</b>، <b>فروش لایسنس</b>، <b>فروش سهم از درآمد</b> و <b>فروش برند</b>. خریدار بسته به نیاز خود یکی از این مدل‌ها را انتخاب می‌کند.</p>
         </details>
         <details>
           <summary>دسترسی خصوصی یعنی چه؟<i></i></summary>
           <p>خریدار می‌تواند درخواست دسترسی خصوصی بدهد تا اطلاعات حساس کسب‌وکار را پیش از پیشنهاد قیمت ببیند.</p>
+        </details>
+        <details>
+          <summary>آیا پلتفرم کمیسیون می‌گیرد؟<i></i></summary>
+          <p>خیر. پلتفرم ما هیچ کمیسیونی از خریدار یا فروشنده بابت واسطه‌گری دریافت نمی‌کند. کل مبلغ توافق‌شده بین دو طرف جابجا می‌شود و تنها هزینه‌های اختیاری مانند پیشرفته‌کردن آگهی (Boost) ممکن است وجود داشته باشد.</p>
         </details>
         <details>
           <summary>چگونه به توافق می‌رسیم؟<i></i></summary>
@@ -873,10 +931,10 @@
         <div class="blob b-v b2" aria-hidden="true"></div>
         <div class="gridbg" aria-hidden="true"></div>
         <h2 class="h2">امروز اولین معامله امن خود را<br><span class="dim">تجربه کنید.</span></h2>
-        <p class="lead">{{ platform_stats.active_listings|format_number }} آگهی فعال، {{ platform_stats.total_users|format_number }} کاربر و پنل پیگیری کامل، آماده شروع هستند.</p>
+        <p class="lead">{{ platform_stats.active_listings|format_number }} آگهی فعال، {{ platform_stats.total_users|format_number }} کاربر و پنل پیگیری کامل — بدون هیچ کمیسیون — آماده شروع هستند.</p>
         <div class="btn-home-row">
-          <a class="pbtn pbtn-dark" href="#">شروع کنید <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
-          <a class="pbtn pbtn-light" href="#">با ما صحبت کنید</a>
+          <a class="pbtn pbtn-dark" href="{% url 'listings:listing_create' %}">ثبت آگهی فروش <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
+          <a class="pbtn pbtn-light" href="{% url 'listings:listing_list' %}">مشاهده همه آگهی‌ها</a>
         </div>
       </div>
     </div>
