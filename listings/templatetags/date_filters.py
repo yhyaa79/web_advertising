@@ -43,6 +43,19 @@ def time_ago(value):
 
 
 @register.filter
+def is_recent(value):
+    """True when a listing was published within the last 24 hours."""
+    if not value:
+        return False
+
+    if timezone.is_naive(value):
+        value = timezone.make_aware(value, timezone.get_current_timezone())
+
+    elapsed = timezone.now() - value
+    return timedelta(0) <= elapsed < timedelta(days=1)
+
+
+@register.filter
 def jalali_date(value):
     if not value:
         return ""

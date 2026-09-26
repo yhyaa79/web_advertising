@@ -1,5 +1,13 @@
+<!-- templates/listings/_listing_card.html -->
+
 {% load custom_tags date_filters %}
 <article class="card-listing listing-card {% if promoted or listing.premier %}listing-card-promoted{% endif %}">
+    {% if promoted %}
+    <span class="listing-card-promotion-ribbon" aria-label="آگهی پیشرفته">
+        <i class="bi bi-stars" aria-hidden="true"></i>
+        آگهی پیشرفته
+    </span>
+    {% endif %}
     <div class="listing-card-main">
         <div class="listing-card-media">
             <a href="{% url 'listings:listing_detail' listing.pk %}" class="listing-card-image-link" aria-label="{{ listing.title }}">
@@ -12,6 +20,10 @@
                 {% endif %}
                 <span class="listing-card-category">{{ listing.get_category_display_safe }}</span>
             </a>
+            <span class="listing-card-published">
+                <i class="bi bi-clock" aria-hidden="true"></i>
+                {{ listing.created_at|time_ago }}
+            </span>
             <div class="listing-card-tools">
                 <button class="share-listing-btn" type="button" aria-label="اشتراک‌گذاری" title="اشتراک‌گذاری"
                     data-title="{{ listing.title }}" data-url="{{ request.scheme }}://{{ request.get_host }}{% url 'listings:listing_detail' listing.pk %}">
@@ -46,14 +58,21 @@
                 {% elif listing.boost %}
                 <span class="listing-card-badge">اگهی پیشرفته</span>
                 {% endif %}
+                {% if listing.created_at|is_recent %}
+                <span class="listing-card-badge listing-card-new-badge"><i class="bi bi-lightning-charge-fill" aria-hidden="true"></i> تازه منتشر شده</span>
+                {% endif %}
             </div>
             <a href="{% url 'listings:listing_detail' listing.pk %}" class="listing-card-description-link">
                 <p class="listing-card-description">{{ listing.description }}</p>
             </a>
-            <div class="listing-card-extra">
-                <span>دنبال‌کننده: <bdi>{{ listing.followers_count|split_number }}</bdi> نفر</span>
-                {% if listing.profit_margin %}<span>حاشیه سود: {{ listing.profit_margin|floatformat:0 }} ٪</span>{% endif %}
-                <a href="{% url 'listings:similar_listings' listing.pk %}">آیا به دنبال اگهی های مشابه می‌گردید؟</a>
+            <div class="listing-card-similar">
+                <a href="{% url 'listings:similar_listings' listing.pk %}" class="listing-card-similar-link">
+                    مشاهده آگهی‌های مشابه <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" 
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 12H5M11 6l-6 6 6 6"/>
+                    </svg>
+                </a>
             </div>
             <div class="listing-card-facts">
                 <div class="listing-card-fact">
@@ -62,11 +81,15 @@
                 </div>
                 <div class="listing-card-fact">
                     <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="20" height="19" rx="2"/><path d="M9 3v6m10-6v6M4 12h20"/></svg>
-                    <div><p>{{ listing.created_at|time_ago }}</p><span>تاریخ انتشار اگهی:</span></div>
+                    <div><p>{{ listing.platform_age|floatformat:0 }} سال</p><span>سن پلتفرم:</span></div>
                 </div>
                 <div class="listing-card-fact">
-                    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 3 11 6-11 6L3 9l11-6Zm-11 12 11 6 11-6M3 21l11 6 11-6"/></svg>
-                    <div><p>{{ listing.platform_age|floatformat:0 }} سال</p><span>سن پلتفرم:</span></div>
+                    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 24v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/>
+                        <circle cx="10.5" cy="9" r="4"/>
+                        <path d="M23 11v6m3-3h-6"/>
+                    </svg>
+                    <div><p><bdi>{{ listing.followers_count|split_number }}</bdi> نفر</p><span>کاربر:</span></div>
                 </div>
             </div>
         </div>
@@ -93,6 +116,9 @@
             <span>برگشت سرمایه تا <strong>{% widthratio total_price listing.monthly_income 1 %}</strong> ماه</span>
             {% endif %}
             {% endwith %}
+            {% endif %}
+            {% if listing.profit_margin %}
+            <span class="listing-card-profit"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i> حاشیه سود <strong>{{ listing.profit_margin|floatformat:0 }}٪</strong></span>
             {% endif %}
         </div>
         <div class="listing-card-actions">
