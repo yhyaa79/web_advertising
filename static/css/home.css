@@ -245,6 +245,7 @@ a:focus-visible {
     width: calc(var(--k) * 133);
     padding: calc(var(--k) * 7) calc(var(--k) * 9) calc(var(--k) * 8);
     background: #fff;
+    width: 290px;
     border-radius: calc(var(--k) * 11);
     box-shadow: 0 calc(var(--k) * 8) calc(var(--k) * 22) rgba(120, 48, 48, .10), 0 0 0 1px rgba(40, 20, 20, .035);
 }
@@ -254,15 +255,17 @@ a:focus-visible {
     align-items: center;
     gap: calc(var(--k) * 8);
     flex-direction: row-reverse;
+    justify-content: space-between;
 }
 
 .person b {
     display: block;
-    font-size: calc(var(--k) * 9);
+    font-size: calc(var(--k) * 7);
     line-height: calc(var(--k) * 11);
     font-weight: 600;
     letter-spacing: -.01em;
     text-align: right;
+
 }
 
 .person small {
@@ -299,15 +302,39 @@ a:focus-visible {
 }
 
 .bonnie {
-    right: calc(var(--k) * 59);
+    right: calc(var(--k) * 54);
     top: calc(var(--k) * 54);
     transform: rotate(-2.5deg);
 }
 
 .simon {
-    right: calc(var(--k) * 480);
+    right: calc(var(--k) * 475);
     top: calc(var(--k) * 50);
     transform: rotate(2.5deg);
+}
+
+.person-price {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    padding: 0 12px;
+    text-align: center;
+    line-height: 1.25;
+    margin-top: 10px;
+}
+
+.person-price strong{
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--red-color);
+    overflow-wrap: anywhere;
+}
+
+.person-price s{
+    color: #969aa3;
+    font-size: 11px;
 }
 
 /* deal card */
@@ -2275,8 +2302,8 @@ a:focus-visible {
 }
 
 .lst-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    overflow: auto;
+    display: flex;
     gap: 18px;
 }
 
@@ -2284,6 +2311,7 @@ a:focus-visible {
     position: relative;
     display: flex;
     flex-direction: column;
+    min-width: 400px;
     gap: 14px;
     padding: 20px;
     background: #fff;

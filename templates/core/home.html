@@ -45,7 +45,7 @@
 
       <div class="actions">
         <a class="btn-home btn-light" href="#for-buyers">خریدار هستم</a>
-        <a class="btn-home btn-dark" href="#for-sellers">فروشنده هستم <svg aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
+        <a class="btn-home btn-dark" href="#for-sellers">فروشنده هستم</a>
       </div>
 
       <div class="appt float-slow">
@@ -77,12 +77,15 @@
               {% endif %}
             </span>
             <div>
-              <b>{{ listing.title|truncatechars:22 }}</b>
+              <b>{{ listing.title|truncatechars:32 }}</b>
               <small>{{ listing.get_category_display_safe|default:listing.category }}</small>
             </div>
           </div>
-          <div class="week">{{ listing.get_areas_activity_display_safe|truncatechars:22 }}</div>
-          <div class="bar"><i style="width:{% if listing.is_verified %}100{% elif listing.is_income %}75{% else %}45{% endif %}%"></i></div>
+          <div class="person-price">
+            <strong><bdi>{{ listing.discount_price|default:listing.price|split_number }}</bdi>تومان </strong>
+            {% if listing.discount_price %}<s>{{ listing.price|split_number }} تومان</s>{% endif %}
+          </div>
+
         </div>
         {% endwith %}
       {% endif %}
@@ -103,12 +106,15 @@
               {% endif %}
             </span>
             <div>
-              <b>{{ listing.title|truncatechars:22 }}</b>
+              <b>{{ listing.title|truncatechars:32 }}</b>
               <small>{{ listing.get_category_display_safe|default:listing.category }}</small>
             </div>
           </div>
-          <div class="week">{{ listing.get_areas_activity_display_safe|truncatechars:22 }}</div>
-          <div class="bar"><i style="width:{% if listing.is_verified %}100{% elif listing.is_income %}75{% else %}45{% endif %}%"></i></div>
+          <div class="person-price">
+            <strong><bdi>{{ listing.discount_price|default:listing.price|split_number }}</bdi>تومان </strong>
+            {% if listing.discount_price %}<s>{{ listing.price|split_number }} تومان</s>{% endif %}
+          </div>
+
         </div>
         {% endwith %}
       {% endif %}
@@ -503,7 +509,7 @@
   </section>
 
   <!-- ═══════════════════════ TOP CATEGORIES (Trending) ═══════════════════════ -->
-  {% if top_categories %}
+<!--   {% if top_categories %}
   <section class="sec cat-sec" id="categories">
     <div class="blob b-y" style="right:-8%;left:auto;top:15%;width:46%;height:65%" aria-hidden="true"></div>
     <div class="wrap">
@@ -546,9 +552,9 @@
     </div>
   </section>
   {% endif %}
-
+ -->
   <!-- ═══════════════════════ FEATURED LISTINGS ═══════════════════════ -->
-  {% if latest_listings or discounted_listings or most_viewed_listings %}
+<!--   {% if latest_listings or discounted_listings or most_viewed_listings %}
   <section class="sec list-sec" id="featured">
     <div class="blob b-v" style="left:-6%;right:auto;top:10%;width:44%;height:70%" aria-hidden="true"></div>
     <div class="wrap">
@@ -723,9 +729,9 @@
     </div>
   </section>
   {% endif %}
-
+ -->
   <!-- ═══════════════════════ TRENDING ═══════════════════════ -->
-  {% if trending_listings or market_opportunities.big_discounts %}
+<!--   {% if trending_listings or market_opportunities.big_discounts %}
   <section class="sec trend-sec" id="trending">
     <div class="gridbg" aria-hidden="true"></div>
     <div class="wrap">
@@ -785,7 +791,7 @@
     </div>
   </section>
   {% endif %}
-
+ -->
   <!-- ═══════════════════════ HOW IT WORKS ═══════════════════════ -->
   <section class="sec how" id="how">
     <div class="wrap">
@@ -837,7 +843,7 @@
   </section>
 
   <!-- ═══════════════════════ LIVE MARKET PANEL ═══════════════════════ -->
-  <section class="sec clin" id="live-panel">
+<!--   <section class="sec clin" id="live-panel">
     <div class="blob b-y" style="right:-10%;left:auto;top:20%;width:40%;height:60%" aria-hidden="true"></div>
     <div class="wrap">
       <div class="split">
@@ -902,7 +908,7 @@
       </div>
     </div>
   </section>
-
+ -->
   <!-- ═══════════════════════ FAQ ═══════════════════════ -->
   <section class="sec faq" id="faq">
     <div class="wrap">
