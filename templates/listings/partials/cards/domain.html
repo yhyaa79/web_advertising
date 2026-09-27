@@ -1,0 +1,51 @@
+{% load custom_tags date_filters listing_card_tags %}
+<article class="card-listing listing-card listing-card--domain {% if promoted or listing.premier %}listing-card-promoted{% endif %}">
+    {% include "listings/partials/cards/_promoted_ribbon.html" %}
+    <div class="listing-card-main listing-card-main--no-media">
+        <div class="listing-card-content listing-card-content--full">
+            <div class="listing-card-domain-head">
+                <div class="listing-card-domain-identity">
+                    <span class="listing-card-domain-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1"/></svg>
+                    </span>
+                    <div class="listing-card-domain-meta">
+                        <span class="listing-card-category listing-card-category--inline">{{ listing.get_category_display_safe }}</span>
+                        <span class="listing-card-published listing-card-published--inline">
+                            <i class="bi bi-clock" aria-hidden="true"></i>{{ listing.created_at|time_ago }}
+                        </span>
+                    </div>
+                </div>
+                {% include "listings/partials/cards/_card_tools.html" %}
+            </div>
+            <a href="{% url 'listings:listing_detail' listing.pk %}" class="listing-card-heading-link">
+                <h3 class="listing-card-title">{{ listing.title }}</h3>
+            </a>
+            {% include "listings/partials/cards/_card_badges.html" %}
+            <a href="{% url 'listings:listing_detail' listing.pk %}" class="listing-card-description-link">
+                <p class="listing-card-description {% sensitive_class listing 'description' %}">{{ listing.description }}</p>
+            </a>
+            <div class="listing-card-similar">
+                <a href="{% url 'listings:similar_listings' listing.pk %}" class="listing-card-similar-link">
+                    مشاهده آگهی‌های مشابه <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="listing-card-facts">
+                {% with dd=listing.domain_details %}
+                <div class="listing-card-fact">
+                    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 10h20v14H4z"/><path d="M10 10V6a4 4 0 0 1 8 0v4"/></svg>
+                    <div><p class="{% sensitive_class listing 'domain_name' %}"><bdi>{{ dd.domain_name|default:listing.title }}</bdi></p><span>نام دامنه:</span></div>
+                </div>
+                <div class="listing-card-fact">
+                    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="6" width="20" height="19" rx="2"/><path d="M9 3v6m10-6v6M4 12h20"/></svg>
+                    <div><p class="{% sensitive_class listing 'expiry_date' %}">{% if dd.expiry_date %}{{ dd.expiry_date|date:"Y/m/d" }}{% else %}—{% endif %}</p><span>انقضا:</span></div>
+                </div>
+                <div class="listing-card-fact">
+                    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="14" cy="14" r="10"/><path d="M14 8v6l4 2"/></svg>
+                    <div><p>{% if dd.domain_age_years %}{{ dd.domain_age_years }} سال{% elif listing.platform_age %}{{ listing.platform_age|floatformat:0 }} سال{% else %}—{% endif %}</p><span>سن دامنه:</span></div>
+                </div>
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+    {% include "listings/partials/cards/_card_footer.html" %}
+</article>

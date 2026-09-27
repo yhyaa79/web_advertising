@@ -1,0 +1,21 @@
+{% load listing_card_tags date_filters %}
+{% if card_show_image %}
+<div class="listing-card-media">
+    <a href="{% url 'listings:listing_detail' listing.pk %}" class="listing-card-image-link" aria-label="{{ listing.title }}">
+        {% if listing.main_image %}
+        {% sensitive_class listing 'image' as img_sensitive %}
+        <img src="{{ listing.main_image.url }}" alt="{{ listing.title }}" class="listing-card-image {{ img_sensitive }}" loading="lazy">
+        {% else %}
+        <span class="listing-card-placeholder" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/></svg>
+        </span>
+        {% endif %}
+        <span class="listing-card-category">{{ listing.get_category_display_safe }}</span>
+    </a>
+    <span class="listing-card-published">
+        <i class="bi bi-clock" aria-hidden="true"></i>
+        {{ listing.created_at|time_ago }}
+    </span>
+    {% include "listings/partials/cards/_card_tools.html" %}
+</div>
+{% endif %}

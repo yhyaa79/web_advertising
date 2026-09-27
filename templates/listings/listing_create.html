@@ -23,10 +23,10 @@
       <div class="lw-grid">
         <div class="lw-main">
           <section class="lw-panel active" data-panel="category">
-            <div class="lw-card"><div class="lw-card-head"><div class="icon">🧭</div><div><h2>چه چیزی را برای فروش می‌گذارید؟</h2><p>این انتخاب، سؤال‌ها و مراحل بعدی را مشخص می‌کند.</p></div></div><div class="lw-card-body">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">{% include "listings/partials/_inline_icon.html" with icon="compass" %}</div><div><h2>چه چیزی را برای فروش می‌گذارید؟</h2><p>این انتخاب، سؤال‌ها و مراحل بعدی را مشخص می‌کند.</p></div></div><div class="lw-card-body">
               <div class="lw-main-cats">
                 {% for main_slug, main_label, subs in platform_categories %}
-                <button type="button" class="lw-main-cat" data-main="{{ main_slug }}"><span>{% if main_slug == 'website' %}🌐{% elif main_slug == 'ecommerce' %}🛒{% elif main_slug == 'app' %}📱{% elif main_slug == 'social_media' %}📣{% elif main_slug == 'content_media' %}🎙️{% elif main_slug == 'domain' %}🔗{% elif main_slug == 'service_business' %}💼{% else %}📦{% endif %}</span><b>{{ main_label }}</b></button>
+                <button type="button" class="lw-main-cat" data-main="{{ main_slug }}"><span class="lw-category-icon">{% include "listings/partials/_inline_icon.html" with icon=main_slug %}</span><b>{{ main_label }}</b></button>
                 {% endfor %}
               </div>
               {% for main_slug, main_label, subs in platform_categories %}
@@ -40,7 +40,7 @@
           </section>
 
           <section class="lw-panel" data-panel="basics">
-            <div class="lw-card"><div class="lw-card-head"><div class="icon">✍️</div><div><h2>معرفی دارایی</h2><p>اطلاعاتی که خریدار برای شناخت سریع آگهی نیاز دارد.</p></div></div><div class="lw-card-body"><div class="lw-fields">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">{% include "listings/partials/_inline_icon.html" with icon="write" %}</div><div><h2>معرفی دارایی</h2><p>اطلاعاتی که خریدار برای شناخت سریع آگهی نیاز دارد.</p></div></div><div class="lw-card-body"><div class="lw-fields">
               <div class="lw-field full"><label>عنوان آگهی <span class="req">*</span></label><input name="title" id="title" required maxlength="200" placeholder="مثال: فروش فروشگاه تخصصی با مشتریان بازگشتی"><small>نوع دارایی و مهم‌ترین مزیت آن را کوتاه و دقیق بنویسید.</small><div class="error">عنوان آگهی را وارد کنید.</div></div>
               <div class="lw-field"><label>حوزه فعالیت <span class="optional">اختیاری</span></label><select name="areas_activity" id="areas_activity"><option value="">انتخاب کنید</option>{% for slug,label,subs in activity_categories %}<optgroup label="{{ label }}">{% for value,text in subs %}<option value="{{ value }}">{{ text }}</option>{% endfor %}</optgroup>{% endfor %}</select><small>صنعت یا موضوع اصلی مخاطبان دارایی را مشخص می‌کند.</small></div>
               <div class="lw-field" id="url-field"><label id="url-label">آدرس دارایی <span class="optional">اختیاری</span></label><input type="url" name="platform_url" id="platform_url" class="ltr" placeholder="https://example.com"><small>لینک عمومی و قابل بررسی دارایی را وارد کنید.</small><div class="error">آدرس واردشده معتبر نیست.</div></div>
@@ -52,12 +52,12 @@
           </section>
 
           <section class="lw-panel" data-panel="details">
-            <div class="lw-card"><div class="lw-card-head"><div class="icon" id="details-icon">📊</div><div><h2 id="details-title">مشخصات تخصصی</h2><p>این سؤال‌ها فقط برای زیر‌دسته انتخاب‌شده نمایش داده می‌شوند.</p></div></div><div class="lw-card-body"><div class="lw-note">عددهای واقعی و قابل اثبات، اعتماد خریدار و کیفیت ارزیابی آگهی را بالا می‌برند.</div><div class="lw-fields" id="dynamic-fields"></div></div></div>
+            <div class="lw-card"><div class="lw-card-head"><div class="icon" id="details-icon">{% include "listings/partials/_inline_icon.html" with icon="chart" %}</div><div><h2 id="details-title">مشخصات تخصصی</h2><p>این سؤال‌ها فقط برای زیر‌دسته انتخاب‌شده نمایش داده می‌شوند.</p></div></div><div class="lw-card-body"><div class="lw-note">عددهای واقعی و قابل اثبات، اعتماد خریدار و کیفیت ارزیابی آگهی را بالا می‌برند.</div><div class="lw-fields" id="dynamic-fields"></div></div></div>
             <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn next" type="button" data-next>مرحله بعد ←</button></nav>
           </section>
 
           <section class="lw-panel" data-panel="finance" data-feature="financial">
-            <div class="lw-card"><div class="lw-card-head"><div class="icon">💹</div><div><h2>عملکرد مالی</h2><p>فقط یک عدد مرجع برای هر شاخص دریافت می‌شود.</p></div></div><div class="lw-card-body">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">{% include "listings/partials/_inline_icon.html" with icon="chart" %}</div><div><h2>عملکرد مالی</h2><p>فقط یک عدد مرجع برای هر شاخص دریافت می‌شود.</p></div></div><div class="lw-card-body">
               <label class="lw-check"><input type="checkbox" name="is_income" id="is_income" checked><span>این دارایی در حال حاضر درآمد دارد</span></label>
               <div class="lw-fields lw-finance-fields" id="finance-fields">
                 <div class="lw-field"><label>درآمد ماهانه (تومان) <span class="req">*</span></label><input type="number" name="monthly_income" min="0" data-income-required required><div class="error">درآمد ماهانه را وارد کنید.</div></div>
@@ -89,7 +89,7 @@
           </section>
 
           <section class="lw-panel" data-panel="analytics">
-            <div class="lw-card"><div class="lw-card-head"><div class="icon">📈</div><div><h2>نمودارها و منابع ورودی</h2><p>داده‌های دوره‌ای برای ارزیابی روند رشد</p></div></div><div class="lw-card-body">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">{% include "listings/partials/_inline_icon.html" with icon="chart" %}</div><div><h2>نمودارها و منابع ورودی</h2><p>داده‌های دوره‌ای برای ارزیابی روند رشد</p></div></div><div class="lw-card-body">
               <div class="lw-subcard feature-block" data-feature-block="financial"><div class="lw-subcard-head"><div><h3>نمودار درآمد</h3><p>حداقل سه ماه اخیر پیشنهاد می‌شود</p></div><button type="button" class="lw-add" data-add="income">+ نقطه درآمد</button></div><div id="income-list"></div><input type="hidden" name="income_point_count" id="income-count" value="0"></div>
               <div class="lw-subcard"><div class="lw-subcard-head"><div><h3>نمودار بازدید / مخاطب</h3><p>تعداد بازدید یا کاربر در هر تاریخ</p></div><button type="button" class="lw-add" data-add="views">+ نقطه بازدید</button></div><div id="views-list"></div><input type="hidden" name="views_point_count" id="views-count" value="0"></div>
               <div class="lw-subcard feature-block" data-feature-block="traffic"><div class="lw-subcard-head"><div><h3>منابع ترافیک <span class="optional">اختیاری</span></h3><p>اگر منبعی وارد می‌کنید، مجموع سهم منابع باید دقیقاً ۱۰۰٪ شود.</p></div><button type="button" class="lw-add" data-add="traffic">+ منبع ترافیک</button></div><div id="traffic-list"></div><div class="traffic-meter" id="traffic-meter"><span id="traffic-message">هنوز منبعی ثبت نشده است.</span><b id="traffic-total">۰٪</b></div><input type="hidden" name="traffic_count" id="traffic-count" value="0"></div>
@@ -98,7 +98,7 @@
           </section>
 
           <section class="lw-panel" data-panel="sale">
-            <div class="lw-card"><div class="lw-card-head"><div class="icon">🤝</div><div><h2>قیمت و شرایط انتقال</h2><p>دقیقاً مشخص کنید خریدار چه چیزی دریافت می‌کند.</p></div></div><div class="lw-card-body"><div class="lw-fields">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">{% include "listings/partials/_inline_icon.html" with icon="sale" %}</div><div><h2>قیمت و شرایط انتقال</h2><p>دقیقاً مشخص کنید خریدار چه چیزی دریافت می‌کند.</p></div></div><div class="lw-card-body"><div class="lw-fields">
               <div class="lw-field"><label>قیمت پیشنهادی (تومان) <span class="req">*</span></label><input type="number" name="price" id="price" required min="1"><small>ارزش کل معامله را بدون جداکننده وارد کنید.</small><div class="error">قیمت باید بیشتر از صفر باشد.</div></div>
               <div class="lw-field"><label>قیمت با تخفیف <span class="optional">اختیاری</span></label><input type="number" name="discount_price" min="1"><small>در صورت استفاده باید از قیمت اصلی کمتر باشد.</small></div>
               <div class="lw-field"><label>نوع فروش <span class="req">*</span></label><select name="sale_type" id="sale_type" required><option value="">انتخاب کنید</option><option value="full_ownership">انتقال کامل مالکیت</option><option value="partial_ownership">فروش بخشی از مالکیت</option><option value="license">فروش مجوز / لایسنس</option><option value="revenue_share">سهم از درآمد</option><option value="brand">فروش برند</option></select><div class="error">نوع فروش را انتخاب کنید.</div></div>
@@ -112,7 +112,7 @@
           </section>
 
           <section class="lw-panel" data-panel="story">
-            <div class="lw-card"><div class="lw-card-head"><div class="icon">🧾</div><div><h2>درباره پلتفرم و اقلام معامله</h2><p>آنچه خریدار دریافت می‌کند و سؤال‌های متداول</p></div></div><div class="lw-card-body">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">{% include "listings/partials/_inline_icon.html" with icon="story" %}</div><div><h2>درباره پلتفرم و اقلام معامله</h2><p>آنچه خریدار دریافت می‌کند و سؤال‌های متداول</p></div></div><div class="lw-card-body">
               <div class="lw-field full"><label>درباره پلتفرم <span class="optional">اختیاری</span></label><small style="margin-bottom:9px">با HTML ساختار محتوا و با CSS ظاهر آن را تنظیم کنید. دکمه‌های آماده برای کاربران بدون دانش کدنویسی طراحی شده‌اند.</small>
                 <div class="rich-editor">
                   <div class="rich-toolbar" aria-label="ابزارهای ویرایش HTML">
@@ -140,7 +140,7 @@
           </section>
 
           <section class="lw-panel" data-panel="ecosystem">
-            <div class="lw-card"><div class="lw-card-head"><div class="icon">🧩</div><div><h2>اکوسیستم، خدمات و تکنولوژی‌ها</h2><p>این بخش فقط برای دسته‌های مرتبط وارد مسیر می‌شود.</p></div></div><div class="lw-card-body">
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">{% include "listings/partials/_inline_icon.html" with icon="ecosystem" %}</div><div><h2>اکوسیستم، خدمات و تکنولوژی‌ها</h2><p>این بخش فقط برای دسته‌های مرتبط وارد مسیر می‌شود.</p></div></div><div class="lw-card-body">
               <div class="lw-subcard feature-block" data-feature-block="social_links"><div class="lw-subcard-head"><div><h3>رسانه‌های اجتماعی وابسته</h3><p>برای خود دسته «شبکه اجتماعی» نمایش داده نمی‌شود تا داده تکراری نباشد</p></div><button type="button" class="lw-add" data-add="social">+ افزودن رسانه</button></div><div id="social-list"></div><input type="hidden" name="social_count" id="social-count" value="0"></div>
               <div class="lw-subcard feature-block" data-feature-block="services"><div class="lw-subcard-head"><div><h3>خدمات مورد استفاده</h3><p>سرویس‌های اشتراکی، ابری، پیامکی، تحلیلی و عملیاتی</p></div><button type="button" class="lw-add" data-add="service">+ افزودن خدمت</button></div><div id="service-list"></div><input type="hidden" name="service_count" id="service-count" value="0"></div>
               <div class="lw-subcard feature-block" data-feature-block="technical"><div class="lw-subcard-head"><div><h3>تکنولوژی‌ها</h3><p>همه گزینه‌های مورد استفاده را انتخاب کنید</p></div></div>
@@ -154,8 +154,8 @@
           </section>
 
           <section class="lw-panel" data-panel="media">
-            <div class="lw-card"><div class="lw-card-head"><div class="icon">🖼️</div><div><h2>تصاویر و مدارک</h2><p>یک تصویر اصلی باکیفیت برای آگهی انتخاب کنید.</p></div></div><div class="lw-card-body">
-              <div class="lw-field"><label>تصویر اصلی <span class="req">*</span></label><label class="lw-upload"><span style="font-size:30px">☁️</span><strong id="upload-title">انتخاب تصویر اصلی</strong><small>JPG، PNG یا WEBP — حداکثر ۵ مگابایت</small><input type="file" name="main_image" id="main_image" required accept="image/jpeg,image/png,image/webp"><img class="lw-preview" id="image-preview" alt="پیش‌نمایش تصویر"></label><div class="error">تصویر اصلی را انتخاب کنید.</div></div>
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">{% include "listings/partials/_inline_icon.html" with icon="upload" %}</div><div><h2>تصاویر و مدارک</h2><p>یک تصویر اصلی باکیفیت برای آگهی انتخاب کنید.</p></div></div><div class="lw-card-body">
+              <div class="lw-field" id="main-image-field"><label>تصویر اصلی <span class="req" id="main-image-req">*</span></label><label class="lw-upload"><span class="lw-upload-icon">{% include "listings/partials/_inline_icon.html" with icon="upload" %}</span><strong id="upload-title">انتخاب تصویر اصلی</strong><small id="main-image-hint">JPG، PNG یا WEBP — حداکثر ۵ مگابایت</small><input type="file" name="main_image" id="main_image" required accept="image/jpeg,image/png,image/webp"><img class="lw-preview" id="image-preview" alt="پیش‌نمایش تصویر"></label><div class="error">تصویر اصلی را انتخاب کنید.</div></div>
               <div class="lw-field" style="margin-top:18px"><label>تصاویر تکمیلی <span class="optional">اختیاری</span></label><input type="file" name="gallery_images" accept="image/jpeg,image/png,image/webp" multiple><small>صفحات مهم محصول یا داشبورد را بدون نمایش داده محرمانه اضافه کنید.</small></div>
               <div class="lw-subcard feature-block" data-feature-block="income_proof"><div class="lw-subcard-head"><div><h3>اثبات مالی</h3><p>تصویر پنل پرداخت، گزارش فروش یا صورت‌حساب بدون اطلاعات حساس</p></div><button type="button" class="lw-add" data-add="proof">+ افزودن مدرک</button></div><div id="proof-list"></div><input type="hidden" name="income_proof_count" id="proof-count" value="0"></div>
               <div class="lw-subcard"><div class="lw-subcard-head"><div><h3>پیوست‌ها</h3><p>گزارش PDF، قرارداد نمونه یا مستند تکمیلی</p></div><button type="button" class="lw-add" data-add="attachment">+ افزودن پیوست</button></div><div id="attachment-list"></div><input type="hidden" name="attachment_count" id="attachment-count" value="0"></div>
@@ -164,7 +164,7 @@
           </section>
 
           <section class="lw-panel" data-panel="review">
-            <div class="lw-card"><div class="lw-card-head"><div class="icon">✅</div><div><h2>بازبینی و ثبت آگهی</h2><p>پیش از ارسال، خلاصه اطلاعات را یک‌بار کنترل کنید.</p></div></div><div class="lw-card-body"><div class="review-grid" id="review-grid"></div><div class="lw-note" style="margin:18px 0 0;background:#eefaf3;color:#215f40">آگهی پس از ثبت با وضعیت «در انتظار تأیید» ذخیره می‌شود.</div></div></div>
+            <div class="lw-card"><div class="lw-card-head"><div class="icon">{% include "listings/partials/_inline_icon.html" with icon="check" %}</div><div><h2>بازبینی و ثبت آگهی</h2><p>پیش از ارسال، خلاصه اطلاعات را یک‌بار کنترل کنید.</p></div></div><div class="lw-card-body"><div class="review-grid" id="review-grid"></div><div class="lw-note" style="margin:18px 0 0;background:#eefaf3;color:#215f40">آگهی پس از ثبت با وضعیت «در انتظار تأیید» ذخیره می‌شود.</div></div></div>
             <nav class="lw-nav"><button class="lw-btn prev" type="button" data-prev>مرحله قبل</button><button class="lw-btn submit" id="submit-btn" type="submit">ثبت نهایی آگهی</button></nav>
           </section>
         </div>
@@ -172,7 +172,7 @@
         <aside class="lw-side">
           <div class="lw-side-card"><h3>خلاصه آگهی</h3><ul class="lw-summary"><li><span>دسته</span><b id="sum-category">انتخاب نشده</b></li><li><span>عنوان</span><b id="sum-title">—</b></li><li><span>قیمت</span><b id="sum-price">—</b></li><li><span>تکمیل</span><b id="sum-progress">۱۴٪</b></li></ul></div>
           <div class="lw-side-card"><h3 id="tip-title">چرا اول دسته‌بندی؟</h3><p id="tip-text">با انتخاب دقیق دسته، فقط اطلاعات مرتبط با همان دارایی از شما خواسته می‌شود.</p></div>
-          <div class="lw-side-card lw-safe"><h3>🔒 حریم خصوصی</h3><p>اطلاعات حساس را در توضیحات عمومی ننویسید؛ در صورت نیاز آگهی را خصوصی ثبت کنید.</p></div>
+          <div class="lw-side-card lw-safe"><h3><span class="lw-side-icon">{% include "listings/partials/_inline_icon.html" with icon="lock" %}</span> حریم خصوصی</h3><p>اطلاعات حساس را در توضیحات عمومی ننویسید؛ در صورت نیاز آگهی را خصوصی ثبت کنید.</p></div>
         </aside>
       </div>
     </form>
@@ -191,6 +191,19 @@
   let selected = '', main = '', flow = [], index = 0, maxVisited = 0;
 
   const esc = value => String(value == null ? '' : value).replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+  const iconSvg = key => {
+    const paths = {
+      website: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.3 2.5 3.5 5.5 3.5 9S14.3 18.5 12 21c-2.3-2.5-3.5-5.5-3.5-9S9.7 5.5 12 3Z"/>',
+      ecommerce: '<path d="m3 4 2 2 2.4 10.2h10.9L21 8H7"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/>',
+      app: '<rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M10.5 5h3M11 18.5h2"/>',
+      social: '<path d="M4 13V6l13-3v12L9 18v-5Z"/><path d="M17 7c2 1 3 2.6 3 4.5S19 15 17 16"/>',
+      media: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3Z"/>',
+      domain: '<path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1"/>',
+      service: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2M3 12h18"/>',
+      other: '<path d="M4 7 12 3l8 4v10l-8 4-8-4V7Z"/><path d="M4 7l8 4 8-4m-8 4v10"/>'
+    };
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(paths[key]||paths.other)+'</svg>';
+  };
   function toast(message, type=''){const el=document.createElement('div');el.className='toast '+type;el.textContent=message;document.getElementById('toasts').appendChild(el);setTimeout(()=>el.remove(),4500)}
   function computeFlow(){const cfg=CONFIG[selected]||{};flow=['category','basics','details'];if(cfg.financial)flow.push('finance');if(cfg.charts)flow.push('analytics');flow.push('sale','story');if(cfg.technical||cfg.social_links||cfg.services)flow.push('ecosystem');flow.push('media','review')}
   function drawSteps(){const wrap=document.getElementById('steps');wrap.innerHTML='';flow.forEach((key,i)=>{const b=document.createElement('button');b.type='button';b.className='lw-step '+(i===index?'active':i<index?'done':'locked');b.innerHTML='<i>'+(i<index?'✓':i+1)+'</i><span>'+labels[key]+'</span>';b.disabled=i>maxVisited;b.onclick=()=>show(i);wrap.appendChild(b)})}
@@ -204,8 +217,9 @@
   document.querySelectorAll('[name=category_choice]').forEach(radio=>radio.onchange=()=>{selected=radio.value;main=(CONFIG[selected]||{}).main||'';categoryInput.value=selected;document.querySelectorAll('.lw-sub').forEach(x=>x.classList.toggle('active',x.contains(radio)));document.getElementById('category-error').style.display='none';document.getElementById('sum-category').textContent=radio.dataset.label;renderFields();computeFlow();applyFeatureVisibility();index=0;maxVisited=0;drawSteps();updateCategoryAwareBasics()});
 
   function attrs(spec){let out='';['min','max','step'].forEach(k=>{if(spec[k]!==undefined)out+=' '+k+'="'+esc(spec[k])+'"'});if(spec.required)out+=' required';if(spec.ltr)out+=' class="ltr"';return out}
-  function renderFields(){const cfg=CONFIG[selected];if(!cfg)return;document.getElementById('details-title').textContent=cfg.title;document.getElementById('details-icon').textContent=cfg.icon;document.getElementById('dynamic-fields').innerHTML=cfg.fields.map(spec=>{const req=spec.required?'<span class="req">*</span>':'<span class="optional">اختیاری</span>';const help='<small>'+esc(spec.help||'اختیاری؛ فقط در صورت دسترسی به اطلاعات دقیق وارد کنید.')+'</small>';let control='';if(spec.type==='textarea')control='<textarea name="'+esc(spec.name)+'" rows="4" placeholder="'+esc(spec.placeholder||'')+'"'+attrs(spec)+'></textarea>';else if(spec.type==='select')control='<select name="'+esc(spec.name)+'"'+attrs(spec)+'><option value="">انتخاب کنید</option>'+(spec.options||[]).map(o=>'<option value="'+esc(o[0])+'">'+esc(o[1])+'</option>').join('')+'</select>';else if(spec.type==='checkbox')return '<div class="lw-field full"><label class="lw-check"><input type="checkbox" name="'+esc(spec.name)+'"><span>'+esc(spec.label)+'</span></label>'+help+'</div>';else control='<input type="'+esc(spec.type||'text')+'" name="'+esc(spec.name)+'" placeholder="'+esc(spec.placeholder||'')+'"'+attrs(spec)+'>';return '<div class="lw-field"><label>'+esc(spec.label)+' '+req+'</label>'+control+help+'<div class="error">'+esc(spec.label)+' را وارد کنید.</div></div>'}).join('')}
-  function updateCategoryAwareBasics(){document.getElementById('age-field').classList.toggle('is-hidden',main==='domain');const map={domain:'آدرس صفحه معرفی دامنه',social_media:'لینک صفحه / کانال',app:'وب‌سایت یا صفحه استور',website:'آدرس وب‌سایت',ecommerce:'آدرس فروشگاه'};document.getElementById('url-label').innerHTML=(map[main]||'آدرس دارایی')+' <span class="optional">اختیاری</span>'}
+  function renderFields(){const cfg=CONFIG[selected];if(!cfg)return;document.getElementById('details-title').textContent=cfg.title;document.getElementById('details-icon').innerHTML=iconSvg(cfg.icon);document.getElementById('dynamic-fields').innerHTML=cfg.fields.map(spec=>{const req=spec.required?'<span class="req">*</span>':'<span class="optional">اختیاری</span>';const help='<small>'+esc(spec.help||'اختیاری؛ فقط در صورت دسترسی به اطلاعات دقیق وارد کنید.')+'</small>';let control='';if(spec.type==='textarea')control='<textarea name="'+esc(spec.name)+'" rows="4" placeholder="'+esc(spec.placeholder||'')+'"'+attrs(spec)+'></textarea>';else if(spec.type==='select')control='<select name="'+esc(spec.name)+'"'+attrs(spec)+'><option value="">انتخاب کنید</option>'+(spec.options||[]).map(o=>'<option value="'+esc(o[0])+'">'+esc(o[1])+'</option>').join('')+'</select>';else if(spec.type==='checkbox')return '<div class="lw-field full"><label class="lw-check"><input type="checkbox" name="'+esc(spec.name)+'"><span>'+esc(spec.label)+'</span></label>'+help+'</div>';else control='<input type="'+esc(spec.type||'text')+'" name="'+esc(spec.name)+'" placeholder="'+esc(spec.placeholder||'')+'"'+attrs(spec)+'>';return '<div class="lw-field"><label>'+esc(spec.label)+' '+req+'</label>'+control+help+'<div class="error">'+esc(spec.label)+' را وارد کنید.</div></div>'}).join('')}
+  function updateCategoryAwareBasics(){document.getElementById('age-field').classList.toggle('is-hidden',main==='domain');const map={domain:'آدرس صفحه معرفی دامنه',social_media:'لینک صفحه / کانال',app:'وب‌سایت یا صفحه استور',website:'آدرس وب‌سایت',ecommerce:'آدرس فروشگاه'};document.getElementById('url-label').innerHTML=(map[main]||'آدرس دارایی')+' <span class="optional">اختیاری</span>';updateMainImageRequirement()}
+  function updateMainImageRequirement(){const cfg=CONFIG[selected]||{};const required=cfg.requires_main_image!==false;const field=document.getElementById('main-image-field');const input=document.getElementById('main_image');const req=document.getElementById('main-image-req');const hint=document.getElementById('main-image-hint');if(!field||!input)return;if(main==='domain'){field.classList.add('is-hidden');input.required=false;input.value='';return}field.classList.remove('is-hidden');input.required=required;if(req)req.style.display=required?'':'none';if(hint)hint.textContent=required?'JPG، PNG یا WEBP — حداکثر ۵ مگابایت':'اختیاری — در صورت تمایل تصویر معرفی دارایی'}
   function applyFeatureVisibility(){const cfg=CONFIG[selected]||{};document.querySelectorAll('[data-feature-block]').forEach(block=>{const key=block.dataset.featureBlock;let visible=!!cfg[key];if((key==='financial'||key==='income_proof')&&document.getElementById('is_income')&&!document.getElementById('is_income').checked)visible=false;block.classList.toggle('is-hidden',!visible)})}
   document.getElementById('is_income').onchange=function(){document.getElementById('finance-fields').classList.toggle('is-hidden',!this.checked);document.getElementById('finance-extras').classList.toggle('is-hidden',!this.checked);document.querySelectorAll('[data-income-required]').forEach(x=>x.required=this.checked);applyFeatureVisibility()};
 

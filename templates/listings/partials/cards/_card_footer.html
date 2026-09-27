@@ -1,0 +1,38 @@
+{% load listing_card_tags custom_tags %}
+<div class="listing-card-footer">
+    <div class="listing-card-price">
+        {% sensitive_class listing 'price' as price_sensitive %}
+        <strong class="{{ price_sensitive }}"><bdi>{{ listing.discount_price|default:listing.price|split_number }}</bdi>تومان </strong>
+        {% if listing.discount_price %}
+        <s class="{% sensitive_class listing 'discount_price' %}">{{ listing.price|split_number }} تومان</s>
+        {% endif %}
+    </div>
+    <div class="listing-card-income">
+        {% if listing.monthly_income %}
+        <strong class="{% sensitive_class listing 'monthly_income' %}"><bdi>{{ listing.monthly_income|split_number }}</bdi></strong>
+        <span class="{% sensitive_class listing 'monthly_income' %}">تومان درآمد ماهانه</span>
+        {% else %}
+        <span>این اگهی به درامد نرسیده است</span>
+        {% endif %}
+    </div>
+    <div class="listing-card-roi">
+        {% if listing.monthly_income and listing.monthly_income > 0 %}
+        {% with total_price=listing.discount_price|default:listing.price %}
+        {% if total_price %}
+        <span class="{% sensitive_class listing 'roi' %}">برگشت سرمایه تا <strong>{% widthratio total_price listing.monthly_income 1 %}</strong> ماه</span>
+        {% endif %}
+        {% endwith %}
+        {% endif %}
+        {% if listing.profit_margin %}
+        <span class="listing-card-profit {% sensitive_class listing 'profit_margin' %}"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i> حاشیه سود <strong>{{ listing.profit_margin|floatformat:0 }}٪</strong></span>
+        {% endif %}
+    </div>
+    <div class="listing-card-actions">
+        <a href="{% url 'listings:listing_detail' listing.pk %}" class="btn btn-primary btn-large btn-width-100">اطلاعات بیشتر</a>
+        {% if listing.platform_url %}
+        <a href="{{ listing.platform_url }}" class="btn btn-success btn-large btn-width-100 btn-gap {% sensitive_class listing 'platform_url' %}" target="_blank" rel="noopener">بازدید
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+        </a>
+        {% endif %}
+    </div>
+</div>

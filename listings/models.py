@@ -4,6 +4,7 @@
 
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 
 class Category(models.Model):
@@ -331,7 +332,12 @@ class Listing(models.Model):
     most_view    = models.IntegerField(null=True, blank=True, verbose_name='بیشترین بازدید')
     most_comment = models.IntegerField(null=True, blank=True, verbose_name='بیشترین کامنت')
 
-    main_image = models.ImageField(upload_to='listings/images/', verbose_name='تصویر اصلی')
+    main_image = models.ImageField(
+        upload_to='listings/images/',
+        verbose_name='تصویر اصلی',
+        blank=True,
+        null=True,
+    )
 
     boost          = models.BooleanField(default=False, verbose_name='آگهی پیشرفته')
     premier        = models.BooleanField(default=False, verbose_name='آگهی برتر')
@@ -497,11 +503,19 @@ class Listing(models.Model):
     def has_access(self, user):
         if not self.is_private:
             return True
-        if not user.is_authenticated:
+        if not getattr(user, 'is_authenticated', False):
             return False
         if user == self.seller:
             return True
         return self.visit_requests.filter(requester=user, status='approved').exists()
+
+    def clean(self):
+        """A cover is mandatory for visual asset categories, never for domains."""
+        super().clean()
+        from .category_config import category_requires_main_image
+
+        if self.category and category_requires_main_image(self.category) and not self.main_image:
+            raise ValidationError({"main_image": "تصویر اصلی برای این دسته‌بندی اجباری است."})
 
     def get_category_display_safe(self):
         """

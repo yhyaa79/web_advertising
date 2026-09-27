@@ -7,10 +7,10 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
-from .category_config import build_category_form_config, validate_category_config
+from .category_config import build_category_form_config, get_main_category, validate_category_config
 from .content_sanitizer import build_safe_rich_content
 from .models import (
-    Attachment, Category, DomainDetails, Expense, IncomeDataPoint, IncomeProof,
+    Attachment, Category, DomainDetails, EcommerceDetails, Expense, IncomeDataPoint, IncomeProof,
     License, Listing, ListingFAQ, MonetizationMethod, SaleInclude, ServiceUsed,
     SocialMedia, TechnologyUsed, TrafficSource, ViewsDataPoint, WebsiteDetails,
 )
@@ -57,6 +57,10 @@ class ListingWizardTests(TestCase):
         for schema in config.values():
             names = [item["name"] for item in schema["fields"]]
             self.assertEqual(len(names), len(set(names)))
+
+    def test_legacy_menu_slugs_resolve_to_their_specialized_asset_family(self):
+        self.assertEqual(get_main_category("website_blog"), "website")
+        self.assertEqual(get_main_category("app_saas"), "app")
 
     def test_get_renders_category_first_wizard(self):
         response = self.client.get(self.url)
@@ -107,14 +111,20 @@ class ListingWizardTests(TestCase):
 
     def test_domain_flow_does_not_require_financial_data(self):
         payload = {**self.base, "category": "domain_com", "domain_name": "example.com",
-                   "registrar": "Namecheap", "expiry_date": "2028-01-01",
-                   "main_image": image_file("domain.png")}
+                   "registrar": "Namecheap", "expiry_date": "2028-01-01"}
         response = self.post(payload)
         self.assertEqual(response.status_code, 200, response.content)
         listing = Listing.objects.get()
         self.assertFalse(listing.is_income)
         self.assertIsNone(listing.monthly_income)
+        self.assertFalse(listing.main_image)
         self.assertEqual(DomainDetails.objects.get(listing=listing).domain_name, "example.com")
+
+    def test_website_requires_main_image(self):
+        payload = {**self.base, "category": "website_blog", "monthly_visits": "1000"}
+        response = self.post(payload)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("main_image", response.json()["errors"])
 
     def test_extended_category_sections_are_saved_without_duplicates(self):
         payload = {
@@ -180,6 +190,52 @@ class ListingWizardTests(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn("traffic_count", response.json()["errors"])
         self.assertEqual(Listing.objects.count(), 0)
+
+
+@override_settings(
+    MEDIA_ROOT=TEST_MEDIA_ROOT,
+    STATICFILES_STORAGE="django.contrib.staticfiles.storage.StaticFilesStorage",
+)
+class ListingListCardTemplateTests(TestCase):
+    """Regression: category card partials must load their own template tag libraries."""
+
+    def test_listing_list_renders_with_pagination(self):
+        listing = Listing.objects.create(
+            seller=get_user_model().objects.create_user("buyer", password="secret123"),
+            title="آگهی تستی برای رندر کارت لیست",
+            description="توضیحات کافی برای نمایش در لیست آگهی‌ها و جلوگیری از خطای قالب. " * 2,
+            price=1_000_000,
+            areas_activity="tech_saas",
+            category="domain_com",
+            status="active",
+        )
+        DomainDetails.objects.create(listing=listing, domain_name="example.com", registrar="Namecheap")
+        url = reverse("listings:listing_list")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "listing-card--domain")
+        self.assertContains(response, "listing-card-main--no-media")
+        self.assertEqual(self.client.get(url + "?page=2").status_code, 200)
+
+    def test_private_card_masks_configured_data_and_image_for_guest(self):
+        listing = Listing.objects.create(
+            seller=get_user_model().objects.create_user("private-seller", password="secret123"),
+            title="فروشگاه خصوصی تست کارت",
+            description="توضیحات کافی برای سنجش ماسک داده‌ها در کارت خصوصی و جلوگیری از خطای اعتبارسنجی قالب. " * 2,
+            price=1_000_000,
+            monthly_income=50_000,
+            areas_activity="business_shopping",
+            category="ecommerce_woocommerce",
+            status="active",
+            is_private=True,
+            main_image=image_file("private-card.png"),
+        )
+        EcommerceDetails.objects.create(listing=listing, products_count=25, orders_per_month=120)
+
+        response = self.client.get(reverse("listings:listing_list"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "listing-sensitive--chess")
+        self.assertContains(response, "listing-sensitive--image")
 
 
 class RichContentSanitizerTests(TestCase):

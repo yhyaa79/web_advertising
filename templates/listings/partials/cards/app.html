@@ -1,0 +1,34 @@
+{% load custom_tags date_filters listing_card_tags %}
+<article class="card-listing listing-card {% if promoted or listing.premier %}listing-card-promoted{% endif %}">
+    {% include "listings/partials/cards/_promoted_ribbon.html" %}
+    <div class="listing-card-main">
+        {% include "listings/partials/cards/_card_media.html" %}
+        <div class="listing-card-content">
+            <a href="{% url 'listings:listing_detail' listing.pk %}" class="listing-card-heading-link"><h3 class="listing-card-title">{{ listing.title }}</h3></a>
+            {% include "listings/partials/cards/_card_badges.html" %}
+            <a href="{% url 'listings:listing_detail' listing.pk %}" class="listing-card-description-link">
+                <p class="listing-card-description {% sensitive_class listing 'description' %}">{{ listing.description }}</p>
+            </a>
+            <div class="listing-card-similar">
+                <a href="{% url 'listings:similar_listings' listing.pk %}" class="listing-card-similar-link">مشاهده آگهی‌های مشابه <i class="bi bi-arrow-left" aria-hidden="true"></i></a>
+            </div>
+            <div class="listing-card-facts">
+                {% with ad=listing.app_details %}
+                <div class="listing-card-fact">
+                    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="7" y="3" width="14" height="22" rx="3"/><path d="M11 7h6"/></svg>
+                    <div><p class="{% sensitive_class listing 'mau' %}">{% if ad.mau %}<bdi>{{ ad.mau|split_number }}</bdi> MAU{% else %}—{% endif %}</p><span>کاربر فعال ماهانه:</span></div>
+                </div>
+                <div class="listing-card-fact">
+                    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 4l3 6 6 1-4 4 1 6-6-3-6 3 1-6-4-4 6-1z"/></svg>
+                    <div><p>{% if ad.rating %}{{ ad.rating }} از ۵{% else %}—{% endif %}</p><span>امتیاز:</span></div>
+                </div>
+                <div class="listing-card-fact">
+                    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V8l10-4 10 4v12l-10 4-10-4z"/></svg>
+                    <div><p>{% if ad.downloads %}<bdi>{{ ad.downloads|split_number }}</bdi>{% else %}—{% endif %}</p><span>دانلود:</span></div>
+                </div>
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+    {% include "listings/partials/cards/_card_footer.html" %}
+</article>

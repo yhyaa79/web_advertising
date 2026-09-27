@@ -106,37 +106,24 @@ SUBCATEGORY_FIELDS = {
     "website_blog": [field("publishing_frequency", "تعداد محتوای جدید در ماه", "number", min_value=0)],
     "website_news_magazine": [field("daily_articles", "میانگین خبر / مقاله روزانه", "number", min_value=0)],
     "website_forum_community": [field("registered_members", "اعضای ثبت‌نام‌شده", "number", min_value=0), field("monthly_posts", "پست ماهانه انجمن", "number", min_value=0)],
-    "website_directory": [field("directory_entries", "تعداد رکوردهای دایرکتوری", "number", min_value=0)],
-    "website_portal": [field("portal_modules", "ماژول‌ها و سرویس‌های فعال", "textarea")],
-    "website_review": [field("published_reviews", "تعداد بررسی‌های منتشرشده", "number", min_value=0)],
-    "website_landing_page": [field("monthly_leads", "سرنخ ماهانه", "number", min_value=0)],
-    "website_corporate": [field("monthly_leads", "سرنخ ماهانه", "number", min_value=0)],
     "website_educational": [field("students_count", "دانشجویان ثبت‌نام‌شده", "number", min_value=0), field("courses_count", "تعداد دوره‌ها", "number", min_value=0)],
     "website_job_board": [field("active_jobs", "فرصت‌های شغلی فعال", "number", min_value=0), field("employers_count", "کارفرمایان عضو", "number", min_value=0)],
-    "website_dating": [field("registered_members", "اعضای ثبت‌نام‌شده", "number", min_value=0)],
     "website_real_estate": [field("active_property_ads", "آگهی ملک فعال", "number", min_value=0)],
-    "website_classifieds": [field("active_ads", "آگهی فعال", "number", min_value=0)],
     "website_other": [field("website_model", "مدل و کارکرد وب‌سایت")],
     "ecommerce_woocommerce": [field("plugin_count", "افزونه‌های کلیدی فعال", "number", min_value=0)],
     "ecommerce_shopify": [field("shopify_plan", "پلن فعلی Shopify")],
-    "ecommerce_opencart_prestashop": [field("store_engine", "فروشگاه‌ساز", "select", options=[["opencart", "OpenCart"], ["prestashop", "PrestaShop"]])],
     "ecommerce_custom": [field("source_code_transfer", "سورس‌کد کامل منتقل می‌شود", "checkbox")],
     "ecommerce_marketplace_shop": [field("marketplace_name", "نام مارکت‌پلیس", required=True), field("seller_score", "امتیاز فروشنده")],
     "ecommerce_dropship": [field("supplier_agreements", "توافق فعال با تأمین‌کنندگان", "checkbox")],
-    "ecommerce_digital_products": [field("digital_catalog_size", "محصول دیجیتال قابل انتقال", "number", min_value=0)],
-    "ecommerce_physical_products": [field("suppliers_count", "تعداد تأمین‌کنندگان", "number", min_value=0)],
-    "ecommerce_subscription_box": [field("active_subscriptions", "اشتراک فعال", "number", min_value=0), field("churn_rate", "نرخ ریزش (درصد)", "number", **PERCENT)],
+    "ecommerce_woo_fba_dropship": [field("fulfillment_model", "مدل تامین و ارسال", required=True)],
     "ecommerce_other": [field("commerce_model", "مدل فروش")],
     "app_android": [field("store_url", "لینک Google Play / کافه‌بازار", "url", ltr=True)],
     "app_ios": [field("store_url", "لینک App Store", "url", ltr=True)],
     "app_cross_platform": [field("framework", "فریم‌ورک", "select", options=[["flutter", "Flutter"], ["react_native", "React Native"], ["other", "سایر"]])],
-    "app_pwa": [field("offline_support", "پشتیبانی آفلاین دارد", "checkbox")],
-    "app_desktop": [field("supported_os", "سیستم‌عامل‌های پشتیبانی‌شده", required=True)],
     "app_game_mobile": [field("monthly_players", "بازیکن ماهانه", "number", min_value=0)],
-    "app_game_pc_console": [field("supported_platforms", "پلتفرم‌های انتشار", required=True)],
     "app_saas": [field("paying_customers", "مشتریان پرداخت‌کننده", "number", required=True, min_value=0), field("churn_rate", "نرخ ریزش ماهانه (درصد)", "number", **PERCENT)],
-    "app_browser_extension": [field("browser_stores", "مرورگرهای پشتیبانی‌شده", required=True)],
     "app_telegram_bot": [field("bot_users", "کاربران فعال ربات", "number", required=True, min_value=0)],
+    "app_web_tool": [field("delivery_platform", "بستر ارائه", placeholder="وب‌اپ، افزونه یا API")],
     "app_other": [field("delivery_platform", "بستر ارائه")],
     "social_instagram": [field("avg_story_views", "میانگین بازدید استوری", "number", min_value=0)],
     "social_telegram_channel": [field("avg_post_views", "میانگین بازدید هر پست", "number", min_value=0)],
@@ -144,50 +131,91 @@ SUBCATEGORY_FIELDS = {
     "social_youtube": [field("watch_hours_28d", "ساعت تماشا در ۲۸ روز", "number", min_value=0)],
     "social_aparat": [field("monthly_video_views", "بازدید ویدیو ماهانه", "number", min_value=0)],
     "social_twitter_x": [field("monthly_impressions", "ایمپرشن ماهانه", "number", min_value=0)],
-    "social_facebook": [field("monthly_impressions", "ایمپرشن ماهانه", "number", min_value=0)],
     "social_linkedin": [field("page_type", "نوع صفحه", "select", options=[["company", "شرکتی"], ["personal", "شخصی"]])],
     "social_tiktok": [field("avg_video_views", "میانگین بازدید ویدیو", "number", min_value=0)],
-    "social_pinterest": [field("monthly_views", "بازدید ماهانه", "number", min_value=0)],
-    "social_threads": [field("monthly_impressions", "ایمپرشن ماهانه", "number", min_value=0)],
-    "social_clubhouse": [field("club_members", "اعضای کلاب", "number", min_value=0)],
     "social_other": [field("network_name", "نام شبکه اجتماعی", required=True)],
     "content_podcast": [field("avg_episode_downloads", "میانگین دانلود هر قسمت", "number", min_value=0)],
     "content_newsletter": [field("open_rate", "نرخ بازشدن ایمیل (درصد)", "number", **PERCENT), field("click_rate", "نرخ کلیک (درصد)", "number", **PERCENT)],
     "content_adsense_channel": [field("monthly_ad_impressions", "نمایش تبلیغ ماهانه", "number", min_value=0)],
-    "content_streaming": [field("avg_concurrent_viewers", "میانگین بیننده هم‌زمان", "number", min_value=0)],
     "content_ebook_course": [field("units_sold", "تعداد فروش تا امروز", "number", min_value=0)],
-    "content_stock_media": [field("library_size", "تعداد فایل‌های کتابخانه", "number", min_value=0)],
-    "content_other": [field("content_format", "فرمت اصلی محتوا", required=True)],
     "domain_com": [], "domain_ir": [],
     "domain_international_other": [field("extension", "پسوند دامنه", required=True)],
     "domain_brandable": [field("is_brandable", "نام دامنه کوتاه و برندپذیر است", "checkbox")],
-    "domain_keyword": [field("is_exact_match", "دامنه تطابق دقیق کلیدواژه است", "checkbox")],
     "domain_portfolio": [field("portfolio_size", "تعداد دامنه‌های مجموعه", "number", required=True, min_value=2)],
     "service_agency": [field("contracts_count", "قرارداد فعال", "number", min_value=0)],
-    "service_freelance_platform": [field("freelancers_count", "فریلنسرهای تأییدشده", "number", min_value=0)],
     "service_consulting": [field("consulting_hours_monthly", "ساعت مشاوره ماهانه", "number", min_value=0)],
     "service_membership_site": [field("paid_members", "اعضای پرداخت‌کننده", "number", min_value=0)],
     "service_marketplace": [field("monthly_transactions", "تراکنش ماهانه", "number", min_value=0)],
     "service_booking": [field("monthly_bookings", "رزرو ماهانه", "number", min_value=0)],
+    "service_sms_marketing": [field("monthly_sends", "میانگین ارسال ماهانه", "number", min_value=0)],
     "service_other": [field("service_model", "مدل ارائه خدمت", required=True)],
     "other_misc": [],
+}
+
+# Some legacy subcategory slugs live under a different menu heading.  The
+# prefix determines the asset family, and therefore its form, data model and
+# list card, rather than the menu section where it happens to be displayed.
+MAIN_CATEGORY_OVERRIDES = {
+    "software": "app",
+    "website_blog": "website",
+    "website_news_magazine": "website",
+    "website_forum_community": "website",
+    "website_educational": "website",
+    "website_job_board": "website",
+    "website_real_estate": "website",
+    "website_other": "website",
 }
 
 CATEGORY_META = {
     # Flags below control entire wizard stages/sections. They are intentionally
     # kept here so category behaviour can be changed without editing HTML/JS.
-    "website": {"label": "وب‌سایت", "icon": "🌐", "financial": True, "charts": True, "traffic": True, "monetization": True, "technical": True, "social_links": True, "licenses": True, "services": True, "income_proof": True},
-    "ecommerce": {"label": "فروشگاه اینترنتی", "icon": "🛒", "financial": True, "charts": True, "traffic": True, "monetization": True, "technical": True, "social_links": True, "licenses": True, "services": True, "income_proof": True},
-    "app": {"label": "اپلیکیشن", "icon": "📱", "financial": True, "charts": True, "traffic": True, "monetization": True, "technical": True, "social_links": True, "licenses": True, "services": True, "income_proof": True},
-    "social_media": {"label": "شبکه اجتماعی", "icon": "📣", "financial": True, "charts": True, "traffic": False, "monetization": True, "technical": False, "social_links": False, "licenses": False, "services": False, "income_proof": True},
-    "content_media": {"label": "رسانه و محتوا", "icon": "🎙️", "financial": True, "charts": True, "traffic": True, "monetization": True, "technical": False, "social_links": True, "licenses": True, "services": True, "income_proof": True},
-    "domain": {"label": "دامنه", "icon": "🔗", "financial": False, "charts": False, "traffic": False, "monetization": False, "technical": False, "social_links": False, "licenses": False, "services": False, "income_proof": False},
-    "service_business": {"label": "کسب‌وکار خدماتی", "icon": "💼", "financial": True, "charts": True, "traffic": False, "monetization": True, "technical": False, "social_links": True, "licenses": True, "services": True, "income_proof": True},
-    "other": {"label": "سایر", "icon": "📦", "financial": False, "charts": False, "traffic": False, "monetization": False, "technical": False, "social_links": False, "licenses": False, "services": False, "income_proof": False},
+    "website": {"label": "وب‌سایت", "icon": "website", "financial": True, "charts": True, "traffic": True, "monetization": True, "technical": True, "social_links": True, "licenses": True, "services": True, "income_proof": True, "requires_main_image": True},
+    "ecommerce": {"label": "فروشگاه اینترنتی", "icon": "ecommerce", "financial": True, "charts": True, "traffic": True, "monetization": True, "technical": True, "social_links": True, "licenses": True, "services": True, "income_proof": True, "requires_main_image": True},
+    "app": {"label": "اپلیکیشن", "icon": "app", "financial": True, "charts": True, "traffic": True, "monetization": True, "technical": True, "social_links": True, "licenses": True, "services": True, "income_proof": True, "requires_main_image": True},
+    "social_media": {"label": "شبکه اجتماعی", "icon": "social", "financial": True, "charts": True, "traffic": False, "monetization": True, "technical": False, "social_links": False, "licenses": False, "services": False, "income_proof": True, "requires_main_image": True},
+    "content_media": {"label": "رسانه و محتوا", "icon": "media", "financial": True, "charts": True, "traffic": True, "monetization": True, "technical": False, "social_links": True, "licenses": True, "services": True, "income_proof": True, "requires_main_image": True},
+    "domain": {"label": "دامنه", "icon": "domain", "financial": False, "charts": False, "traffic": False, "monetization": False, "technical": False, "social_links": False, "licenses": False, "services": False, "income_proof": False, "requires_main_image": False},
+    "service_business": {"label": "کسب‌وکار خدماتی", "icon": "service", "financial": True, "charts": True, "traffic": False, "monetization": True, "technical": False, "social_links": True, "licenses": True, "services": True, "income_proof": True, "requires_main_image": True},
+    "other": {"label": "سایر", "icon": "other", "financial": False, "charts": False, "traffic": False, "monetization": False, "technical": False, "social_links": False, "licenses": False, "services": False, "income_proof": False, "requires_main_image": False},
+}
+
+# ── کارت لیست آگهی: فیلدهایی که برای بینندهٔ بدون دسترسی (آگهی خصوصی) ماسک می‌شوند ──
+# کلیدها همان slug دستهٔ اصلی (website, domain, …) هستند — برای تغییر رفتار فقط اینجا را ویرایش کنید.
+LISTING_CARD_PRIVATE_FIELDS = {
+    "website": ["price", "discount_price", "monthly_income", "profit_margin", "roi", "platform_url", "description", "monthly_visits"],
+    "ecommerce": ["price", "discount_price", "monthly_income", "profit_margin", "roi", "platform_url", "description", "orders_per_month"],
+    "app": ["price", "discount_price", "monthly_income", "profit_margin", "roi", "platform_url", "description", "mau"],
+    "social_media": ["price", "discount_price", "monthly_income", "profit_margin", "roi", "platform_url", "description", "followers", "engagement_rate"],
+    "content_media": ["price", "discount_price", "monthly_income", "profit_margin", "roi", "platform_url", "description", "subscribers"],
+    "domain": ["price", "discount_price", "monthly_income", "platform_url", "description", "domain_name", "keyword", "search_volume", "expiry_date"],
+    "service_business": ["price", "discount_price", "monthly_income", "profit_margin", "roi", "platform_url", "description", "active_clients"],
+    "other": ["price", "discount_price", "monthly_income", "platform_url", "description"],
+}
+
+# image = ماسک روی تصویر کارت (علاوه بر فیلدهای بالا)
+LISTING_CARD_PRIVATE_IMAGE = {
+    "website": True,
+    "ecommerce": True,
+    "app": True,
+    "social_media": True,
+    "content_media": True,
+    "domain": False,
+    "service_business": True,
+    "other": True,
+}
+
+LISTING_CARD_SHOW_IMAGE = {
+    "domain": False,
 }
 
 
 def get_main_category(sub_slug):
+    if sub_slug in CATEGORY_META:
+        return sub_slug
+    if sub_slug in MAIN_CATEGORY_OVERRIDES:
+        return MAIN_CATEGORY_OVERRIDES[sub_slug]
+    if sub_slug.startswith("app_"):
+        return "app"
     from .models import Category
     for main_slug, _label, subs in Category.PLATFORM_CATEGORIES:
         if any(slug == sub_slug for slug, _ in subs):
@@ -200,8 +228,31 @@ def get_fields_for_sub(sub_slug):
     fields = deepcopy(BASE_FIELDS.get(main, BASE_FIELDS["other"])) + deepcopy(SUBCATEGORY_FIELDS.get(sub_slug, []))
     unique = {item["name"]: item for item in fields}  # subtype refines; never asks twice
     result = deepcopy(CATEGORY_META.get(main, CATEGORY_META["other"]))
-    result.update({"main": main, "subcategory": sub_slug, "fields": list(unique.values())})
+    meta = CATEGORY_META.get(main, CATEGORY_META["other"])
+    result.update({
+        "main": main,
+        "subcategory": sub_slug,
+        "fields": list(unique.values()),
+        "requires_main_image": meta.get("requires_main_image", True),
+    })
     return result
+
+
+def category_requires_main_image(sub_slug):
+    main = get_main_category(sub_slug)
+    return CATEGORY_META.get(main, CATEGORY_META["other"]).get("requires_main_image", True)
+
+
+def get_listing_card_private_fields(main_slug):
+    return LISTING_CARD_PRIVATE_FIELDS.get(main_slug, LISTING_CARD_PRIVATE_FIELDS["other"])
+
+
+def listing_card_masks_image(main_slug):
+    return LISTING_CARD_PRIVATE_IMAGE.get(main_slug, True)
+
+
+def listing_card_show_image(main_slug):
+    return LISTING_CARD_SHOW_IMAGE.get(main_slug, True)
 
 
 def build_category_form_config():

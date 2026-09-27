@@ -1,0 +1,15 @@
+{% load date_filters %}
+<div class="listing-card-badges">
+    {% if listing.is_private %}<span class="listing-card-badge">خصوصی</span>{% endif %}
+    {% if listing.is_income %}<span class="listing-card-badge">درامد اگهی</span>{% endif %}
+    {% if listing.is_verified %}<span class="listing-card-badge">اطلاعات مورد تایید</span>{% endif %}
+    {% if listing.suggested_price %}<span class="listing-card-badge">پیشنهاد قیمت</span>{% endif %}
+    {% if listing.premier %}
+    <span class="listing-card-badge">اگهی برتر</span>
+    {% elif listing.boost %}
+    <span class="listing-card-badge">اگهی پیشرفته</span>
+    {% endif %}
+    {% if listing.created_at|is_recent %}
+    <span class="listing-card-badge listing-card-new-badge"><i class="bi bi-lightning-charge-fill" aria-hidden="true"></i> تازه منتشر شده</span>
+    {% endif %}
+</div>

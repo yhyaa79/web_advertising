@@ -40,13 +40,33 @@ from .category_descriptions import get_category_description
 
 from .category_config import (
     build_category_form_config, get_main_category, get_fields_for_sub,
+    category_requires_main_image,
 )
+from .listing_cards import prefetch_listing_card_details
 from .content_sanitizer import build_safe_rich_content
 import json as _json
 from .sidebar import build_sidebar_context
 
 
 logger = logging.getLogger(__name__)
+
+
+def _validate_main_image(category, main_image, field_errors):
+    """Validate main_image; required only for categories that need a cover photo."""
+    if not category_requires_main_image(category):
+        if not main_image:
+            return
+    elif not main_image:
+        field_errors["main_image"] = "تصویر اصلی اجباری است"
+        return
+    if main_image.size > 5 * 1024 * 1024:
+        field_errors["main_image"] = "حجم تصویر اصلی نباید بیشتر از ۵ مگابایت باشد"
+        return
+    try:
+        django_forms.ImageField().clean(main_image)
+        main_image.seek(0)
+    except django_forms.ValidationError:
+        field_errors["main_image"] = "فایل انتخاب‌شده یک تصویر معتبر نیست"
 
 User = get_user_model()
 
@@ -374,13 +394,19 @@ def listing_list(request):
             listings = listings.filter(roi_months__lte=float(max_roi_val))
  
     # آگهی‌های ویژه
-    boosted_listings = list(listings.filter(boost=True).order_by('?')[:3])
+    boosted_listings = list(
+        prefetch_listing_card_details(listings.filter(boost=True).order_by('?')[:3])
+    )
     if len(boosted_listings) < 3:
         needed = 3 - len(boosted_listings)
         current_boosted_ids = [item.id for item in boosted_listings]
-        extra_boosted = Listing.objects.filter(
-            status='active', boost=True
-        ).exclude(id__in=current_boosted_ids).order_by('?')[:needed]
+        extra_boosted = list(
+            prefetch_listing_card_details(
+                Listing.objects.filter(status='active', boost=True)
+                .exclude(id__in=current_boosted_ids)
+                .order_by('?')[:needed]
+            )
+        )
         boosted_listings.extend(extra_boosted)
  
     boosted_ids = [item.id for item in boosted_listings]
@@ -441,6 +467,7 @@ def listing_list(request):
         main_listings_queryset = main_listings_queryset.order_by('-created_at')
  
     # صفحه‌بندی
+    main_listings_queryset = prefetch_listing_card_details(main_listings_queryset)
     paginator = Paginator(main_listings_queryset, 20)
     page = request.GET.get('page')
     try:
@@ -699,19 +726,11 @@ def listing_create(request):
         field_errors["title"] = "عنوان آگهی اجباری است"
     if not description:
         field_errors["description"] = "توضیحات اجباری است"
-    if not main_image:
-        field_errors["main_image"] = "تصویر اصلی اجباری است"
-    elif main_image.size > 5 * 1024 * 1024:
-        field_errors["main_image"] = "حجم تصویر اصلی نباید بیشتر از ۵ مگابایت باشد"
-    else:
-        try:
-            django_forms.ImageField().clean(main_image)
-            main_image.seek(0)
-        except django_forms.ValidationError:
-            field_errors["main_image"] = "فایل انتخاب‌شده یک تصویر معتبر نیست"
     valid_platform_slugs = {slug for slug, _ in Category.PLATFORM_CHOICES}
     if category not in valid_platform_slugs:
         field_errors["category"] = "یک دسته‌بندی معتبر انتخاب کنید"
+    else:
+        _validate_main_image(category, main_image, field_errors)
 
     try:
         price = int(price_raw)
@@ -947,7 +966,7 @@ def listing_create(request):
             is_private=p.get("is_private") == "on",
             boost=p.get("boost") == "on",
             premier=p.get("premier") == "on",
-            main_image=main_image,
+            main_image=main_image if main_image else None,
             status="pending",
             avg_monthly_revenue=_decimal(p.get("avg_monthly_revenue")),
             avg_monthly_profit=_decimal(p.get("avg_monthly_profit")),

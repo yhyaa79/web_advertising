@@ -6,6 +6,7 @@
 {% load custom_tags %}
 {% load date_filters %}
 {% load filter_tags %}
+{% load listing_card_tags %}
 
 {% block title %}لیست آگهی‌ها{% endblock %}
 
@@ -813,7 +814,7 @@
                     <div class="boosted-section">
                         {% for listing in boosted_listings %}
 
-                        {% include "listings/partials/_listing_card.html" with promoted=listing.boost %}
+                        {% render_listing_card listing promoted=listing.boost %}
 
                         {% endfor %}
                     </div>
@@ -823,7 +824,7 @@
                 <div class="list-notice">
                     {% for listing in listings %}
 
-                    {% include "listings/partials/_listing_card.html" with promoted=False %}
+                    {% render_listing_card listing promoted=False %}
                     {% empty %}
                     <p class="text-center">آگهی فعالی یافت نشد.</p>
                     {% endfor %}

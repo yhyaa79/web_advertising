@@ -1,0 +1,38 @@
+{% load custom_tags date_filters listing_card_tags %}
+<article class="card-listing listing-card {% if promoted or listing.premier %}listing-card-promoted{% endif %}">
+    {% include "listings/partials/cards/_promoted_ribbon.html" %}
+    <div class="listing-card-main">
+        {% include "listings/partials/cards/_card_media.html" %}
+        <div class="listing-card-content">
+            <a href="{% url 'listings:listing_detail' listing.pk %}" class="listing-card-heading-link">
+                <h3 class="listing-card-title">{{ listing.title }}</h3>
+            </a>
+            {% include "listings/partials/cards/_card_badges.html" %}
+            <a href="{% url 'listings:listing_detail' listing.pk %}" class="listing-card-description-link">
+                <p class="listing-card-description {% sensitive_class listing 'description' %}">{{ listing.description }}</p>
+            </a>
+            <div class="listing-card-similar">
+                <a href="{% url 'listings:similar_listings' listing.pk %}" class="listing-card-similar-link">
+                    مشاهده آگهی‌های مشابه <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="listing-card-facts">
+                <div class="listing-card-fact">
+                    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 24v-6m6 6V13m6 11V8m6 16V3"/></svg>
+                    <div><p>{{ listing.get_areas_activity_display_safe }}</p><span>حوزه‌ فعالیت:</span></div>
+                </div>
+                {% with wd=listing.website_details %}
+                <div class="listing-card-fact">
+                    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4h20v20H4z"/><path d="M4 12h20M12 4v20"/></svg>
+                    <div><p class="{% sensitive_class listing 'monthly_visits' %}">{% if wd.monthly_visits %}<bdi>{{ wd.monthly_visits|split_number }}</bdi>{% else %}—{% endif %}</p><span>بازدید ماهانه:</span></div>
+                </div>
+                {% endwith %}
+                <div class="listing-card-fact">
+                    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="20" height="19" rx="2"/><path d="M9 3v6m10-6v6M4 12h20"/></svg>
+                    <div><p>{{ listing.platform_age|floatformat:0 }} سال</p><span>سن پلتفرم:</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "listings/partials/cards/_card_footer.html" %}
+</article>
